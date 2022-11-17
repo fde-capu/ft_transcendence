@@ -1,0 +1,62 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    docker-compose.yaml                                :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
+#    Updated: 2022/11/17 18:35:30 by fde-capu         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+version: "2.5"
+
+services:
+  ftt_backend: # Needs to be NestJS.
+    container_name: ftt_backend
+    image: bash:latest # Temporary mock.
+    volumes:
+      - ./health_check.sh:/health_check.sh
+    restart: unless-stopped
+    ports:
+      - 3490:80
+    networks:
+      - ft_transcendence
+    env_file: ftt_backend.env
+    # makes the service available as the hostname,implies depends_on:
+    links:
+      - ftt_database:ftt_database
+    entrypoint: /health_check.sh;
+#	entrypoint: sh -c "yarn install && yarn run dev"
+  ftt_frontend:
+    container_name: ftt_frontend
+    image: bash:latest # Temporary mock.
+    volumes:
+      - ./health_check.sh:/health_check.sh
+    restart: unless-stopped
+    ports:
+      - 3491:80
+    networks:
+      - ft_transcendence
+    expose: [3000]
+    env_file: ftt_frontend.env
+    entrypoint: /health_check.sh;
+  ftt_database:
+    container_name: ftt_database
+    image: postgres:latest
+    volumes:
+      - ./health_check.sh:/health_check.sh
+    restart: unless-stopped
+    ports:
+      - 3492:80
+    networks:
+      - ft_transcendence
+    expose: [3000]
+    env_file: ftt_database.env
+    entrypoint: /health_check.sh;
+    ports:
+      - 5432:5432
+
+networks:
+  ft_transcendence:
