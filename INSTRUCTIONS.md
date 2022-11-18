@@ -1,8 +1,11 @@
-Open the file to check comments, and run:
+Open the file to check comments about docker rootless mode, and run:
 	`./prerequisites.sh`
 
 Cross your fingers and run:
 	`docker compose up --build`
+
+You can check the open ports connection with:
+	`ss -tnlp` or `netstat -tnlp`
 
 While the containers are running, interact with them:
 	`docker exec -it ftt_backend /bin/sh`

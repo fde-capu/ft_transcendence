@@ -1,29 +1,38 @@
 #!/bin/sh
-skip_apt_update="true";
+skip_apt_update="false";
+skip_apt_upgrade="false";
 docker_clean_containers="true";
 docker_clean_images="true";
 docker_system_prune="true";
-reinstall_conteinerd_docker_ce="false";
+reinstall_conteinerd_docker_ce="true";
+remove_previous_docker_service="true";
+docker_stop="true";
 
 set -x;
 
 [ "$skip_apt_update" != "true" ] && sudo apt-get update;
+[ "$skip_apt_upgrade" != "true" ] && sudo apt-get upgrade;
 [ "$docker_clean_containers" = "true" ] && \
 	docker container rm -f $(docker ps -aq) 2>/dev/null;
 [ "$docker_clean_images" = "true" ] && docker rmi $(docker images -aq) 2>/dev/null;
 [ "$docker_system_prune" = "true" ] && docker system prune -y 2>/dev/null;
 [ "$reinstall_conteinerd_docker_ce" = "true" ] && \
 	sudo apt-get purge -y containerd.io docker-ce && \
-	sudo apt-get install -y containerd.io docker-ce
+	sudo apt-get install -y containerd.io docker-ce;
+[ "$remove_previous_docker_service" = "true" ] && \
+	sudo systemctl stop docker.service && \
+	sudo rm -rf ~/.config/systemd/user/default.target.wants && \
+	sudo rm -f ~/.config/systemd/user/docker.service
+[ "$docker_stop" = "true" ] && sudo systemctl stop docker;
 
 # For docker-compose in rootless mode:
 # Source: https://docs.docker.com/engine/security/rootless
-	sudo apt-get install -y uidmap;
+	sudo apt-get install -y uidmap; # updates even if already installed.
 # Script to check user subordinates:
 	subuid=`grep ^$(whoami): /etc/subuid | awk -F ":" '{print $3}'`;
 	[ "$subuid" -lt "65536" ] && echo "Subordinate uid $subuid fail." && exit 1;
 	subgid=`grep ^$(whoami): /etc/subgid | awk -F ":" '{print $3}'`;
-	[ "$subgid" -lt "65536" ] && echo "Subordinate gid $subgid fail." && exit 1;
+	[ "$subgid" -lt "65536" ] && echo "Subordinate gid $subgid fail." && exit 2;
 # Needed by rootless:
 	sudo apt-get install -y dbus-user-session;
 	sudo apt-get install -y fuse-overlayfs; # recomended
@@ -45,10 +54,10 @@ set -x;
 # as a non-root user to set up the daemon. If this fails, run
 #	sudo apt-get install -y docker-ce-rootless-extras
 # Script to do so:
-	dockerd-rootless-setuptool.sh install || \
-		( sudo apt-get install -y docker-ce-rootless-extras && \
-			dockerd-rootless-setuptool.sh install ) || \
-			( echo "docker-ce-rootless-extras failed." && exit 1 );
+	dockerd-rootless-setuptool.sh install 2>/dev/null || \
+		(sudo apt-get install -y docker-ce-rootless-extras && \
+			dockerd-rootless-setuptool.sh --force install || \
+				(echo "docker-ce-rootless-extras failed." && exit 3));
 # The systemd unit file is installed as ~/.config/systemd/user/docker.service.
 	systemctl --user start docker
 	docker context use rootless
