@@ -27,6 +27,7 @@ do_docker_stop()
 
 	[ "$do_apt_update" = "true" ] && sudo apt update;
 	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade;
+	sudo apt install -y docker-compose-plugin;
 
 # For docker-compose in rootless mode:
 # Source: https://docs.docker.com/engine/security/rootless
