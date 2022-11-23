@@ -1,5 +1,5 @@
 #!/bin/sh
-do_apt_update="false";#XXX
+do_apt_update="true";#XXX
 do_apt_upgrade="true";
 docker_clean_containers="true";
 docker_clean_images="true";

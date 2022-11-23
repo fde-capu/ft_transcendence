@@ -24,7 +24,7 @@ services:
     networks:
       - ft_transcendence
     env_file: ftt_backend.env
-    # makes the service available as the hostname,implies depends_on:
+    # makes the service available as the hostname, implies depends_on:
     entrypoint: /health_check.sh;
 #   links:
 #     - ftt_database:ftt_database
