@@ -22,8 +22,9 @@ NOTES
 - Subject states `docker-compose` but its obsolete, and `docker compose` is
   latest stable release.
 
-- It is possible to work via ssh on the VM. Setup NAT ports, sshd on VM, then:
-	`ssh user42@127.0.0.1 -p 2222`
+- It is possible to work via ssh on the VM. Setup NAT ports, sshd on VM, then
+	- Start VM on background: `virtualboxvm --startvm user42@42saopaulo --separate`
+	- Login: `ssh user42@127.0.0.1 -p 2222`
 
 QUESTIONS
 

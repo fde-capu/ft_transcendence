@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/23 20:12:39 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/24 08:26:37 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ services:
     container_name: ftt_backend
     image: nestjs/cli:latest
     build:
-      dockerfile: ftt_backend_Dockerfile
+      dockerfile: Dockerfile_ftt_backend
     volumes:
       - ./health_check.sh:/health_check.sh
     restart: unless-stopped
