@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/18 17:29:16 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/23 20:12:39 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,15 @@ services:
   ftt_backend: # Needs to be NestJS.
     container_name: ftt_backend
     image: nestjs/cli:latest
+    build:
+      dockerfile: ftt_backend_Dockerfile
     volumes:
       - ./health_check.sh:/health_check.sh
     restart: unless-stopped
     ports:
       - 3490:3000
     networks:
-      - ft_transcendence
+      - samsara_net
     env_file: ftt_backend.env
     # makes the service available as the hostname, implies depends_on:
     entrypoint: /health_check.sh;
@@ -38,7 +40,7 @@ services:
 #    ports:
 #      - 3491:80
 #    networks:
-#      - ft_transcendence
+#      - samsara_net
 #    expose: [3000]
 #    env_file: ftt_frontend.env
 #    entrypoint: /health_check.sh;
@@ -49,10 +51,10 @@ services:
 #      - ./health_check.sh:/health_check.sh
 #    restart: unless-stopped
 #    networks:
-#      - ft_transcendence
+#      - samsara_net
 #    expose: [3000]
 #    env_file: ftt_database.env
 #    entrypoint: /health_check.sh;
 
 networks:
-  ft_transcendence:
+  samsara_net:

@@ -28,7 +28,10 @@ do_docker_stop()
 
 	[ "$do_apt_update" = "true" ] && sudo apt update;
 	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade;
+
 	sudo apt install -y docker-compose-plugin;
+	sudo apt install -y nodejs npm;
+	sudo npm install -g @nestjs/cli@latest;
 
 # For docker-compose in rootless mode:
 	sudo apt install -y uidmap; # updates even if already installed.

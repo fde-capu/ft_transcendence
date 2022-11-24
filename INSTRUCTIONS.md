@@ -17,6 +17,14 @@ While the containers are running, interact with them:
 Finally:
 	`docker-compose down`
 
+NOTES
+
+- Subject states `docker-compose` but its obsolete, and `docker compose` is
+  latest stable release.
+
+- It is possible to work via ssh on the VM. Setup NAT ports, sshd on VM, then:
+	`ssh user42@127.0.0.1 -p 2222`
+
 QUESTIONS
 
 Why do I need to npm install @nestjs/cli? Does not it comes with nestjs/schematics?
