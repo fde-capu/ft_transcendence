@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/24 08:26:37 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/24 13:38:19 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,14 @@ version: "2.5"
 services:
   ftt_backend: # Needs to be NestJS.
     container_name: ftt_backend
-    image: nestjs/cli:latest
+#    image: node:lts
     build:
       dockerfile: Dockerfile_ftt_backend
     volumes:
       - ./health_check.sh:/health_check.sh
     restart: unless-stopped
     ports:
-      - 3490:3000
+      - 3490:80
     networks:
       - samsara_net
     env_file: ftt_backend.env

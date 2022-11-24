@@ -1,2 +1,8 @@
-FROM nestjs/cli:latest
+FROM node:lts-hydrogen
+
+# Utilities:
+## RUN apt update && apt install -y 
+
 WORKDIR /app
+
+RUN npm install @nestjs/cli@latest
