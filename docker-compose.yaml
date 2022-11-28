@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/27 22:40:16 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/27 22:56:09 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ services:
       - samsara_net
     env_file: ftt_backend.env
     # makes the service available as the hostname, implies depends_on:
-    entrypoint: npm run start && /health_check.sh node
+    entrypoint: npm run start:dev && /health_check.sh node
 
 #   links:
 #     - ftt_database:ftt_database
