@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/27 22:27:56 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/27 22:40:16 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,10 @@ version: "2.5"
 services:
   ftt_backend:
     container_name: ftt_backend
-#    image: node:lts-hydrogen
     volumes:
       - ./health_check.sh:/health_check.sh
       - ./app_backend:/app_backend
-    working_dir: /app_backend/hello-world
+    working_dir: /app_backend
     build:
       context: app_backend
       dockerfile: ../Dockerfile_ftt_backend

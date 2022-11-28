@@ -2,6 +2,3 @@ FROM node:lts-hydrogen
 RUN npm install -g npm@latest
 RUN npm install -g n
 RUN n stable
-# RUN npm install -g @nestjs/cli@latest
-#ENTRYPOINT npm run start && /health_check.sh node
-#ENTRYPOINT /health_check.sh
