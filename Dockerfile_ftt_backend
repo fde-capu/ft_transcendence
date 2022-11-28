@@ -4,5 +4,3 @@ RUN npm install -g npm@latest
 RUN npm install -g n
 RUN n stable
 RUN npm install -g @nestjs/cli@latest
-RUN cd /app_backend && npm install @nestjs/common@latest
-RUN cd /app_backend && npm install @nestjs/core@latest
