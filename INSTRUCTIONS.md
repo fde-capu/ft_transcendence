@@ -1,3 +1,8 @@
+To use a VM shared folder:
+	`sudo adduser user42 vboxsf`
+	...then logout and login.
+	`cd /mnt/ft_transcendence`
+
 Open the file to check comments about docker rootless mode, and run:
 	`./prerequisites.sh`
 
