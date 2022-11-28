@@ -6,28 +6,32 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/24 13:38:19 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/27 22:27:56 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 version: "2.5"
 
 services:
-  ftt_backend: # Needs to be NestJS.
+  ftt_backend:
     container_name: ftt_backend
-#    image: node:lts
-    build:
-      dockerfile: Dockerfile_ftt_backend
+#    image: node:lts-hydrogen
     volumes:
       - ./health_check.sh:/health_check.sh
+      - ./app_backend:/app_backend
+    working_dir: /app_backend/hello-world
+    build:
+      context: app_backend
+      dockerfile: ../Dockerfile_ftt_backend
     restart: unless-stopped
     ports:
-      - 3490:80
+      - 3490:3000
     networks:
       - samsara_net
     env_file: ftt_backend.env
     # makes the service available as the hostname, implies depends_on:
-    entrypoint: /health_check.sh;
+    entrypoint: npm run start && /health_check.sh node
+
 #   links:
 #     - ftt_database:ftt_database
 ##	entrypoint: sh -c "yarn install && yarn run dev"

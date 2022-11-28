@@ -1,5 +1,10 @@
 #!/bin/sh
-do_apt_update="true";#XXX must be true
+
+# By the time of developing, stable releases (LTS):
+# node 18.12.1
+# npm 6.14.4
+
+do_apt_update="true";
 do_apt_upgrade="true";
 docker_clean_containers="true";
 docker_clean_images="true";
@@ -27,10 +32,13 @@ do_docker_stop()
 	[ "$docker_stop" = "true" ] && do_docker_stop;
 
 	[ "$do_apt_update" = "true" ] && sudo apt update;
-	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade;
+	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade && sudo apt -y autoremove;
 
 	sudo apt install -y docker-compose-plugin;
-	sudo apt install -y nodejs npm;
+	sudo apt install -y npm;
+	sudo npm install -g n;
+	sudo n stable;
+	sudo npm install -g npm@latest;
 	sudo npm install -g @nestjs/cli@latest;
 
 # For docker-compose in rootless mode:
