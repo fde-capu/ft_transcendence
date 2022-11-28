@@ -36,9 +36,9 @@ do_docker_stop()
 
 	sudo apt install -y docker-compose-plugin;
 	sudo apt install -y npm;
+	sudo npm install -g npm@latest;
 	sudo npm install -g n;
 	sudo n stable;
-	sudo npm install -g npm@latest;
 	sudo npm install -g @nestjs/cli@latest;
 
 # For docker-compose in rootless mode:
