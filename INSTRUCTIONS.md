@@ -42,3 +42,11 @@ nest generate module books
 nest generate controller books
 ...and follow https://www.digitalocean.com/community/tutorials/getting-started-with-nestjs
 ...or other building tutorial.
+
+---
+
+To use a VM shared folder:
+	`sudo adduser user42 vboxsf`
+	...then logout and login.
+	`cd /mnt/ft_transcendence`
+	...then go with the ssh key, and git configuration.

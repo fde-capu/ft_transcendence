@@ -34,6 +34,7 @@ do_docker_stop()
 	[ "$do_apt_update" = "true" ] && sudo apt update;
 	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade && sudo apt -y autoremove;
 
+	sudo dpkg --configure -a
 	sudo apt install -y docker-compose-plugin;
 	sudo apt install -y npm;
 	sudo npm install -g n;
