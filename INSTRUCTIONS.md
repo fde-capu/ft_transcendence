@@ -7,9 +7,9 @@ Open the file to check comments about docker rootless mode, and run:
 	`./prerequisites.sh`
 
 Cross your fingers and run:
-	`docker compose up --build`
+	`docker-compose up --build`
 or, while testing:
-	`docker compose up --build --force-recreate`
+	`docker-compose up --build --force-recreate`
 
 You can check the open ports connection by the rootlesskit with:
 	`ss -tnlp` or `netstat -tnlp`
@@ -20,14 +20,23 @@ While the containers are running, interact with them:
 	`docker exec -it ftt_database /bin/sh`
 
 Finally:
-	`docker compose down`
+	`docker-compose down`
+
+NOTES
+
+- Subject states `docker-compose` but its obsolete, and `docker compose` is
+  latest stable release.
+
+- It is possible to work via ssh on the VM. Setup NAT ports, sshd on VM, then
+	- Start VM on background: `virtualboxvm --startvm user42@42saopaulo --separate`
+	- Login: `ssh user42@127.0.0.1 -p 2222`
 
 QUESTIONS
 
 Why do I need to npm install @nestjs/cli? Does not it comes with nestjs/schematics?
 Even on nestjs/cli..?
 
-docker compose up --build --force-recreate
+docker-compose up --build --force-recreate
 docker exec -it ftt_backend /bin/sh
 
 (Example:)
