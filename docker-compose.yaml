@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/29 09:40:16 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/29 09:46:11 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ services:
     image: postgres:latest
     volumes:
       - ./health_check.sh:/health_check.sh
-      - ./vol_database:/var/lib/postgressql/data
+      - ./vol_database:/var/lib/postgresql
     restart: always
     environment:
       POSTGRES_PASSWORD: user42

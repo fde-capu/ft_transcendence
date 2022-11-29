@@ -44,7 +44,6 @@ do_docker_stop()
 	if [ "$install_dependencies" = "true" ] ; then
 
 		sudo dpkg --configure -a
-		sudo apt install -y postgresql
 		sudo apt install -y docker-compose-plugin;
 		sudo apt install -y npm;
 		sudo npm install -g n;
