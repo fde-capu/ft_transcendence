@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/29 15:06:08 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/29 17:44:19 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,6 @@ services:
       POSTGRES_PASSWORD: 42
       PGDATA: /external_data
       POSTGRES_USER: root
-#      POSTGRES_DB: user42
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
