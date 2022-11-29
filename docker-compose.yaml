@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/29 07:50:12 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/29 08:44:58 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ services:
     container_name: ftt_backend
     volumes:
       - ./health_check.sh:/health_check.sh
-      - ./app_backend:/app_backend
+      - ./app_backend:/app
+    working_dir: /app
     build:
       context: app_backend
       dockerfile: ../Dockerfile_ftt_backend
@@ -27,7 +28,6 @@ services:
       - 3490:3000
     networks:
       - samsara_net
-    working_dir: /app_backend
     entrypoint: npm run start:dev && /health_check.sh node
 #    env_file: ftt_backend.env
 #   links:
@@ -37,7 +37,8 @@ services:
     container_name: ftt_frontend
     volumes:
       - ./health_check.sh:/health_check.sh
-      - ./app_frontend:/app_frontend
+      - ./app_frontend:/app
+    working_dir: /app
     build:
       context: app_frontend
       dockerfile: ../Dockerfile_ftt_frontend
@@ -46,7 +47,6 @@ services:
       - 3491:3000
     networks:
       - samsara_net
-    working_dir: /app_frontend
     entrypoint: npm run start:dev && /health_check.sh node
 #    env_file: ftt_frontend.env
 #    expose: [3000]

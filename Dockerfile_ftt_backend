@@ -1,8 +1,4 @@
 # fde-capu's ft_transcendence Dockerfile backend
 
 FROM node:lts-hydrogen
-#RUN npm install -g npm@latest
-#RUN npm install -g n
-#RUN n stable
-#RUN npm install -g @nestjs/cli@latest
 EXPOSE 3490
