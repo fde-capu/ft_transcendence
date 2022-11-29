@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/29 08:44:58 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/29 09:40:16 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,11 +23,13 @@ services:
     build:
       context: app_backend
       dockerfile: ../Dockerfile_ftt_backend
-    restart: unless-stopped
     ports:
       - 3490:3000
     networks:
       - samsara_net
+    depends_on:
+      ftt_database:
+        condition: service_healthy
     entrypoint: npm run start:dev && /health_check.sh node
 #    env_file: ftt_backend.env
 #   links:
@@ -42,7 +44,6 @@ services:
     build:
       context: app_frontend
       dockerfile: ../Dockerfile_ftt_frontend
-    restart: unless-stopped
     ports:
       - 3491:3000
     networks:
@@ -51,12 +52,20 @@ services:
 #    env_file: ftt_frontend.env
 #    expose: [3000]
 
-#  ftt_database:
-#    container_name: ftt_database
-#    image: postgres:latest
-#    volumes:
-#      - ./health_check.sh:/health_check.sh
-#    restart: unless-stopped
+  ftt_database:
+    container_name: ftt_database
+    image: postgres:latest
+    volumes:
+      - ./health_check.sh:/health_check.sh
+      - ./vol_database:/var/lib/postgressql/data
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: user42
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
 #    networks:
 #      - samsara_net
 #    expose: [3000]
