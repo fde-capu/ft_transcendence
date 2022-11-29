@@ -6,19 +6,19 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/27 22:56:09 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/28 16:02:41 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 version: "2.5"
 
 services:
+
   ftt_backend:
     container_name: ftt_backend
     volumes:
       - ./health_check.sh:/health_check.sh
       - ./app_backend:/app_backend
-    working_dir: /app_backend
     build:
       context: app_backend
       dockerfile: ../Dockerfile_ftt_backend
@@ -27,26 +27,30 @@ services:
       - 3490:3000
     networks:
       - samsara_net
-    env_file: ftt_backend.env
-    # makes the service available as the hostname, implies depends_on:
+    working_dir: /app_backend
     entrypoint: npm run start:dev && /health_check.sh node
-
+#    env_file: ftt_backend.env
 #   links:
 #     - ftt_database:ftt_database
-##	entrypoint: sh -c "yarn install && yarn run dev"
-#  ftt_frontend:
-#    container_name: ftt_frontend
-#    image: bash:latest # Temporary mock.
-#    volumes:
-#      - ./health_check.sh:/health_check.sh
-#    restart: unless-stopped
-#    ports:
-#      - 3491:80
-#    networks:
-#      - samsara_net
-#    expose: [3000]
+
+  ftt_frontend:
+    container_name: ftt_frontend
+    volumes:
+      - ./health_check.sh:/health_check.sh
+      - ./app_frontend:/app_frontend
+    build:
+      context: app_frontend
+      dockerfile: ../Dockerfile_ftt_frontend
+    restart: unless-stopped
+    ports:
+      - 3491:3000
+    networks:
+      - samsara_net
+    working_dir: /app_frontend
+    entrypoint: npm run start:dev && /health_check.sh node
 #    env_file: ftt_frontend.env
-#    entrypoint: /health_check.sh;
+#    expose: [3000]
+
 #  ftt_database:
 #    container_name: ftt_database
 #    image: postgres:latest
