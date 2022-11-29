@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/29 09:46:11 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/11/29 15:06:08 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,15 +56,18 @@ services:
     container_name: ftt_database
     image: postgres:latest
     volumes:
-      - ./health_check.sh:/health_check.sh
-      - ./vol_database:/var/lib/postgresql
+#      - ./health_check.sh:/health_check.sh
+      - ./vol_database:/external_data
     restart: always
     environment:
-      POSTGRES_PASSWORD: user42
+      POSTGRES_PASSWORD: 42
+      PGDATA: /external_data
+      POSTGRES_USER: root
+#      POSTGRES_DB: user42
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
-      timeout: 5s
+      timeout: 20s
       retries: 10
 #    networks:
 #      - samsara_net
