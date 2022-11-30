@@ -1,4 +1,4 @@
 # fde-capu's ft_transcendence Dockerfile backend
 
-FROM nestjs/cli:latest
+FROM node:latest
 EXPOSE 3490
