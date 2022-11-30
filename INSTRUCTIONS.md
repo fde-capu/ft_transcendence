@@ -1,3 +1,6 @@
+VM issues:
+Enable PAE/NX to validate apt-get hashes.
+
 Open the file to check comments about docker rootless mode, and run:
 	`./prerequisites.sh`
 

@@ -1,4 +1,4 @@
 # fde-capu's ft_transcendence Dockerfile frontend
 
-FROM node:lts-hydrogen
+FROM nestjs/cli:latest
 EXPOSE 3491
