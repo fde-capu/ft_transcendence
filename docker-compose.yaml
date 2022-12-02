@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/12/02 12:23:48 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/02 14:44:16 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ services:
     volumes:
 #      - ./health_check.sh:/health_check.sh
       - ./vol_database:/external_data
+      - ./database_init:/docker-entrypoint-initdb.d
     restart: always
     environment:
       POSTGRES_PASSWORD: 42
