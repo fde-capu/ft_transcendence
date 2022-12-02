@@ -9,6 +9,7 @@ docker_image_prune="true";
 reinstall_containerd_docker_ce="true";
 docker_stop="true";
 install_dependencies="true";
+clean_database="true"; # Resets pulled git vol_database.
 
 do_docker_stop()
 {
@@ -35,6 +36,8 @@ do_docker_stop()
 
 	[ "$do_apt_update" = "true" ] && sudo apt update;
 	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade && sudo apt -y autoremove;
+
+	[ "$clean_database" = "true" ] && sudo rm -rf vol_database;
 
 	if [ "$install_dependencies" = "true" ] ; then
 
