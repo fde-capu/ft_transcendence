@@ -1,9 +1,4 @@
 #!/bin/sh
-
-# By the time of developing, stable releases (LTS):
-# node 18.12.1
-# npm 8.19.2
-
 # XXX put all to true
 do_apt_update="true";
 do_apt_upgrade="true";

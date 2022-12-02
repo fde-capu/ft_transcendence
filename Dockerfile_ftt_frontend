@@ -1,4 +1,4 @@
 # fde-capu's ft_transcendence Dockerfile frontend
 
-FROM node:latest
+FROM node:current-slim
 EXPOSE 3491

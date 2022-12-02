@@ -1,3 +1,9 @@
+# By the time of developing, stable releases (LTS):
+
+# node:current-slim = 19.2-bullseye-slim
+# node 18.12.1
+# npm 8.19.2
+
 VM issues:
 Enable PAE/NX to validate apt-get hashes.
 
