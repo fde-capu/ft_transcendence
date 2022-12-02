@@ -1,0 +1,5 @@
+# Adding vol_database to .gitingore,
+# then, using hooks to add -f pre-commit.
+# So it does not show permission errors on status.
+
+vol_database
