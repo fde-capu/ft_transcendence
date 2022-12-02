@@ -2,8 +2,8 @@
 # node:current-slim = 19.2-bullseye-slim
 # postgres:latest = 15.1-bullseye
 # latest stable node: 18.12.1
-# latest stable npm: 8.19.2
-# latest stable psql: 15.1 (Debian 51.1-1.pgdg110+1)
+# latest stable npm: 9.1.3
+# latest stable psql inside container: 15.1 (Debian 51.1-1.pgdg110+1)
 
 ### VM issues:
 ## Enable PAE/NX to validate apt-get hashes.
@@ -65,3 +65,6 @@ nest generate module books
 nest generate controller books
 ...and follow https://www.digitalocean.com/community/tutorials/getting-started-with-nestjs
 ...or other building tutorial.
+
+
+
