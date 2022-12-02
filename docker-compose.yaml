@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/11/29 17:44:19 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/02 12:23:48 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,8 +68,8 @@ services:
       interval: 1s
       timeout: 20s
       retries: 10
-#    networks:
-#      - samsara_net
+    networks:
+      - samsara_net
 #    expose: [3000]
 #    env_file: ftt_database.env
 #    entrypoint: /health_check.sh;

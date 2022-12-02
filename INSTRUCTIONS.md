@@ -1,8 +1,9 @@
-# By the time of developing, stable releases (LTS):
-
+# By the time of developing:
 # node:current-slim = 19.2-bullseye-slim
-# node 18.12.1
-# npm 8.19.2
+# postgres:latest = 15.1-bullseye
+# latest stable node: 18.12.1
+# latest stable npm: 8.19.2
+# latest stable psql: 15.1 (Debian 51.1-1.pgdg110+1)
 
 VM issues:
 Enable PAE/NX to validate apt-get hashes.

@@ -27,8 +27,8 @@ do_docker_stop()
 	[ "$docker_clean_images" = "true" ] && \
 		[ "$(docker images -aq)" != "" ] && \
 		docker rmi $(docker images -aq);
-	[ "$docker_system_prune" = "true" ] && docker system prune;
-	[ "$docker_image_prune" = "true" ] && docker image prune;
+	[ "$docker_system_prune" = "true" ] && docker system prune -y;
+	[ "$docker_image_prune" = "true" ] && docker image prune -y;
 	[ "$reinstall_containerd_docker_ce" = "true" ] && \
 		sudo apt install -y containerd.io docker-ce;
 	[ "$docker_stop" = "true" ] && do_docker_stop;
