@@ -7,12 +7,8 @@
 
 ### VM issues:
 ## Enable PAE/NX to validate apt-get hashes.
-## To use a VM shared folder:
-	`sudo adduser user42 vboxsf`
-#	...then logout and login.
-	`cd /mnt/ft_transcendence`
-#	...then go with the ssh key, and git configuration.
-# But this it not good, becase versioning outside and inside VM are different
+## Found no use in sharing an external folder:
+# Versioning outside and inside VM are different
 # for npm, nest etc..
 
 ### Open the file to check comments about docker rootless mode, and run:
@@ -69,3 +65,5 @@ nest generate controller books
 
 https://geshan.com.np/blog/2021/01/nodejs-postgresql-tutorial/
 https://geshan.com.np/blog/2021/12/docker-postgres/
+
+

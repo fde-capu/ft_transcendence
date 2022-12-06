@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/12/02 15:47:22 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/06 15:19:34 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ services:
     volumes:
       - ./health_check.sh:/health_check.sh
       - ./app_backend:/app
-    working_dir: /app
     build:
       context: app_backend
       dockerfile: ../Dockerfile_ftt_backend
@@ -36,27 +35,11 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postres
       DB_NAME: postres
+    working_dir: /app
     entrypoint: npm start && /health_check.sh node
 #    env_file: ftt_backend.env
 #   links:
 #     - ftt_database:ftt_database
-
-  ftt_frontend:
-    container_name: ftt_frontend
-    volumes:
-      - ./health_check.sh:/health_check.sh
-      - ./app_frontend:/app
-    working_dir: /app
-    build:
-      context: app_frontend
-      dockerfile: ../Dockerfile_ftt_frontend
-    ports:
-      - 3491:3000
-    networks:
-      - samsara_net
-    entrypoint: npm run start:dev && /health_check.sh node
-#    env_file: ftt_frontend.env
-#    expose: [3000]
 
   ftt_database:
     container_name: ftt_database
@@ -80,6 +63,23 @@ services:
 #    expose: [3000]
 #    env_file: ftt_database.env
 #    entrypoint: /health_check.sh;
+
+#  ftt_frontend:
+#    container_name: ftt_frontend
+#    volumes:
+#      - ./health_check.sh:/health_check.sh
+#      - ./app_frontend:/app
+#    working_dir: /app
+#    build:
+#      context: app_frontend
+#      dockerfile: ../Dockerfile_ftt_frontend
+#    ports:
+#      - 3491:3000
+#    networks:
+#      - samsara_net
+#    entrypoint: npm run start:dev && /health_check.sh node
+##    env_file: ftt_frontend.env
+##    expose: [3000]
 
 networks:
   samsara_net:
