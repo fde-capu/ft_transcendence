@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/12/06 16:52:47 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/06 20:45:14 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,8 +33,8 @@ services:
       DB_HOST: ftt_database
       DB_PORT: 5432
       DB_USER: root
-      DB_PASSWORD: 42
-      DB_NAME: fttdb
+      DB_PASSWORD: root42
+      DB_NAME: root
     working_dir: /app
     entrypoint: npm start && /health_check.sh node
 #    env_file: ftt_backend.env
@@ -50,9 +50,8 @@ services:
       - ./database_init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     environment:
-      POSTGRES_PASSWORD: 42
+      POSTGRES_PASSWORD: root42
       POSTGRES_USER: root
-      POSTGRES_DB: fttdb
       PGDATA: /external_data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
