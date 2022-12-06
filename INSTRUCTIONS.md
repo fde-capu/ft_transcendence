@@ -1,4 +1,9 @@
 ## By the time of developing:
+
+# compose.cli.docker_client.get_client: docker-compose version 1.29.2, build 5becea4c
+# docker-py version: 5.0.0
+# CPython version: 3.7.10
+# OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
 # node:current-slim = 19.2-bullseye-slim
 # postgres:latest = 15.1-bullseye
 # latest stable node: 18.12.1

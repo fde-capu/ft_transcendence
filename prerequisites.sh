@@ -1,14 +1,14 @@
 #!/bin/sh
 # XXX put all to true
-do_apt_update="true";
-do_apt_upgrade="true";
+do_apt_update="false";
+do_apt_upgrade="false";
+reinstall_npm="false";
 docker_clean_containers="true";
-docker_clean_images="true";
-docker_system_prune="true";
-docker_image_prune="true";
-reinstall_containerd_docker_ce="true";
-docker_stop="true";
-install_dependencies="true";
+docker_clean_images="false";
+docker_image_prune="false";
+docker_system_prune="false";
+reinstall_containerd_docker_ce="false";
+install_dependencies="false";
 clean_database="true"; # Resets pulled git vol_database.
 
 do_docker_stop()
@@ -32,10 +32,18 @@ do_docker_stop()
 	[ "$docker_image_prune" = "true" ] && docker image prune -y;
 	[ "$reinstall_containerd_docker_ce" = "true" ] && \
 		sudo apt install -y containerd.io docker-ce;
-	[ "$docker_stop" = "true" ] && do_docker_stop;
+
+	do_docker_stop;
 
 	[ "$do_apt_update" = "true" ] && sudo apt update;
 	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade && sudo apt -y autoremove;
+	if [ "$reinstall_npm" = "true" ] ; then
+		sudo apt install -y npm;
+		sudo npm install -g n;
+		sudo n stable;
+		sudo npm install -g npm@latest;
+		sudo npm install -g @nestjs/cli@latest;
+	fi;
 
 	[ "$clean_database" = "true" ] && sudo rm -rf vol_database;
 
@@ -43,11 +51,6 @@ do_docker_stop()
 
 		sudo dpkg --configure -a
 		sudo apt install -y docker-compose-plugin;
-		sudo apt install -y npm;
-		sudo npm install -g n;
-		sudo n stable;
-		sudo npm install -g npm@latest;
-		sudo npm install -g @nestjs/cli@latest;
 
 # For docker-compose in rootless mode:
 		sudo apt install -y uidmap; # updates even if already installed.
@@ -104,4 +107,5 @@ do_docker_stop()
 # ...please refer to:
 # https://docs.docker.com/engine/security/rootless
 
+set +x;
 echo 'Success!'
