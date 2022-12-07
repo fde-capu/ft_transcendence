@@ -72,3 +72,5 @@ https://geshan.com.np/blog/2021/01/nodejs-postgresql-tutorial/
 https://geshan.com.np/blog/2021/12/docker-postgres/
 
 
+Post curl:
+curl -i -X POST -H 'Accept: application/json' -H 'Content-type: application/json' http://0.0.0.0:3490/quotes --data '{"quote":"God is dead.","author":"Nietzsche"}'
