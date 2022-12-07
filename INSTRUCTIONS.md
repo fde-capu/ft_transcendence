@@ -1,15 +1,18 @@
 ## By the time of developing, lastest stables:
-# VM: Linux 42saopaulo 5.15.0-56-generic #62~20.04.1-Ubuntu SMP x86_64 x86_64 x86_64 GNU/Linux
-#   latest stable node: 18.12.1
-#   latest stable npm: 9.1.3
+# VM
+# - Linux 42saopaulo 5.15.0-56-generic #62~20.04.1-Ubuntu SMP x86_64 GNU/Linux
+#   node: 18.12.1
+#   npm: 9.1.3
 #   compose.cli.docker_client.get_client: docker-compose version 1.29.2, build 5becea4c
 #   docker-py version: 5.0.0
 #   CPython version: 3.7.10
 #   OpenSSL version: OpenSSL 1.1.0l  10 Sep 2019
 # node:current-slim = 19.2-bullseye-slim
+# - Linux 60931926b714 5.15.0-56-generic #62~20.04.1-Ubuntu SMP x86_64 GNU/Linux
 #    node: 19.2.0
 #    npm: 8.19.3
 # postgres:latest = 15.1-bullseye
+# - Linux 4ee7f68b3d2f 5.15.0-56-generic #62~20.04.1-Ubuntu SMP x86_64 GNU/Linux
 #    psql: 15.1 (Debian 51.1-1.pgdg110+1)
 
 ### VM issues:
