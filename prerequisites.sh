@@ -1,14 +1,14 @@
 #!/bin/sh
 # XXX put all to true
-do_apt_update="false";
-do_apt_upgrade="false";
-reinstall_npm="false";
+do_apt_update="true";
+do_apt_upgrade="true";
+reinstall_npm="true";
 docker_clean_containers="true";
-docker_clean_images="false";
-docker_image_prune="false";
-docker_system_prune="false";
-reinstall_containerd_docker_ce="false";
-install_dependencies="false";
+docker_clean_images="true";
+docker_image_prune="true";
+docker_system_prune="true";
+reinstall_containerd_docker_ce="true";
+install_dependencies="true";
 clean_database="true"; # Resets pulled git vol_database.
 
 do_docker_stop()
