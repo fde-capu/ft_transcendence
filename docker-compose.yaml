@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/12/06 20:45:14 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/06 21:14:52 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ services:
       DB_PASSWORD: root42
       DB_NAME: root
     working_dir: /app
-    entrypoint: npm start && /health_check.sh node
+    entrypoint: npm run dev && /health_check.sh node
 #    env_file: ftt_backend.env
 #   links:
 #     - ftt_database:ftt_database
