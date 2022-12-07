@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/12/07 10:47:21 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/07 11:15:47 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ services:
   ftt_backend:
     container_name: ftt_backend
     volumes:
+      - ./ftt_backend_init.sh:/init.sh
       - ./health_check.sh:/health_check.sh
       - ./app_backend:/app
     build:
@@ -36,9 +37,7 @@ services:
       DB_PASSWORD: root42
       DB_NAME: root
     working_dir: /app
-    entrypoint: >-
-      bash -c "npm ci &&
-      npm run dev && /health_check.sh node"
+    entrypoint: bash -c "npm ci && npm run dev && /health_check.sh node"
 #    env_file: ftt_backend.env
 #   links:
 #     - ftt_database:ftt_database
