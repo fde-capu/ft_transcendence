@@ -1,3 +1,16 @@
+CREATE SEQUENCE global_unique START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+
+CREATE TABLE users (
+    id bigint DEFAULT nextval('global_unique'::regclass) NOT NULL PRIMARY KEY,
+	intra_login character varying(255) NOT NULL UNIQUE,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+INSERT INTO users (intra_login) VALUES
+('fde-capu');
+
+/*
 CREATE SEQUENCE quote_id_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 
 CREATE TABLE quote (
@@ -26,3 +39,4 @@ INSERT INTO quote (quote, author) VALUES
 ('Measuring programming progress by lines of code is like measuring aircraft building progress by weight.', 'Bill Gates'),
 ('Controlling complexity is the essence of computer programming.', 'Brian Kernighan'),
 ('The only way to learn a new programming language is by writing programs in it.', 'Dennis Ritchie');
+*/
