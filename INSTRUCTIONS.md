@@ -76,7 +76,10 @@ nest generate controller books
 
 https://geshan.com.np/blog/2021/01/nodejs-postgresql-tutorial/
 https://geshan.com.np/blog/2021/12/docker-postgres/
-
+https://blog.devgenius.io/setting-up-nestjs-with-postgresql-ac2cce9045fe
+https://www.freecodecamp.org/news/build-web-apis-with-nestjs-beginners-guide/
+https://progressivecoder.com/how-to-implement-nestjs-passport-authentication-using-local-strategy/
+https://www.techiediaries.com/nestjs-tutorial-jwt-authentication/
 
 Post curl:
 curl -i -X POST -H 'Accept: application/json' -H 'Content-type: application/json' http://0.0.0.0:3490/quotes --data '{"quote":"God is dead.","author":"Nietzsche"}'
