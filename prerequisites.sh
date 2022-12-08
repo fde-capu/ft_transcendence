@@ -50,7 +50,7 @@ do_docker_stop()
 	if [ "$install_dependencies" = "true" ] ; then
 
 		sudo dpkg --configure -a
-		sudo apt install -y docker-compose-plugin;
+		sudo apt install -y docker docker-compose-plugin;
 
 # For docker-compose in rootless mode:
 		sudo apt install -y uidmap; # updates even if already installed.

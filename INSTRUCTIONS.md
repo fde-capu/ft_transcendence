@@ -1,6 +1,7 @@
 ## By the time of developing, lastest stables:
 # VM
 # - Linux 42saopaulo 5.15.0-56-generic #62~20.04.1-Ubuntu SMP x86_64 GNU/Linux
+#   Docker version 20.10.21, build 3056208
 #   Unsing `n stable`:
 #   node: 18.12.1
 #   npm: 9.1.3
