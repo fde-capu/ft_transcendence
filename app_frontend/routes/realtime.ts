@@ -38,9 +38,8 @@ io.on('connection', (socket) => {
 ////
 let port = realtime.get("port");
 const server = realtime.listen(port, function() {
-    var host = express.address().address;
-    var port = express.address().port;
-    console.log("Realtime listening on " + host + " " + port);
+    var port = realtime.get("port");
+    console.log("Realtime listening on " + port + ".");
 });
 //
 ////////////////////
