@@ -1,5 +1,6 @@
 {
   "name": "app-backend",
+  "author": "fde-capu",
   "version": "0.0.0",
   "private": true,
   "scripts": {

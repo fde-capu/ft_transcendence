@@ -3,3 +3,4 @@
 # So it does not show permission errors on status.
 
 vol_database
+node_modules
