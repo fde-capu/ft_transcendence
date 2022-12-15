@@ -7,7 +7,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "node ./src/server/server.ts",
-    "dev": "nodemon -e js,mjs,json,ts,tsx,htm,html,css ./src/server/server.ts"
+    "dev": "nodemon -e js,mjs,json,ts,tsx ./src/server/server.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.14",
