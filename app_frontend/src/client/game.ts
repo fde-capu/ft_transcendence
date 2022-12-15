@@ -1,5 +1,4 @@
 import * as phaser from "phaser"
-//import 'phaser';
 
 type GameConfig = Phaser.Types.Core.GameConfig;
 

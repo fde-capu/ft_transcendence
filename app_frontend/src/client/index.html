@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-  <script src="phaser.js"></script>
+  <script src="phaser"></script>
   Text!
     <div id='game'></div>
     <script src="/socket.io/socket.io.js"></script>
@@ -14,6 +14,6 @@
       const socket = io()
       socket.emit("msg", "test")
     </script>
-    <script src="game.js" type="module"></script>
+    <script src="game_canvas" type="module"></script>
   </body>
 </html>

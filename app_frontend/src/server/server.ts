@@ -1,6 +1,7 @@
 // src/server/server.ts
 import * as express from "express"
 import * as path from "path"
+import {Player} from "../shared/model/player"
 
 const app = express();
 app.set("external_port", 3491);
@@ -12,24 +13,18 @@ let io = require("socket.io")(http)
 app.get("/", (req: any, res: any) => {
   res.sendFile(path.resolve("./src/client/index.html"))
 })
-
-app.get("/phaser.js", (req: any, res: any) => {
+app.get("/phaser", (req: any, res: any) => {
   res.sendFile(path.resolve("./node_modules/phaser/dist/phaser.js"))
 })
-
-app.get("/game.js", (req: any, res: any) => {
-  res.sendFile(path.resolve("./dist/client/game.js"))
-})
-
-app.get("/game.js", (req: any, res: any) => {
+app.get("/game_canvas", (req: any, res: any) => {
   res.sendFile(path.resolve("./dist/client/game.js"))
 })
 
 io.on("connection", function(socket: any) {
   console.log("Client connected!")
   socket.on("msg", function(msg: any) {
-//	let player = new Player(msg)
-//	console.log(player.getName())
+	let player = new Player(msg)
+	console.log(player.getName())
 	console.log("heya");
   })
 })
