@@ -13,10 +13,24 @@ app.get("/", (req: any, res: any) => {
   res.sendFile(path.resolve("./src/client/index.html"))
 })
 
+app.get("/phaser.js", (req: any, res: any) => {
+  res.sendFile(path.resolve("./node_modules/phaser/dist/phaser.js"))
+})
+
+app.get("/game.js", (req: any, res: any) => {
+  res.sendFile(path.resolve("./dist/client/game.js"))
+})
+
+app.get("/game.js", (req: any, res: any) => {
+  res.sendFile(path.resolve("./dist/client/game.js"))
+})
+
 io.on("connection", function(socket: any) {
   console.log("Client connected!")
   socket.on("msg", function(msg: any) {
-    console.log(msg)
+//	let player = new Player(msg)
+//	console.log(player.getName())
+	console.log("heya");
   })
 })
 
