@@ -2,25 +2,14 @@
 import * as express from "express"
 import * as path from "path"
 
-var livereload = require("livereload");
-const connectLivereload = require("connect-livereload");
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, 'dist'));
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
-
 const app = express();
-app.set("port", process.env.PORT || 3000)
-app.use(connectLivereload());
+app.set("external_port", 3491);
+app.set("port", process.env.PORT || 3000);
 
 let http = require("http").Server(app)
 let io = require("socket.io")(http)
 
 app.get("/", (req: any, res: any) => {
-	console.log("Got /");
   res.sendFile(path.resolve("./src/client/index.html"))
 })
 
@@ -32,7 +21,7 @@ io.on("connection", function(socket: any) {
 })
 
 http.listen(app.get("port"), function() {
-  console.log("Frontend listening on *:" + app.get("port"))
+  console.log("Frontend listening on *:" + app.get("external_port"))
 })
 
 module.exports = app;
