@@ -22,10 +22,9 @@ app.get("/game_canvas", (req: any, res: any) => {
 
 io.on("connection", function(socket: any) {
   console.log("Client connected!")
-  socket.on("msg", function(msg: any) {
+  socket.on("set_player_name", function(msg: any) {
 	let player = new Player(msg)
-	console.log(player.getName())
-	console.log("heya");
+	console.log("Player name set: " + player.getName())
   })
 })
 
