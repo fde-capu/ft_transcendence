@@ -1,11 +1,11 @@
-import * as phaser from "phaser"
+const Phaser = require("phaser");
 
 type GameConfig = Phaser.Types.Core.GameConfig;
 
 const config: GameConfig = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 400,
+  height: 300,
   parent: 'game',
   scene: {
     preload: preload,
@@ -14,14 +14,11 @@ const config: GameConfig = {
   }
 }
 
-
 export class Game extends Phaser.Game {
   constructor(config: GameConfig) {
     super(config)
   }
 }
-
-const game = new Game(config)
 
 function preload ()
 {
@@ -37,5 +34,7 @@ function create ()
 
 function update ()
 {
-//	this.add.image(400, 300, 'pixel_white');
+	this.add.image(100, 200, 'pixel_white');
 }
+
+const game = new Game(config)

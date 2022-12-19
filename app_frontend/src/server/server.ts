@@ -1,16 +1,17 @@
-// src/server/server.ts
-//import express from "express"
+//import express from "express";
 //import path from "path"
 //import {Player} from "/app/dist/shared/model/player.js"
-import {Player} from "../shared/model/player.js"
+//import * as express from "express";
+//import * as path from "path";
+//import * as morgan from "morgan";
+//import morgan from "morgan";
 
-const path = require("path");
-//const player = require("../shared/model/player.js");
+import {Player} from "../shared/model/player.js"
 
 const express = require("express");
 const app = express();
-var morgan = require("morgan");
-app.use(morgan("combined"));
+const path = require("path");
+
 
 app.set("external_port", 3491);
 app.set("port", process.env.PORT || 3000);
@@ -29,6 +30,9 @@ app.get("/phaser", (req: any, res: any) => {
 })
 app.get("/game_canvas", (req: any, res: any) => {
   res.sendFile(path.resolve("./dist/client/game.js"))
+})
+app.get("/assets", (req: any, res: any) => {
+  res.sendFile(path.resolve("./dist/shared/assets"))
 })
 
 io.on("connection", function(socket: any) {
