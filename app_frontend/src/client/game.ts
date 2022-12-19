@@ -20,3 +20,4 @@ export class Game extends Phaser.Game {
 }
 
 const game = new Game(config)
+

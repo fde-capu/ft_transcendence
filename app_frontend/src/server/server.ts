@@ -13,6 +13,9 @@ let io = require("socket.io")(http)
 app.get("/", (req: any, res: any) => {
   res.sendFile(path.resolve("./src/client/index.html"))
 })
+app.get("/socket.io", (req: any, res: any) => {
+  res.sendFile(path.resolve("./node_modules/socket.io/client-dist/socket.io.js"))
+})
 app.get("/phaser", (req: any, res: any) => {
   res.sendFile(path.resolve("./node_modules/phaser/dist/phaser.js"))
 })

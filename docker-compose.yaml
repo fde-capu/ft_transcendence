@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/12/14 17:45:02 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/19 15:13:10 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,55 +31,55 @@ services:
 ##    env_file: ftt_frontend.env
 ##    expose: [3000]
 
-  ftt_backend:
-    container_name: ftt_backend
-    volumes:
-      - ./health_check.sh:/health_check.sh
-      - ./app_backend:/app
-    working_dir: /app
-    build:
-      context: app_backend
-      dockerfile: ../Dockerfile_ftt_backend
-    ports:
-      - 3490:3000
-    networks:
-      - samsara_net
-    depends_on:
-      ftt_database:
-        condition: service_healthy
-    environment:
-      DB_HOST: ftt_database
-      DB_PORT: 5432
-      DB_USER: root
-      DB_PASSWORD: root42
-      DB_NAME: root
-    entrypoint: bash -c "npm ci && npm run dev && /health_check.sh node"
-#    env_file: ftt_backend.env
-#   links:
-#     - ftt_database:ftt_database
-
-  ftt_database:
-    container_name: ftt_database
-    image: postgres:latest
-    volumes:
+#  ftt_backend:
+#    container_name: ftt_backend
+#    volumes:
 #      - ./health_check.sh:/health_check.sh
-      - ./vol_database:/external_data
-      - ./database_init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: root42
-      POSTGRES_USER: root
-      PGDATA: /external_data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 1s
-      timeout: 20s
-      retries: 10
-    networks:
-      - samsara_net
-#    expose: [3000]
-#    env_file: ftt_database.env
-#    entrypoint: /health_check.sh;
+#      - ./app_backend:/app
+#    working_dir: /app
+#    build:
+#      context: app_backend
+#      dockerfile: ../Dockerfile_ftt_backend
+#    ports:
+#      - 3490:3000
+#    networks:
+#      - samsara_net
+#    depends_on:
+#      ftt_database:
+#        condition: service_healthy
+#    environment:
+#      DB_HOST: ftt_database
+#      DB_PORT: 5432
+#      DB_USER: root
+#      DB_PASSWORD: root42
+#      DB_NAME: root
+#    entrypoint: bash -c "npm ci && npm run dev && /health_check.sh node"
+##    env_file: ftt_backend.env
+##   links:
+##     - ftt_database:ftt_database
+#
+#  ftt_database:
+#    container_name: ftt_database
+#    image: postgres:latest
+#    volumes:
+##      - ./health_check.sh:/health_check.sh
+#      - ./vol_database:/external_data
+#      - ./database_init.sql:/docker-entrypoint-initdb.d/init.sql
+#    restart: always
+#    environment:
+#      POSTGRES_PASSWORD: root42
+#      POSTGRES_USER: root
+#      PGDATA: /external_data
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready"]
+#      interval: 1s
+#      timeout: 20s
+#      retries: 10
+#    networks:
+#      - samsara_net
+##    expose: [3000]
+##    env_file: ftt_database.env
+##    entrypoint: /health_check.sh;
 
 networks:
   samsara_net:
