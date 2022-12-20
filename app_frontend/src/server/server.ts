@@ -14,7 +14,7 @@ const app = express();
 app.use(morgan('tiny'));
 
 const path = require("path");
-const assetsPath = path.join(__dirname, '../shared/assets');
+const assetsPath = path.join(__dirname, '../../src/shared/assets');
 app.use(express.static(assetsPath));
 const clientPath = path.join(__dirname, '../../src/client');
 app.use(express.static(clientPath));
