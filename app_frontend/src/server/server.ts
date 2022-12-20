@@ -9,9 +9,13 @@
 import {Player} from "../shared/model/player.js"
 
 const express = require("express");
+var morgan = require('morgan');
 const app = express();
+app.use(morgan('tiny'));
 const path = require("path");
-
+const assetsPath = path.join(__dirname, '../shared/assets');
+console.log("AASSS", assetsPath);
+app.use(express.static(assetsPath));
 
 app.set("external_port", 3491);
 app.set("port", process.env.PORT || 3000);
@@ -32,7 +36,7 @@ app.get("/game_canvas", (req: any, res: any) => {
   res.sendFile(path.resolve("./dist/client/game.js"))
 })
 app.get("/assets", (req: any, res: any) => {
-  res.sendFile(path.resolve("./dist/shared/assets"))
+  res.sendFile(assetsPath);
 })
 
 io.on("connection", function(socket: any) {

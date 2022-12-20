@@ -22,8 +22,8 @@ export class Game extends Phaser.Game {
 
 function preload ()
 {
-	this.load.image('pixel_black', 'assets/pixel_black_20.png');
-	this.load.image('pixel_white', 'assets/pixel_white_20.png');
+	this.load.image('pixel_black', 'pixel_black_20.png');
+	this.load.image('pixel_white', 'pixel_white_20.png');
 }
 
 function create ()
