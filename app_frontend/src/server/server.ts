@@ -12,19 +12,22 @@ const express = require("express");
 var morgan = require('morgan');
 const app = express();
 app.use(morgan('tiny'));
+
 const path = require("path");
 const assetsPath = path.join(__dirname, '../shared/assets');
-console.log("AASSS", assetsPath);
 app.use(express.static(assetsPath));
+const clientPath = path.join(__dirname, '../../src/client');
+app.use(express.static(clientPath));
 
 app.set("external_port", 3491);
 app.set("port", process.env.PORT || 3000);
+app.use(express.static(path.join( __dirname, "../client")));
 
 let http = require("http").Server(app)
 let io = require("socket.io")(http)
 
 app.get("/", (req: any, res: any) => {
-  res.sendFile(path.resolve("./src/client/index.html"))
+  res.sendFile(path.resolve(clientPath + "/index.html"))
 })
 app.get("/socket.io", (req: any, res: any) => {
   res.sendFile(path.resolve("./node_modules/socket.io/client-dist/socket.io.js"))
@@ -34,9 +37,6 @@ app.get("/phaser", (req: any, res: any) => {
 })
 app.get("/game_canvas", (req: any, res: any) => {
   res.sendFile(path.resolve("./dist/client/game.js"))
-})
-app.get("/assets", (req: any, res: any) => {
-  res.sendFile(assetsPath);
 })
 
 io.on("connection", function(socket: any) {
