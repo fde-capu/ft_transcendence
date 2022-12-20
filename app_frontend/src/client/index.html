@@ -6,14 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-  <script src="phaser"></script>
-  Text!
-    <div id='game'></div>
+	<script>
+		var exports = {};
+	</script>
+
+    <div id='game'>
+		Text!
+	</div>
+
+	<!-- ***************** -->
+
+	<script src="phaser"></script>
+    <script src="game_canvas"></script>
+
+	<!-- ***************** -->
+
     <script src="socket.io"></script>
     <script>
       const socket = io()
       socket.emit("set_player_name", "Magnavox")
     </script>
-    <script src="game_canvas"></script>
+
   </body>
 </html>
