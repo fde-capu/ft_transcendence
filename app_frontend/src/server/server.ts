@@ -1,42 +1,31 @@
-//import express from "express";
-//import path from "path"
-//import {Player} from "/app/dist/shared/model/player.js"
-//import * as express from "express";
-//import * as path from "path";
-//import * as morgan from "morgan";
-//import morgan from "morgan";
-
 import {Player} from "../shared/model/player.js"
-
-const express = require("express");
-var morgan = require('morgan');
-const app = express();
-app.use(morgan('tiny'));
-
 const path = require("path");
-const assetsPath = path.join(__dirname, '../../src/shared/assets');
-app.use(express.static(assetsPath));
-const clientPath = path.join(__dirname, '../../src/client');
-app.use(express.static(clientPath));
+const express = require("express");
+const morgan = require('morgan');
 
+const clientPath = path.resolve(__dirname + '/../../src/client');
+console.log("clientPath: " + clientPath);
+
+const socketIoPath = path.resolve(__dirname + '/../../node_modules/socket.io/client-dist');
+console.log("socketIoPath: " + socketIoPath);
+
+const assetsPath = path.resolve(__dirname + '../../../src/shared/assets');
+console.log("assetsPath: " + assetsPath);
+
+const app = express();
 app.set("external_port", 3491);
 app.set("port", process.env.PORT || 3000);
-app.use(express.static(path.join( __dirname, "../client")));
+app.use(morgan('tiny'));
+app.use(express.static(assetsPath));
+app.use(express.static(clientPath));
+app.use(express.static(socketIoPath));
+console.log("Frontend app listening on " + app.get("port") + ":" + app.get("external_port") + ".");
 
-let http = require("http").Server(app)
-let io = require("socket.io")(http)
+let http = require("http").Server(app);
+let io = require("socket.io")(http);
 
 app.get("/", (req: any, res: any) => {
-  res.sendFile(path.resolve(clientPath + "/index.html"))
-})
-app.get("/socket.io", (req: any, res: any) => {
-  res.sendFile(path.resolve("./node_modules/socket.io/client-dist/socket.io.js"))
-})
-app.get("/phaser", (req: any, res: any) => {
-  res.sendFile(path.resolve("./node_modules/phaser/dist/phaser.js"))
-})
-app.get("/game_canvas", (req: any, res: any) => {
-  res.sendFile(path.resolve("./dist/client/game.js"))
+  res.sendFile(clientPath + "/index.html");
 })
 
 io.on("connection", function(socket: any) {
@@ -48,7 +37,7 @@ io.on("connection", function(socket: any) {
 })
 
 http.listen(app.get("port"), function() {
-  console.log("Frontend listening on *:" + app.get("external_port"))
+  console.log("Frontend ready.");
 })
 
 module.exports = app;
