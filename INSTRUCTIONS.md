@@ -84,3 +84,5 @@ https://www.techiediaries.com/nestjs-tutorial-jwt-authentication/
 
 Post curl:
 curl -i -X POST -H 'Accept: application/json' -H 'Content-type: application/json' http://0.0.0.0:3490/quotes --data '{"quote":"God is dead.","author":"Nietzsche"}'
+
+curl -H "Content-Type: application/json" --request POST --data '{"abc":"123"}' http://0.0.0.0:3490/users

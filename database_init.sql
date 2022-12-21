@@ -2,12 +2,12 @@ CREATE SEQUENCE global_unique START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALU
 
 CREATE TABLE users (
     id bigint DEFAULT nextval('global_unique'::regclass) NOT NULL PRIMARY KEY,
-	intra_login character varying(255) NOT NULL UNIQUE,
+	intra_id character varying(255) NOT NULL UNIQUE,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-INSERT INTO users (intra_login) VALUES
+INSERT INTO users (intra_id) VALUES
 ('fde-capu');
 
 /*
