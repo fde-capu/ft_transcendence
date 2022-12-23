@@ -6,7 +6,7 @@ No more C! No more C++!
 This project is about doing something you’ve never done before.
 Remind yourself the beginning of your journey in computer science.
 Look at you now. Time to shine!
-Version: 11
+Version: 11.2
 Contents
 I Preamble 2
 II Mandatory part 3
