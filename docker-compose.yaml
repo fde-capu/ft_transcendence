@@ -6,7 +6,7 @@
 #    By: fde-capu <fde-capu@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/17 14:08:46 by fde-capu          #+#    #+#              #
-#    Updated: 2022/12/20 18:16:01 by fde-capu         ###   ########.fr        #
+#    Updated: 2022/12/23 17:12:52 by fde-capu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,10 +51,10 @@ services:
       DB_HOST: ftt_database
       DB_PORT: 5432
       DB_USER: root
-      DB_PASSWORD: root42
       DB_NAME: root
+    env_file:
+      - ./ftt_backend.env
     entrypoint: bash -c "npm ci && npm run dev && /health_check.sh node"
-#    env_file: ftt_backend.env
 #   links:
 #     - ftt_database:ftt_database
 
@@ -67,9 +67,11 @@ services:
       - ./database_init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     environment:
-      POSTGRES_PASSWORD: root42
+#      POSTGRES_PASSWORD: root42
       POSTGRES_USER: root
-      PGDATA: /external_data
+      PGDATA: ./external_data
+    env_file:
+      - ./ftt_database.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
@@ -78,7 +80,6 @@ services:
     networks:
       - samsara_net
 #    expose: [3000]
-#    env_file: ftt_database.env
 #    entrypoint: /health_check.sh;
 
 networks:
