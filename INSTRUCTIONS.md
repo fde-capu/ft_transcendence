@@ -86,3 +86,70 @@ Post curl:
 curl -i -X POST -H 'Accept: application/json' -H 'Content-type: application/json' http://0.0.0.0:3490/quotes --data '{"quote":"God is dead.","author":"Nietzsche"}'
 
 curl -H "Content-Type: application/json" --request POST --data '{"abc":"123"}' http://0.0.0.0:3490/users
+
+-- to-dos next:
+Persistent Database
+Intra API integration
+HTML designs+funcionalities:
+  top bar with user menus:
+    (shows) user's avatar horizontal
+	my profile
+	create match
+	online users
+	chat creation > chat-admin configure
+  real-time avatar showing status:
+    online, offline, in a game
+    invite for a game
+    go to profile
+  user profile page (private), with blocks/pages:
+	change avatar
+	change screen name
+	friends list
+	enable two-factor authentication
+	statistics:
+	  wins/looses
+	  score
+	  ranking..? achievments..?
+	  match history summary
+  public user profile page (only to logged users):
+	real-time avatar
+	screen name
+    actions:
+	  add as friend
+	  block
+	friends list..?
+	anything under statistics
+  online users page:
+    list of everyone so one can visit their public profile
+  chat:
+	public chat:
+	  main screen:
+	    text
+        logged users avatars list (repeat real-time avatar, smaller)
+	  admin main screen:
+	    text
+        logged users avatars list with option to:
+	      set/unset as administrator 
+		  ban user
+		  mute user for amount of time
+		chat configure screen:
+		  set/change/remove password for room
+		  invite user
+    private chat:
+	  same as public chat, but with auto password initialy
+  create match screen:
+    random player
+	specific player (as from "invite for a game")
+	any customization of choice
+	screen must be responsive
+  current running games screen:
+    click to watch any
+  game screen
+  matchmaking system
+  game engine
+  
+
+
+
+-- FINISHING INSTRUCTIONS:
+# 1) remove .env (save elsewhere) from Git repository, add to .gitignore.
