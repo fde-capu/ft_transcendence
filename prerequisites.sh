@@ -37,7 +37,7 @@ do_docker_stop()
 	do_docker_stop;
 
 	[ "$do_apt_update" = "true" ] && sudo apt update;
-	[ "$do_apt_upgrade" = "true" ] && sudo apt -y upgrade && sudo apt -y autoremove;
+	[ "$do_apt_upgrade" = "true" ] && sudo apt upgrade && sudo apt autoremove;
 	if [ "$reinstall_npm" = "true" ] ; then
 		sudo apt install -y npm;
 		sudo npm install -g n;

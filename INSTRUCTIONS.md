@@ -88,7 +88,7 @@ curl -i -X POST -H 'Accept: application/json' -H 'Content-type: application/json
 curl -H "Content-Type: application/json" --request POST --data '{"abc":"123"}' http://0.0.0.0:3490/users
 
 -- to-dos next:
-Unattached env files
+[X] Unattached env files
 Persistent Database
 Intra API integration (unattached env also)
 HTML designs+funcionalities:
