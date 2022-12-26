@@ -9,7 +9,7 @@ docker_image_prune="true";
 docker_system_prune="true";
 reinstall_containerd_docker_ce="true";
 install_dependencies="true";
-clean_database="true"; # Resets pulled git vol_database.
+clean_database="true";
 
 do_docker_stop()
 {

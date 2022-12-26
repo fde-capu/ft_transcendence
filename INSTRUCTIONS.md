@@ -111,7 +111,7 @@ HTML designs+funcionalities:
 	  wins/looses
 	  score
 	  ranking..? achievments..?
-	  match history summary
+      match history summary
   public user profile page (only to logged users):
 	real-time avatar
 	screen name
@@ -122,32 +122,34 @@ HTML designs+funcionalities:
 	anything under statistics
   online users page:
     list of everyone so one can visit their public profile
+  current running games screen:
+    click to watch any
   chat:
 	public chat:
 	  main screen:
 	    text
+		typing area
         logged users avatars list (repeat real-time avatar, smaller)
 	  admin main screen:
 	    text
+		typing area
         logged users avatars list with option to:
 	      set/unset as administrator 
-		  ban user
+		  ban user for amount of time
 		  mute user for amount of time
 		chat configure screen:
 		  set/change/remove password for room
 		  invite user
     private chat:
 	  same as public chat, but with auto password initialy
+  matchmaking system:
   create match screen:
-    random player
+    random player (matchmaking system)
 	specific player (as from "invite for a game")
 	any customization of choice
-	screen must be responsive
-  current running games screen:
-    click to watch any
   game screen
-  matchmaking system
-  game engine
+    game engine THE PONG GAME PER SE
+	screen must be responsive
   
 
 

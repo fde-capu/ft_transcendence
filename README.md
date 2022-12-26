@@ -38,7 +38,7 @@ Back and Forward buttons of the browser.
 Google Chrome and one additional web browser of your choice.
 • The user should encounter no unhandled errors and no warnings when browsing the
 website.
-• Everything has to be launch by a single call to: docker-compose up --build
+• Everything has to be launch by a single call to: docker compose up --build
 When your computers in clusters run under Linux, you will use
 Docker in rootless mode for security reasons. This comes with 2
 sideways: 1) your Docker runtime files must be located in /goinfre

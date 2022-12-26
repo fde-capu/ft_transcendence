@@ -30,15 +30,10 @@ app.get("/", (req: any, res: any) => {
 
 io.on("connection", function(socket: any) {
   console.log("Client connected!")
+
   socket.on("set_player_name", function(msg: any) {
 	let p1 = new Player(msg)
 	console.log("Player name set: " + p1.getName())
-
-
-
-
-
-
   })
 })
 
