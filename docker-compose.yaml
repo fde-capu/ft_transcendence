@@ -15,7 +15,7 @@ services:
       - 3491:3000
     networks:
       - samsara_net
-    entrypoint: bash -c "npm ci && npm run dev && /health_check.sh node"
+    entrypoint: bash -c "npm ci && npm run start && /health_check.sh node"
 ##    env_file: ftt_frontend.env
 ##    expose: [3000]
 
