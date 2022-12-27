@@ -12,10 +12,10 @@ services:
       context: app_frontend
       dockerfile: ../Dockerfile_ftt_frontend
     ports:
-      - 3491:3000
+      - 4200:4200
     networks:
       - samsara_net
-    entrypoint: bash -c "npm ci && npm run start && /health_check.sh node"
+    entrypoint: bash -c "npm run start"
 ##    env_file: ftt_frontend.env
 ##    expose: [3000]
 

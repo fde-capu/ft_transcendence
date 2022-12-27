@@ -1,4 +1,4 @@
 # ft_transcendence Dockerfile frontend
 
 FROM node:current-slim
-EXPOSE 3491
+EXPOSE 4200
