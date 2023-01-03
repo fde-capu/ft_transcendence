@@ -29,7 +29,7 @@ services:
       context: app_backend
       dockerfile: ../Dockerfile_ftt_backend
     ports:
-      - 3490:3000
+      - 3000:3000
     networks:
       - samsara_net
     depends_on:
