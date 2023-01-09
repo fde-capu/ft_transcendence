@@ -1,4 +1,4 @@
 vol_database
 node_modules
 dist
-*.env
+# XXX include .env to be ignored.

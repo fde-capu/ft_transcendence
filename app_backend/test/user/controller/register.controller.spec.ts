@@ -22,10 +22,12 @@ describe('RegisterController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
   it('should call userService registerUser()', () => {
     controller.code('stringcode');
     expect(UserService).toBeCalled();
   });
+
   // it('/ (GET)', () => {
   //   return request(controller.code)
   //     .get('/')
