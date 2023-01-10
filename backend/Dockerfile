@@ -1,11 +1,11 @@
-FROM node:latest AS development
+FROM node:lts-slim AS development
 VOLUME ["/app"]
 HEALTHCHECK --interval=15s --timeout=2s --start-period=60s \
     CMD curl http://localhost:3000 || exit 1
 WORKDIR /app
 ENTRYPOINT ["bash", "-c", "npm ci && npm run start:dev"]
 
-FROM node:latest AS build
+FROM node:lts-slim AS build
 COPY . /build
 WORKDIR /build
 RUN npm ci && \
@@ -14,7 +14,7 @@ RUN npm ci && \
     rm ./dist/tsconfig.build.tsbuildinfo && \
     mv ./node_modules ./dist/node_modules
 
-FROM gcr.io/distroless/nodejs18-debian11:latest AS production
+FROM node:lts-slim AS production
 COPY --from=build /build/dist /dist
 HEALTHCHECK --interval=10s --timeout=2s --start-period=5s \
     CMD curl http://localhost:3000 || exit 1
