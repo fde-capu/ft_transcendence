@@ -1,4 +1,6 @@
 vol_database
 node_modules
 dist
+pgdata
+.vscode
 # XXX include .env to be ignored.

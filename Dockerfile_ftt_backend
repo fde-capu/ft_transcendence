@@ -1,4 +1,0 @@
-# ft_transcendence Dockerfile backend
-
-FROM node:current-slim
-EXPOSE 3490

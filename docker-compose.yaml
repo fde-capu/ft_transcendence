@@ -1,73 +1,60 @@
-version: "2.5"
-
-services:
-
-  ftt_frontend:
-    container_name: ftt_frontend
-    volumes:
-      - ./health_check.sh:/health_check.sh
-      - ./app_frontend:/app
-    working_dir: /app
-    build:
-      context: app_frontend
-      dockerfile: ../Dockerfile_ftt_frontend
-    ports:
-      - 4200:4200
-    networks:
-      - samsara_net
-    entrypoint: bash -c "npm run start"
-##    env_file: ftt_frontend.env
-##    expose: [3000]
-
-  ftt_backend:
-    container_name: ftt_backend
-    volumes:
-      - ./health_check.sh:/health_check.sh
-      - ./app_backend:/app
-    working_dir: /app
-    build:
-      context: app_backend
-      dockerfile: ../Dockerfile_ftt_backend
-    ports:
-      - 3000:3000
-    networks:
-      - samsara_net
-    depends_on:
-      ftt_database:
-        condition: service_healthy
-    environment:
-      DB_HOST: ftt_database
-      DB_PORT: 5432
-      DB_USER: root
-      DB_NAME: root
-    env_file:
-      - ./ftt_backend.env
-    entrypoint: bash -c "npm ci && npm run start:dev && /health_check.sh node"
-#   links:
-#     - ftt_database:ftt_database
-
-  ftt_database:
-    container_name: ftt_database
-    image: postgres:latest
-    volumes:
-#      - ./health_check.sh:/health_check.sh
-      - ./vol_database:/external_data
-      - ./database_init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: always
-    environment:
-      POSTGRES_USER: root
-      PGDATA: ./external_data
-    env_file:
-      - ./ftt_database.env
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 1s
-      timeout: 20s
-      retries: 10
-    networks:
-      - samsara_net
-#    expose: [3000]
-#    entrypoint: /health_check.sh;
+version: "3.8"
 
 networks:
   samsara_net:
+
+services:
+
+  database:
+    container_name: database
+    image: postgres:latest
+    restart: unless-stopped
+    healthcheck:
+      test: 
+        - "CMD-SHELL"
+        - "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - samsara_net
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    env_file:
+      - ./.env
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      target: ${ENVIRONMENT:-production}
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - samsara_net
+    volumes:
+      - ./backend:/app
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      target: ${ENVIRONMENT:-production}
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 4200:4200
+    env_file:
+      - ./.env
