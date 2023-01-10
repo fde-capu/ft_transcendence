@@ -16,7 +16,7 @@ export class RegisterController {
 
     try {
       const user = await this.userService.registerUser(code);
-      response.redirect('http://127.0.0.6/game/?');
+      response.redirect('http://localhost:4200/game/?');
     } catch (e) {
       console.log(e);
     }

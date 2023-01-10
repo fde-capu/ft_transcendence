@@ -6,6 +6,7 @@ networks:
 services:
 
   database:
+    container_name: database
     image: postgres:latest
     restart: unless-stopped
     healthcheck:
@@ -25,6 +26,7 @@ services:
       - ./.env
 
   backend:
+    container_name: backend
     build:
       context: ./backend
       target: ${ENVIRONMENT:-production}
@@ -37,11 +39,12 @@ services:
     volumes:
       - ./backend:/app
     ports:
-      - 127.0.0.5:80:3000
+      - 3000:3000
     env_file:
       - ./.env
 
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       target: ${ENVIRONMENT:-production}
@@ -52,6 +55,6 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - 127.0.0.6:80:4200
+      - 4200:4200
     env_file:
       - ./.env

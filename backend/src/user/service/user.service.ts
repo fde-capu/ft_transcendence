@@ -17,7 +17,7 @@ export class UserService {
         grant_type: 'authorization_code',
         client_id: this.configService.get<string>('API42_CLIENT_ID'),
         client_secret: this.configService.get<string>('API42_CLIENT_SECRET'),
-        redirect_uri: 'http://127.0.0.5/user/register',
+        redirect_uri: 'http://localhost:3000/user/register',
         code,
       },
     );
