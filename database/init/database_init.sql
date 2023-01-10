@@ -7,8 +7,10 @@ CREATE TABLE users (
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-INSERT INTO users (intra_id) VALUES
-('fde-capu', 'jestevam', 'msales-a');
+INSERT INTO
+    users (intra_id)
+VALUES
+    ('fde-capu'), ('jestevam'), ('msales-a');
 
 /*
 CREATE SEQUENCE quote_id_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
