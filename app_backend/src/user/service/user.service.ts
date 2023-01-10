@@ -12,6 +12,7 @@ export class UserService {
             redirect_uri: 'http://localhost:3000/user/register',
             code
         });
+		console.log(responseToken.data);
         return responseToken.data;
     }
 }
