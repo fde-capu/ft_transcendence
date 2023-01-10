@@ -8,12 +8,14 @@ export class RegisterController {
   @Get()
   async code(@Query('code') code: string, @Res() response: Response = null): Promise<void> {
 
-	// XXX registrar na base de dados, que usuário foi autenticado.
+	// XXX registrar na base de dados, que usuário foi autenticado:
+	//		chamar API42 /me, levantar dados do login
+	//		gerar token de resposta
 
 	try
 	{
 		const user = await this.userService.registerUser(code);
-		response.redirect("http://localhost:4200/game");
+		response.redirect("http://localhost:4200/game/?");
 	}
 	catch(e)
 	{
