@@ -7,16 +7,9 @@ import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator
 import { GameComponent } from './game/game.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FttAuthenticatorComponent,
-    GameComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  declarations: [AppComponent, FttAuthenticatorComponent, GameComponent],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -8,9 +8,8 @@ describe('FttAuthenticatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FttAuthenticatorComponent ]
-    })
-    .compileComponents();
+      declarations: [FttAuthenticatorComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FttAuthenticatorComponent);
     component = fixture.componentInstance;

@@ -4,19 +4,22 @@ import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator
 import { GameComponent } from './game/game.component';
 
 const routes: Routes = [
-{
-	path: "",
-	component: FttAuthenticatorComponent
-},{
-	path: "login",
-	component: FttAuthenticatorComponent
-},{
-	path: "game",
-	component: GameComponent
-}];
+  {
+    path: '',
+    component: FttAuthenticatorComponent,
+  },
+  {
+    path: 'login',
+    component: FttAuthenticatorComponent,
+  },
+  {
+    path: 'game',
+    component: GameComponent,
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
