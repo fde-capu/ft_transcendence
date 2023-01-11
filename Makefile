@@ -1,7 +1,7 @@
 
 .PHONY: all re fclean clean test
 
-all : dev
+all :
 	docker compose up --build
 
 dev :
