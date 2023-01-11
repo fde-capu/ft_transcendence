@@ -50,7 +50,7 @@ export class UserService {
   async getMe({ access_token }: TokenDTO): Promise<MeDTO> {
     const response = await this.httpService.axiosRef.get<MeDTO>(
       'https://api.intra.42.fr/v2/me',
-      { headers: { Authentication: `Bearer ${access_token}` } },
+      { headers: { Authorization: `Bearer ${access_token}` } },
     );
     return response.data;
   }

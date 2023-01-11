@@ -19,14 +19,9 @@ export class RegisterController {
       });
     try {
       const token = await this.userService.getToken(code);
-      //const me = await this.userService.getMe(token);
-      const me: MeDTO = {
-        email: 'fulano@42sp.org.br',
-        login: 'fu-lano',
-        image: { versions: { large: '', medium: '', small: '', micro: '' } },
-      };
+      const me = await this.userService.getMe(token);
       return response
-        .cookie('acces_token', token.access_token, { httpOnly: true })
+        .cookie('acces_token', me.login)
         .redirect('http://localhost:4200/game/?');
     } catch (e) {
       console.log('deu erro aqui no controller');
