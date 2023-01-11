@@ -29,7 +29,7 @@ services:
     container_name: backend
     build:
       context: ./backend
-      target: ${ENVIRONMENT:-production}
+      target: ${FTT_MODE:-production}
     restart: unless-stopped
     depends_on:
       database:
@@ -47,7 +47,7 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-      target: ${ENVIRONMENT:-production}
+      target: ${FTT_MODE:-production}
     restart: unless-stopped
     volumes:
       - ./frontend:/app
