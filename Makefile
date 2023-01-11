@@ -1,19 +1,18 @@
 
 .PHONY: all re fclean clean test
 
-all :
-	docker compose up --build
+all : dev
 
 dev :
-	set FTT_MODE = development
+	export FTT_MODE="development"; \
 	docker compose up --build
 
 build :
-	set FTT_MODE = build
+	export FTT_MODE="build"; \
 	docker compose up --build
 
 production :
-	set FTT_MODE = production
+	export FTT_MODE="production"; \
 	docker compose up --build
 
 clean :
