@@ -1,6 +1,7 @@
 FROM node:lts-slim AS development
 VOLUME ["/app"]
-HEALTHCHECK --interval=15s --timeout=2s --start-period=60s \
+RUN apt-get update && apt-get install -y curl
+HEALTHCHECK --interval=15s --timeout=2s --retries=2 --start-period=30s \
     CMD curl http://localhost:3000 || exit 1
 WORKDIR /app
 ENTRYPOINT ["bash", "-c", "npm ci && npm run start:dev"]
@@ -16,7 +17,8 @@ RUN npm ci && \
 
 FROM node:lts-slim AS production
 COPY --from=build /build/dist /dist
-HEALTHCHECK --interval=10s --timeout=2s --start-period=5s \
+RUN apt-get update && apt-get install -y curl
+HEALTHCHECK --interval=10s --timeout=2s --retries=2 --start-period=5s \
     CMD curl http://localhost:3000 || exit 1
 WORKDIR /dist
 CMD ["main.js"]

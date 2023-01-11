@@ -1,6 +1,7 @@
 FROM node:lts-slim AS development
 VOLUME ["/app"]
-HEALTHCHECK --interval=15s --timeout=2s --start-period=60s \
+RUN apt-get update && apt-get install -y curl
+HEALTHCHECK --interval=15s --timeout=2s --retries=2 --start-period=30s \
     CMD curl http://localhost:4200 || exit 1
 WORKDIR /app
 ENTRYPOINT ["bash", "-c", "npm ci && npm run watch"]
@@ -14,7 +15,7 @@ RUN npm ci && \
 FROM nginx:stable-alpine AS production
 COPY --from=build /build/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /build/dist/frontend /usr/share/nginx/html
-HEALTHCHECK --interval=15s --timeout=2s --start-period=5s \
+RUN apt-get update && apt-get install -y curl
+HEALTHCHECK --interval=15s --timeout=2s --retries=2 --start-period=5s \
     CMD curl http://localhost:4200 || exit 1
-
 EXPOSE 4200

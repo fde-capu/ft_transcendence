@@ -156,3 +156,22 @@ HTML designs+funcionalities:
 
 -- FINISHING INSTRUCTIONS:
 # 1) remove .env (save elsewhere) from Git repository, add to .gitignore.
+
+
+-- Oauth flow
+
+Frontend->Backend: GET /oauth/status
+Backend-->Frontend: 401 Not Authorized
+Frontend->Backend: GET /oauth/authorize
+Backend->Frontend: 301 api42/oauth/authorize
+Frontend->Api42: GET /oauth/authorize
+Api42-->Frontend: 301 backend/oauth/callback?code=xpto
+Frontend-->Backend: GET /oauth/callback?code=xpto
+Backend->Api42: POST /oauth/token
+Api42->Backend: 200 token
+Backend->Api42: GET /api/me
+Backend-->Frontend: Cookie JWT 301 /
+Frontend->Backend: GET /oauth/status
+Backend-->Frontend: 200 OK
+
+https://sequencediagram.org/
