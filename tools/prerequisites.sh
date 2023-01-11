@@ -1,15 +1,12 @@
 #!/bin/sh
-# XXX put all to true
-do_apt_update="true";
-do_apt_upgrade="true";
-reinstall_npm="true";
-docker_clean_containers="true";
-docker_clean_images="true";
-docker_image_prune="true";
-docker_system_prune="true";
-reinstall_containerd_docker_ce="true";
-install_dependencies="true";
-clean_database="true";
+
+ask()
+{
+	echo -n "$1 [y/N] ";
+	read answer;
+	[ "$answer" != "${answer#[Yy]}" ] && return 0;
+	return 1;
+}
 
 do_docker_stop()
 {
@@ -20,49 +17,47 @@ do_docker_stop()
 	return 0;
 }
 
-	set -x;
-
-	[ "$docker_clean_containers" = "true" ] && \
-		[ "$(docker ps -aq)" != "" ] && \
+	[ "$(docker ps -aq)" != "" ] && \
+		ask "Clean docker containers?" && \
 		docker container rm -f $(docker ps -aq) 2>/dev/null;
-	[ "$docker_clean_images" = "true" ] && \
-		[ "$(docker images -aq)" != "" ] && \
+	[ "$(docker images -aq)" != "" ] && \
+		ask "Clean docker images?" && \
 		docker rmi $(docker images -aq);
-	[ "$docker_system_prune" = "true" ] && docker system prune -y;
-	[ "$docker_image_prune" = "true" ] && docker image prune -y;
-	[ "$reinstall_containerd_docker_ce" = "true" ] && \
+	ask "Prune docker system?" && docker system prune;
+	ask "Prune docker images?" && docker image prune;
+	ask "Reinstall containerd?" && \
 		rm -rf ~/.docker && \
 		sudo apt install -y containerd.io docker-ce;
+	ask "Stop docker service?" && do_docker_stop;
 
-	do_docker_stop;
+	ask "Do apt update?" && sudo apt update;
+	ask "Do apt upgrade (system wide)?" && sudo apt upgrade && \
+		ask "Do apt autoremove?" && sudo apt autoremove;
 
-	[ "$do_apt_update" = "true" ] && sudo apt update;
-	[ "$do_apt_upgrade" = "true" ] && sudo apt upgrade && sudo apt autoremove;
-	if [ "$reinstall_npm" = "true" ] ; then
-		sudo apt install -y npm;
-		sudo npm install -g n;
-		sudo n stable;
-		sudo npm install -g npm@latest;
-		sudo npm install -g @nestjs/cli@latest;
-	fi;
+	ask "Reinstall npm?" && sudo apt install -y npm;
+	ask "Install npm-n? Usefull to get latest stable." && sudo npm install -g n;
+	ask "Run n stable? Sets npm version." && sudo n stable;
+	ask "Install latest npm?" && sudo npm install -g npm@latest;
+	ask "Install nestjs/cli@latest?" && sudo npm install -g @nestjs/cli@latest;
 
-	[ "$clean_database" = "true" ] && sudo rm -rf vol_database;
+	ask "Reset ft_transcendence project database?" && sudo rm -rf vol_database;
 
-	if [ "$install_dependencies" = "true" ] ; then
+	if ask "Install dependencies for rootless docker?" ; then
 
-		sudo dpkg --configure -a
-		sudo apt install -y docker docker-compose-plugin;
+		ask "Reconfigure dpkg?" && sudo dpkg --configure -a;
+		ask "Reinstall docker?" && sudo apt install -y docker;
+		ask "Reinstall docker-compose-plugin?" && sudo apt install -y docker-compose-plugin;
 
 # For docker-compose in rootless mode:
-		sudo apt install -y uidmap; # updates even if already installed.
+		ask "Update (or install) uidmap?" && sudo apt install -y uidmap; # updates even if already installed.
 # Script to check user subordinates:
 		subuid=`grep ^$(whoami): /etc/subuid | awk -F ":" '{print $3}'`;
 		[ "$subuid" -lt "65536" ] && echo "Subordinate uid $subuid fail." && exit 1;
 		subgid=`grep ^$(whoami): /etc/subgid | awk -F ":" '{print $3}'`;
 		[ "$subgid" -lt "65536" ] && echo "Subordinate gid $subgid fail." && exit 2;
 # Needed by rootless:
-		sudo apt install -y dbus-user-session;
-		sudo apt install -y fuse-overlayfs; # recomended
+		ask "Install/check dbus-user-session? (Needed by rootless)" && sudo apt install -y dbus-user-session;
+		ask "Install/check fuse-overlayfs? (Recomended by rootless)" && sudo apt install -y fuse-overlayfs; # recomended
 # Rootless docker requires version of slirp4netns greater than v0.4.0 \
 # (when vpnkit is not installed). Check you have this with
 #	slirp4netns --version
@@ -74,25 +69,28 @@ do_docker_stop()
 		[ "$vp1" -gt "0" ] && need_install="false" ||
 			[ "$vp2" -ge "4" ] && need_install="false" ||
 				need_install="true";
-		[ "$need_install" = "true" ] && sudo apt install -y slirp4netns;
+		[ "$need_install" = "true" ] && \
+			ask "You need to install slirp4netns >= 0.4.0. It is needed by rootless docker. Do it?" && \
+			sudo apt install -y slirp4netns;
 
-		[ "$reinstall_containerd_docker_ce" = "true" ] && \
-			rm -f ~/.config/systemd/user/docker.service;
+		ask "Reset containerd_docker_ce services?" && rm -f ~/.config/systemd/user/docker.service;
 
 # Run
 #	dockerd-rootless-setuptool.sh install
 # as a non-root user to set up the daemon. If this fails, run
 #	sudo apt install -y docker-ce-rootless-extras
 # Script to do so:
-		dockerd-rootless-setuptool.sh install 2>/dev/null || \
-			(sudo apt install -y docker-ce-rootless-extras && \
-				dockerd-rootless-setuptool.sh --force install);
+		if ask "Run dockerd-rootless-setuptool.sh?" ; then
+			dockerd-rootless-setuptool.sh install 2>/dev/null || \
+				(ask "...it failed. You might need docker-ce-rooless-extras. Install it?" && \
+					sudo apt install -y docker-ce-rootless-extras && \
+					dockerd-rootless-setuptool.sh --force install);
+		fi;
 
 	fi;
 
 # The systemd unit file is installed as ~/.config/systemd/user/docker.service.
-	systemctl --user start docker
-	docker context use rootless
+	ask "Start rootless docker?" && systemctl --user start docker && docker context use rootless
 
 # For more...
 # - Use the rootless Daemon on your system startup
@@ -108,5 +106,4 @@ do_docker_stop()
 # ...please refer to:
 # https://docs.docker.com/engine/security/rootless
 
-set +x;
-echo 'Success!'
+echo 'Done!'
