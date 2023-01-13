@@ -12,15 +12,20 @@ export class RegisterController {
   ): Promise<any> {
     if (!code || code === '')
       return response.status(400).json({
-        error: 'You must provide a authorization code!',
+        error: 'Propoer code failed by API42.',
       });
     try {
       const tokenFrom42 = await this.userService.getToken(code);
       const me = await this.userService.getMe(tokenFrom42);
+	  // me = transform me into user_book dto. TODO
 	  const transcendToken = me.login + '_TOKENIZED';
       return response
         .cookie('access_token', transcendToken)
-        .redirect('http://localhost:4200/game/?');
+        .cookie('intra_id', me.login)
+        .cookie('full_name', me.displayname)
+        .cookie('email', me.email)
+        .cookie('avatar_link', me.image.versions.micro)
+        .redirect('http://localhost:4200/game');
     } catch (e) {
       console.log('RegisterController failed to generate unique token.');
       console.log(e.response.data);

@@ -12,16 +12,10 @@ export interface TokenDTO {
 }
 
 export interface MeDTO {
-  email: string;
   login: string;
-  image: {
-    versions: {
-      large: string;
-      medium: string;
-      small: string;
-      micro: string;
-    };
-  };
+  email: string;
+  displayname: string;
+  image: { versions: { micro: string; }}
 }
 
 @Injectable()
@@ -51,6 +45,7 @@ export class UserService {
       'https://api.intra.42.fr/v2/me',
       { headers: { Authorization: `Bearer ${access_token}` } },
     );
+	console.log("getMe response:", response);
     return response.data;
   }
 }

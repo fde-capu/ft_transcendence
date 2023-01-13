@@ -14,7 +14,5 @@ export class GameComponent {
   avatarLink: string = 'undefined_avatarLink';
 
   ngOnInit() {
-    const name = this.route.snapshot.queryParamMap.get('acess_token');
-    console.log("GameComponent init: name", name);
   }
 }
