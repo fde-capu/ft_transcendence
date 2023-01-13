@@ -7,15 +7,17 @@ import { UserBookService } from '../user-book.service';
   styleUrls: ['./user-profile.component.css'],
 })
 export class UserProfileComponent {
-  fullName!: string;
   login!: string;
+  fullName!: string;
   avatarLink!: string;
+  access_token!: string;
 
   constructor( 
 	private readonly userBookService: UserBookService) {}
 
   ngOnInit() {
-    this.login = this.userBookService.getLogin();
+    this.access_token = this.userBookService.getAccessToken();
+	this.login = 'What is, where is the login?';
     fetch (
 	  'http://localhost:3000/ping',
 	  { credentials: 'include' }

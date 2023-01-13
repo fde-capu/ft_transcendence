@@ -6,14 +6,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class UserBookService {
-  private login!: string;
+  private access_token!: string;
 
   constructor() {
-    this.login = document.cookie.split('=')[1];
-    if (!this.login) window.location.href = '/';
+    this.access_token = document.cookie.split('=')[1];
+    if (!this.access_token) window.location.href = '/';
   }
 
-  getLogin(): string {
-    return this.login;
+  getAccessToken(): string {
+    return this.access_token;
   }
 }
