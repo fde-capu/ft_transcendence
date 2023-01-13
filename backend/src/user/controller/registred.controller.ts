@@ -22,9 +22,6 @@ export class RegisterController {
       return response
         .cookie('access_token', transcendToken)
         .cookie('intra_id', me.login)
-        .cookie('full_name', me.displayname)
-        .cookie('email', me.email)
-        .cookie('avatar_link', me.image.versions.micro)
         .redirect('http://localhost:4200/game');
     } catch (e) {
       console.log('RegisterController failed to generate unique token.');

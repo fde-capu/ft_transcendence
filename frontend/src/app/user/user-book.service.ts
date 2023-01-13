@@ -17,9 +17,9 @@ export class UserBookService {
 	this.access_token = cookieSplit[0].split('=')[1];
     if (!this.access_token) window.location.href = '/';
 	this.login = cookieSplit[1].split('=')[1];
-	this.fullName = cookieSplit[2].split('=')[1];
-	this.email = cookieSplit[3].split('=')[1];
-	this.avatarLink = cookieSplit[4].split('=')[1];
+	this.fullName = "";
+	this.email = "";
+	this.avatarLink = "";
   }
 
   getAccessToken(): string {

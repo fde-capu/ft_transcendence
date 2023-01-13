@@ -45,7 +45,6 @@ export class UserService {
       'https://api.intra.42.fr/v2/me',
       { headers: { Authorization: `Bearer ${access_token}` } },
     );
-	console.log("getMe response:", response);
     return response.data;
   }
 }
