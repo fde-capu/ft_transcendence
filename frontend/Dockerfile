@@ -8,7 +8,7 @@ ENTRYPOINT ["bash", "-c", "npm ci && npm run start:dev"]
 FROM node:lts-slim AS build
 COPY . /build
 WORKDIR /build
-#RUN npm ci
+RUN npm ci
 RUN npm run build
 RUN npm prune --omit=dev
 RUN npm run start:prod

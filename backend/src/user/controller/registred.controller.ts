@@ -10,21 +10,19 @@ export class RegisterController {
     @Query('code') code: string,
     @Res() response: Response = null,
   ): Promise<any> {
-    // XXX registrar na base de dados, que usuário foi autenticado:
-    //		chamar API42 /me, levantar dados do login
-    //		gerar token de resposta
     if (!code || code === '')
       return response.status(400).json({
         error: 'You must provide a authorization code!',
       });
     try {
-      const token = await this.userService.getToken(code);
-      const me = await this.userService.getMe(token);
+      const tokenFrom42 = await this.userService.getToken(code);
+      const me = await this.userService.getMe(tokenFrom42);
+	  const transcendToken = me.login + '_TOKENIZED';
       return response
-        .cookie('acces_token', me.login)
+        .cookie('access_token', transcendToken)
         .redirect('http://localhost:4200/game/?');
     } catch (e) {
-      console.log(`deu erro aqui no controller`);
+      console.log('RegisterController failed to generate unique token.');
       console.log(e.response.data);
       response.status(e.response.status).json(e.response.data);
     }

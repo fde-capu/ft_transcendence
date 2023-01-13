@@ -31,9 +31,8 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
-  async getToken(code: string): Promise<TokenDTO> {
-    // via API 42.
-
+  async getToken(code: string): Promise<TokenDTO>
+  {
     const responseToken = await this.httpService.axiosRef.post<TokenDTO>(
       'https://api.intra.42.fr/oauth/token',
       {

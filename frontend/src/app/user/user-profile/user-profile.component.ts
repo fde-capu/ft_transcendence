@@ -7,13 +7,20 @@ import { UserBookService } from '../user-book.service';
   styleUrls: ['./user-profile.component.css'],
 })
 export class UserProfileComponent {
+  fullName!: string;
   login!: string;
-  constructor(private readonly userBookService: UserBookService) {}
+  avatarLink!: string;
+
+  constructor( 
+	private readonly userBookService: UserBookService) {}
 
   ngOnInit() {
     this.login = this.userBookService.getLogin();
-    fetch('http://localhost:3000/ping', { credentials: 'include' })
-      .then(async r => console.log(await r.json()))
-      .catch(e => console.error(e));
+    fetch (
+	  'http://localhost:3000/ping',
+	  { credentials: 'include' }
+	)
+	.then(async r => console.log(await r.json()))
+	.catch(e => console.error(e));
   }
 }
