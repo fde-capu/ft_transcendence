@@ -24,7 +24,8 @@ export class RegisterController {
         .cookie('acces_token', me.login)
         .redirect('http://localhost:4200/game/?');
     } catch (e) {
-      console.log('deu erro aqui no controller');
+      console.log(`deu erro aqui no controller`);
+      console.log(e.response.data);
       response.status(e.response.status).json(e.response.data);
     }
   }

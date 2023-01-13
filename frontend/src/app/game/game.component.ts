@@ -7,11 +7,11 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./game.component.css'],
 })
 export class GameComponent {
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
-  intraId : string = "foo_name";
-  fullName : string = "Foo da Silva";
-  avatarLink : string = "https://intra.42.fr/...";
+  intraId = 'foo_name';
+  fullName = 'Foo da Silva';
+  avatarLink = 'https://intra.42.fr/...';
 
   ngOnInit() {
     const name = this.route.snapshot.queryParamMap.get('acess_token');

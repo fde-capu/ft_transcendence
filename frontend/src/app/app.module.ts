@@ -5,10 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator.component';
 import { GameComponent } from './game/game.component';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [AppComponent, FttAuthenticatorComponent, GameComponent],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, UserModule],
   providers: [],
   bootstrap: [AppComponent],
 })

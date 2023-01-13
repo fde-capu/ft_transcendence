@@ -18,9 +18,19 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "latest",
+    "@angular-eslint/builder": "15.1.0",
+    "@angular-eslint/eslint-plugin": "15.1.0",
+    "@angular-eslint/eslint-plugin-template": "15.1.0",
+    "@angular-eslint/schematics": "15.1.0",
+    "@angular-eslint/template-parser": "15.1.0",
     "@angular/cli": "latest",
-    "@angular/router": "latest",
     "@angular/platform-browser": "latest",
-    "@angular/platform-browser-dynamic": "latest"
+    "@angular/platform-browser-dynamic": "latest",
+    "@angular/router": "latest",
+    "@typescript-eslint/eslint-plugin": "5.44.0",
+    "@typescript-eslint/parser": "5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.6.0",
+    "prettier": "^2.8.2"
   }
 }
