@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 export interface TokenDTO {
@@ -17,6 +17,12 @@ export interface MeDTO {
   displayname: string;
   image: { versions: { micro: string } };
 }
+export interface registerResp {
+  token: string;
+  login: string;
+}
+
+
 
 @Injectable()
 export class UserService {
@@ -25,21 +31,30 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
-  async getToken(code: string): Promise<TokenDTO> {
-    const responseToken = await this.httpService.axiosRef.post<TokenDTO>(
-      'https://api.intra.42.fr/oauth/token',
-      {
-        grant_type: 'authorization_code',
-        client_id: this.configService.get<string>('API42_CLIENT_ID'),
-        client_secret: this.configService.get<string>('API42_CLIENT_SECRET'),
-        redirect_uri: 'http://localhost:3000/user/register',
-        code,
-      },
-    );
-    return responseToken.data;
+  async registerUser(codeFrom42: string = ''): Promise<registerResp>
+  {
+    if (!codeFrom42 || codeFrom42 === '')
+      throw new BadRequestException();
+    try{
+      const responseToken = await this.httpService.axiosRef.post<string>(
+        'https://api.intra.42.fr/oauth/token',
+        {
+          grant_type: 'authorization_code',
+          client_id: this.configService.get<string>('API42_CLIENT_ID'),
+          client_secret: this.configService.get<string>('API42_CLIENT_SECRET'),
+          redirect_uri: 'http://localhost:3000/user/register',
+          codeFrom42,
+        },
+      );
+      const {login} = await this.getBasicUserInfo(responseToken.data);
+      return ({token: responseToken.data, login});
+    }
+    catch(err){
+      throw err.response;
+    }
   }
 
-  async getMe({ access_token }: TokenDTO): Promise<MeDTO> {
+  async getBasicUserInfo(access_token: string): Promise<MeDTO> {
     const response = await this.httpService.axiosRef.get<MeDTO>(
       'https://api.intra.42.fr/v2/me',
       { headers: { Authorization: `Bearer ${access_token}` } },
