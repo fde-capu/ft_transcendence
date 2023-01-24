@@ -1,7 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { RegisterController } from '../../../src/user/controller/registred.controller';
-import * as request from 'supertest';
 import { UserService } from '../../../src/user/service/user.service';
 jest.mock('../../../src/user/service/user.service');
 

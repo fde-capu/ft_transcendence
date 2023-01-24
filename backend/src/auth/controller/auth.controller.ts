@@ -4,26 +4,17 @@ import {
   HttpException,
   HttpStatus,
   Query,
-  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { JWTPayload } from 'jose';
-import path from 'path';
-import {
-  catchError,
-  firstValueFrom,
-  map,
-  Observable,
-  switchMap,
-  tap,
-} from 'rxjs';
-import { ErrorResponse } from '../forty-two/error.response';
-import { FortyTwoService } from '../forty-two/forty-two.service';
-import { TokenPayload } from '../token-payload/token-payload.decorator';
-import { TokenService } from '../token/token.service';
-import { AuthGuard } from './auth.guard';
+import { catchError, firstValueFrom, switchMap, tap } from 'rxjs';
+import { TokenPayload } from '../decorator/token-payload.decorator';
+import { TokenService } from '../service/token.service';
+import { AuthGuard } from '../guard/auth.guard';
+import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
+import { ErrorResponse } from 'src/forty-two/service/error.response';
 
 @Controller('auth')
 export class AuthController {

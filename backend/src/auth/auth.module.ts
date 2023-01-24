@@ -1,12 +1,11 @@
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { FortyTwoService } from './forty-two/forty-two.service';
-import { AuthController } from './auth/auth.controller';
-import { TokenService } from './token/token.service';
+import { FortyTwoModule } from 'src/forty-two/forty-two.module';
+import { AuthController } from './controller/auth.controller';
+import { TokenService } from './service/token.service';
 
 @Module({
-  imports: [HttpModule],
-  providers: [FortyTwoService, TokenService],
+  imports: [FortyTwoModule],
+  providers: [TokenService],
   controllers: [AuthController],
   exports: [TokenService],
 })

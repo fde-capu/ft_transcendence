@@ -1,6 +1,6 @@
-import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { TokenService } from '../token/token.service';
+import { TokenService } from '../service/token.service';
 
 @Injectable()
 export class TokenParserMiddleware implements NestMiddleware {

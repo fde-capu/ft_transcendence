@@ -7,7 +7,7 @@ import { AxiosError } from 'axios';
 import { TokenResponse } from './token.response';
 import { ErrorResponse } from './error.response';
 import { TokenInfoResponse } from './token-info.response';
-import { User, UserResponse } from './user.response';
+import { UserResponse } from './user.response';
 
 @Injectable()
 export class FortyTwoService {

@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
-import { MeDTO, UserService } from '../service/user.service';
+import { UserService } from '../service/user.service';
 import { Response } from 'express';
 
 @Controller('user/register')
@@ -17,8 +17,8 @@ export class RegisterController {
     try {
       const tokenFrom42 = await this.userService.getToken(code);
       const me = await this.userService.getMe(tokenFrom42);
-	  // me = transform me into user_book dto. TODO
-	  const transcendToken = me.login + '_TOKENIZED';
+      // me = transform me into user_book dto. TODO
+      const transcendToken = me.login + '_TOKENIZED';
       return response
         .cookie('access_token', transcendToken)
         .cookie('intra_id', me.login)
