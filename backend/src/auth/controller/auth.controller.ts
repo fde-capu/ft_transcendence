@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Query,
   Res,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -32,9 +33,17 @@ export class AuthController {
   @Get('callback')
   public async callback(
     @Res() res: Response,
-    @Query('code') code: string,
+    @Query('code') code?: string,
     @Query('state') state?: string,
+    @Query('error') error?: string,
+    @Query('error_description') errorDescription?: string,
   ): Promise<Response<any, Record<string, any>>> {
+    if (error) {
+      throw new UnauthorizedException({
+        cause: error,
+        description: errorDescription,
+      });
+    }
     let fortyTwo: TokenResponse;
     let expireIn = 0;
     const token = await firstValueFrom(
