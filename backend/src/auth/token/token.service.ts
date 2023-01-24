@@ -4,8 +4,6 @@ import { SignJWT, jwtVerify, JWTPayload } from 'jose';
 
 @Injectable()
 export class TokenService {
-  private readonly alg = 'HS256';
-
   private secret: Uint8Array;
 
   constructor(readonly configService: ConfigService) {
@@ -14,11 +12,13 @@ export class TokenService {
     );
   }
 
-  async sign(subject: string, expiresIn = 7200): Promise<string> {
+  async sign(subject: string, expiresIn: number): Promise<string> {
     return await new SignJWT({
       sub: subject,
       exp: Math.floor(Date.now() / 1000) + expiresIn,
-    }).sign(this.secret);
+    })
+      .setProtectedHeader({ alg: 'HS256' })
+      .sign(this.secret);
   }
 
   async inspect(jwt: string): Promise<JWTPayload> {

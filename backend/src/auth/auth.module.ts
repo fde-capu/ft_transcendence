@@ -8,5 +8,6 @@ import { TokenService } from './token/token.service';
   imports: [HttpModule],
   providers: [FortyTwoService, TokenService],
   controllers: [AuthController],
+  exports: [TokenService],
 })
 export class AuthModule {}
