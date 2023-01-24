@@ -8,6 +8,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { JWTPayload } from 'jose';
+import path from 'path';
 import {
   catchError,
   firstValueFrom,
@@ -18,6 +20,7 @@ import {
 } from 'rxjs';
 import { ErrorResponse } from '../forty-two/error.response';
 import { FortyTwoService } from '../forty-two/forty-two.service';
+import { TokenPayload } from '../token-payload/token-payload.decorator';
 import { TokenService } from '../token/token.service';
 
 @Controller('auth')
@@ -61,9 +64,8 @@ export class AuthController {
   }
 
   @Get('info')
-  public tokenInfo(@Req() req: Request) {
-    const token = req.cookies['authorization'];
-    if (token) return this.tokenService.inspect(token);
-    return { error: 'token vazio!' };
+  public tokenInfo(@TokenPayload() payload?: JWTPayload) {
+    if (!payload) return { error: 'token vazio!' };
+    return payload;
   }
 }
