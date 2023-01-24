@@ -15,6 +15,7 @@ import { TokenService } from '../service/token.service';
 import { AuthGuard } from '../guard/auth.guard';
 import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
 import { ErrorResponse } from 'src/forty-two/service/error.response';
+import { TokenResponse } from 'src/forty-two/service/token.response';
 
 @Controller('auth')
 export class AuthController {
@@ -34,14 +35,18 @@ export class AuthController {
     @Query('code') code: string,
     @Query('state') state?: string,
   ): Promise<Response<any, Record<string, any>>> {
+    let fortyTwo: TokenResponse;
     let expireIn = 0;
     const token = await firstValueFrom(
       this.fortyTwoService.getTokenWithAuthorizationCode(code, state).pipe(
         tap((r) => {
           expireIn = r.expires_in;
+          fortyTwo = r;
         }),
         switchMap((r) => this.fortyTwoService.getUserInfo(r.access_token)),
-        switchMap((r) => this.tokenService.sign(r.login, expireIn)),
+        switchMap((r) =>
+          this.tokenService.sign(r.login, expireIn, { fortyTwo }),
+        ),
         catchError((error: ErrorResponse) => {
           throw new HttpException(error, HttpStatus.UNAUTHORIZED);
         }),
