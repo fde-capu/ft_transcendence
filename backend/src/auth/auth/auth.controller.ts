@@ -6,6 +6,7 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { JWTPayload } from 'jose';
@@ -22,6 +23,7 @@ import { ErrorResponse } from '../forty-two/error.response';
 import { FortyTwoService } from '../forty-two/forty-two.service';
 import { TokenPayload } from '../token-payload/token-payload.decorator';
 import { TokenService } from '../token/token.service';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -64,8 +66,8 @@ export class AuthController {
   }
 
   @Get('info')
+  @UseGuards(AuthGuard)
   public tokenInfo(@TokenPayload() payload?: JWTPayload) {
-    if (!payload) return { error: 'token vazio!' };
     return payload;
   }
 }
