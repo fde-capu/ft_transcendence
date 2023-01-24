@@ -1,13 +1,28 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { RegisterController } from './user/controller/registred.controller';
-import { UserService } from './user/service/user.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/entity/user.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [HttpModule, ConfigModule.forRoot()],
-  controllers: [RegisterController, PingController],
-  providers: [UserService],
+  imports: [UserModule, HttpModule, ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DB_HOST'),
+        port: +configService.get<number>('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_NAME'),
+        entities: [User],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),],
+  controllers: [PingController],
+  providers: [],
 })
 export class AppModule {}

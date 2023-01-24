@@ -1,6 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../entity/user.entity';
 
 export interface TokenDTO {
   access_token: string;
@@ -27,6 +30,7 @@ export interface registerResp {
 @Injectable()
 export class UserService {
   constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {}
