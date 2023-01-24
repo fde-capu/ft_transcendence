@@ -1,28 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SignJWT, jwtVerify, JWTPayload } from 'jose';
+import { JWTPayload, EncryptJWT, jwtDecrypt, base64url } from 'jose';
 
 @Injectable()
 export class TokenService {
   private secret: Uint8Array;
 
   constructor(readonly configService: ConfigService) {
-    this.secret = new TextEncoder().encode(
+    this.secret = base64url.decode(
       configService.get<string>('BACKEND_TOKEN_SECRET'),
     );
   }
 
-  async sign(subject: string, expiresIn: number): Promise<string> {
-    return await new SignJWT({
+  async sign(
+    subject: string,
+    expiresIn: number,
+    claims?: { [propName: string]: unknown },
+  ): Promise<string> {
+    return await new EncryptJWT({
       sub: subject,
       exp: Math.floor(Date.now() / 1000) + expiresIn,
+      ...claims,
     })
-      .setProtectedHeader({ alg: 'HS256' })
-      .sign(this.secret);
+      .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
+      .encrypt(this.secret);
   }
 
   async inspect(jwt: string): Promise<JWTPayload> {
-    const { payload } = await jwtVerify(jwt, this.secret);
+    const { payload } = await jwtDecrypt(jwt, this.secret);
     return payload;
   }
 }
