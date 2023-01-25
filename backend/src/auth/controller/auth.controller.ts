@@ -17,6 +17,7 @@ import { AuthGuard } from '../guard/auth.guard';
 import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
 import { ErrorResponse } from 'src/forty-two/service/error.response';
 import { TokenResponse } from 'src/forty-two/service/token.response';
+import { encode } from 'querystring';
 
 @Controller('auth')
 export class AuthController {
@@ -39,10 +40,14 @@ export class AuthController {
     @Query('error_description') errorDescription?: string,
   ) {
     if (error) {
-      throw new UnauthorizedException({
+      const query = encode({
         cause: error,
         description: errorDescription,
       });
+      res
+        .clearCookie('authorization')
+        .redirect(`http://localhost:4200/error?${query}`);
+      return;
     }
     let fortyTwo: TokenResponse;
     let expireIn = 0;
