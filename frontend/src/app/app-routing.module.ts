@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/guard/auth.guard';
 import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator.component';
 import { GameComponent } from './game/game.component';
-import { UserProfileComponent } from './user/user-profile/user-profile.component';
 
 const routes: Routes = [
   {
@@ -14,22 +14,17 @@ const routes: Routes = [
     component: GameComponent,
   },
   {
-    path: 'user',
-    component: UserProfileComponent,
-    children: [
-      {
-        path: 'profile',
-        component: UserProfileComponent,
-      },
-    ],
-  },
-  {
     path: 'login',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
   {
     path: 'error',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
+  },
+  {
+    path: 'user',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
   },
   {
     path: '**',
