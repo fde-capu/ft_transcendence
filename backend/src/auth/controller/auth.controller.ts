@@ -70,6 +70,11 @@ export class AuthController {
       .json({ access_token: token });
   }
 
+  @Get('logout')
+  public logout(@Res() res: Response) {
+    res.clearCookie('authorization').redirect('http://localhost:4200/');
+  }
+
   @Get('info')
   @UseGuards(AuthGuard)
   public tokenInfo(@TokenPayload() payload?: JWTPayload) {
