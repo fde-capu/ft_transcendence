@@ -9,9 +9,10 @@ import { UserModule } from './user/user.module';
 import { HomeComponent } from './home/home.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { ProfileComponent } from './profile/profile.component';
+import { OnlineUsersComponent } from './online-users/online-users.component';
 
 @NgModule({
-  declarations: [AppComponent, FttAuthenticatorComponent, GameComponent, HomeComponent, HomeComponent, AvatarComponent, ProfileComponent],
+  declarations: [AppComponent, FttAuthenticatorComponent, GameComponent, HomeComponent, HomeComponent, AvatarComponent, ProfileComponent, OnlineUsersComponent],
   imports: [BrowserModule, AppRoutingModule, UserModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
