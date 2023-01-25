@@ -10,7 +10,7 @@ export class UserService {
   constructor(private readonly httpClient: HttpClient) {}
 
   getCurrentUser(): Observable<UserResponse> {
-    return this.httpClient.get<UserResponse>('http://localhost:4200/user/me', {
+    return this.httpClient.get<UserResponse>('http://localhost:3000/user/me', {
       withCredentials: true,
     });
   }
