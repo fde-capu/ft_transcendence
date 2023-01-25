@@ -1,0 +1,14 @@
+
+User Profile
+<div style='border: 1px solid black'>
+<div><span>name: </span>
+	{{user.name}}
+</div>
+<div><span>id: </span>{{user.intraId}}</div>
+<div><span>image url: </span>{{user.image}}</div>
+</div>
+
+<div>
+  <label for="name">Change your display name: </label>
+  <input id="name" [(ngModel)]="user.name" placeholder="name">
+</div>
