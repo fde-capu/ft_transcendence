@@ -1,19 +1,22 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private isAuthenticated$ = new BehaviorSubject<boolean>(false);
+  private isAuthenticated$: Subject<boolean> = new ReplaySubject(1);
 
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly httpClient: HttpClient
   ) {
-    this.verify();
+    this.verify().subscribe({
+      next: () => this.isAuthenticated$.next(true),
+      error: () => this.isAuthenticated$.next(false),
+    });
   }
 
   /**
