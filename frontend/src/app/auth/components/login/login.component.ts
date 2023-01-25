@@ -11,7 +11,7 @@ export class LoginComponent {
   isAuthenticated$: Observable<boolean>;
 
   constructor(private readonly authService: AuthService) {
-    this.isAuthenticated$ = this.authService.verify();
+    this.isAuthenticated$ = this.authService.isAuthenticated();
   }
 
   signIn() {

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
+  CanDeactivate,
   Router,
+  RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
 import { map, Observable } from 'rxjs';
@@ -17,19 +20,33 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     private readonly router: Router
   ) {}
 
-  canActivate(): Observable<boolean | UrlTree> {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> {
     return this.authService.isAuthenticated().pipe(
-      map(v => {
-        if (v) return true;
+      map(value => {
+        if (state.url.includes('/login')) {
+          if (value) return this.router.createUrlTree(['/']);
+          return true;
+        }
+        if (value) return true;
         return this.router.createUrlTree(['/login']);
       })
     );
   }
 
-  canActivateChild(): Observable<boolean | UrlTree> {
+  canActivateChild(
+    childRoute: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> {
     return this.authService.isAuthenticated().pipe(
-      map(v => {
-        if (v) return true;
+      map(value => {
+        if (state.url.includes('/login')) {
+          if (value) return this.router.createUrlTree(['/']);
+          return true;
+        }
+        if (value) return true;
         return this.router.createUrlTree(['/login']);
       })
     );

@@ -1,7 +1,16 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import {
+  catchError,
+  map,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+  tap,
+} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,32 +20,17 @@ export class AuthService {
 
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly router: Router
   ) {
-    this.verify().subscribe({
-      next: () => this.isAuthenticated$.next(true),
-      error: () => this.isAuthenticated$.next(false),
-    });
-  }
-
-  /**
-   * @description **verify** is designed for internal use in AuthModule only. Use **isAuthenticated** instead.
-   */
-  public verify(): Observable<boolean> {
-    return this.httpClient
+    this.httpClient
       .get('http://localhost:3000/auth/info', {
         withCredentials: true,
       })
-      .pipe(
-        map(() => {
-          this.isAuthenticated$.next(true);
-          return true;
-        }),
-        catchError(() => {
-          this.isAuthenticated$.next(false);
-          return of(false);
-        })
-      );
+      .subscribe({
+        next: () => this.isAuthenticated$.next(true),
+        error: () => this.isAuthenticated$.next(false),
+      });
   }
 
   public isAuthenticated(): Observable<boolean> {
@@ -48,6 +42,16 @@ export class AuthService {
   }
 
   public signOut(): void {
-    this.document.location.href = 'http://localhost:3000/auth/logout';
+    this.httpClient
+      .get('http://localhost:3000/auth/logout', {
+        withCredentials: true,
+      })
+      .pipe(tap(() => this.isAuthenticated$.next(false)))
+      .subscribe({
+        next: async () => {
+          console.log('cade?');
+          await this.router.navigate(['login']);
+        },
+      });
   }
 }

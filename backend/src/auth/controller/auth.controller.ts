@@ -77,7 +77,7 @@ export class AuthController {
 
   @Get('logout')
   public logout(@Res() res: Response) {
-    res.clearCookie('authorization').redirect('http://localhost:4200/');
+    res.clearCookie('authorization').json({ message: 'We hope see u soon' });
   }
 
   @Get('info')
