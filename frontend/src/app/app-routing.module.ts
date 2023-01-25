@@ -10,10 +10,6 @@ const routes: Routes = [
     component: FttAuthenticatorComponent,
   },
   {
-    path: 'login',
-    component: FttAuthenticatorComponent,
-  },
-  {
     path: 'game',
     component: GameComponent,
   },
@@ -26,6 +22,10 @@ const routes: Routes = [
         component: UserProfileComponent,
       },
     ],
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
 ];
 

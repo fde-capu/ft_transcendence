@@ -37,7 +37,7 @@ export class AuthController {
     @Query('state') state?: string,
     @Query('error') error?: string,
     @Query('error_description') errorDescription?: string,
-  ): Promise<Response<any, Record<string, any>>> {
+  ) {
     if (error) {
       throw new UnauthorizedException({
         cause: error,
@@ -61,13 +61,13 @@ export class AuthController {
         }),
       ),
     );
-    return res
+    res
       .cookie('authorization', token, {
         httpOnly: true,
         sameSite: 'strict',
         maxAge: expireIn * 1000,
       })
-      .json({ access_token: token });
+      .redirect('http://localhost:4200/login');
   }
 
   @Get('logout')
