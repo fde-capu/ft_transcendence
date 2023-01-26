@@ -3,7 +3,6 @@ import {
   ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
-  CanDeactivate,
   Router,
   RouterStateSnapshot,
   UrlTree,

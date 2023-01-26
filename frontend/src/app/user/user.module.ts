@@ -9,6 +9,6 @@ import { UserResolver } from './resolver/user.resolver';
 @NgModule({
   declarations: [ProfileComponent],
   imports: [CommonModule, UserRoutingModule],
-  providers: [UserService, UserResolver]
+  providers: [UserService, UserResolver],
 })
 export class UserModule {}

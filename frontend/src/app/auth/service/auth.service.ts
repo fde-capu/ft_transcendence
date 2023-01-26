@@ -2,15 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  catchError,
-  map,
-  Observable,
-  of,
-  ReplaySubject,
-  Subject,
-  tap,
-} from 'rxjs';
+import { Observable, ReplaySubject, Subject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +15,7 @@ export class AuthService {
     private readonly httpClient: HttpClient,
     private readonly router: Router
   ) {
+    console.log('estou construindo o authservice');
     this.httpClient
       .get('http://localhost:3000/auth/info', {
         withCredentials: true,
@@ -49,7 +42,7 @@ export class AuthService {
       .pipe(tap(() => this.isAuthenticated$.next(false)))
       .subscribe({
         next: async () => {
-          console.log('cade?');
+          this.isAuthenticated$.next(false);
           await this.router.navigate(['login']);
         },
       });

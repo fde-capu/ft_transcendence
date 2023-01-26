@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { UserResponse } from '../../service/user.response';
 
 @Component({
@@ -10,7 +11,15 @@ import { UserResponse } from '../../service/user.response';
 })
 export class ProfileComponent {
   user$: Observable<UserResponse>;
-  constructor(private readonly route: ActivatedRoute) {
+  isAuthenticated$: Observable<boolean>;
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService
+  ) {
     this.user$ = this.route.data.pipe(map(({ currentUser }) => currentUser));
+    this.isAuthenticated$ = this.authService.isAuthenticated();
+  }
+  signOut() {
+    this.authService.signOut();
   }
 }
