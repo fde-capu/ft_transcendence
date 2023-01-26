@@ -11,8 +11,9 @@ export class User {
   @Column({
     nullable: false,
     default: '',
+    name: 'username'
   })
-  username: string;
+  login: string;
 
   @Column({
     nullable: false,
