@@ -2,7 +2,7 @@
 <ul>
   <li *ngFor='let user of users'>
     <div (click)='onClick($event, user)'>
-	  <app-avatar></app-avatar> <!-- TODO, pass parameters to avatar -->
+	  <app-avatar [user]="user"></app-avatar>
       <span class="user-name-medium">{{user.name}}</span>
 	  <!-- TODO show current match -->
     </div>

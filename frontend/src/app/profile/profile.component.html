@@ -1,7 +1,6 @@
 <h2>User Profile</h2>
-<div id='whole_block'>
-	<div
-	><label>name</label>
+<div>
+	<div><label>name</label>
 	<input id="name" [(ngModel)]="user.name"
 		(focus)="switchIf('change_me_1', 'Change', 'Ok');"
 		(focusout)="switchIf('change_me_1', 'Ok', 'Change');"

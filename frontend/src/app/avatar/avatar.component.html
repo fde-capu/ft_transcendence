@@ -1,5 +1,5 @@
-<div class='avatar' (click)='onClick()'>
-<div>{{user.name}}</div>
-<div>{{user.intraId}}</div>
-<div>{{user.image}}</div>
+<div *ngIf="user" class='avatar' (click)='onClick()'>
+	<div>{{user.name}}</div>
+	<div>{{user.intraId}}</div>
+	<div>{{user.image}}</div>
 </div>

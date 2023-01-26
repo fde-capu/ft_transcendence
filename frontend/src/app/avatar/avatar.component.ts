@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from '../user-interface';
 
 @Component({
@@ -7,11 +7,15 @@ import { User } from '../user-interface';
   styleUrls: ['./avatar.component.css']
 })
 export class AvatarComponent {
-	user: User = {
-		intraId: "ftt_undef_intraId",
-		name: "ftt_undef_name",
-		image: "ftt_undef_image"
-	};
+
+	@Input() user?: User;
+
+
+//	user: User = {
+//		intraId: "ftt_undef_intraId",
+//		name: "ftt_undef_name",
+//		image: "ftt_undef_image"
+//	};
 	onClick(): void {
 		// TODO open interaction mini-popup.
 	}

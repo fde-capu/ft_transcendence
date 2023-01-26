@@ -8,4 +8,3 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'PONG!';
 }
-export function mess() {	alert('MESS');  }
