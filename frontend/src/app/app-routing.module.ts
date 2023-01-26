@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/guard/auth.guard';
-import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator.component';
-import { GameComponent } from './game/game.component';
+import { PreloadAllModules } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    component: FttAuthenticatorComponent,
-  },
-  {
-    path: 'game',
-    component: GameComponent,
+    pathMatch: 'full',
+    redirectTo: 'user',
   },
   {
     path: 'login',
@@ -33,7 +29,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
