@@ -3,8 +3,10 @@
   <li *ngFor='let user of users'>
     <div (click)='onClick($event, user)'>
 	  <app-avatar [user]="user"></app-avatar>
-      <span class="user-name-medium">{{user.name}}</span>
-	  <!-- TODO show current match -->
+	  <span class="hover_invert" style="padding: 2px 15px;">
+		<span class="user-name-medium">{{user.intraId}} | {{user.name}}</span>
+	  </span>
+	  <!-- TODO show current match <app-live-match>?-->
     </div>
   </li>
 </ul>
