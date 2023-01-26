@@ -1,1 +1,73 @@
-/* You can add global styles to this file, and also import other style files */
+body
+{
+	background: #1e1e1e;	
+	font-family: 'VT323', monospace;
+	font-size: 32px;
+	cursor: cell;
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+h2
+{
+	font-variant-caps: all-petite-caps;
+	margin: 4px 0px 0px 24px;
+}
+input
+{
+	border: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	cursor: inherit;
+}
+input:focus-visible {
+	outline-style: none;
+	-webkit-filter: invert(100%);
+}
+.inverted {
+	-webkit-filter: invert(100%);
+}
+button
+{
+	cursor: inherit;
+	text-align: inherit;
+	border: none;
+	font-family: inherit;
+	font-size: inherit;
+}
+button:active {
+	-webkit-filter: invert(100%);
+}
+button::before {
+	content: "[";
+}
+button::after {
+	content: "]";
+}
+input::selection {
+	-webkit-filter: invert(0%);
+}
+ul
+{
+	margin: 0;
+}
+li
+{
+	list-style-type: none;
+	margin: 10px 30px 0px -20px;
+	border: 1px solid black;
+}
+label
+{
+	display: inline-block;
+	font-weight: bold;
+	width: 120px;
+	text-align: right;
+	padding-right: 5px;
+}
+label::after {
+	font-weight: normal;
+	content: " : ";
+}
