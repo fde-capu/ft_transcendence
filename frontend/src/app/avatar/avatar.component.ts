@@ -12,4 +12,7 @@ export class AvatarComponent {
 		name: "ftt_undef_name",
 		image: "ftt_undef_image"
 	};
+	onClick(): void {
+		// TODO open interaction mini-popup.
+	}
 }

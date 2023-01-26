@@ -1,0 +1,11 @@
+.avatar
+{
+	border: 1.66px solid #eee;
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 38%;
+	margin-right: 10px;
+	width: 64px;
+	height: 64px;
+	overflow: hidden;
+}
