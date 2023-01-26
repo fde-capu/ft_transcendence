@@ -4,6 +4,7 @@ import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator
 import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
+import { OnlineUsersComponent } from './online-users/online-users.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 
 const routes: Routes = [
@@ -26,6 +27,11 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+	// TODO set profile/intraId to show any user.
+  },
+  {
+    path: 'online',
+    component: OnlineUsersComponent,
   },
   {
     path: 'user',
