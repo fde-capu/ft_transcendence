@@ -2,21 +2,36 @@ import { Component, Input } from '@angular/core';
 import { User } from '../user-interface';
 
 @Component({
-  selector: 'app-avatar',
-  templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.css']
+selector: 'app-avatar',
+templateUrl: './avatar.component.html',
+styleUrls: ['./avatar.component.css']
 })
 export class AvatarComponent {
-
 	@Input() user?: User;
+	popUpOn: boolean = false;
+	wait: any;
 
-
-//	user: User = {
-//		intraId: "ftt_undef_intraId",
-//		name: "ftt_undef_name",
-//		image: "ftt_undef_image"
-//	};
 	onClick(): void {
-		// TODO open interaction mini-popup.
+		this.popUpOn = this.popUpOn ? false : true;
+		var self = this;
+		this.wait = setTimeout(function() {
+			self.popUpOn = false;
+		}, 1300);
+	}
+
+	onHover(): void {
+		console.log('in');
+		var self = this;
+		clearTimeout(this.wait);
+		this.popUpOn = true;
+		function repeat(){
+			setTimeout(function() {
+				return self.popUpOn ? repeat() : false;
+			}, 300);
+		}; repeat();
+	}
+
+	onHoverOut(): void {
+		this.popUpOn = false;
 	}
 }

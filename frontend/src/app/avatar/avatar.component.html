@@ -1,5 +1,12 @@
-<div *ngIf="user" class='avatar' (click)='onClick()'>
-	<div>{{user.name}}</div>
-	<div>{{user.intraId}}</div>
-	<div>{{user.image}}</div>
+<!-- TODO get image dinamicaly -->
+<div *ngIf="user" class='avatar' 
+style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+(click)='onClick()'>
+	<div class='avatar_menu' *ngIf="popUpOn" (mouseenter)='onHover()' (mouseleave)='onHoverOut()'>
+		<div style="margin-bottom: 4px;">{{user.intraId}} | {{user.name}}</div>
+		<button class="single-line">Profile</button>
+		<button class="single-line">Private Message</button>
+		<button class="single-line">Add as Friend</button>
+		<button class="single-line">INVITE TO GAME</button>
+	</div>
 </div>
