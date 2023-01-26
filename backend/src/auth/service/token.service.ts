@@ -12,16 +12,8 @@ export class TokenService {
     );
   }
 
-  async sign(
-    subject: string,
-    expiresIn: number,
-    claims?: { [propName: string]: unknown },
-  ): Promise<string> {
-    return await new EncryptJWT({
-      sub: subject,
-      exp: Math.floor(Date.now() / 1000) + expiresIn,
-      ...claims,
-    })
+  async sign(payload: JWTPayload): Promise<string> {
+    return await new EncryptJWT(payload)
       .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
       .encrypt(this.secret);
   }

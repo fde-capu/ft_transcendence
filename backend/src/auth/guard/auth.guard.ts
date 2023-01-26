@@ -9,7 +9,8 @@ import {
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const payload = context.switchToHttp().getRequest()['tokenPayload'];
-    if (!payload) throw new UnauthorizedException();
+    if (!payload || (payload['mfa']['enabled'] && !payload['mfa']['verified']))
+      throw new UnauthorizedException();
     return true;
   }
 }
