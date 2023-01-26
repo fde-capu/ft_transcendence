@@ -40,6 +40,7 @@ export class UserService {
     if (!codeFrom42 || codeFrom42 === '')
       throw new BadRequestException();
     try{
+      console.log(this.configService.get<string>('API42_CLIENT_ID'), " e o ", this.configService.get<string>('API42_CLIENT_SECRET'));
       const responseToken = await this.httpService.axiosRef.post<string>(
         'https://api.intra.42.fr/oauth/token',
         {
@@ -50,8 +51,11 @@ export class UserService {
           codeFrom42,
         },
       );
-      const {login} = await this.getBasicUserInfo(responseToken.data);
-      return ({token: responseToken.data, login});
+      const basicInfo = await this.getBasicUserInfo(responseToken.data);
+      const resp = this.userRepository.create({login: 'jestevam', email: 'email'});
+      console.log(await this.userRepository.insert({login: 'jestevam', email: 'email'}));
+      return ({token: responseToken.data, login: basicInfo.login});
+      // return ({token: '', login: ''});
     }
     catch(err){
       throw err.response;
