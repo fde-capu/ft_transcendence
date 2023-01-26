@@ -1,0 +1,10 @@
+<h2>Online Users</h2>
+<ul>
+  <li *ngFor='let user of users'>
+    <div (click)='onClick($event, user)'>
+	  <app-avatar></app-avatar> <!-- TODO, pass parameters to avatar -->
+      <span class="user-name-medium">{{user.name}}</span>
+	  <!-- TODO show current match -->
+    </div>
+  </li>
+</ul>
