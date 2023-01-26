@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "cookie-parser": "^1.4.6",
     "jose": "^4.11.2",
+    "otplib": "^12.0.1",
     "ps": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
