@@ -9,20 +9,19 @@ styleUrls: ['./avatar.component.css']
 export class AvatarComponent {
 	@Input() user?: User;
 	popUpOn: boolean = false;
-	wait: any;
+//	wait: any;
 
 	onClick(): void {
 		this.popUpOn = this.popUpOn ? false : true;
-		var self = this;
-		this.wait = setTimeout(function() {
-			self.popUpOn = false;
-		}, 1300);
+//		var self = this;
+//		this.wait = setTimeout(function() {
+//			self.popUpOn = false;
+//		}, 1500);
 	}
 
 	onHover(): void {
-		console.log('in');
 		var self = this;
-		clearTimeout(this.wait);
+//		clearTimeout(this.wait);
 		this.popUpOn = true;
 		function repeat(){
 			setTimeout(function() {
