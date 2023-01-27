@@ -1,12 +1,16 @@
 .avatar
 {
+	display: block;
+
+}
+
+.avatar-image
+{
 	float: left;
 	border: 3px solid val(--color-sublow);
-	display: block;
 	margin: 5px;
 	width: 64px;
 	height: 64px;
-
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -17,9 +21,9 @@
 	font-size: 66%;
 	width: 300px;
 	background: var(--color-low-transp);
-	left: 100%;
-	position: relative;
-	display: block;
+	position: absolute;
 	border: 4px solid var(--color-border);
 	padding: 10px;
+	margin-left: 66px;
+	margin-top: -4px;
 }
