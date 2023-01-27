@@ -13,17 +13,15 @@ export class OnlineUsersComponent {
 	selectedUser?: User;
 	constructor(private router: Router, private userService: UserService) {};
 	ngOnInit(): void {
-		this.getUsers();
+		this.getOnlineUsers();
 	}
 
-	getUsers(): void {
-		this.userService.getUsers()
+	getOnlineUsers(): void {
+		this.userService.getOnlineUsers()
 			.subscribe(users => this.users = users);
 	}
 
 	onClick(e: Event, user: User): void {
-//		TODO: inject a blink() function.
-
 //		TODO;
 //		this.router.navigate(['/profile', user.intraId])
 	}

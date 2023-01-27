@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { User } from '../user-interface';
 import { UserService } from '../user.service';
-
+import { USERS } from '../mocks';
 
 @Component({
   selector: 'app-profile',
@@ -10,11 +10,7 @@ import { UserService } from '../user.service';
 })
 export class ProfileComponent {
 	// TODO get user value from URI *or* if URI is empty, user is logged user.
-	user: User = {
-		intraId: "ftt_undef_intraId",
-		name: "ftt_undef_name",
-		image: "ftt_undef_image"
-	};
+	user: User = USERS[8];
 	focusOn(el: string): void {
 		const exist = document.getElementById(el);
 		if (exist) exist.focus();

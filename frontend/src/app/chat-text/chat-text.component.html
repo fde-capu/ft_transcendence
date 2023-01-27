@@ -2,13 +2,12 @@
 <div *ngIf="chatMessageService.chat.length">
 
   <ul>
-  <li class='chat-line' *ngFor='let chatLine of chatMessageService.chat'>
-  <!-- TODO: pass real user to avatar (messages = { user: string, message, string }) -->
+  <li *ngFor='let chatLine of chatMessageService.chat' class='chat-line'> 
 	<app-avatar [user]="chatLine.user"></app-avatar>
-	<span class='user-name-small inline'>
-	{{chatLine.user.intraId}} | {{chatLine.user.name}}:
-	</span>
-	{{chatLine.message}}
+	<span class='user-name-small hover_invert'>
+		{{chatLine.user.intraId}} | {{chatLine.user.name}}</span>
+		<span class='small'>:</span>
+		{{chatLine.message}}
   </li>
   </ul>
 

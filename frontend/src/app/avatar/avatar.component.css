@@ -1,11 +1,9 @@
 .avatar
 {
 	float: left;
-	font-size: 66%;
-	border: 3px solid #050505;
+	border: 3px solid val(--color-sublow);
 	display: block;
-	vertical-align: middle;
-	margin-right: 10px;
+	margin: 5px;
 	width: 64px;
 	height: 64px;
 
@@ -16,6 +14,7 @@
 
 .avatar_menu
 {
+	font-size: 66%;
 	width: 300px;
 	background: var(--color-low-transp);
 	left: 100%;

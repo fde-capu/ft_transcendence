@@ -7,10 +7,16 @@ import { USERS } from './mocks';
   providedIn: 'root'
 })
 export class UserService {
+  loggedUser?: Observable<User>;
   constructor() {}
 
-  getUsers(): Observable<User[]> {
+  getOnlineUsers(): Observable<User[]> {
 	const users = of(USERS);
 	return users;
   }
+
+//  getLoggedUser(): Observable<User> {
+//	const users = of(USERS);
+//	return users[8];
+//  }
 }
