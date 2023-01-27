@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../user-interface';
+import { UserService } from '../user.service';
 
 @Component({
 selector: 'app-avatar',
@@ -9,19 +10,13 @@ styleUrls: ['./avatar.component.css']
 export class AvatarComponent {
 	@Input() user?: User;
 	popUpOn: boolean = false;
-//	wait: any;
 
 	onClick(): void {
 		this.popUpOn = this.popUpOn ? false : true;
-//		var self = this;
-//		this.wait = setTimeout(function() {
-//			self.popUpOn = false;
-//		}, 1500);
 	}
 
 	onHover(): void {
 		var self = this;
-//		clearTimeout(this.wait);
 		this.popUpOn = true;
 		function repeat(){
 			setTimeout(function() {
