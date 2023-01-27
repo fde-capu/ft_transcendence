@@ -1,1 +1,9 @@
-<button (click)="signIn()" [disabled]="isAuthenticated$ | async">Entrar</button>
+<section *ngIf="!isAuthenticated">
+  <button (click)="signIn()">Entrar</button>
+  <qrcode [qrdata]="challengeUri" [width]="256"></qrcode>
+</section>
+<section *ngIf="challengeEnabled">
+  <input #token type="text" name="code" placeholder="MFA code"/>
+  <button type="submit" (click)="solveChallenge(token.value)">Enviar</button>
+</section>
+<p *ngIf="message">{{message}}</p>

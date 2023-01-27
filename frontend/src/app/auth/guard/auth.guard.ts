@@ -23,14 +23,21 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
-    return this.authService.isAuthenticated().pipe(
+    return this.authService.getAuthContext().pipe(
       map(value => {
-        if (state.url.includes('/login')) {
-          if (value) return this.router.createUrlTree(['/']);
-          return true;
-        }
-        if (value) return true;
-        return this.router.createUrlTree(['/login']);
+        const isAuthenticated =
+          value &&
+          (!value.mfa.enabled || (value.mfa.enabled && value.mfa.verified));
+
+        const goingToLoggingPage = state.url.includes('/login');
+
+        if (!isAuthenticated && !goingToLoggingPage)
+          return this.router.createUrlTree(['/login']);
+
+        if (isAuthenticated && goingToLoggingPage)
+          return this.router.createUrlTree(['/']);
+
+        return true;
       })
     );
   }
@@ -39,14 +46,21 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
-    return this.authService.isAuthenticated().pipe(
+    return this.authService.getAuthContext().pipe(
       map(value => {
-        if (state.url.includes('/login')) {
-          if (value) return this.router.createUrlTree(['/']);
-          return true;
-        }
-        if (value) return true;
-        return this.router.createUrlTree(['/login']);
+        const isAuthenticated =
+          value &&
+          (!value.mfa.enabled || (value.mfa.enabled && value.mfa.verified));
+
+        const goingToLoggingPage = state.url.includes('/login');
+
+        if (!isAuthenticated && !goingToLoggingPage)
+          return this.router.createUrlTree(['/login']);
+
+        if (isAuthenticated && goingToLoggingPage)
+          return this.router.createUrlTree(['/']);
+
+        return true;
       })
     );
   }

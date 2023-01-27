@@ -11,13 +11,11 @@ import { UserResponse } from '../../service/user.response';
 })
 export class ProfileComponent {
   user$: Observable<UserResponse>;
-  isAuthenticated$: Observable<boolean>;
   constructor(
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService
   ) {
     this.user$ = this.route.data.pipe(map(({ currentUser }) => currentUser));
-    this.isAuthenticated$ = this.authService.isAuthenticated();
   }
   signOut() {
     this.authService.signOut();
