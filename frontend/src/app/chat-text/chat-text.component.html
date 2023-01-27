@@ -1,0 +1,18 @@
+<h2>CHAT MESSAGES</h2>
+<div *ngIf="chatMessageService.chat.length">
+
+  <ul>
+  <li class='chat-line' *ngFor='let chatLine of chatMessageService.chat'>
+  <!-- TODO: pass real user to avatar (messages = { user: string, message, string }) -->
+	<app-avatar [user]="chatLine.user"></app-avatar>
+	<span class='user-name-small inline'>
+	{{chatLine.user.intraId}} | {{chatLine.user.name}}:
+	</span>
+	{{chatLine.message}}
+  </li>
+  </ul>
+
+  <hr>
+  <button type="button" class="clear"
+          (click)="chatMessageService.clear()">Clear Chat</button>
+</div>

@@ -1,11 +1,14 @@
 <h2>User Profile</h2>
 <div>
 	<div><label>name</label>
+
+<!--	<app-input></app-input> -->
 	<input id="name" [(ngModel)]="user.name"
 		(focus)="switchIf('change_me_1', 'Change', 'Ok');"
 		(focusout)="switchIf('change_me_1', 'Ok', 'Change');"
 		(keydown.enter)="blur('name'); blink('change_me_1');"
 		>
+
 		<!-- TODO 'Change' button only when client is the owner of profile -->
 		<button id="change_me_1" type="button" (click)=
 			"focusIf('change_me_1', 'Change', 'name');"

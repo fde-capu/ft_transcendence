@@ -1,4 +1,5 @@
 import { User } from './user-interface';
+import { ChatMessage } from './chat-message-interface';
 
 export const USERS: User[] = [
   { intraId: "blabla", name: 'Blats Bla', image: 'https://foo-url/' },
@@ -12,4 +13,19 @@ export const USERS: User[] = [
   { intraId: "zaphbeebl", name: 'Zaphod Beeblebrox', image: 'https://foo-url/' },
   { intraId: "arthudent", name: 'Arthur Dent', image: 'https://foo-url/' },
   { intraId: "fordperfe", name: 'Ford Perfect', image: 'https://foo-url/' },
+];
+
+export const CHATS: ChatMessage[] = [
+  {
+	user: USERS[6],
+	message: 'Doloris epsum eitch un dastret gonibs functum. Al ma gnardu prepis, la ma dega, unfuctum de miris solinus.'
+  },
+  {
+	user: USERS[8],
+	message: 'user.service run. Lorem ipsum dolor hipsis defnat harocum! Tetus archi quo UBNOSCIOUS! De MODUS dodus operatum TASGARI! Dout me ipinasys cretusculus ne banit a sondelius prunt... Me ne ga fum de ipis rectum!!! Ne med foust et limous terbacitum, ka cest nuch ama greptium donorium bost.'
+  },
+  {
+	user: USERS[9],
+	message: 'Plunctus zeit no sact-turnus ome dast a melichom wizcozus per tentclwus de PONG!'
+  },
 ];

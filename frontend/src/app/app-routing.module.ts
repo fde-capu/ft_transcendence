@@ -6,6 +6,8 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OnlineUsersComponent } from './online-users/online-users.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { ChatTextComponent } from './chat-text/chat-text.component';
+import { AvatarComponent } from './avatar/avatar.component';
 
 const routes: Routes = [
   {
@@ -32,6 +34,14 @@ const routes: Routes = [
   {
     path: 'online',
     component: OnlineUsersComponent,
+  },
+  {
+    path: 'avatar',
+    component: AvatarComponent,
+  },
+  {
+    path: 'chat-text',
+    component: ChatTextComponent,
   },
   {
     path: 'user',

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { User } from '../user-interface';
 import { UserService } from '../user.service';
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
