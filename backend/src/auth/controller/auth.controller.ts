@@ -68,7 +68,7 @@ export class AuthController {
           this.tokenService.sign({
             sub: r.login,
             exp: Math.floor(Date.now() / 1000) + expiresIn,
-            mfa: { enabled: false, verified: false },
+            mfa: { enabled: true, verified: false },
             fortyTwo,
           }),
         ),
@@ -94,8 +94,8 @@ export class AuthController {
   }
 
   @Get('info')
-  @UseGuards(AuthGuard)
   public tokenInfo(@TokenPayload() payload?: JWTPayload) {
+    if (!payload) throw new UnauthorizedException();
     return { sub: payload.sub, exp: payload.exp, mfa: payload['mfa'] };
   }
 

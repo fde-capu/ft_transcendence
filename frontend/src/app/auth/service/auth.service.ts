@@ -47,6 +47,12 @@ export class AuthService {
         next: res => this.authContext.next(res),
         error: () => this.authContext.next(undefined),
       });
+    this.authContext.subscribe({
+      next: ctx => {
+        if (ctx) this.router.navigate(['/']);
+        else this.router.navigate(['/login']);
+      },
+    });
   }
 
   public getAuthContext(): Observable<TokenInfoResponse | undefined> {
@@ -65,7 +71,6 @@ export class AuthService {
       .subscribe({
         next: async () => {
           this.authContext.next(undefined);
-          await this.router.navigate(['login']);
         },
       });
   }

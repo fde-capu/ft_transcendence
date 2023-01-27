@@ -14,4 +14,8 @@ export class OtpService {
   getUri(account: string, secret: string): string {
     return authenticator.keyuri(account, 'ft_transcendence', secret);
   }
+
+  getToken(secret: string): string {
+    return authenticator.generate(secret);
+  }
 }
