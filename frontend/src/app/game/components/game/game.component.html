@@ -1,0 +1,3 @@
+<input #data type="text" placeholder="Data">
+<button type="submit" (click)="send(data.value)">Enviar</button>
+<p>{{ message$ | async }}</p>
