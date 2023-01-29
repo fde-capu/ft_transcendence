@@ -1,0 +1,20 @@
+.render-filter, svg {
+	pointer-events: none;
+	position: fixed;
+bottom: 0px;
+left: 0px;
+top: calc(var(--body-margin) * -1);
+right: 0px;
+width: 100%;
+height: calc(100% + (2 * var(--body-margin)));
+}
+.aliasing {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAACXBIWXMAAAsSAAALEgHS3X78AAAAEElEQVQIHWNgYGD4BMQMDAAFtgDzhcd9ZwAAAABJRU5ErkJggg==');
+	opacity:.55;
+    z-index: 1000;
+}
+.reflexes {
+	opacity:.15;
+	background-image: url('#reflexes');
+    z-index: 1003;
+}

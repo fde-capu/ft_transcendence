@@ -7,7 +7,6 @@ import { USERS } from './mocks';
   providedIn: 'root'
 })
 export class UserService {
-  loggedUser?: Observable<User>;
   constructor() {}
 
   getOnlineUsers(): Observable<User[]> {
@@ -15,8 +14,7 @@ export class UserService {
 	return users;
   }
 
-//  getLoggedUser(): Observable<User> {
-//	const users = of(USERS);
-//	return users[8];
-//  }
+  getLoggedUser(): User {
+	return USERS[Math.floor(Math.random() * USERS.length)];
+  }
 }
