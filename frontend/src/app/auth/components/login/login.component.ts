@@ -39,10 +39,10 @@ export class LoginComponent {
   solveChallenge(token: string) {
     this.authService.solveChallenge(token).subscribe({
       next: () => {
-        this.message = 'uhu mfa completo!';
+        this.message = 'Nicely done!';
       },
       error: () => {
-        this.message = 'o codigo está errado!';
+        this.message = 'Yikes! Wrong code, bud!';
       },
     });
   }
