@@ -10,7 +10,8 @@ import { USERS } from '../mocks';
 })
 export class ProfileComponent {
 	// TODO get user value from URI *or* if URI is empty, user is logged user.
-	user: User = USERS[8];
+	constructor(private userService: UserService) {};
+	user: User = this.userService.getLoggedUser();
 	focusOn(el: string): void {
 		const exist = document.getElementById(el);
 		if (exist) exist.focus();
