@@ -77,6 +77,8 @@ export class AuthController {
         }),
       ),
     );
+    // Code review note (CRN):
+    // - The multiplyer 1000 (exp) could be ad option set in a global object.
     return res
       .cookie('authorization', token, {
         httpOnly: true,
@@ -90,8 +92,9 @@ export class AuthController {
   public logout(@Res() res: Response) {
     return res
       .clearCookie('authorization')
-      .json({ message: 'We hope see u soon' });
+      .json({ message: 'Did you have a good trip?' });
   }
+  // CRN: All strings could also be in a separate global.
 
   @Get('info')
   public tokenInfo(@TokenPayload() payload?: JWTPayload) {
@@ -105,7 +108,7 @@ export class AuthController {
 
     if (payload['mfa']['enabled']) throw new BadRequestException();
 
-    const secret = 'LMWVYBAAAVES2FKG';
+    const secret = 'LMWVYBAAAVES2FKG'; // CRN: What's this, why is it here?
     return {
       secret,
       uri: this.otp.getUri(payload.sub, secret),
@@ -124,7 +127,7 @@ export class AuthController {
 
     if (!otp) throw new BadRequestException();
 
-    const secret = 'LMWVYBAAAVES2FKG';
+    const secret = 'LMWVYBAAAVES2FKG'; // CRN: TODO: keep secret actually secret.
     const valid = this.otp.verify(otp, secret);
     if (!valid) throw new BadRequestException();
 
@@ -144,7 +147,8 @@ export class AuthController {
         mfa: { enabled: true, verified: true },
       });
   }
-
+  // CRN: Here the multiplyer 1000 is also used.
+  
   @Delete('challenge')
   @UseGuards(AuthGuard)
   public async disableChallenge(
@@ -167,5 +171,6 @@ export class AuthController {
         exp: payload.exp,
         mfa: { enabled: false, verified: false },
       });
+     // CRN: Also * 1000.
   }
 }
