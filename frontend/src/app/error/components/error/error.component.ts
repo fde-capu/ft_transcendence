@@ -18,10 +18,10 @@ export class ErrorComponent {
   ) {
     this.cause =
       route.snapshot.queryParamMap.get('cause') ||
-      'Parece que você foi longe demais';
+      'An error! Why did this happen?';
     this.description =
       route.snapshot.queryParamMap.get('description') ||
-      'Que tal voltar e jogar uma bela partida de pong?';
+      'You have sent a PING, but this is PONG!';
   }
 
   goBack() {
