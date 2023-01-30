@@ -13,6 +13,7 @@ export class LoginComponent {
 
   challengeEnabled = false;
 
+  // TODO: Remove it. It is only here for tests proposes. If you want to generate the code use this.authService.getChallenge()
   challengeUri =
     'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
 
