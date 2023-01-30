@@ -1,7 +1,9 @@
+<!--
+TODO 'Change' button only when client is the owner of profile
+-->
 <!-- TODO get image dinamicaly -->
 <h2>User Profile</h2>
 <table>
-<!--	<app-input></app-input> // Could substitute this <tr> -->
 	<tr>
 		<td>
 			<label>name</label>
@@ -11,7 +13,7 @@
 			(focus)="switchIf('change_me_1', 'Change', 'Ok');"
 			(focusout)="switchIf('change_me_1', 'Ok', 'Change');"
 			(keydown.enter)="blur('name'); blink('change_me_1');"
-			>
+			/>
 		</td>
 		<td>
 			<!-- TODO 'Change' button only when client is the owner of profile -->
