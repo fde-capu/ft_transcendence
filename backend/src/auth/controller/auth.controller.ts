@@ -19,8 +19,8 @@ import { TokenPayload } from '../decorator/token-payload.decorator';
 import { TokenService } from '../service/token.service';
 import { AuthGuard } from '../guard/auth.guard';
 import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
-import { ErrorResponse } from 'src/forty-two/service/error.response';
-import { TokenResponse } from 'src/forty-two/service/token.response';
+import { ErrorFortyTwoApi } from 'src/forty-two/service/error';
+import { TokenFortyTwoApi } from 'src/forty-two/service/token';
 import { encode } from 'querystring';
 import { OtpService } from '../service/otp.service';
 
@@ -55,7 +55,7 @@ export class AuthController {
         .redirect(`http://localhost:4200/error?${query}`);
       return;
     }
-    let fortyTwo: TokenResponse;
+    let fortyTwo: TokenFortyTwoApi;
     let expiresIn = 0;
     const token = await firstValueFrom(
       this.fortyTwoService.getTokenWithAuthorizationCode(code, state).pipe(
@@ -72,7 +72,7 @@ export class AuthController {
             fortyTwo,
           }),
         ),
-        catchError((error: ErrorResponse) => {
+        catchError((error: ErrorFortyTwoApi) => {
           throw new HttpException(error, HttpStatus.UNAUTHORIZED);
         }),
       ),
@@ -148,7 +148,7 @@ export class AuthController {
       });
   }
   // CRN: Here the multiplyer 1000 is also used.
-  
+
   @Delete('challenge')
   @UseGuards(AuthGuard)
   public async disableChallenge(
@@ -171,6 +171,6 @@ export class AuthController {
         exp: payload.exp,
         mfa: { enabled: false, verified: false },
       });
-     // CRN: Also * 1000.
+    // CRN: Also * 1000.
   }
 }

@@ -160,7 +160,7 @@ export interface CampusUser {
   updated_at: Date;
 }
 
-export interface UserResponse {
+export interface UserFortyTwoApi {
   id: number;
   email: string;
   login: string;

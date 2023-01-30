@@ -1,4 +1,4 @@
-export interface TokenInfoResponse {
+export interface TokenInfoFortyTwoApi {
   resource_owner_id: number;
   scopes: string[];
   expires_in_seconds: number;

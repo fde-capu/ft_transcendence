@@ -4,10 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { encode } from 'querystring';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { AxiosError } from 'axios';
-import { TokenResponse } from './token.response';
-import { ErrorResponse } from './error.response';
-import { TokenInfoResponse } from './token-info.response';
-import { UserResponse } from './user.response';
+import { TokenFortyTwoApi } from './token';
+import { ErrorFortyTwoApi } from './error';
+import { TokenInfoFortyTwoApi } from './token-info';
+import { UserFortyTwoApi } from './user';
 
 @Injectable()
 export class FortyTwoService {
@@ -39,7 +39,7 @@ export class FortyTwoService {
   public getTokenWithAuthorizationCode(
     code: string,
     state?: string,
-  ): Observable<TokenResponse> {
+  ): Observable<TokenFortyTwoApi> {
     const payload = {
       grant_type: 'authorization_code',
       client_id: this.clientId,
@@ -49,10 +49,10 @@ export class FortyTwoService {
       state,
     };
     return this.httpService
-      .post<TokenResponse>('https://api.intra.42.fr/oauth/token', payload)
+      .post<TokenFortyTwoApi>('https://api.intra.42.fr/oauth/token', payload)
       .pipe(
         map((response) => response.data),
-        catchError((error: AxiosError<ErrorResponse>) => {
+        catchError((error: AxiosError<ErrorFortyTwoApi>) => {
           return throwError(() => error.response.data);
         }),
       );
@@ -61,7 +61,7 @@ export class FortyTwoService {
   public getTokenWithRefreshToken(
     refresh_token: string,
     scope?: string[],
-  ): Observable<TokenResponse> {
+  ): Observable<TokenFortyTwoApi> {
     const payload = {
       grant_type: 'refresh_token',
       client_id: this.clientId,
@@ -70,36 +70,36 @@ export class FortyTwoService {
       refresh_token,
     };
     return this.httpService
-      .post<TokenResponse>('https://api.intra.42.fr/oauth/token', payload)
+      .post<TokenFortyTwoApi>('https://api.intra.42.fr/oauth/token', payload)
       .pipe(
         map((response) => response.data),
-        catchError((error: AxiosError<ErrorResponse>) => {
+        catchError((error: AxiosError<ErrorFortyTwoApi>) => {
           return throwError(() => error.response.data);
         }),
       );
   }
 
-  public getTokenInfo(token: string): Observable<TokenInfoResponse> {
+  public getTokenInfo(token: string): Observable<TokenInfoFortyTwoApi> {
     return this.httpService
-      .get<TokenInfoResponse>('https://api.intra.42.fr/oauth/token/info', {
+      .get<TokenInfoFortyTwoApi>('https://api.intra.42.fr/oauth/token/info', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .pipe(
         map((response) => response.data),
-        catchError((error: AxiosError<ErrorResponse>) => {
+        catchError((error: AxiosError<ErrorFortyTwoApi>) => {
           return throwError(() => error.response.data);
         }),
       );
   }
 
-  public getUserInfo(token: string): Observable<UserResponse> {
+  public getUserInfo(token: string): Observable<UserFortyTwoApi> {
     return this.httpService
-      .get<UserResponse>('https://api.intra.42.fr/v2/me', {
+      .get<UserFortyTwoApi>('https://api.intra.42.fr/v2/me', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .pipe(
         map((response) => response.data),
-        catchError((error: AxiosError<ErrorResponse>) => {
+        catchError((error: AxiosError<ErrorFortyTwoApi>) => {
           return throwError(() => error.response.data);
         }),
       );
