@@ -2,9 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from './../../../environments/environment';
 import {
   catchError,
-  distinctUntilChanged,
   map,
   Observable,
   ReplaySubject,
@@ -40,7 +40,7 @@ export class AuthService {
     private readonly router: Router
   ) {
     this.httpClient
-      .get<TokenInfoResponse>('http://localhost:3000/auth/info', {
+      .get<TokenInfoResponse>(`${environment.backendOrigin}/auth/info`, {
         withCredentials: true,
       })
       .subscribe({
@@ -60,12 +60,12 @@ export class AuthService {
   }
 
   public signIn(): void {
-    this.document.location.href = 'http://localhost:3000/auth/authorize';
+    this.document.location.href = `${environment.backendOrigin}/auth/authorize`;
   }
 
   public signOut(): void {
     this.httpClient
-      .get('http://localhost:3000/auth/logout', {
+      .get(`${environment.backendOrigin}/auth/logout`, {
         withCredentials: true,
       })
       .subscribe({
@@ -77,7 +77,7 @@ export class AuthService {
 
   public getChallenge(): Observable<string> {
     return this.httpClient
-      .get<ChallengeResponse>('http://localhost:3000/auth/challenge', {
+      .get<ChallengeResponse>(`${environment.backendOrigin}/auth/challenge`, {
         withCredentials: true,
       })
       .pipe(
@@ -91,7 +91,7 @@ export class AuthService {
   public solveChallenge(token: string): Observable<boolean> {
     return this.httpClient
       .post<TokenInfoResponse>(
-        'http://localhost:3000/auth/challenge',
+        `${environment.backendOrigin}/auth/challenge`,
         {
           token,
         },
@@ -108,9 +108,12 @@ export class AuthService {
 
   public disableChallenge(): Observable<boolean> {
     return this.httpClient
-      .delete<TokenInfoResponse>('http://localhost:3000/auth/challenge', {
-        withCredentials: true,
-      })
+      .delete<TokenInfoResponse>(
+        `${environment.backendOrigin}/auth/challenge`,
+        {
+          withCredentials: true,
+        }
+      )
       .pipe(
         tap(res => this.authContext.next(res)),
         map(() => true),
