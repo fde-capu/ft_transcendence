@@ -11,11 +11,12 @@ import { ProfileComponent } from './profile/profile.component';
 import { OnlineUsersComponent } from './online-users/online-users.component';
 import { ChatTextComponent } from './chat-text/chat-text.component';
 import { RenderFilterComponent } from './render-filter/render-filter.component';
+import { MenuBarComponent } from './menu-bar/menu-bar.component';
 
 @NgModule({
   declarations: [AppComponent, FttAuthenticatorComponent, GameComponent, 
 	HomeComponent, HomeComponent, AvatarComponent, ProfileComponent, OnlineUsersComponent,
-	ChatTextComponent, RenderFilterComponent],
+	ChatTextComponent, RenderFilterComponent, MenuBarComponent],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

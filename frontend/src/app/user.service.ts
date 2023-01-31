@@ -10,10 +10,14 @@ import { USERS } from './mocks';
   providedIn: 'root'
 })
 export class UserService {
+	loggedUser!: User;
 
-	constructor(private route: ActivatedRoute) {}
+	constructor(private route: ActivatedRoute) {
+		this.loggedUser = USERS[Math.floor(Math.random() * USERS.length)];
+	}
 
-	ngOnInit() {}
+	ngOnInit() {
+	}
 
 	// TODO: all Observables are mocked. Unmock them!
 
@@ -23,8 +27,7 @@ export class UserService {
 	}
 
 	getLoggedUser(): Observable<User> {
-		const loggedUser = USERS[Math.floor(Math.random() * USERS.length)];
-		return of(loggedUser);
+		return of(this.loggedUser);
 	}
 
 	getUserById(intraId: string): Observable<User> {

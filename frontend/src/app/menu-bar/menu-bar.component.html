@@ -1,0 +1,8 @@
+<div *ngIf="isLogged" class="menu-bar flex-line">
+	<!-- TODO get image dinamicaly -->
+	<app-avatar></app-avatar>
+	<a class="user-name-medium" style="margin-left: 16px;" routerLink="/profile/{{user.intraId}}">
+		{{user.intraId}} | {{user.name}}
+	</a>
+</div>
+
