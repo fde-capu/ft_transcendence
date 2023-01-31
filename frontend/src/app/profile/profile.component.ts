@@ -33,12 +33,6 @@ export class ProfileComponent {
 				.subscribe(user => { ownership = user });
 			this.owner = ownership === this.user;
 		}
-		else
-		{
-			this.userService.getLoggedUser()
-				.subscribe(user => this.user = user);
-			this.owner = true;
-		}
 	}
 	focusOn(el: string): void {
 		const exist = document.getElementById(el);

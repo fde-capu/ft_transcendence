@@ -14,6 +14,7 @@ export class MenuBarComponent {
 	isLogged: Boolean = true;
 	// ^ TODO: make it into a user.service...
 	// ...or accept the user is always logged.
+	menuOpen: Boolean = false;
 
 	ngOnInit(): void {
 		this.getUser();
@@ -21,5 +22,12 @@ export class MenuBarComponent {
 	getUser(): void {
 		this.userService.getLoggedUser()
 			.subscribe(user => this.user = user);
-	}	
+	}
+
+	onClickBurger(): void {
+		this.menuOpen = !this.menuOpen;
+	}
+	onMouseLeave(): void { 
+		this.menuOpen = false;
+	}
 }

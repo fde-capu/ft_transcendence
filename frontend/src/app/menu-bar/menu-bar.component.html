@@ -1,5 +1,10 @@
 <div *ngIf="isLogged" class="menu-bar flex-line">
 	<!-- TODO get image dinamicaly -->
+	<div class="burger hover_invert" (click)="onClickBurger();">
+	</div>
+	<div *ngIf="menuOpen" class="burger-menu" (mouseleave)="onMouseLeave();">
+		<button>...</button>
+	</div>
 	<app-avatar></app-avatar>
 	<a class="user-name-medium" style="margin-left: 16px;" routerLink="/profile/{{user.intraId}}">
 		{{user.intraId}} | {{user.name}}

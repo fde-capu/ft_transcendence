@@ -1,5 +1,5 @@
 :root {
-	cursor:url("assets/cursor.png") 10 10, cell;
+	cursor:url("assets/cursor.png") 8 8, cell;
 	--color-high:#eee;
 	--color-subhigh:#aaa;
 	--color-supmed:#888;
@@ -7,12 +7,19 @@
 	--color-border:#333;
 	--color-low:#222;
 	--color-sublow:#101010;
-	--color-low-transp:#222222f6;
 	--color-high-transp:#a0a0a087;
+	--color-low-transp:#222222f6;
+	--color-sublow-transp:#101010f6;
 	--color-shadow:#000000aa;
-	--body-margin: 40px;
 
+	--body-margin: 40px;
+	--body-border-width: 8px;
 	--normal-font-size: 32px;
+
+	--body-inner: calc(var(--body-margin) + var(--body-border-width));
+	--border-thin: 4px solid var(--color-border);
+	--color-popup-background: var(--color-low-transp);
+	--color-menu-bar: var(--color-sublow-transp);
 }
 body
 {
@@ -25,7 +32,7 @@ body
 	-ms-user-select: none; /* IE10+/Edge */
 	user-select: none; /* Standard */
 	image-rendering: pixelated;
-	color: #eeeeee;
+	color: var(--color-high);
 	padding: 0;
 	border: 0;
 	margin: 0;
@@ -76,7 +83,7 @@ a {
 	all: unset;
 }
 a, .hover_invert {
-	background: var(--color-low);
+	background: #222; /* NOT var(--color-low) because of darkread bug. */
 }
 a:hover, .hover_invert:hover {
 	-webkit-filter: invert(100%);
@@ -87,7 +94,7 @@ a:hover, .hover_invert:hover {
 	font-size: 100%;
 }
 .user-name-small {
-	font-size: 66.66%;
+	font-size: 66.6666%;
 	min-width: max-content;
 	padding: 0px 5px;
 }
@@ -143,9 +150,9 @@ li
 }
 .chat-line {
 	min-width: unset;
-	min-height: 2.15em;
+	min-height: 68px;
 	list-style-type: none;
-	margin: 0px 30px 0px -20px;
+	margin: 0px 0px 2px -20px;
 	width: 97%;
 	display: inline-block;
     align-items: center;
@@ -188,7 +195,7 @@ table > tr {
 	left: 0;
 	margin: var(--body-margin);
 	padding: 10vh 9vw;
-	border: 10px solid var(--color-border);
+	border: var(--body-border-width) solid var(--color-border);
 	displaY: block;
 }
 /* Firefox */
@@ -216,32 +223,58 @@ table > tr {
 {
 	display: block;
 }
-
 .avatar-image
 {
 	float: left;
 	border: none;
-	margin: 5px;
+	margin-right: 5px;
 	width: 64px;
 	height: 64px;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 }
-
 .avatar_menu
 {
-	font-size: 66%;
+	font-size: 66.6666%;
 	width: 300px;
-	background: var(--color-low-transp);
+	background: var(--color-popup-background);
 	position: absolute;
-	border: 4px solid var(--color-border);
+	border: var(--border-thin);
 	padding: 10px;
-	margin-left: 66px;
-	margin-top: -4px;
+	margin-left: 60px;
+	margin-top: -5px;
 }
 .no-border-margin-padding {
 	margin: 0;
 	padding: 0;
 	border: 0;
+}
+.menu-bar {
+	background: var(--color-menu-bar);
+	height: 64px;
+	position: absolute;
+	top: var(--body-border-width);
+	left: var(--body-inner);
+	width: calc(100% - (var(--body-inner) * 2));
+	padding: 0;
+	border-bottom: var(--border-thin);
+}
+.burger {
+	background-image:url('/assets/burger.png');
+	width: 16px;
+	height: 16px;
+	padding: 24px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.burger-menu {
+	position: absolute;
+	top: 64px;
+	left: 0px;
+	border: var(--border-thin);
+	border-left: none;
+	background: var(--color-popup-background);
+	padding: 32px;
+	width: 256px;
 }
