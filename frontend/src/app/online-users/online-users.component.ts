@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from "@angular/router"
 import { User } from '../user-interface';
 import { UserService } from '../user.service';
 
@@ -11,7 +10,7 @@ import { UserService } from '../user.service';
 export class OnlineUsersComponent {
 	users: User[] = []
 	selectedUser?: User;
-	constructor(private router: Router, private userService: UserService) {};
+	constructor(private userService: UserService) {};
 	ngOnInit(): void {
 		this.getOnlineUsers();
 	}
@@ -21,7 +20,8 @@ export class OnlineUsersComponent {
 			.subscribe(users => this.users = users);
 	}
 
-	onClick(e: Event, user: User): void {
+	onClick(e: Event): void {
+		console.log('user clicked:', e);
 //		TODO;
 //		this.router.navigate(['/profile', user.intraId])
 	}

@@ -70,10 +70,13 @@ input:selection {
 .inverted {
 	-webkit-filter: invert(100%);
 }
-.hover_invert {
+a {
+	all: unset;
+}
+a, .hover_invert {
 	background: var(--color-low);
 }
-.hover_invert:hover {
+a:hover, .hover_invert:hover {
 	-webkit-filter: invert(100%);
 }
 .user-name-medium {

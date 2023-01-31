@@ -2,9 +2,9 @@
 <ul>
   <li *ngFor='let user of users'>
 	  <app-avatar [user]="user"></app-avatar>
-	  <span class="hover_invert user-name-medium" (click)='onClick($event, user)'>
+	  <a class="user-name-medium" routerLink="/profile/{{user.intraId}}">
 		{{user.intraId}} | {{user.name}}
-	  </span>
+	  </a>
 	  <!-- TODO show current match <app-live-match>?-->
   </li>
 </ul>
