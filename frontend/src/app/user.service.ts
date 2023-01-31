@@ -7,14 +7,22 @@ import { USERS } from './mocks';
   providedIn: 'root'
 })
 export class UserService {
-  constructor() {}
+	constructor() {}
 
-  getOnlineUsers(): Observable<User[]> {
-	const users = of(USERS);
-	return users;
-  }
+	getOnlineUsers(): Observable<User[]> {
+		const users = of(USERS);
+		return users;
+	}
 
-  getLoggedUser(): User {
-	return USERS[Math.floor(Math.random() * USERS.length)];
-  }
+	// This does not make sense to be a service...
+	getLoggedUser(): Observable<User> {
+		const loggedUser = of(USERS[Math.floor(Math.random() * USERS.length)]);
+		return loggedUser;
+	}
+
+	// This ALSO does not make sense to be a service...
+	getUserFromURI(): Observable<User> {
+		const userFromURI = of(USERS[Math.floor(Math.random() * USERS.length)]);
+		return userFromURI;
+	}
 }

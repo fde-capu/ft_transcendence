@@ -9,9 +9,17 @@ import { USERS } from '../mocks';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-	// TODO get user value from URI *or* if URI is empty, user is logged user.
+	user: User = {} as User;
 	constructor(private userService: UserService) {};
-	user: User = this.userService.getLoggedUser();
+	// TODO get user value from URI *or* if URI is empty, user is logged user.
+	ngOnInit(): void {
+		this.getUserFromURI();
+	}
+	getUserFromURI(): void {
+		// "getUserFromURI" is here only for testing.
+		this.userService.getUserFromURI()
+			.subscribe(userFromURI => this.user = userFromURI);
+	}
 	focusOn(el: string): void {
 		const exist = document.getElementById(el);
 		if (exist) exist.focus();

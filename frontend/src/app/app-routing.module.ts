@@ -27,9 +27,23 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
+	// TODO set profile/intraId to show any user.
     path: 'profile',
     component: ProfileComponent,
-	// TODO set profile/intraId to show any user.
+	children: [{
+		path: ':intraId', 
+		component: ProfileComponent 
+	}]
+  },
+  {
+	path: ':intraId', component: ProfileComponent,
+	children: [{
+		path: 'profile',
+		component: ProfileComponent
+	},{
+		path: 'avatar',
+		component: AvatarComponent
+	}]
   },
   {
     path: 'online',
@@ -42,17 +56,7 @@ const routes: Routes = [
   {
     path: 'chat-text',
     component: ChatTextComponent,
-  },
-  {
-    path: 'user',
-    component: UserProfileComponent,
-    children: [
-      {
-        path: 'profile',
-        component: UserProfileComponent,
-      },
-    ],
-  },
+  }
 ];
 
 @NgModule({
