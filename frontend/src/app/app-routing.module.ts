@@ -5,7 +5,6 @@ import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OnlineUsersComponent } from './online-users/online-users.component';
-import { UserProfileComponent } from './user/user-profile/user-profile.component';
 import { ChatTextComponent } from './chat-text/chat-text.component';
 import { AvatarComponent } from './avatar/avatar.component';
 
@@ -27,23 +26,11 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-	// TODO set profile/intraId to show any user.
+    path: 'profile/:intraId',
+    component: ProfileComponent,
+  },{
     path: 'profile',
     component: ProfileComponent,
-	children: [{
-		path: ':intraId', 
-		component: ProfileComponent 
-	}]
-  },
-  {
-	path: ':intraId', component: ProfileComponent,
-	children: [{
-		path: 'profile',
-		component: ProfileComponent
-	},{
-		path: 'avatar',
-		component: AvatarComponent
-	}]
   },
   {
     path: 'online',

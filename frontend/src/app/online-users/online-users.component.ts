@@ -8,21 +8,13 @@ import { UserService } from '../user.service';
   styleUrls: ['./online-users.component.css']
 })
 export class OnlineUsersComponent {
-	users: User[] = []
-	selectedUser?: User;
+	users: User[] = [];
 	constructor(private userService: UserService) {};
 	ngOnInit(): void {
 		this.getOnlineUsers();
 	}
-
 	getOnlineUsers(): void {
 		this.userService.getOnlineUsers()
 			.subscribe(users => this.users = users);
-	}
-
-	onClick(e: Event): void {
-		console.log('user clicked:', e);
-//		TODO;
-//		this.router.navigate(['/profile', user.intraId])
 	}
 }

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { User } from '../user-interface';
-import { UserService } from '../user.service';
 import { USERS } from '../mocks';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,15 +12,28 @@ import { USERS } from '../mocks';
 })
 export class ProfileComponent {
 	user: User = {} as User;
-	constructor(private userService: UserService) {};
+
+	constructor (
+		private userService: UserService,
+		private route: ActivatedRoute,
+		private location: Location
+	) {};
+
 	// TODO get user value from URI *or* if URI is empty, user is logged user.
 	ngOnInit(): void {
-		this.getUserFromURI();
+		this.getUser();
 	}
-	getUserFromURI(): void {
-		// "getUserFromURI" is here only for testing.
-		this.userService.getUserFromURI()
-			.subscribe(userFromURI => this.user = userFromURI);
+	getUser(): void {
+		const id = this.route.snapshot.paramMap.get('intraId');
+		if (id !== null) {
+			this.userService.getUserById(id)
+				.subscribe(user => this.user = user);
+		}
+		else
+		{
+			this.userService.getLoggedUser()
+				.subscribe(user => this.user = user);
+		}
 	}
 	focusOn(el: string): void {
 		const exist = document.getElementById(el);

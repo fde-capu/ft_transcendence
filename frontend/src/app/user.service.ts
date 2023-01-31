@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { User } from './user-interface';
 import { USERS } from './mocks';
 
@@ -7,22 +8,26 @@ import { USERS } from './mocks';
   providedIn: 'root'
 })
 export class UserService {
-	constructor() {}
+
+	constructor(private route: ActivatedRoute) {}
+
+	ngOnInit() {}
+
+	// TODO: all Observables are mocked (of), just unmock them!
 
 	getOnlineUsers(): Observable<User[]> {
-		const users = of(USERS);
-		return users;
+		const users = USERS;
+		return of(users);
 	}
 
-	// This does not make sense to be a service...
 	getLoggedUser(): Observable<User> {
-		const loggedUser = of(USERS[Math.floor(Math.random() * USERS.length)]);
-		return loggedUser;
+		const loggedUser = USERS[Math.floor(Math.random() * USERS.length)];
+		return of(loggedUser);
 	}
 
-	// This ALSO does not make sense to be a service...
-	getUserFromURI(): Observable<User> {
-		const userFromURI = of(USERS[Math.floor(Math.random() * USERS.length)]);
-		return userFromURI;
+	getUserById(intraId: string): Observable<User> {
+		const user = USERS.find(h => h.intraId === intraId)!;
+		console.log("F", user);
+		return of(user);
 	}
 }
