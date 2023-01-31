@@ -12,6 +12,7 @@ import { UserService } from '../user.service';
 })
 export class ProfileComponent {
 	user: User = {} as User;
+	owner: Boolean = false;
 
 	constructor (
 		private userService: UserService,
@@ -19,7 +20,6 @@ export class ProfileComponent {
 		private location: Location
 	) {};
 
-	// TODO get user value from URI *or* if URI is empty, user is logged user.
 	ngOnInit(): void {
 		this.getUser();
 	}
@@ -33,6 +33,7 @@ export class ProfileComponent {
 		{
 			this.userService.getLoggedUser()
 				.subscribe(user => this.user = user);
+			this.owner = true;
 		}
 	}
 	focusOn(el: string): void {

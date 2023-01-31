@@ -1,3 +1,5 @@
+// TODO: (this TODO is way out of place!): remove -interface from type files.
+
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -13,7 +15,7 @@ export class UserService {
 
 	ngOnInit() {}
 
-	// TODO: all Observables are mocked (of), just unmock them!
+	// TODO: all Observables are mocked. Unmock them!
 
 	getOnlineUsers(): Observable<User[]> {
 		const users = USERS;
@@ -27,7 +29,6 @@ export class UserService {
 
 	getUserById(intraId: string): Observable<User> {
 		const user = USERS.find(h => h.intraId === intraId)!;
-		console.log("F", user);
 		return of(user);
 	}
 }

@@ -1,10 +1,9 @@
 <!--
 TODO 'Change' button only when client is the owner of profile
 -->
-<!-- TODO get image dinamicaly -->
 <h2>User Profile</h2>
 <table>
-	<tr>
+	<tr *ngIf="owner; else name_simple">
 		<td>
 			<label>name</label>
 		</td>
@@ -22,6 +21,12 @@ TODO 'Change' button only when client is the owner of profile
 				>Change</button>
 		</td>
 	</tr>
+	<ng-template #name_simple>
+		<tr>
+			<td>	<label>name</label>	</td>
+			<td>	{{user.name}}		</td>
+		</tr>
+	</ng-template>
 
 	<tr>
 		<td>	<label>id</label>	</td>
@@ -33,7 +38,8 @@ TODO 'Change' button only when client is the owner of profile
 		<td>	{{user.image}}				</td>
 	</tr>
 
-	<tr>
+<!-- TODO get image dinamicaly -->
+	<tr *ngIf="owner; else image_simple">
 		<td>	<label>image</label>	</td>
 		<td>	<div class="profile-image hover_invert"
 			style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
@@ -41,4 +47,13 @@ TODO 'Change' button only when client is the owner of profile
 		<td>	<button type="button">Change</button>
 										</td>
 	</tr>
+	<ng-template #image_simple>
+		<tr>
+			<td>	<label>image</label>	</td>
+			<td>	<div class="profile-image hover_invert"
+				style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+					></div>					</td>
+		</tr>
+	</ng-template>
+
 </table>
