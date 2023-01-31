@@ -28,6 +28,10 @@ export class ProfileComponent {
 		if (id !== null) {
 			this.userService.getUserById(id)
 				.subscribe(user => this.user = user);
+			var ownership: User = {} as User;
+			this.userService.getLoggedUser()
+				.subscribe(user => { ownership = user });
+			this.owner = ownership === this.user;
 		}
 		else
 		{
