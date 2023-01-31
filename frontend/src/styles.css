@@ -15,11 +15,16 @@
 	--body-margin: 40px;
 	--body-border-width: 8px;
 	--normal-font-size: 32px;
-
-	--body-inner: calc(var(--body-margin) + var(--body-border-width));
+	--box-padding-horizontal: 104px;
+	--box-padding-vertical: 104px;
 	--border-thin: 4px solid var(--color-border);
 	--color-popup-background: var(--color-low-transp);
 	--color-menu-bar: var(--color-sublow-transp);
+
+	/* Styles based of paramteres above: */
+	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
+	--inner-large: calc(100vw - (2 * (var(--margin-plus-border))));
+	--box-padding: var(--box-padding-horizontal) var(--box-padding-vertical));;
 }
 body
 {
@@ -191,12 +196,19 @@ table > tr {
 }
 .outter-box
 {
+	display: fixed;
 	top: 0;
 	left: 0;
+	bottom: 0;
+	right: 0;
+	max-width: var(--inner-large);
+	max-height: 400px;
+	overflow: overlay;
+
+	height: var(--body-inner-height);
 	margin: var(--body-margin);
-	padding: 10vh 9vw;
+	padding: var(--box-padding-horizontal) var(--box-padding-vertical);
 	border: var(--body-border-width) solid var(--color-border);
-	displaY: block;
 }
 /* Firefox */
 * {
@@ -237,7 +249,6 @@ table > tr {
 .avatar_menu
 {
 	font-size: 66.6666%;
-	width: 300px;
 	background: var(--color-popup-background);
 	position: absolute;
 	border: var(--border-thin);
@@ -253,14 +264,15 @@ table > tr {
 .menu-bar {
 	background: var(--color-menu-bar);
 	height: 64px;
-	position: absolute;
-	top: var(--body-border-width);
-	left: var(--body-inner);
-	width: calc(100% - (var(--body-inner) * 2));
 	padding: 0;
 	border-bottom: var(--border-thin);
+	position: relative;
+	top: calc(-1 * var(--box-padding-vertical));
+	left: calc(-1 * var(--box-padding-horizontal));
+	width: calc(100% + (2 * var(--box-padding-horizontal)));
 }
 .burger {
+	background: #33333333; /* Absolute because of darkreader. */
 	background-image:url('/assets/burger.png');
 	width: 16px;
 	height: 16px;
@@ -276,5 +288,7 @@ table > tr {
 	border-left: none;
 	background: var(--color-popup-background);
 	padding: 32px;
-	width: 256px;
+}
+.oneliner {
+	display: block;
 }

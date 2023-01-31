@@ -3,7 +3,12 @@
 	<div class="burger hover_invert" (click)="onClickBurger();">
 	</div>
 	<div *ngIf="menuOpen" class="burger-menu" (mouseleave)="onMouseLeave();">
-		<button>...</button>
+		<button class="oneliner">Home</button>
+		<button class="oneliner" routerLink="/profile/{{user.intraId}}">Profile</button>
+		<button class="oneliner">Configuration</button>
+		<button class="oneliner">Create Match</button>
+		<button class="oneliner">Create Char</button>
+		<button class="oneliner">Log Out</button>
 	</div>
 	<app-avatar></app-avatar>
 	<a class="user-name-medium" style="margin-left: 16px;" routerLink="/profile/{{user.intraId}}">

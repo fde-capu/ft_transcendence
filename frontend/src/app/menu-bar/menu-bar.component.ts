@@ -30,4 +30,12 @@ export class MenuBarComponent {
 	onMouseLeave(): void { 
 		this.menuOpen = false;
 	}
+
+	goProfile(): void {
+		this.onMouseLeave();
+		
+	}
+
+
+
 }
