@@ -27,15 +27,7 @@ export class MenuBarComponent {
 	onClickBurger(): void {
 		this.menuOpen = !this.menuOpen;
 	}
-	onMouseLeave(): void { 
+	menuOff(): void { 
 		this.menuOpen = false;
 	}
-
-	goProfile(): void {
-		this.onMouseLeave();
-		
-	}
-
-
-
 }

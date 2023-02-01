@@ -7,6 +7,7 @@
 	--color-border:#333;
 	--color-low:#222;
 	--color-sublow:#101010;
+	--color-dark:#000000;
 	--color-high-transp:#a0a0a087;
 	--color-low-transp:#222222f6;
 	--color-sublow-transp:#101010f6;
@@ -20,6 +21,7 @@
 	--border-thin: 4px solid var(--color-border);
 	--color-popup-background: var(--color-low-transp);
 	--color-menu-bar: var(--color-sublow-transp);
+	--screen-color: var(--color-sublow);
 
 	/* Styles based of paramteres above: */
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
@@ -28,7 +30,7 @@
 }
 body
 {
-	background: var(--color-sublow);
+	background: var(--screen-color);
 	font-family: 'VT323', monospace;
 	font-size: var(--normal-font-size);
 	text-shadow: 0px 0px 10px var(--color-supmed);
@@ -61,6 +63,7 @@ h2
 }
 input
 {
+	padding: 0;
 	text-shadow: inherit;
 	border: none;
 	background: inherit;
@@ -119,6 +122,8 @@ button
 	font-size: inherit;
 	background: inherit;
 	color: var(--color-high);
+	padding-top: 0;
+	padding-bottom: 0;
 }
 button:hover {
 	background: var(--color-high);
@@ -272,13 +277,15 @@ table > tr {
 	width: calc(100% + (2 * var(--box-padding-horizontal)));
 }
 .burger {
-	background: #33333333; /* Absolute because of darkreader. */
 	background-image:url('/assets/burger.png');
 	width: 16px;
 	height: 16px;
 	padding: 24px;
 	background-repeat: no-repeat;
 	background-position: center;
+}
+.burger:hover {
+	-webkit-filter: drop-shadow(0 0 3px white);
 }
 .burger-menu {
 	position: absolute;

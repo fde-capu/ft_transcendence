@@ -30,8 +30,11 @@ export class UserService {
 		return of(this.loggedUser);
 	}
 
-	getUserById(intraId: string): Observable<User> {
-		const user = USERS.find(h => h.intraId === intraId)!;
+	getUserById(intraId: string | null): Observable<User> {
+		if (intraId !== null)
+			var user = USERS.find(h => h.intraId === intraId)!;
+		else
+			return this.getLoggedUser();
 		return of(user);
 	}
 }

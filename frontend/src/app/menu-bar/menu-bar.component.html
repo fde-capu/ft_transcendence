@@ -1,9 +1,9 @@
 <div *ngIf="isLogged" class="menu-bar flex-line">
 	<!-- TODO get image dinamicaly -->
-	<div class="burger hover_invert" (click)="onClickBurger();">
+	<div class="burger" (click)="onClickBurger();">
 	</div>
-	<div *ngIf="menuOpen" class="burger-menu" (mouseleave)="onMouseLeave();">
-		<button class="oneliner">Home</button>
+	<div *ngIf="menuOpen" class="burger-menu" (mouseleave)="menuOff();" (click)="menuOff();">
+		<button class="oneliner" routerLink="/home">Home</button>
 		<button class="oneliner" routerLink="/profile/{{user.intraId}}">Profile</button>
 		<button class="oneliner">Configuration</button>
 		<button class="oneliner">Create Match</button>
