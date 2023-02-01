@@ -1,3 +1,5 @@
+/* TODO: Solve for many resolutions */
+
 :root {
 	cursor:url("assets/cursor.png") 8 8, cell;
 	--color-high:#eee;
@@ -11,7 +13,7 @@
 	--color-high-transp:#a0a0a087;
 	--color-low-transp:#222222f6;
 	--color-sublow-transp:#101010f6;
-	--color-shadow:#000000aa;
+	--color-shadow:#0000003d;
 
 	--body-margin: 40px;
 	--body-border-width: 8px;
@@ -19,8 +21,8 @@
 	--box-padding-horizontal: 104px;
 	--box-padding-vertical: 104px;
 	--border-thin: 4px solid var(--color-border);
-	--color-popup-background: var(--color-low-transp);
-	--color-menu-bar: var(--color-sublow-transp);
+	--color-popup-background: var(--color-sublow-transp);
+	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
 
 	/* Styles based of paramteres above: */
@@ -47,6 +49,7 @@ body
 		grayscale(100%)
 		url(#noise)
 		;
+	color-interpolation-filters: srgb;
 }
 pre {
 	font-size: 40%;
@@ -238,7 +241,7 @@ table > tr {
 }
 .avatar
 {
-	display: block;
+	position: relative;
 }
 .avatar-image
 {
@@ -251,8 +254,9 @@ table > tr {
 	background-repeat: no-repeat;
 	background-position: center;
 }
-.avatar_menu
+.avatar-menu
 {
+	min-width: max-content;
 	font-size: 66.6666%;
 	background: var(--color-popup-background);
 	position: absolute;
@@ -260,6 +264,7 @@ table > tr {
 	padding: 10px;
 	margin-left: 60px;
 	margin-top: -5px;
+	z-index: 100;
 }
 .no-border-margin-padding {
 	margin: 0;
@@ -295,7 +300,9 @@ table > tr {
 	border-left: none;
 	background: var(--color-popup-background);
 	padding: 32px;
+	z-index: 100;
 }
 .oneliner {
 	display: block;
+	white-space: nowrap;
 }
