@@ -1,5 +1,9 @@
-<div class="chat-input-box">
-  <textarea id="chat-input-text" class="chat-input-text blinker" placeholder="<- Type here."></textarea>
+<div class="chat-input-box" id="chatBox">
+  <textarea class="chat-input-text" placeholder="<- Type here."
+	(keydown.enter)="send($event)"
+	[(ngModel)]="message"
+	autofocus
+  ></textarea>
   <button type="button" (click)="chatMessageService.clear()">Clear Chat</button>
-  <button type="button" (click)="chatMessageService.clear()">Send</button>
+  <button id="send-button" type="button" (click)="send($event);">Send</button>
 </div>

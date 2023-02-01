@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { User } from '../user-interface';
 import { USERS } from '../mocks';
+import { UserService } from '../user.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-profile',
