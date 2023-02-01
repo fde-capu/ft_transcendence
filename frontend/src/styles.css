@@ -11,6 +11,7 @@
 	--color-sublow:#101010;
 	--color-dark:#000000;
 	--color-high-transp:#a0a0a087;
+	--color-medium-transp:#77777747;
 	--color-low-transp:#222222f6;
 	--color-sublow-transp:#101010f6;
 	--color-shadow:#0000003d;
@@ -65,7 +66,7 @@ h2
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
 }
-input
+input, textarea
 {
 	padding: 0;
 	text-shadow: inherit;
@@ -305,4 +306,44 @@ table > tr {
 .oneliner {
 	display: block;
 	white-space: nowrap;
+}
+.chat-whole-box {
+	border: var(--border-thin);
+	width: 100%;
+}
+.chat-input-text {
+	height: 10vh;
+	min-height: 1em;
+	background: var(--color-sublow);
+	resize: none;
+	width: 100%;
+	padding: 32px;
+	width: calc(100% - 64px);
+	box-shadow: inset 0px 8px 64px #77777719;
+	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
+	border-radius: 32px;
+}
+*::placeholder {
+}
+.blinker {
+	animation: text-blinker 1.618s step-end infinite;
+}
+@keyframes text-blinker {
+  0%	{ content-visibility: hidden; font-size: 0px; }
+  20%	{ content-visibility: visible; font-size: inherit; }
+  35%	{ content-visibility: hidden; font-size: 0px; }
+  42%	{ content-visibility: visible; font-size: inherit; }
+  60%	{ content-visibility: hidden; font-size: 0px; }
+  62%	{ content-visibility: visible; font-size: inherit; }
+}
+.chat-input-text:hover {
+
+}
+.chat-input-text:focus-visible {
+	outline-style: unset;
+	animation: none;
+}
+.chat-input-box {
+	padding: 32px;
+	margin-top: 0px;
 }

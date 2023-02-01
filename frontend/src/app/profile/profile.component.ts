@@ -19,7 +19,6 @@ export class ProfileComponent {
 		private route: ActivatedRoute,
 		private location: Location
 	) {};
-
 	ngOnInit(): void {
 		this.getUser();
 	}
@@ -33,7 +32,6 @@ export class ProfileComponent {
 				.subscribe(user => { ownership = user });
 			this.owner = ownership === this.user;
 		})
-//		}
 	}
 	focusOn(el: string): void {
 		const exist = document.getElementById(el);
