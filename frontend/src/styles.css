@@ -18,13 +18,14 @@
 
 	--body-margin: 40px;
 	--body-border-width: 8px;
-	--normal-font-size: 32px;
 	--box-padding-horizontal: 104px;
 	--box-padding-vertical: 104px;
 	--border-thin: 4px solid var(--color-border);
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
+	--font-medium: 32px;
+	--font-small: 20px;
 
 	/* Styles based of paramteres above: */
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
@@ -35,7 +36,7 @@ body
 {
 	background: var(--screen-color);
 	font-family: 'VT323', monospace;
-	font-size: var(--normal-font-size);
+	font-size: var(--font-medium);
 	text-shadow: 0px 0px 10px var(--color-supmed);
 	-webkit-user-select: none; /* Safari */
 	-moz-user-select: none; /* Firefox */
@@ -108,9 +109,8 @@ a:hover, .hover_invert:hover {
 	font-size: 100%;
 }
 .user-name-small {
-	font-size: 66.6666%;
+	font-size: var(--font-small);
 	min-width: max-content;
-	padding: 0px 5px;
 }
 .small {
 	font-size: 66.66%;
@@ -212,17 +212,16 @@ table > tr {
 }
 .outter-box
 {
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
 	max-width: var(--inner-width);
 	max-height: calc(100vh - (2 * (var(--margin-plus-border))));
 	height: 100%;
 	overflow: overlay;
 
 	margin: var(--body-margin);
-	padding: var(--box-padding-horizontal) var(--box-padding-vertical);
+	padding-top: 0;
+	padding-bottom: var(--box-padding-horizontal);
+	padding-left: var(--box-padding-vertical);
+	padding-right: var(--box-padding-vertical);
 	border: var(--body-border-width) solid var(--color-border);
 }
 /* Firefox */
@@ -264,7 +263,7 @@ table > tr {
 .avatar-menu
 {
 	min-width: max-content;
-	font-size: 66.6666%;
+	font-size: var(--font-small);
 	background: var(--color-popup-background);
 	position: absolute;
 	border: var(--border-thin);
@@ -284,7 +283,7 @@ table > tr {
 	padding: 0;
 	border-bottom: var(--border-thin);
 	position: relative;
-	top: calc(-1 * var(--box-padding-vertical));
+	top: 0;
 	left: calc(-1 * var(--box-padding-horizontal));
 	width: calc(100% + (2 * var(--box-padding-horizontal)));
 }

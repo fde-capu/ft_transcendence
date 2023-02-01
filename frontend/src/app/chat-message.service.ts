@@ -10,12 +10,11 @@ export class ChatMessageService {
 
 	constructor() {
 		// TODO remove these lines, do it properly.
-		this.add(CHATS[0]);
-		this.add(CHATS[1]);
-		this.add(CHATS[2]);
+		this.mockChat();
 	}
 
 	add(chatMessage: ChatMessage) {
+		console.log(chatMessage.message);
 		this.chat.push(chatMessage);
 	}
 
@@ -25,5 +24,14 @@ export class ChatMessageService {
 
 	ngOnInit(): void {
 
+	}
+
+	mockChat(): void {
+		const self = this;
+		let n: ReturnType<typeof setTimeout>;
+		n = setTimeout(function(){
+			self.add(CHATS[Math.floor(Math.random() * CHATS.length)]);
+			self.mockChat();
+		}, Math.random() * 10000 + 5000);
 	}
 }

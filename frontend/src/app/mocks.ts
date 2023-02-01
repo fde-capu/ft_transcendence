@@ -22,10 +22,30 @@ export const CHATS: ChatMessage[] = [
   },
   {
 	user: USERS[8],
-	message: 'user.service run. Lorem ipsum dolor hipsis defnat harocum! Tetus archi quo UBNOSCIOUS! De MODUS dodus operatum TASGARI! Dout me ipinasys cretusculus ne banit a sondelius prunt... Me ne ga fum de ipis rectum!!! Ne med foust et limous terbacitum, ka cest nuch ama greptium donorium bost.'
+	message: 'Lorem ipsum dolor hipsis defnat harocum! Tetus archi quo UBNOSCIOUS! De MODUS dodus operatum TASGARI! Dout me ipinasys cretusculus ne banit a sondelius prunt... Me ne ga fum de ipis rectum!!! Ne med foust et limous terbacitum, ka cest nuch ama greptium donorium bost.'
   },
   {
 	user: USERS[9],
 	message: 'Plunctus zeit no sact-turnus ome dast a melichom wizcozus per tentclwus de PONG!'
   },
+  {
+	user: USERS[5],
+	message: 'Xexemus!'
+  },
+  {
+	user: USERS[7],
+	message: 'Dat totamalasis prun!'
+  },
+  {
+	user: USERS[10],
+	message: ':P'
+  },
+  {
+	user: USERS[3],
+	message: "              ...            ...shash"
+  },
+  {
+	user: USERS[4],
+	message: 'Holo!'
+  }
 ];
