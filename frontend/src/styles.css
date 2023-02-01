@@ -148,6 +148,11 @@ ul
 {
 	margin: 0;
 }
+ul
+{
+	display: flex;
+	flex-direction: column-reverse;
+}
 li
 {
 	list-style-type: none;
@@ -305,31 +310,34 @@ table > tr {
 	z-index: 100;
 }
 .oneliner {
-	display: block;
+	display: flex;
 	white-space: nowrap;
 }
 .chat-whole-box {
 	border: var(--border-thin);
-	width: 100%;
-	max-height: 500px;
+	width: 512px;
+	height: 512px;
 	overflow: auto;
+	position: relative;
+}
+.chat-text
+{
+	overflow: auto;
+	border: none;
+	width: 512px;
+	height: 428px;
 }
 .chat-input-text {
-	height: 10vh;
-	min-height: 1em;
+	height: 1em;
 	background: var(--color-sublow);
 	resize: none;
+	padding: 0px;
 	width: 100%;
-	padding: 32px;
-	width: calc(100% - 64px);
+	position: relative;
 	box-shadow: inset 0px 8px 64px #77777719;
 	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
-	border-radius: 32px;
-	margin-left: -16px;
 }
 /* blinker is not in use and is crappy */
-*::placeholder {
-}
 .blinker {
 	animation: text-blinker 0.618s step-end infinite;
 }
@@ -341,14 +349,22 @@ table > tr {
   60%	{ content-visibility: hidden; font-size: 0px; }
   72%	{ content-visibility: visible; font-size: inherit; }
 }
-.chat-input-text:hover {
-
+/**/
+*::placeholder {
+	padding-top: 4px;
+	font-size: 75%;
 }
 .chat-input-text:focus-visible {
 	outline-style: unset;
 	animation: none;
 }
 .chat-input-box {
-	padding: 32px;
-	margin-top: 0px;
+	height: 1em;
+    position: absolute;
+    bottom: 0;
+	width: calc(512px - 4em);
+	padding-right: 4em;
+	filter: drop-shadow(0px 16px 128px #aaaaaaaa);
+}
+.sticky {
 }
