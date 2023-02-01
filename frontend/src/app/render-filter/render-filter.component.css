@@ -1,12 +1,10 @@
 .render-filter, svg {
 	pointer-events: none;
-	position: fixed;
-bottom: 0px;
-left: 0px;
-top: calc(var(--body-margin) * -1);
-right: 0px;
-width: 100%;
-height: calc(100% + (2 * var(--body-margin)));
+	position: fixed !important;
+	top: calc(var(--body-margin) * -1);
+	left: 0px;
+	width: 100%;
+	height: 100vh;
 }
 .aliasing {
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAACXBIWXMAAAsSAAALEgHS3X78AAAAEElEQVQIHWNgYGD4BMQMDAAFtgDzhcd9ZwAAAABJRU5ErkJggg==');

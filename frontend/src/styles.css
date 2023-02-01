@@ -27,8 +27,8 @@
 
 	/* Styles based of paramteres above: */
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
-	--inner-large: calc(100vw - (2 * (var(--margin-plus-border))));
-	--box-padding: var(--box-padding-horizontal) var(--box-padding-vertical));;
+	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))));
+	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
 }
 body
 {
@@ -50,6 +50,7 @@ body
 		url(#noise)
 		;
 	color-interpolation-filters: srgb;
+	height: calc(100vh - (6.4 * (var(--margin-plus-border))));
 }
 pre {
 	font-size: 40%;
@@ -204,25 +205,24 @@ table > tr {
 }
 .outter-box
 {
-	display: fixed;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-	max-width: var(--inner-large);
-	max-height: 400px;
+	max-width: var(--inner-width);
+	max-height: calc(100vh - (2 * (var(--margin-plus-border))));
+	height: 100%;
 	overflow: overlay;
 
-	height: var(--body-inner-height);
 	margin: var(--body-margin);
 	padding: var(--box-padding-horizontal) var(--box-padding-vertical);
 	border: var(--body-border-width) solid var(--color-border);
 }
 /* Firefox */
-* {
+/* {
   scrollbar-width: thin;
   scrollbar-color: var(--color-sublow) var(--color-sublow);
-}
+} */
 /* Chrome, Edge and Safari */
 *::-webkit-scrollbar {
   width: 16px;
