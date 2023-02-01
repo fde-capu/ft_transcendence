@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { User } from '../user-interface';
+import { User } from '../user';
 import { USERS } from '../mocks';
 import { UserService } from '../user.service';
 import { ActivatedRoute, Params } from '@angular/router';

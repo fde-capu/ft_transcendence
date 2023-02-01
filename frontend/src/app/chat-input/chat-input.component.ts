@@ -1,8 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ChatMessageService } from '../chat-message.service';
-import { ChatMessage } from '../chat-message-interface';
+import { ChatMessage } from '../chat-message';
 import { UserService } from '../user.service';
-import { User } from '../user-interface';
+import { User } from '../user';
 
 @Component({
   selector: 'app-chat-input',

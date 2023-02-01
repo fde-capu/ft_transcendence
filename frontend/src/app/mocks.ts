@@ -1,5 +1,5 @@
-import { User } from './user-interface';
-import { ChatMessage } from './chat-message-interface';
+import { User } from './user';
+import { ChatMessage } from './chat-message';
 
 export const USERS: User[] = [
   { intraId: "blabla", name: 'Blats Bla', image: 'https://foo-url/' },

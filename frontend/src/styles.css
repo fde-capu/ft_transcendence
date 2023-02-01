@@ -24,7 +24,7 @@
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
-	--font-medium: 32px;
+	--font-medium: 24px;
 	--font-small: 20px;
 
 	/* Styles based of paramteres above: */
@@ -318,6 +318,7 @@ table > tr {
 	height: 512px;
 	overflow: auto;
 	position: relative;
+	font-size: var(--font-small);
 }
 .chat-text
 {
