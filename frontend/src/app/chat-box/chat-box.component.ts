@@ -30,7 +30,6 @@ export class ChatBoxComponent {
 		this.chatMessageService.getInChatUsers().subscribe(
 			inChat => this.usersOn = inChat
 		);
-//			this.usersOn = usersOn
 		this.imprintInfo();
 	}
 

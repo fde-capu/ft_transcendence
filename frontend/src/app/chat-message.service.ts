@@ -47,6 +47,8 @@ export class ChatMessageService {
 	}
 
 	getInChatUsers(): Observable<User[]> {
+		// TODO: it facilitates (always?) for the loggedUser to be in first position,
+		// then the administrators, then eveyone else.
 		const inChat = CHAT_ROOM[0].user;
 		return of(inChat);
 	}
