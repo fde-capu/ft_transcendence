@@ -6,8 +6,40 @@
 	<div class="window-close" (click)="onClose()"></div>
 	<div class="window-menu" (click)="onMenu()"></div>
 <div class="window-options" style="top:{{titleHeight}}px;" *ngIf="optionsOn">
-			Private [ On ]
-	<br>	Password _________ [ Change ]
+	<table>
+		<tr>
+			<td>
+				<label>Privacy</label>
+			</td><td>
+				<span (click)="switchPrivacy();">
+					<div *ngIf="chatRoom.isPrivate">
+						<span class="inverted">[ ON ]</span> [ OFF ]
+					</div>
+					<div *ngIf="!chatRoom.isPrivate">
+						[ ON ] <span class="inverted">[ OFF ]</span>
+					</div>
+				</span>
+			</td><td>
+				<button type="button" (click)="switchPrivacy();">Change</button>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label>Password</label>
+			</td><td>
+				<input id="password" [(ngModel)]="chatRoom.password"
+				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
+				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
+				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton');"
+				/>
+			</td><td>
+				<button id="passwordButton" type="button" (click)=
+					"fun.focusIf('passwordButton', 'Change', 'password');"
+					>Change</button>
+			</td>
+		</tr>
+	</table>
+	<button (click)="onMenu()">Ok</button>
 </div>
 <app-chat-text></app-chat-text>
 <app-chat-input></app-chat-input>

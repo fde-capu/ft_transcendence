@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ChatRoom } from '../chat-room';
 import { ChatMessageService } from '../chat-message.service';
+import { HelperFunctionsService } from '../helper-functions.service';
 
 @Component({
   selector: 'app-chat-box',
@@ -8,7 +9,10 @@ import { ChatMessageService } from '../chat-message.service';
   styleUrls: ['./chat-box.component.css']
 })
 export class ChatBoxComponent {
-	constructor (private chatMessageService: ChatMessageService) {}
+	constructor (
+		private chatMessageService: ChatMessageService,
+		public fun: HelperFunctionsService
+	) {}
 	chatRoomOn: Boolean = true;
 	chatRoom: ChatRoom = {} as ChatRoom;
 	windowName: string = "CHAT";
@@ -27,17 +31,27 @@ export class ChatBoxComponent {
 		+ (this.chatRoom.password ? "PASSWORD: " + this.chatRoom.password : "")
 		this.titleHeight = 4 +
 		(this.chatRoom.isPrivate || this.chatRoom.password ? 32 : 16)
+		this.setPrivacyString();
 	}
 
 	onClose() {
 		alert (`
-			// TODO: User exits Chat Room.
+			// TODO: User exits Chat Room, the window closes.
 			// If they are the only admin, who takes administration?
 		`);
 	}
 
 	onMenu() {
 		this.optionsOn = this.optionsOn ? false : true;
+	}
+
+	switchPrivacy() {
+		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
+		this.setPrivacyString();
+	}
+
+	setPrivacyString()
+	{
 	}
 
 }

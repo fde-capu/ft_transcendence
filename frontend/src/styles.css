@@ -181,18 +181,6 @@ li
 	border: none;
 	border-bottom: 4px dashed var(--color-border);
 }
-label
-{
-	display: inline-block;
-	width: 300px;
-	text-align: right;
-	padding-right: 1ch;
-	cursor: inherit;
-}
-label::after {
-	font-weight: normal;
-	content: " :";
-}
 hr {
 	border: 5px dashed var(--color-high);
 	width: 200px;
@@ -206,10 +194,25 @@ hr {
 	background-position: center;
 	display: -webkit-inline-box;
 }
-table {
+label
+{
+	display: inline-block;
+	padding-right: 1ch;
+	cursor: inherit;
+}
+label::after {
+	font-weight: normal;
+	content: " :";
+}
+table td {
+	padding-top: 4px;
+	padding-bottom: 4px;
 }
 table > tr {
 	vertical-align: top;
+}
+td:nth-child(1) {
+	text-align: right;
 }
 .outter-box
 {
@@ -416,4 +419,5 @@ table > tr {
     display: flex;
     justify-content: center;
     align-items: center;
+	flex-direction: column;
 }

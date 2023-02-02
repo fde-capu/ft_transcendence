@@ -10,15 +10,14 @@ TODO, bug: Alternating from profile to profile is not working.
 		</td>
 		<td>
 			<input id="name" [(ngModel)]="user.name"
-			(focus)="switchIf('change_me_1', 'Change', 'Ok');"
-			(focusout)="switchIf('change_me_1', 'Ok', 'Change');"
-			(keydown.enter)="blur('name'); blink('change_me_1');"
+			(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
+			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
+			(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
 			/>
 		</td>
 		<td>
-			<!-- TODO 'Change' button only when client is the owner of profile -->
-			<button id="change_me_1" type="button" (click)=
-				"focusIf('change_me_1', 'Change', 'name');"
+			<button id="nameButton" type="button" (click)=
+				"fun.focusIf('nameButton', 'Change', 'name');"
 				>Change</button>
 		</td>
 	</tr>
