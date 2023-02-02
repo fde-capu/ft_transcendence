@@ -1,5 +1,6 @@
 import { User } from './user';
 import { ChatMessage } from './chat-message';
+import { ChatRoom } from './chat-room';
 
 export const USERS: User[] = [
   { intraId: "blabla", name: 'Blats Bla', image: 'https://foo-url/' },
@@ -48,4 +49,16 @@ export const CHATS: ChatMessage[] = [
 	user: USERS[4],
 	message: 'Holo!'
   }
+];
+
+export const CHAT_ROOM: ChatRoom[] = [
+	{
+		id: "chatRoomId",
+		name: "Small Name Only?",
+		user: USERS,
+		admin: [ USERS[7] ],
+		history: CHATS,
+		password: "blablabla fseouib fseoub",
+		isPrivate: true
+	}
 ];

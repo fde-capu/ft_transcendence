@@ -1,4 +1,15 @@
-<div class="chat-whole-box">
+<div class="chat-whole-box" *ngIf="chatRoomOn">
+<app-window-title
+	[windowName]="windowName"
+	[windowExtras]="windowExtras"
+></app-window-title>
+	<div class="window-close" (click)="onClose()"></div>
+	<div class="window-menu" (click)="onMenu()"></div>
+<div class="window-options" style="top:{{titleHeight}}px;" *ngIf="optionsOn">
+			Private [ On ]
+	<br>	Password _________ [ Change ]
+</div>
 <app-chat-text></app-chat-text>
 <app-chat-input></app-chat-input>
 </div>
+

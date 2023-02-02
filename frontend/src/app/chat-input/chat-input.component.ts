@@ -10,7 +10,7 @@ import { User } from '../user';
   styleUrls: ['./chat-input.component.css']
 })
 export class ChatInputComponent {
-	message: String = "";
+	message: string = "";
 	user: User = {} as User;
 	textArea: HTMLElement | null = null;
 	chatBox: HTMLElement | null = null;

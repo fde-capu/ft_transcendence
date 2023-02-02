@@ -14,11 +14,12 @@ import { RenderFilterComponent } from './render-filter/render-filter.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { ChatInputComponent } from './chat-input/chat-input.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { WindowTitleComponent } from './window-title/window-title.component';
 
 @NgModule({
   declarations: [AppComponent, FttAuthenticatorComponent, GameComponent, 
 	HomeComponent, HomeComponent, AvatarComponent, ProfileComponent, OnlineUsersComponent,
-	ChatTextComponent, RenderFilterComponent, MenuBarComponent, ChatInputComponent, ChatBoxComponent],
+	ChatTextComponent, RenderFilterComponent, MenuBarComponent, ChatInputComponent, ChatBoxComponent, WindowTitleComponent],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,6 +1,9 @@
+// This could be better called simple ChatService.
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { ChatMessage } from './chat-message';
-import { CHATS } from './mocks';
+import { ChatRoom } from './chat-room';
+import { CHATS, CHAT_ROOM } from './mocks';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +36,10 @@ export class ChatMessageService {
 			self.add(CHATS[Math.floor(Math.random() * CHATS.length)]);
 			self.mockChat();
 		}, Math.random() * 10000 + 5000);
+	}
+
+	getChatRoom(): Observable<ChatRoom> {
+		const chatRoom = CHAT_ROOM[0];
+		return of(chatRoom);
 	}
 }

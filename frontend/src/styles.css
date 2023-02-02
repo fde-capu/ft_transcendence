@@ -13,7 +13,7 @@
 	--color-high-transp:#a0a0a087;
 	--color-medium-transp:#77777747;
 	--color-low-transp:#222222f6;
-	--color-sublow-transp:#101010f6;
+	--color-sublow-transp:#101010eb;
 	--color-shadow:#0000003d;
 
 	--body-margin: 40px;
@@ -24,6 +24,7 @@
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
+	--font-large: 28px;
 	--font-medium: 24px;
 	--font-small: 20px;
 
@@ -287,27 +288,6 @@ table > tr {
 	left: calc(-1 * var(--box-padding-horizontal));
 	width: calc(100% + (2 * var(--box-padding-horizontal)));
 }
-.burger {
-	background-image:url('/assets/burger.png');
-	width: 16px;
-	height: 16px;
-	padding: 24px;
-	background-repeat: no-repeat;
-	background-position: center;
-}
-.burger:hover {
-	-webkit-filter: drop-shadow(0 0 3px white);
-}
-.burger-menu {
-	position: absolute;
-	top: 64px;
-	left: 0px;
-	border: var(--border-thin);
-	border-left: none;
-	background: var(--color-popup-background);
-	padding: 32px;
-	z-index: 100;
-}
 .oneliner {
 	display: flex;
 	white-space: nowrap;
@@ -351,8 +331,11 @@ table > tr {
 }
 /**/
 *::placeholder {
+	/* I like it normal but I also like it small. */
+	/*
 	padding-top: 4px;
 	font-size: 75%;
+	*/
 }
 .chat-input-text:focus-visible {
 	outline-style: unset;
@@ -365,6 +348,72 @@ table > tr {
 	width: calc(512px - 4em);
 	padding-right: 4em;
 	filter: drop-shadow(0px 16px 128px #aaaaaaaa);
+	border-top: var(--border-thin);
 }
-.sticky {
+.window-title {
+	font-variant-caps: all-petite-caps;
+	padding: 0px 0px 4px 12px;
+	margin: 0;
+	font-size: var(--font-large);
+	background: var(--color-shadow);
+	border-bottom: var(--border-thin);
+	line-height: 0.5em;
+}
+.burger {
+	width: 16px;
+	height: 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.burger {
+	padding: 24px;
+	background-image:url('/assets/burger.png');
+}
+.burger:hover, .window-close:hover {
+	-webkit-filter: drop-shadow(0px 0px 3px #fff);
+}
+.burger-menu {
+	position: absolute;
+	top: 64px;
+	left: 0px;
+	border: var(--border-thin);
+	border-left: none;
+	background: var(--color-popup-background);
+	padding: 32px;
+	z-index: 100;
+}
+.window-close {
+	width: 16px;
+	height: 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image:url('/assets/x.png');
+	opacity: .7;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.window-menu {
+	width: 16px;
+	height: 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image:url('/assets/burger.png');
+	padding: 0;
+	position: absolute;
+	top: 16px;
+	right: 0;
+}
+.window-options {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: var(--color-sublow-transp);
+	z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
