@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ChatRoom } from '../chat-room';
 import { ChatMessageService } from '../chat-message.service';
 import { HelperFunctionsService } from '../helper-functions.service';
+import { User } from '../user';
 
 @Component({
   selector: 'app-chat-box',
@@ -10,35 +11,51 @@ import { HelperFunctionsService } from '../helper-functions.service';
 })
 export class ChatBoxComponent {
 	constructor (
-		private chatMessageService: ChatMessageService,
+		public chatMessageService: ChatMessageService,
 		public fun: HelperFunctionsService
 	) {}
 	chatRoomOn: Boolean = true;
 	chatRoom: ChatRoom = {} as ChatRoom;
-	windowName: string = "CHAT";
+	windowTitle: string = "CHAT";
+	windowName: string = "";
 	windowExtras: string = "";
 	optionsOn: Boolean = true;
-	titleHeight: Number = 32;
+	usersOn: User[] = [];
 
 	ngOnInit() {
 		this.chatMessageService.getChatRoom().subscribe(
 			chatRoom => this.chatRoom = chatRoom
 		);
-		this.windowName = this.windowName + ": " + this.chatRoom.name;
+		this.chatMessageService.getInChatUsers().subscribe(
+			inChat => this.usersOn = inChat
+		);
+//			this.usersOn = usersOn
+		this.imprintInfo();
+	}
+
+	imprintInfo() {
+		this.windowName = this.windowTitle + ": " + this.chatRoom.name;
 		this.windowExtras = ""
-		+ (this.chatRoom.isPrivate ? "PRIVATE" : "")
-		+ (this.chatRoom.isPrivate && this.chatRoom.password ? " | " : "")
-		+ (this.chatRoom.password ? "PASSWORD: " + this.chatRoom.password : "")
-		this.titleHeight = 4 +
-		(this.chatRoom.isPrivate || this.chatRoom.password ? 32 : 16)
-		this.setPrivacyString();
+		+ (this.chatRoom.isPrivate ? "PRIVATE" : "PUBLIC")
+		+ " "
+		+ (this.chatRoom.password ? "PROTECTED" : "")
 	}
 
 	onClose() {
+		if (this.optionsOn)
+		{
+			return this.onMenu();
+
+		}
 		alert (`
 			// TODO: User exits Chat Room, the window closes.
 			// If they are the only admin, who takes administration?
 		`);
+	}
+
+	menuFor(user: User)
+	{
+		alert(user.name);
 	}
 
 	onMenu() {
@@ -47,11 +64,11 @@ export class ChatBoxComponent {
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
-		this.setPrivacyString();
+		this.imprintInfo();
 	}
 
-	setPrivacyString()
-	{
+	cleanPassword() {
+		this.chatRoom.password = "";
+		this.imprintInfo();
 	}
-
 }

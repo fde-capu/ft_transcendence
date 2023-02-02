@@ -4,6 +4,8 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { User } from './user';
 import { USERS } from './mocks';
 
+// TODO: all is mocked. Unmock them!
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +19,6 @@ export class UserService {
 	ngOnInit() {
 	}
 
-	// TODO: all Observables are mocked. Unmock them!
 
 	getOnlineUsers(): Observable<User[]> {
 		const users = USERS;

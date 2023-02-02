@@ -4,19 +4,35 @@
 	[windowExtras]="windowExtras"
 ></app-window-title>
 	<div class="window-close" (click)="onClose()"></div>
-	<div class="window-menu" (click)="onMenu()"></div>
-<div class="window-options" style="top:{{titleHeight}}px;" *ngIf="optionsOn">
+	<div class="window-menu-burger" (click)="onMenu()"></div>
+<div class="window-options" *ngIf="optionsOn" (click)="imprintInfo();">
 	<table>
+		<tr>
+			<td>
+				<label>Room Name:</label>
+			</td><td>
+				<input id="name" [(ngModel)]="chatRoom.name"
+				(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
+				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
+				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
+				(change)="imprintInfo();"
+				/>
+			</td><td>
+				<button id="nameButton" type="button" (click)=
+					"fun.focusIf('nameButton', 'Change', 'name');"
+					>Change</button>
+			</td>
+		</tr>
 		<tr>
 			<td>
 				<label>Privacy</label>
 			</td><td>
 				<span (click)="switchPrivacy();">
 					<div *ngIf="chatRoom.isPrivate">
-						<span class="inverted">[ ON ]</span> [ OFF ]
+						<span class="inverted">[>ON<]</span> [ OFF ]
 					</div>
 					<div *ngIf="!chatRoom.isPrivate">
-						[ ON ] <span class="inverted">[ OFF ]</span>
+						[ ON ] <span class="inverted">[>OFF<]</span>
 					</div>
 				</span>
 			</td><td>
@@ -31,15 +47,29 @@
 				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton');"
+				(change)="imprintInfo();"
 				/>
-			</td><td>
+			</td><td style="min-width:175px;">
 				<button id="passwordButton" type="button" (click)=
 					"fun.focusIf('passwordButton', 'Change', 'password');"
 					>Change</button>
+				<button type="button" (click)="cleanPassword();">Clean</button>
 			</td>
 		</tr>
 	</table>
-	<button (click)="onMenu()">Ok</button>
+	<button (click)="onMenu()" style="margin:1em;">Ok</button>
+	<h3>Logged users</h3>
+	<table class="list-of-users">
+		<tr *ngFor="let user of usersOn" >
+		<td width="49%">
+			<a (click)="menuFor(user)">{{ user.intraId }} | {{ user.name }}</a>
+		</td>
+		<td width="49%">
+			<button style="margin-left:0;">Ban</button>
+			<button>Promote</button>
+		</td>
+		</tr>
+	</table>
 </div>
 <app-chat-text></app-chat-text>
 <app-chat-input></app-chat-input>

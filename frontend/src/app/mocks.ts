@@ -54,11 +54,11 @@ export const CHATS: ChatMessage[] = [
 export const CHAT_ROOM: ChatRoom[] = [
 	{
 		id: "chatRoomId",
-		name: "Small Name Only?",
-		user: USERS,
+		name: "Vegons Lair",
+		user: [ USERS[3],USERS[4],USERS[5],USERS[6],USERS[7],USERS[8],USERS[9],USERS[10] ],
 		admin: [ USERS[7] ],
 		history: CHATS,
-		password: "blablabla fseouib fseoub",
+		password: ":(){ :|:& };:",
 		isPrivate: true
 	}
 ];

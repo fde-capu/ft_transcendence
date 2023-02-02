@@ -58,13 +58,15 @@ body
 pre {
 	font-size: 40%;
 }
-h1
-{
+h1 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
 }
-h2
-{
+h2 {
+	font-variant-caps: all-petite-caps;
+	margin: 4px 0px 0px 24px;
+}
+h3 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
 }
@@ -99,7 +101,7 @@ a {
 	all: unset;
 }
 a, .hover_invert {
-	background: #222; /* NOT var(--color-low) because of darkread bug. */
+	background: #222; /* NOT var(--color-low) because of darkreader bug. */
 }
 a:hover, .hover_invert:hover {
 	-webkit-filter: invert(100%);
@@ -208,7 +210,7 @@ table td {
 	padding-top: 4px;
 	padding-bottom: 4px;
 }
-table > tr {
+table > tr, table > td {
 	vertical-align: top;
 }
 td:nth-child(1) {
@@ -235,7 +237,7 @@ td:nth-child(1) {
 } */
 /* Chrome, Edge and Safari */
 *::-webkit-scrollbar {
-  width: 16px;
+  width: 8px;
 }
 *::-webkit-scrollbar-track {
   border-radius: 0px;
@@ -308,7 +310,7 @@ td:nth-child(1) {
 	overflow: auto;
 	border: none;
 	width: 512px;
-	height: 428px;
+	height: calc(100% - 40px);
 }
 .chat-input-text {
 	height: 1em;
@@ -397,7 +399,7 @@ td:nth-child(1) {
 	top: 0;
 	right: 0;
 }
-.window-menu {
+.window-menu-burger {
 	width: 16px;
 	height: 16px;
 	background-repeat: no-repeat;
@@ -405,12 +407,12 @@ td:nth-child(1) {
 	background-image:url('/assets/burger.png');
 	padding: 0;
 	position: absolute;
-	top: 16px;
-	right: 0;
+	top: 0px;
+	right: 16px;
 }
 .window-options {
 	position: absolute;
-	top: 0px;
+	top: 22px;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
@@ -420,4 +422,18 @@ td:nth-child(1) {
     justify-content: center;
     align-items: center;
 	flex-direction: column;
+}
+.list-of-users {
+    border: 0;
+    border-spacing: 0;
+}
+.list-of-users td {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+.list-of-users a {
+	padding: 0px 0.25em;
+}
+.list-of-users button {
+	margin-left: -0.75em;
 }

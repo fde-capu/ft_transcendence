@@ -4,6 +4,10 @@ import { Observable, of } from 'rxjs';
 import { ChatMessage } from './chat-message';
 import { ChatRoom } from './chat-room';
 import { CHATS, CHAT_ROOM } from './mocks';
+import { User } from './user';
+import { USERS } from './mocks';
+
+// TODO: all is mocked. Unmock them!
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +16,6 @@ export class ChatMessageService {
 	chat: ChatMessage[] = [];
 
 	constructor() {
-		// TODO remove these lines, do it properly.
 		this.mockChat();
 	}
 
@@ -41,5 +44,10 @@ export class ChatMessageService {
 	getChatRoom(): Observable<ChatRoom> {
 		const chatRoom = CHAT_ROOM[0];
 		return of(chatRoom);
+	}
+
+	getInChatUsers(): Observable<User[]> {
+		const inChat = CHAT_ROOM[0].user;
+		return of(inChat);
 	}
 }
