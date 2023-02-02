@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ChatRoom } from '../chat-room';
 import { ChatMessageService } from '../chat-message.service';
 import { HelperFunctionsService } from '../helper-functions.service';
@@ -21,6 +21,7 @@ export class ChatBoxComponent {
 	windowExtras: string = "";
 	optionsOn: Boolean = true;
 	usersOn: User[] = [];
+	@Input() user?: User;
 
 	ngOnInit() {
 		this.chatMessageService.getChatRoom().subscribe(
@@ -70,5 +71,16 @@ export class ChatBoxComponent {
 	cleanPassword() {
 		this.chatRoom.password = "";
 		this.imprintInfo();
+	}
+
+	isAdmin(user: User): Boolean {
+		for (let admin of this.chatRoom.admin)
+			if (admin == user)
+				return true;
+		return false;
+	}
+
+	isMe(user: User): Boolean {
+		return user === this.user;
 	}
 }

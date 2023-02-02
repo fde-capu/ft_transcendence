@@ -2,11 +2,12 @@
 <app-window-title
 	[windowName]="windowName"
 	[windowExtras]="windowExtras"
+	(click)="onMenu()"
 ></app-window-title>
 	<div class="window-close" (click)="onClose()"></div>
 	<div class="window-menu-burger" (click)="onMenu()"></div>
 <div class="window-options" *ngIf="optionsOn" (click)="imprintInfo();">
-	<table>
+	<table class="options">
 		<tr>
 			<td>
 				<label>Room Name:</label>
@@ -27,12 +28,12 @@
 			<td>
 				<label>Privacy</label>
 			</td><td>
-				<span (click)="switchPrivacy();">
+				<span>
 					<div *ngIf="chatRoom.isPrivate">
-						<span class="inverted">[>ON<]</span> [ OFF ]
+						<span class="inverted">[>ON<]</span> <a (click)="switchPrivacy();">[ OFF ]</a>
 					</div>
 					<div *ngIf="!chatRoom.isPrivate">
-						[ ON ] <span class="inverted">[>OFF<]</span>
+						<a (click)="switchPrivacy();">[ ON ]</a> <span class="inverted">[>OFF<]</span>
 					</div>
 				</span>
 			</td><td>
@@ -56,17 +57,27 @@
 				<button type="button" (click)="cleanPassword();">Clean</button>
 			</td>
 		</tr>
+		<tr>
+			<td colspan="3">
+				<button (click)="onMenu()">Ok</button>
+			</td>
+		</tr>
 	</table>
-	<button (click)="onMenu()" style="margin:1em;">Ok</button>
 	<h3>Logged users</h3>
 	<table class="list-of-users">
-		<tr *ngFor="let user of usersOn" >
-		<td width="49%">
-			<a (click)="menuFor(user)">{{ user.intraId }} | {{ user.name }}</a>
+		<tr *ngFor="let user of usersOn">
+		<td>
+			<a (click)="menuFor(user)">
+				{{ user.intraId }} | {{ user.name }}
+			</a>
 		</td>
-		<td width="49%">
-			<button style="margin-left:0;">Ban</button>
-			<button>Promote</button>
+		<td>
+			<span *ngIf="!isAdmin(user) && !isMe(user);">
+				<button style="margin-left:0;">Ban</button>
+				<button>Promote</button>
+			</span>
+			<span *ngIf="isAdmin(user) && !isMe(user);"> <-[ Administrator ]</span>
+			<span *ngIf="isMe(user);"> <-[ Yourself ]</span>
 		</td>
 		</tr>
 	</table>
