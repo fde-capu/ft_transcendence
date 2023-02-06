@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ChatMessage } from '../chat-message';
 import { ChatMessageService } from '../chat-message.service';
-import { ChatRoom } from '../chat-room';
 
 @Component({
   selector: 'app-chat-text',
@@ -8,7 +8,14 @@ import { ChatRoom } from '../chat-room';
   styleUrls: ['./chat-text.component.css']
 })
 export class ChatTextComponent {
-	constructor(public chatMessageService: ChatMessageService) {}
-	chatRoom: ChatRoom = {} as ChatRoom;
+	chatMessage: ChatMessage[] = [];
+	constructor (
+		public chatMessageService: ChatMessageService
+	) {}
+	ngOnInit() {
+		this.chatMessageService.getChatText().subscribe(
+			chatMessage => this.chatMessage = chatMessage
+		);
+//		this.imprintInfo();
+	}
 }
-
