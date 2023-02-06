@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../chat-message';
 import { ChatMessageService } from '../chat-message.service';
 
@@ -14,8 +14,9 @@ export class ChatTextComponent {
 	) {}
 	ngOnInit() {
 		this.chatMessageService.getChatText().subscribe(
-			chatMessage => this.chatMessage = chatMessage
+			chatMessage => {
+				this.chatMessage = chatMessage;
+			}
 		);
-//		this.imprintInfo();
 	}
 }
