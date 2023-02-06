@@ -54,6 +54,7 @@ body
 		;
 	color-interpolation-filters: srgb;
 	height: calc(100vh - (6.4 * (var(--margin-plus-border))));
+	word-break: break-all;
 }
 pre {
 	font-size: 40%;
@@ -238,6 +239,7 @@ td:nth-child(1) {
 /* Chrome, Edge and Safari */
 *::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 *::-webkit-scrollbar-track {
   border-radius: 0px;
@@ -292,6 +294,7 @@ td:nth-child(1) {
 	top: 0;
 	left: calc(-1 * var(--box-padding-horizontal));
 	width: calc(100% + (2 * var(--box-padding-horizontal)));
+	z-index: 2000;
 }
 .oneliner {
 	display: flex;
@@ -310,7 +313,7 @@ td:nth-child(1) {
 	overflow: auto;
 	border: none;
 	width: 512px;
-	height: calc(100% - 40px);
+	height: calc(100% - 44px);
 }
 .chat-input-text {
 	height: 1em;

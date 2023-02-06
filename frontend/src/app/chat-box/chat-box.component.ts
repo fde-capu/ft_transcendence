@@ -19,7 +19,7 @@ export class ChatBoxComponent {
 	windowTitle: string = "CHAT";
 	windowName: string = "";
 	windowExtras: string = "";
-	optionsOn: Boolean = true;
+	optionsOn: Boolean = false;
 	usersOn: User[] = [];
 	@Input() user?: User;
 
