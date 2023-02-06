@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,7 +18,7 @@ export interface MeDTO {
   login: string;
   email: string;
   displayname: string;
-  image: { versions: { micro: string } };
+  image: { versions: { micro: string; } }
 }
 export interface registerResp {
   token: string;
@@ -33,14 +33,12 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
-  async registerUser(codeFrom42: string = ''): Promise<registerResp>
-  {
+  async registerUser(codeFrom42: string = ''): Promise<registerResp> {
     if (!codeFrom42 || codeFrom42 === '')
       throw new BadRequestException();
-    try{
-      console.log(this.configService.get<string>('API42_CLIENT_ID'), " e o ", this.configService.get<string>('API42_CLIENT_SECRET'));
+    try {
       const responseToken = await this.httpService.axiosRef.post<string>(
         'https://api.intra.42.fr/oauth/token',
         {
@@ -52,14 +50,20 @@ export class UserService {
         },
       );
       const basicInfo = await this.getBasicUserInfo(responseToken.data);
-      const resp = this.userRepository.create({login: 'jestevam', email: 'email'});
-      console.log(await this.userRepository.insert({login: 'jestevam', email: 'email'}));
-      return ({token: responseToken.data, login: basicInfo.login});
-      // return ({token: '', login: ''});
+      const existUser = await this.userRepository.findOneBy({login: basicInfo.login});
+      if (existUser === null)
+        await this.userRepository.insert({ login: basicInfo.login, email: basicInfo.email});
+      return ({ token: responseToken.data, login: basicInfo.login });
     }
-    catch(err){
+    catch (err) {
       throw err.response;
     }
+  }
+  async getUserByLogin(login: string) {
+    const resp = await this.userRepository.findOneBy({ login });
+    if (resp === null)
+      throw new NotFoundException();
+    return resp;
   }
 
   async getBasicUserInfo(access_token: string): Promise<MeDTO> {
