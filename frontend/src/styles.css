@@ -232,19 +232,23 @@ td:nth-child(1) {
 	padding-right: var(--box-padding-vertical);
 	border: var(--body-border-width) solid var(--color-border);
 }
-/* Firefox */
-/* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-sublow) var(--color-sublow);
-} */
-/* Chrome, Edge and Safari */
+.window {
+	border: var(--border-thin);
+	width: 512px;
+	height: 512px;
+	overflow: auto;
+	position: relative;
+	font-size: var(--font-small);
+	display: inline-block;
+	margin: 1em;
+}
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-track {
   border-radius: 0px;
-  background-color: var(--color-sublow);
+  background-color: transparent;
 }
 *::-webkit-scrollbar-thumb {
   border-radius: 0px;
@@ -305,14 +309,6 @@ td:nth-child(1) {
 .oneliner {
 	display: flex;
 	white-space: nowrap;
-}
-.window {
-	border: var(--border-thin);
-	width: 512px;
-	height: 512px;
-	overflow: auto;
-	position: relative;
-	font-size: var(--font-small);
 }
 .chat-whole-box {
 	font-size: var(--font-small);
