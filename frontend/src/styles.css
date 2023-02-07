@@ -1,4 +1,5 @@
 /* TODO: Solve for many resolutions */
+/* TODO: (BUG) check visuals deformed when using DarkReader Chrome extension. If we care. */
 
 :root {
 	cursor:url("assets/cursor.png") 8 8, cell;
@@ -18,8 +19,8 @@
 
 	--body-margin: 40px;
 	--body-border-width: 8px;
-	--box-padding-horizontal: 104px;
-	--box-padding-vertical: 104px;
+	--inner-padding-vertical: 3em;
+	--inner-padding-horizontal: 1em;
 	--border-thin: 4px solid var(--color-border);
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
@@ -29,10 +30,15 @@
 	--font-medium: 24px;
 	--font-small: 20px;
 
-	/* Styles based of paramteres above: */
+	/* TODO: make these dynamic according to screen size: */
+	--boxes-horizontal-fit: 3;
+	--boxes-min-width: 512px;
+
+	/* Styles based of paramteres above (no need to touch?): */
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
-	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))));
+	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))) - (2 * var(--inner-padding-horizontal)));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
+	--app-window-width: calc(var(--inner-width) / var(--boxes-horizontal-fit));
 }
 body
 {
@@ -55,7 +61,7 @@ body
 		;
 	color-interpolation-filters: srgb;
 	height: calc(100vh - (6.4 * (var(--margin-plus-border))));
-	word-break: break-all;
+	word-break: break-word;
 }
 pre {
 	font-size: 40%;
@@ -63,10 +69,13 @@ pre {
 h1 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
+	display: inline-block;
+	width: var(--inner-width);
 }
 h2 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
+	display: inline-block;
 }
 h3 {
 	font-variant-caps: all-petite-caps;
@@ -224,23 +233,31 @@ td:nth-child(1) {
 	max-height: calc(100vh - (2 * (var(--margin-plus-border))));
 	height: 100%;
 	overflow: overlay;
-
 	margin: var(--body-margin);
 	padding-top: 0;
-	padding-bottom: var(--box-padding-horizontal);
-	padding-left: var(--box-padding-vertical);
-	padding-right: var(--box-padding-vertical);
+	padding-bottom: var(--inner-padding-vertical);
+	padding-left: var(--inner-padding-horizontal);
+	padding-right: var(--inner-padding-horizontal);
 	border: var(--body-border-width) solid var(--color-border);
+}
+.inner-box
+{
+	width: 100%;
+	height: 100%;
+	display: flex;
+    justify-content: center;
 }
 .window {
 	border: var(--border-thin);
-	width: 512px;
+	width: calc(var(--app-window-width) - (3 * var(--border-thin)) - 1em);
+	min-width: var(--boxes-min-width);
+	margin-right: 1rem;
+	margin-bottom: 1rem;
 	height: 512px;
 	overflow: auto;
 	position: relative;
 	font-size: var(--font-small);
 	display: inline-block;
-	margin: 1em;
 }
 *::-webkit-scrollbar {
   width: 8px;
@@ -297,8 +314,8 @@ td:nth-child(1) {
 	border-bottom: var(--border-thin);
 	position: relative;
 	top: 0;
-	left: calc(-1 * var(--box-padding-horizontal));
-	width: calc(100% + (2 * var(--box-padding-horizontal)));
+	left: calc(-1 * var(--inner-padding-horizontal));
+	width: calc(100% + (2 * var(--inner-padding-horizontal)));
 	z-index: 2000;
 }
 .score-big {
@@ -317,7 +334,6 @@ td:nth-child(1) {
 {
 	overflow: auto;
 	border: none;
-	width: 512px;
 	height: calc(100% - 2em - (var(--border-thin)));
 }
 .chat-input-text {
@@ -358,7 +374,8 @@ td:nth-child(1) {
 	height: 1em;
     position: absolute;
     bottom: 0;
-	width: calc(512px - 4em);
+	left: 0;
+	right: 0;
 	padding-right: 4em;
 	filter: drop-shadow(0px 16px 128px #aaaaaaaa);
 	border-top: var(--border-thin);
