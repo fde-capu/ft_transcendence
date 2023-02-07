@@ -1,7 +1,9 @@
-<!--
-TODO 'Change' button only when client is the owner of profile
-TODO, bug: Alternating from profile to profile is not working.
--->
+<div class="window profile" *ngIf="user">
+<app-window-title
+	[windowName]="windowName"
+	[windowExtras]="windowExtras"
+></app-window-title>
+	<div class="window-close" (click)="onClose()"></div>
 <h2>User Profile</h2>
 <table>
 	<tr *ngIf="owner; else name_simple">
@@ -57,3 +59,4 @@ TODO, bug: Alternating from profile to profile is not working.
 	</ng-template>
 
 </table>
+</div>

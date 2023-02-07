@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { USERS } from '../mocks';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +10,7 @@ import { UserService } from '../user.service';
 })
 export class HomeComponent {
 	user: User = {} as User;
+	ANOTHERUSERMOCK: User = USERS[7];
 	constructor (
 		private userService: UserService
 	) {};

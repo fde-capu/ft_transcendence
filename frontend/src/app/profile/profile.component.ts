@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { USERS } from '../mocks';
 import { UserService } from '../user.service';
@@ -12,17 +12,31 @@ import { HelperFunctionsService } from '../helper-functions.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-	user: User = {} as User;
-	owner: Boolean = false;
-
 	constructor (
 		private userService: UserService,
 		private route: ActivatedRoute,
 		private location: Location,
 		public fun: HelperFunctionsService
 	) {};
+
+	owner: Boolean = false;
+	@Input() user!: User;
+	windowName: string = "";
+	windowExtras: string = "USER||FRIEND||SELF:"; // TODO: unmock
+
 	ngOnInit(): void {
-		this.getUser();
+		if (!this.user)
+		{
+			this.getUser();
+		}
+		else
+		{
+			var ownership: User = {} as User;
+			this.userService.getLoggedUser()
+				.subscribe(user => { ownership = user });
+			this.owner = ownership === this.user;
+			this.imprint();
+		}
 	}
 	getUser(): void {
 		this.route.params.subscribe((params: Params) => {
@@ -33,7 +47,21 @@ export class ProfileComponent {
 			this.userService.getLoggedUser()
 				.subscribe(user => { ownership = user });
 			this.owner = ownership === this.user;
+			this.imprint();
 		})
+	}
+	onClose() {
+		alert('Closes this profile.');
+	}
+	isFriend(): Boolean {
+		return this.userService.isFriend(this.user);
+	}
+	imprint() {
+		if (!this.user)
+			return ;
+		this.windowExtras = (this.owner ? "SELF" :
+			this.isFriend() ? "FRIEND" : "USER") + ":";
+		this.windowName = this.user.name;
 	}
 }
 

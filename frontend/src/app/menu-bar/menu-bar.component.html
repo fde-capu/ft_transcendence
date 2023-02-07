@@ -14,6 +14,6 @@
 	<a class="user-name-medium" style="margin-left: 16px;" routerLink="/profile/{{user.intraId}}">
 		{{user.intraId}} | {{user.name}}
 	</a>
-	<div class="score-big">{{ score }}</div>
+	<div class="score-big">{{ score | number:'6.0' }}</div>
 </div>
 

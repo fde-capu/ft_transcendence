@@ -8,6 +8,5 @@ import { Component, Input } from '@angular/core';
 export class WindowTitleComponent {
 	@Input() windowName?: string;
 	@Input() windowExtras?: string;
-	ngOnInit() {
-	}
+	ngOnInit() {}
 }

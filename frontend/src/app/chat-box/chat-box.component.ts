@@ -14,7 +14,6 @@ export class ChatBoxComponent {
 		public chatMessageService: ChatMessageService,
 		public fun: HelperFunctionsService
 	) {}
-	chatRoomOn: Boolean = true;
 	chatRoom: ChatRoom = {} as ChatRoom;
 	windowTitle: string = "CHAT";
 	windowName: string = "";
@@ -30,10 +29,10 @@ export class ChatBoxComponent {
 		this.chatMessageService.getInChatUsers().subscribe(
 			inChat => this.usersOn = inChat
 		);
-		this.imprintInfo();
+		this.imprint();
 	}
 
-	imprintInfo() {
+	imprint() {
 		this.windowName = this.windowTitle + ": " + this.chatRoom.name;
 		this.windowExtras = ""
 		+ (this.chatRoom.isPrivate ? "PRIVATE" : "PUBLIC")
@@ -45,7 +44,6 @@ export class ChatBoxComponent {
 		if (this.optionsOn)
 		{
 			return this.onMenu();
-
 		}
 		alert (`
 			// TODO: User exits Chat Room, the window closes.
@@ -64,12 +62,12 @@ export class ChatBoxComponent {
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
-		this.imprintInfo();
+		this.imprint();
 	}
 
 	cleanPassword() {
 		this.chatRoom.password = "";
-		this.imprintInfo();
+		this.imprint();
 	}
 
 	isAdmin(user: User): Boolean {

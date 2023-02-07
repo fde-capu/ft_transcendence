@@ -19,7 +19,6 @@ export class UserService {
 	ngOnInit() {
 	}
 
-
 	getOnlineUsers(): Observable<User[]> {
 		const users = USERS;
 		return of(users);
@@ -35,5 +34,9 @@ export class UserService {
 		else
 			return this.getLoggedUser();
 		return of(user);
+	}
+
+	isFriend(user: User): Boolean {
+		return Math.random() > .6; // TODO: Unmock.
 	}
 }
