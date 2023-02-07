@@ -33,40 +33,33 @@
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
 	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))) - (2 * var(--inner-padding-horizontal)));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
-	--app-window-width: calc(var(--inner-width) / var(--boxes-horizontal-fit));
+	--app-window-width: calc((var(--inner-width) / var(--boxes-horizontal-fit)) - (2 * var(--border-thin)) - 1em);
 }
-
 @media (max-width: 900px) {
 	:root {
 		--boxes-horizontal-fit: 1;
 	}
 }
-
 @media (min-width: 901px) and (max-width: 1500px) {
 	:root {
 		--boxes-horizontal-fit: 2;
 	}
 }
-
 @media (min-width: 1501px) and (max-width: 2000px) {
 	:root {
 		--boxes-horizontal-fit: 3;
 	}
 }
-
 @media (min-width: 2001px) and (max-width: 2800px) {
 	:root {
 		--boxes-horizontal-fit: 4;
 	}
 }
-
 @media (min-width: 2801px) {
 	:root {
 		--boxes-horizontal-fit: 5;
 	}
 }
-
-
 body
 {
 	background: var(--screen-color);
@@ -90,6 +83,40 @@ body
 	height: calc(100vh - (6.4 * (var(--margin-plus-border))));
 	word-break: break-word;
 }
+.outter-box
+{
+	width: var(--inner-width);
+	height: var(--inner-height);
+	overflow: overlay;
+	margin: var(--body-margin);
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: var(--inner-padding-horizontal);
+	padding-right: var(--inner-padding-horizontal);
+	border: var(--body-border-width) solid var(--color-border);
+}
+.inner-box
+{
+	text-align: center;
+}
+.inner-box * {
+	text-align: initial;
+}
+.window {
+	border: var(--border-thin);
+	width: var(--app-window-width);
+	margin-right: 1rem;
+	margin-bottom: 1rem;
+	height: 512px;
+	overflow: auto;
+	position: relative;
+	font-size: var(--font-small);
+	display: inline-block;
+}
+
+
+
+
 pre {
 	font-size: 40%;
 }
@@ -254,37 +281,6 @@ table > tr, table > td {
 td:nth-child(1) {
 	text-align: right;
 }
-.outter-box
-{
-	max-width: var(--inner-width);
-	max-height: calc(100vh - (2 * (var(--margin-plus-border))));
-	height: 100%;
-	overflow: overlay;
-	margin: var(--body-margin);
-	padding-top: 0;
-	padding-bottom: var(--inner-padding-vertical);
-	padding-left: var(--inner-padding-horizontal);
-	padding-right: var(--inner-padding-horizontal);
-	border: var(--body-border-width) solid var(--color-border);
-}
-.inner-box
-{
-	width: 100%;
-	height: 100%;
-	display: flex;
-    justify-content: center;
-}
-.window {
-	border: var(--border-thin);
-	width: calc(var(--app-window-width) - (3 * var(--border-thin)) - 1em);
-	margin-right: 1rem;
-	margin-bottom: 1rem;
-	height: 512px;
-	overflow: auto;
-	position: relative;
-	font-size: var(--font-small);
-	display: inline-block;
-}
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -338,7 +334,7 @@ td:nth-child(1) {
 	height: 64px;
 	padding: 0;
 	border-bottom: var(--border-thin);
-	position: relative;
+	position: relative; /* Fixed would also be good; for that, many other configuration is needed. This is a design choice. */
 	top: 0;
 	left: calc(-1 * var(--inner-padding-horizontal));
 	width: calc(100% + (2 * var(--inner-padding-horizontal)));
