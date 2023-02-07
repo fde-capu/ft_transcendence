@@ -67,7 +67,7 @@
 	<table class="list-of-users">
 		<tr *ngFor="let user of usersOn">
 		<td>
-			<a (click)="menuFor(user)">
+			<a routerLink="/profile/{{user.intraId}}">
 				{{ user.intraId }} | {{ user.name }}
 			</a>
 		</td>

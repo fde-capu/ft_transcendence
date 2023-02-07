@@ -18,7 +18,7 @@ export class ChatBoxComponent {
 	windowTitle: string = "CHAT";
 	windowName: string = "";
 	windowExtras: string = "";
-	optionsOn: Boolean = false;
+	optionsOn: Boolean = true; // true for facilitation tests.
 	usersOn: User[] = [];
 	@Input() user?: User;
 
@@ -51,11 +51,6 @@ export class ChatBoxComponent {
 		`);
 	}
 
-	menuFor(user: User)
-	{
-		alert(user.name);
-	}
-
 	onMenu() {
 		this.optionsOn = this.optionsOn ? false : true;
 	}
@@ -81,3 +76,6 @@ export class ChatBoxComponent {
 		return user === this.user;
 	}
 }
+// TODO Open user profile when clicking name.
+// TODO (BUG): When changing the Room name on one chatbox, the other reamins unchanged.
+// TODO (BUG): Subcomponents on chatbox are not getting right with multiple instances.

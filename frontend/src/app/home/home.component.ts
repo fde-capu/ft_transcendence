@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Inject, ViewContainerRef } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { USERS } from '../mocks';
@@ -11,6 +11,7 @@ import { USERS } from '../mocks';
 export class HomeComponent {
 	user: User = {} as User;
 	ANOTHERUSERMOCK: User = USERS[7];
+
 	constructor (
 		private userService: UserService
 	) {};

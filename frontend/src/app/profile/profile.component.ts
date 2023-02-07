@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ElementRef } from '@angular/core';
 import { User } from '../user';
 import { USERS } from '../mocks';
 import { UserService } from '../user.service';
@@ -16,18 +16,21 @@ export class ProfileComponent {
 		private userService: UserService,
 		private route: ActivatedRoute,
 		private location: Location,
-		public fun: HelperFunctionsService
+		public fun: HelperFunctionsService,
+		public elementRef: ElementRef
 	) {};
 
 	owner: Boolean = false;
 	@Input() user!: User;
 	windowName: string = "";
 	windowExtras: string = "USER||FRIEND||SELF:"; // TODO: unmock
+	borderless: Boolean = false;
 
 	ngOnInit(): void {
 		if (!this.user)
 		{
 			this.getUser();
+			this.borderless = true;
 		}
 		else
 		{
