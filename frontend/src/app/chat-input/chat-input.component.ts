@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { ChatMessageService } from '../chat-message.service';
+import { ChatMessageService } from '../chat.service';
 import { ChatMessage } from '../chat-message';
 import { UserService } from '../user.service';
 import { User } from '../user';

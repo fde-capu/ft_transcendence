@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ChatRoom } from '../chat-room';
-import { ChatMessageService } from '../chat-message.service';
+import { ChatMessageService } from '../chat.service';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
 

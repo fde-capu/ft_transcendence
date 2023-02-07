@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../chat-message';
-import { ChatMessageService } from '../chat-message.service';
+import { ChatMessageService } from '../chat.service';
 
 @Component({
   selector: 'app-chat-text',
