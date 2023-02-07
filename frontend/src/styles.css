@@ -24,6 +24,7 @@
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
+	--font-x-large: 32px;
 	--font-large: 28px;
 	--font-medium: 24px;
 	--font-small: 20px;
@@ -296,11 +297,16 @@ td:nth-child(1) {
 	width: calc(100% + (2 * var(--box-padding-horizontal)));
 	z-index: 2000;
 }
+.score-big {
+    font-size: var(--font-x-large);
+    position: absolute;
+    right: 2em;
+}
 .oneliner {
 	display: flex;
 	white-space: nowrap;
 }
-.chat-whole-box {
+.window {
 	border: var(--border-thin);
 	width: 512px;
 	height: 512px;
@@ -308,12 +314,15 @@ td:nth-child(1) {
 	position: relative;
 	font-size: var(--font-small);
 }
+.chat-whole-box {
+	font-size: var(--font-small);
+}
 .chat-text
 {
 	overflow: auto;
 	border: none;
 	width: 512px;
-	height: calc(100% - 44px);
+	height: calc(100% - 2em - (var(--border-thin)));
 }
 .chat-input-text {
 	height: 1em;
