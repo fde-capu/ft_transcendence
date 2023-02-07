@@ -36,3 +36,17 @@ export class ProfileComponent {
 		})
 	}
 }
+
+// TODO:
+
+// Put 2FA option on profile.
+// Statistics (must be in user profile)
+//   :: wins/looses, ladder, achievements etc. (+goals, +time playing)
+//      -? visible to all logged users?
+// Match history:
+//   :: all played games, ladder, anything useful.
+//      - stated must be visible to all logged users.
+// Friends list (show online/offline, in game etc).
+//   :: I gess "in game" info doesn't need friendship.
+
+// - Implement user score.

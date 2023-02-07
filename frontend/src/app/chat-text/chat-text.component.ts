@@ -15,6 +15,7 @@ export class ChatTextComponent {
 	ngOnInit() {
 		this.chatMessageService.getChatText().subscribe(
 			chatMessage => {
+				// TODO: Show only last N messages? (Avoid long scrolls?)
 				this.chatMessage = chatMessage;
 			}
 		);

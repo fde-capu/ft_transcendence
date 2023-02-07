@@ -54,3 +54,15 @@ export class ChatMessageService {
 		return of(this.chatMessage);
 	}
 }
+
+// TODO:
+// - Implement direct-messaging.
+// - Chat creationg screen.
+// - "Block user" routine.
+
+// - The user should be able to invite other users to 
+//   play a Pong game through the chat interface.
+// - Should also be able to access user profiles.
+//  :: These two things will be done by the avatar element, however.
+
+// Matchmaking screen.
