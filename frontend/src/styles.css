@@ -1,6 +1,5 @@
 /* TODO: Solve for many resolutions */
 /* TODO: (BUG) check visuals deformed when using DarkReader Chrome extension. If we care. */
-
 :root {
 	cursor:url("assets/cursor.png") 8 8, cell;
 	--color-high:#eee;
@@ -30,16 +29,44 @@
 	--font-medium: 24px;
 	--font-small: 20px;
 
-	/* TODO: make these dynamic according to screen size: */
-	--boxes-horizontal-fit: 3;
-	--boxes-min-width: 512px;
-
 	/* Styles based of paramteres above (no need to touch?): */
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
 	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))) - (2 * var(--inner-padding-horizontal)));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
 	--app-window-width: calc(var(--inner-width) / var(--boxes-horizontal-fit));
 }
+
+@media (max-width: 900px) {
+	:root {
+		--boxes-horizontal-fit: 1;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1500px) {
+	:root {
+		--boxes-horizontal-fit: 2;
+	}
+}
+
+@media (min-width: 1501px) and (max-width: 2000px) {
+	:root {
+		--boxes-horizontal-fit: 3;
+	}
+}
+
+@media (min-width: 2001px) and (max-width: 2800px) {
+	:root {
+		--boxes-horizontal-fit: 4;
+	}
+}
+
+@media (min-width: 2801px) {
+	:root {
+		--boxes-horizontal-fit: 5;
+	}
+}
+
+
 body
 {
 	background: var(--screen-color);
@@ -250,7 +277,6 @@ td:nth-child(1) {
 .window {
 	border: var(--border-thin);
 	width: calc(var(--app-window-width) - (3 * var(--border-thin)) - 1em);
-	min-width: var(--boxes-min-width);
 	margin-right: 1rem;
 	margin-bottom: 1rem;
 	height: 512px;
