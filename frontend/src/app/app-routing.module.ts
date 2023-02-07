@@ -4,7 +4,11 @@ import { PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator.component';
 import { GameComponent } from './game/game.component';
-import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
+import { OnlineUsersComponent } from './online-users/online-users.component';
+import { ChatTextComponent } from './chat-text/chat-text.component';
+import { AvatarComponent } from './avatar/avatar.component';
 
 const routes: Routes = [
   {
@@ -16,6 +20,29 @@ const routes: Routes = [
     path: 'game',
     canActivate: [AuthGuard],
     component: GameComponent,
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+  },
+  {
+    path: 'profile/:intraId',
+    component: ProfileComponent,
+  },{
+    path: 'profile',
+    component: ProfileComponent,
+  },
+  {
+    path: 'online',
+    component: OnlineUsersComponent,
+  },
+  {
+    path: 'avatar',
+    component: AvatarComponent,
+  },
+  {
+    path: 'chat-text',
+    component: ChatTextComponent,
   },
   {
     path: 'user',
@@ -40,7 +67,7 @@ const routes: Routes = [
   {
     path: '**',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
-  },
+  }
 ];
 
 @NgModule({
