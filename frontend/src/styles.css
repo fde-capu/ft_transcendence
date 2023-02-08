@@ -380,17 +380,29 @@ td:nth-child(1) {
 	position: relative;
 }
 .slow-blinker {
-	animation: text-blinker 6.18s step-end infinite;
+	animation: text-blinker 3.18s step-end infinite;
 	height: 24px;
 	position: relative;
 }
+.font-distorter {
+	animation: text-sizer 2.618s step-end infinite;
+}
+/* This is not working :( */
 @keyframes text-blinker {
-  0%	{ content-visibility: hidden; font-size: 0px; }
-  4%	{ content-visibility: visible; font-size: inherit; }
-  35%	{ content-visibility: hidden; font-size: 0px; }
-  39%	{ content-visibility: visible; font-size: inherit; }
-  60%	{ content-visibility: hidden; font-size: 0px; }
-  68%	{ content-visibility: visible; font-size: inherit; }
+  0%	{ visibility: hidden; }
+  4%	{ visibility: visible; }
+  35%	{ visibility: hidden; }
+  39%	{ visibility: visible; }
+  60%	{ visibility: hidden; }
+  68%	{ visibility: visible; }
+}
+@keyframes text-sizer {
+  0%	{ font-size: 100%; }
+  30%	{ font-size: 97%; }
+  35%	{ font-size: 102%; }
+  58%	{ font-size: 104%; }
+  60%	{ font-size: 94%; }
+  93%	{ font-size: 101%; }
 }
 /**/
 *::placeholder {
