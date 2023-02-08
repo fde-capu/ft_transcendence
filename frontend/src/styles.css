@@ -94,16 +94,19 @@ body
 	padding-left: var(--inner-padding-horizontal);
 	padding-right: var(--inner-padding-horizontal);
 	border: var(--body-border-width) solid var(--color-border);
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .inner-box
 {
 	text-align: center;
+	min-width: 448px;
 }
 .inner-box * {
 	text-align: initial;
 }
 .window {
-	border: var(--border-thin);
 	width: var(--app-window-width);
 	margin-right: 1rem;
 	margin-bottom: 1rem;
@@ -129,7 +132,6 @@ h1 {
 h2 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
-	display: inline-block;
 }
 h3 {
 	font-variant-caps: all-petite-caps;
@@ -250,9 +252,7 @@ li
 hr {
 	border: 5px dashed var(--color-high);
 	width: 200px;
-	margin: 40px 0 10px 0;
-}
-.profile {
+	margin: 1em 0;
 }
 .profile-image {
 	width: 128px;
@@ -347,7 +347,7 @@ td:nth-child(1) {
     right: 2em;
 }
 .oneliner {
-	display: flex;
+	display: block;
 	white-space: nowrap;
 }
 .chat-whole-box {
@@ -434,6 +434,21 @@ td:nth-child(1) {
 	background: var(--color-popup-background);
 	padding: 32px;
 	z-index: 100;
+}
+.main-menu-big {
+}
+.main-screen table {
+	border-spacing: 50px;
+}
+.main-screen {
+	zoom: 150%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.main-screen * {
+	margin: 0.5em;
 }
 .window-close {
 	width: 16px;

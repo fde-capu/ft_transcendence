@@ -3,17 +3,11 @@
 	<div class="burger" (click)="onClickBurger();">
 	</div>
 	<div *ngIf="menuOpen" class="burger-menu" (mouseleave)="menuOff();" (click)="menuOff();">
-		<button class="oneliner" routerLink="/home">Home</button>
-		<button class="oneliner" routerLink="/profile/{{user.intraId}}">Profile</button>
-		<button class="oneliner">Create Match</button>
-		<button class="oneliner">Create Chat</button>
-		<button class="oneliner">Graphics</button>
-		<button class="oneliner">Log Out</button>
+		<app-main-menu></app-main-menu>
 	</div>
 	<app-avatar></app-avatar>
 	<a class="user-name-medium" style="margin-left: 16px;" routerLink="/profile/{{user.intraId}}">
 		{{user.intraId}} | {{user.name}}
 	</a>
-	<div class="score-big">{{ score | number:'6.0' }}</div>
+	<div class="score-big">{{ user.score | number:'6.0' }}</div>
 </div>
-

@@ -1,10 +1,5 @@
-<div [class.window]="!borderless" class="profile" *ngIf="user">
-<app-window-title *ngIf="!borderless"
-	[windowName]="windowName"
-	[windowExtras]="windowExtras"
-></app-window-title>
-	<div class="window-close" (click)="onClose()" *ngIf="!borderless"></div>
-<h2>User Profile</h2>
+<div class="window">
+<h2>{{ profileType }} Profile</h2>
 <table>
 	<tr *ngIf="owner; else name_simple">
 		<td>

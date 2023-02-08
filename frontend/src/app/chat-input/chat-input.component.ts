@@ -42,9 +42,6 @@ export class ChatInputComponent {
 		this.chatMessageService.add(newMessage);
 		this.message = "";
 		this.textArea && this.textArea.focus();
-		if (this.chatBox) {
-			this.chatBox.scrollTo({ left: 0, top: 2000, behavior: 'smooth' });
-		}
 	}
 	blink(el: string)
 	{

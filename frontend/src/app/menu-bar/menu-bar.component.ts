@@ -11,7 +11,6 @@ export class MenuBarComponent {
 	constructor (private userService: UserService) {};
 
 	user: User = {} as User;
-	score: number = 33988; // TODO: link to user score. Should this always come with the User interface?
 	isLogged: Boolean = true;
 	// ^ TODO: make it into a user.service...
 	// ...or accept the user is always logged.

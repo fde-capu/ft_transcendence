@@ -50,7 +50,4 @@ export class HelperFunctionsService {
 		const exist = document.getElementById(el);
 		if (exist) exist.focus();
 	};
-	openProfile(user: User): void {
-		alert(user.name + ' profile will be opened. TODO.');
-	}
 }
