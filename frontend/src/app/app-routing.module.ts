@@ -28,7 +28,8 @@ const routes: Routes = [
   {
     path: 'profile/:intraId',
     component: ProfileComponent,
-  },{
+  },
+  {
     path: 'profile',
     component: ProfileComponent,
   },
@@ -45,18 +46,6 @@ const routes: Routes = [
     component: ChatTextComponent,
   },
   {
-    path: 'user',
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
-    component: UserProfileComponent,
-    children: [
-      {
-        path: 'profile',
-        component: UserProfileComponent,
-      },
-    ],
-  },
-  {
     path: 'login',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
@@ -67,7 +56,7 @@ const routes: Routes = [
   {
     path: '**',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
-  }
+  },
 ];
 
 @NgModule({

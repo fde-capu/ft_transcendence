@@ -10,7 +10,7 @@ import { User } from '../user';
   styleUrls: ['./chat-input.component.css']
 })
 export class ChatInputComponent {
-	message: string = "";
+	message = "";
 	user: User = {} as User;
 	textArea: HTMLElement | null = null;
 	chatBox: HTMLElement | null = null;
@@ -33,7 +33,7 @@ export class ChatInputComponent {
 		event.preventDefault();
 		this.blink('send-button');
 		if (!this.message) return ;
-		var newMessage!: ChatMessage;
+		let newMessage!: ChatMessage;
 		newMessage = 
 		{
 			user: this.user,

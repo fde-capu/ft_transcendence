@@ -9,14 +9,14 @@ styleUrls: ['./avatar.component.css']
 })
 export class AvatarComponent {
 	@Input() user?: User;
-	popUpOn: boolean = false;
+	popUpOn = false;
 
 	onClick(): void {
 		this.popUpOn = this.popUpOn ? false : true;
 	}
 
 	onHover(): void {
-		var self = this;
+		const self = this;
 		this.popUpOn = true;
 		function repeat(){
 			setTimeout(function() {

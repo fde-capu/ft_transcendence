@@ -19,10 +19,29 @@ import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { WindowTitleComponent } from './window-title/window-title.component';
 
 @NgModule({
-  declarations: [AppComponent, FttAuthenticatorComponent, GameComponent, 
-	HomeComponent, HomeComponent, AvatarComponent, ProfileComponent, OnlineUsersComponent,
-	ChatTextComponent, RenderFilterComponent, MenuBarComponent, ChatInputComponent, ChatBoxComponent, WindowTitleComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, AuthModule, UserModule],
+  declarations: [
+    AppComponent,
+    FttAuthenticatorComponent,
+    GameComponent,
+    HomeComponent,
+    HomeComponent,
+    AvatarComponent,
+    ProfileComponent,
+    OnlineUsersComponent,
+    ChatTextComponent,
+    RenderFilterComponent,
+    MenuBarComponent,
+    ChatInputComponent,
+    ChatBoxComponent,
+    WindowTitleComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    AuthModule,
+    FormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

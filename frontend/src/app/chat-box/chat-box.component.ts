@@ -14,12 +14,12 @@ export class ChatBoxComponent {
 		public chatMessageService: ChatMessageService,
 		public fun: HelperFunctionsService
 	) {}
-	chatRoomOn: Boolean = true;
+	chatRoomOn = true;
 	chatRoom: ChatRoom = {} as ChatRoom;
-	windowTitle: string = "CHAT";
-	windowName: string = "";
-	windowExtras: string = "";
-	optionsOn: Boolean = false;
+	windowTitle = "CHAT";
+	windowName = "";
+	windowExtras = "";
+	optionsOn = false;
 	usersOn: User[] = [];
 	@Input() user?: User;
 
@@ -72,14 +72,14 @@ export class ChatBoxComponent {
 		this.imprintInfo();
 	}
 
-	isAdmin(user: User): Boolean {
-		for (let admin of this.chatRoom.admin)
+	isAdmin(user: User): boolean {
+		for (const admin of this.chatRoom.admin)
 			if (admin == user)
 				return true;
 		return false;
 	}
 
-	isMe(user: User): Boolean {
+	isMe(user: User): boolean {
 		return user === this.user;
 	}
 }
