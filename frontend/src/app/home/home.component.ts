@@ -22,5 +22,4 @@ export class HomeComponent {
 		this.userService.getLoggedUser()
 			.subscribe(user => this.user = user);
 	}
-
 }
