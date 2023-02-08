@@ -18,6 +18,7 @@ import { ChatInputComponent } from './chat-input/chat-input.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { WindowTitleComponent } from './window-title/window-title.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { CreateMatchComponent } from './create-match/create-match.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
     ChatBoxComponent,
     WindowTitleComponent,
 	MainMenuComponent,
+ CreateMatchComponent,
   ],
   imports: [
     BrowserModule,
