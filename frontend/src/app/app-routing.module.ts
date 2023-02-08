@@ -7,7 +7,7 @@ import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OnlineUsersComponent } from './online-users/online-users.component';
-import { ChatTextComponent } from './chat-text/chat-text.component';
+import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { AvatarComponent } from './avatar/avatar.component';
 
 const routes: Routes = [
@@ -42,8 +42,8 @@ const routes: Routes = [
     component: AvatarComponent,
   },
   {
-    path: 'chat-text',
-    component: ChatTextComponent,
+    path: 'chat',
+    component: ChatBoxComponent,
   },
   {
     path: 'login',

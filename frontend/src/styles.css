@@ -370,17 +370,24 @@ td:nth-child(1) {
 	box-shadow: inset 0px 8px 64px #77777719;
 	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
 }
-/* blinker is not in use and is crappy */
+/* blinker is kindda crappy */
 .blinker {
 	animation: text-blinker 0.618s step-end infinite;
+	height: 24px;
+	position: relative;
+}
+.slow-blinker {
+	animation: text-blinker 6.18s step-end infinite;
+	height: 24px;
+	position: relative;
 }
 @keyframes text-blinker {
   0%	{ content-visibility: hidden; font-size: 0px; }
-  8%	{ content-visibility: visible; font-size: inherit; }
+  4%	{ content-visibility: visible; font-size: inherit; }
   35%	{ content-visibility: hidden; font-size: 0px; }
-  42%	{ content-visibility: visible; font-size: inherit; }
+  39%	{ content-visibility: visible; font-size: inherit; }
   60%	{ content-visibility: hidden; font-size: 0px; }
-  72%	{ content-visibility: visible; font-size: inherit; }
+  68%	{ content-visibility: visible; font-size: inherit; }
 }
 /**/
 *::placeholder {
@@ -439,17 +446,16 @@ td:nth-child(1) {
 .main-menu-big {
 }
 .main-screen table {
-	border-spacing: 50px;
+	border-spacing: 30px;
 }
 .main-screen {
-	zoom: 150%;
+	zoom: 125%;
     display: flex;
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
 }
 .main-screen * {
-	margin: 0.5em;
 }
 .window-close {
 	width: 16px;
