@@ -35,6 +35,7 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
     ChatInputComponent,
     ChatBoxComponent,
     WindowTitleComponent,
+	MainMenuComponent,
   ],
   imports: [
     BrowserModule,

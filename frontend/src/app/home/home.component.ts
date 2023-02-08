@@ -1,4 +1,4 @@
-import { Component, Input, Inject, ViewContainerRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { USERS } from '../mocks';
@@ -9,7 +9,7 @@ import { USERS } from '../mocks';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-	user: User = {} as User;
+	@Input() user: User = {} as User;
 	ANOTHERUSERMOCK: User = USERS[7];
 
 	constructor (
