@@ -267,6 +267,7 @@ label
 	display: inline-block;
 	padding-right: 1ch;
 	cursor: inherit;
+	text-transform: lowercase;
 }
 label::after {
 	font-weight: normal;
