@@ -26,10 +26,10 @@ export class ProfileComponent {
 	}
 	getUser(): void {
 		this.route.params.subscribe((params: Params) => {
-			var id = params['intraId'];
+			const id = params['intraId'];
 			this.userService.getUserById(id)
 				.subscribe(user => this.user = user);
-			var ownership: User = {} as User;
+			let ownership: User = {} as User;
 			this.userService.getLoggedUser()
 				.subscribe(user => { ownership = user });
 			this.user = !this.user ? ownership : this.user;

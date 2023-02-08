@@ -20,10 +20,29 @@ import { WindowTitleComponent } from './window-title/window-title.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 
 @NgModule({
-  declarations: [AppComponent, FttAuthenticatorComponent, GameComponent, 
-	HomeComponent, HomeComponent, AvatarComponent, ProfileComponent, OnlineUsersComponent,
-	ChatTextComponent, RenderFilterComponent, MenuBarComponent, ChatInputComponent, ChatBoxComponent, WindowTitleComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, AuthModule, UserModule],
+  declarations: [
+    AppComponent,
+    FttAuthenticatorComponent,
+    GameComponent,
+    HomeComponent,
+    HomeComponent,
+    AvatarComponent,
+    ProfileComponent,
+    OnlineUsersComponent,
+    ChatTextComponent,
+    RenderFilterComponent,
+    MenuBarComponent,
+    ChatInputComponent,
+    ChatBoxComponent,
+    WindowTitleComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    AuthModule,
+    FormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

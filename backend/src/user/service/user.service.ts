@@ -15,7 +15,7 @@ export interface MeDTO {
   login: string;
   email: string;
   displayname: string;
-  image: { versions: { micro: string; }}
+  image: { versions: { micro: string } };
 }
 
 @Injectable()
@@ -25,8 +25,7 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
-  async getToken(code: string): Promise<TokenDTO>
-  {
+  async getToken(code: string): Promise<TokenDTO> {
     const responseToken = await this.httpService.axiosRef.post<TokenDTO>(
       'https://api.intra.42.fr/oauth/token',
       {

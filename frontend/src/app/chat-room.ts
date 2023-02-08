@@ -9,7 +9,7 @@ export interface ChatRoom
 	admin: User[],
 	history: ChatMessage[],
 	password: string,
-	isPrivate: Boolean
+	isPrivate: boolean
 }
 // TODO: continue adding stuff.
 // TODO: is id a string or a Number? 

@@ -14,11 +14,12 @@ export class ChatBoxComponent {
 		public chatMessageService: ChatMessageService,
 		public fun: HelperFunctionsService
 	) {}
+	chatRoomOn = true; // After last merge, is this in user?
 	chatRoom: ChatRoom = {} as ChatRoom;
-	windowTitle: string = "CHAT";
-	windowName: string = "";
-	windowExtras: string = "";
-	optionsOn: Boolean = true; // true for facilitation tests.
+	windowTitle = "CHAT";
+	windowName = "";
+	windowExtras = "";
+	optionsOn = false;
 	usersOn: User[] = [];
 	@Input() user?: User;
 
@@ -65,14 +66,14 @@ export class ChatBoxComponent {
 		this.imprint();
 	}
 
-	isAdmin(user: User): Boolean {
-		for (let admin of this.chatRoom.admin)
+	isAdmin(user: User): boolean {
+		for (const admin of this.chatRoom.admin)
 			if (admin == user)
 				return true;
 		return false;
 	}
 
-	isMe(user: User): Boolean {
+	isMe(user: User): boolean {
 		return user === this.user;
 	}
 }

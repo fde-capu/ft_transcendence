@@ -11,10 +11,10 @@ export class MenuBarComponent {
 	constructor (private userService: UserService) {};
 
 	user: User = {} as User;
-	isLogged: Boolean = true;
+	isLogged = true;
 	// ^ TODO: make it into a user.service...
 	// ...or accept the user is always logged.
-	menuOpen: Boolean = false;
+	menuOpen = false;
 
 	ngOnInit(): void {
 		this.getUser();
