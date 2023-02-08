@@ -1,4 +1,5 @@
-<div class="window-full">
+<div *ngIf="!done">Please hold on...</div>
+<div *ngIf="done" class="window-full">
 <app-window-title
 	[windowName]="windowName"
 	[windowExtras]="windowExtras"
@@ -7,7 +8,7 @@
 	<div class="window-close" (click)="onClose()"></div>
 	<div class="window-menu-burger" (click)="onMenu()"></div>
 <div class="window-options" *ngIf="optionsOn" (click)="imprint();">
-	<table class="options">
+	<table class="options" *ngIf="isAdmin()">
 		<tr>
 			<td>
 				<label>Room Name:</label>
@@ -63,21 +64,37 @@
 			</td>
 		</tr>
 	</table>
+
 	<h3>Logged users</h3>
 	<table class="list-of-users">
-		<tr *ngFor="let user of usersOn">
+		<tr *ngFor="let user of usersOnChat">
 		<td>
 			<a routerLink="/profile/{{user.intraId}}">
 				{{ user.intraId }} | {{ user.name }}
 			</a>
 		</td>
 		<td>
-			<span *ngIf="!isAdmin(user) && !isMe(user);">
-				<button style="margin-left:0;">Ban</button>
+			<button *ngIf="!isMe(user)" style="margin-left:0;">Invite to Match</button>
+			<span *ngIf="isAdmin() && !isAdmin(user) && !isMe(user);">
+				<button>Ban</button>
 				<button>Promote</button>
 			</span>
 			<span *ngIf="isAdmin(user) && !isMe(user);"> <-[ Administrator ]</span>
 			<span *ngIf="isMe(user);"> <-[ Yourself ]</span>
+		</td>
+		</tr>
+	</table>
+
+	<h3 *ngIf="isAdmin()">Online users</h3>
+	<table *ngIf="isAdmin()" class="list-of-users">
+		<tr *ngFor="let user of usersOutOfChat">
+		<td>
+			<a routerLink="/profile/{{user.intraId}}">
+				{{ user.intraId }} | {{ user.name }}
+			</a>
+		</td>
+		<td>
+			<button style="margin-left:0;">Invite to Chat</button>
 		</td>
 		</tr>
 	</table>

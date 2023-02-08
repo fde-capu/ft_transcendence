@@ -185,6 +185,7 @@ a:hover, .hover_invert:hover {
 .user-name-small {
 	font-size: var(--font-small);
 	min-width: max-content;
+	padding: 0px 0.5em;
 }
 .small {
 	font-size: var(--font-small);
@@ -356,9 +357,6 @@ td:nth-child(1) {
 	display: block;
 	white-space: nowrap;
 }
-.chat-whole-box {
-	font-size: var(--font-small);
-}
 .chat-text
 {
 	overflow: auto;
@@ -469,6 +467,9 @@ td:nth-child(1) {
 	background-image:url('/assets/x.png');
 	opacity: .7;
 	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0 1em 0 0;
 }
 .window-menu-burger {
 	width: 16px;
@@ -478,20 +479,21 @@ td:nth-child(1) {
 	background-image:url('/assets/burger.png');
 	padding: 0;
 	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0 1em 0 0;
 }
 .window-options {
-	font-size: var(--font-small);
-	position: absolute;
-	top: 22px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
 	background: var(--color-sublow-transp);
 	z-index: 200;
     display: flex;
     justify-content: center;
     align-items: center;
 	flex-direction: column;
+	height: calc(var(--inner-below-menu-height) - 3em);
+	width: calc(var(--inner-width));
+	position:absolute;
+	overflow: auto;
 }
 .options
 {
