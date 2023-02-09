@@ -13,6 +13,7 @@ import { TokenService } from 'src/auth/service/token.service';
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
+  namespace: 'game',
 })
 export class GameGateway implements OnGatewayConnection {
   @WebSocketServer()
