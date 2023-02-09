@@ -1,26 +1,14 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
 import { MeDTO, UserService } from '../service/user.service';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @Controller('user')
 export class RegisterController {
   constructor(private readonly userService: UserService) {}
-  @Get('register')
-  async registerUser(
-    @Query('code') code: string,
-    @Res() response: Response = null,
-  ): Promise<any> {
-    try {
-      const basicUser = await this.userService.registerUser(code);
-      return response
-        .cookie('access_token', basicUser.token)
-        .cookie('intra_id', basicUser.login)
-        .redirect('http://localhost:4200/game');
-    } catch (e) {
-      response.status(e.status).json(e.data);
-    }
-  }
+  
   @Get('userByLogin')
+  @UseGuards(AuthGuard)
   async getUserByLogin(
     @Query('login') code: string,
     @Res() response: Response = null,
