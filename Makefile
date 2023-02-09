@@ -21,4 +21,8 @@ clean :
 fclean : clean
 	./tools/c_dataclean.sh
 
-re : clean fclean all
+re : clean fclean install all
+
+install :
+	cd frontend && npm install
+	cd backend && npm install

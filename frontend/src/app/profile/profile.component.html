@@ -1,0 +1,59 @@
+<!--
+TODO 'Change' button only when client is the owner of profile
+TODO, bug: Alternating from profile to profile is not working.
+-->
+<h2>User Profile</h2>
+<table>
+	<tr *ngIf="owner; else name_simple">
+		<td>
+			<label>name</label>
+		</td>
+		<td>
+			<input id="name" [(ngModel)]="user.name"
+			(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
+			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
+			(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
+			/>
+		</td>
+		<td>
+			<button id="nameButton" type="button" (click)=
+				"fun.focusIf('nameButton', 'Change', 'name');"
+				>Change</button>
+		</td>
+	</tr>
+	<ng-template #name_simple>
+		<tr>
+			<td>	<label>name</label>	</td>
+			<td>	{{user.name}}		</td>
+		</tr>
+	</ng-template>
+
+	<tr>
+		<td>	<label>id</label>	</td>
+		<td>	{{user.intraId}}	</td>
+	</tr>
+
+	<tr>
+		<td>	<label>image url</label>	</td>
+		<td>	{{user.image}}				</td>
+	</tr>
+
+<!-- TODO get image dinamicaly -->
+	<tr *ngIf="owner; else image_simple">
+		<td>	<label>image</label>	</td>
+		<td>	<div class="profile-image hover_invert"
+			style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+				></div>					</td>
+		<td>	<button type="button">Change</button>
+										</td>
+	</tr>
+	<ng-template #image_simple>
+		<tr>
+			<td>	<label>image</label>	</td>
+			<td>	<div class="profile-image hover_invert"
+				style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+					></div>					</td>
+		</tr>
+	</ng-template>
+
+</table>
