@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { ChatMessageService } from '../chat.service';
+import { ChatService } from '../chat.service';
 import { ChatMessage } from '../chat-message';
 import { UserService } from '../user.service';
 import { User } from '../user';
@@ -15,7 +15,7 @@ export class ChatInputComponent {
 	textArea: HTMLElement | null = null;
 	chatBox: HTMLElement | null = null;
 	constructor(
-		public chatMessageService: ChatMessageService,
+		public chatService: ChatService,
 		public userService: UserService
 	) {}
 	ngOnInit(): void {
@@ -39,7 +39,7 @@ export class ChatInputComponent {
 			user: this.user,
 			message: this.message
 		};
-		this.chatMessageService.add(newMessage);
+		this.chatService.add(newMessage);
 		this.message = "";
 		this.textArea && this.textArea.focus();
 	}

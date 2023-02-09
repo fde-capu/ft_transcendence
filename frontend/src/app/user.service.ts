@@ -34,6 +34,6 @@ export class UserService {
 	}
 
 	isFriend(user: User): Boolean {
-		return Math.random() > .6; // TODO: Unmock.
+		return Math.random() > .6;
 	}
 }
