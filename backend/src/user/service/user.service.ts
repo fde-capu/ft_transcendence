@@ -2,6 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { map } from 'rxjs';
+import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
+import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
 
@@ -21,8 +24,8 @@ export interface MeDTO {
   image: { versions: { micro: string; } }
 }
 export interface registerResp {
-  token: string;
   login: string;
+  mfa: { enabled: boolean, verified: boolean };
 }
 
 
@@ -32,45 +35,21 @@ export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
+    private readonly fortyTwoService: FortyTwoService,
+
   ) { }
 
-  async registerUser(codeFrom42: string = ''): Promise<registerResp> {
-    if (!codeFrom42 || codeFrom42 === '')
-      throw new BadRequestException();
-    try {
-      const responseToken = await this.httpService.axiosRef.post<string>(
-        'https://api.intra.42.fr/oauth/token',
-        {
-          grant_type: 'authorization_code',
-          client_id: this.configService.get<string>('API42_CLIENT_ID'),
-          client_secret: this.configService.get<string>('API42_CLIENT_SECRET'),
-          redirect_uri: 'http://localhost:3000/user/register',
-          codeFrom42,
-        },
-      );
-      const basicInfo = await this.getBasicUserInfo(responseToken.data);
-      const existUser = await this.userRepository.findOneBy({login: basicInfo.login});
-      if (existUser === null)
-        await this.userRepository.insert({ login: basicInfo.login, email: basicInfo.email});
-      return ({ token: responseToken.data, login: basicInfo.login });
-    }
-    catch (err) {
-      throw err.response;
-    }
+  async registerUser(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
+    const existUser = await this.userRepository.findOneBy({ login: codeFrom42.login });
+    if (existUser === null)
+      await this.userRepository.insert({ login: codeFrom42.login, email: codeFrom42.email });
+    return ({ login: codeFrom42.login, mfa: { enabled: true, verified: false } });
   }
+  
   async getUserByLogin(login: string) {
     const resp = await this.userRepository.findOneBy({ login });
     if (resp === null)
       throw new NotFoundException();
     return resp;
-  }
-
-  async getBasicUserInfo(access_token: string): Promise<MeDTO> {
-    const response = await this.httpService.axiosRef.get<MeDTO>(
-      'https://api.intra.42.fr/v2/me',
-      { headers: { Authorization: `Bearer ${access_token}` } },
-    );
-    return response.data;
   }
 }
