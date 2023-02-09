@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { filter, Observable, tap } from 'rxjs';
-import { AuthService, TokenInfoResponse } from '../../service/auth.service';
+import { tap } from 'rxjs';
+import { AuthService } from 'src/app/auth/service/auth.service';
 
 @Component({
   selector: 'app-login',
