@@ -8,9 +8,14 @@ import { GameService } from '../../service/game.service';
   styleUrls: ['./game.component.css'],
 })
 export class GameComponent {
-  message$: Observable<any>;
+  messages: { author: string; payload: string }[] = [];
   constructor(private readonly gameService: GameService) {
-    this.message$ = this.gameService.getMessage();
+    this.gameService.getMessage().subscribe({
+      next: msg => {
+        console.log(msg);
+        this.messages = [...this.messages, msg];
+      },
+    });
   }
   send(value: string) {
     this.gameService.sendMessage(value);

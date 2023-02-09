@@ -4,17 +4,34 @@ import {
   MessageBody,
   ConnectedSocket,
   OnGatewayConnection,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
+import { TokenService } from 'src/auth/service/token.service';
 
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
 })
 export class GameGateway implements OnGatewayConnection {
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log(parse(client.handshake.headers.cookie)); // TODO use auth here
+  @WebSocketServer()
+  server: Server;
+
+  constructor(private readonly tokenService: TokenService) {}
+
+  async handleConnection(client: Socket, ...args: any[]) {
+    try {
+      const { authorization } = parse(client.handshake.headers.cookie);
+      const { sub: subject } = await this.tokenService.inspect(authorization);
+      client['subject'] = subject;
+      client.emit('message', {
+        author: 'ft_transcendence',
+        payload: 'Welcome!',
+      });
+    } catch (error) {
+      client.disconnect(true);
+    }
   }
 
   @SubscribeMessage('message')
@@ -22,7 +39,9 @@ export class GameGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
-    client.emit('message', 'ta ai?');
-    console.log(payload);
+    this.server.emit('message', {
+      author: client['subject'],
+      payload: payload,
+    });
   }
 }
