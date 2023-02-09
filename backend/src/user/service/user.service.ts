@@ -18,7 +18,7 @@ export interface MeDTO {
   login: string;
   email: string;
   displayname: string;
-  image: { versions: { micro: string; } }
+  image: { versions: { micro: string } };
 }
 export interface registerResp {
   token: string;

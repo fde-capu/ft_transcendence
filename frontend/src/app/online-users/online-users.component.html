@@ -1,0 +1,10 @@
+<h2>Online Users</h2>
+<ul>
+  <li *ngFor='let user of users'>
+	  <app-avatar [user]="user"></app-avatar>
+	  <a class="user-name-medium" routerLink="/profile/{{user.intraId}}">
+		{{user.intraId}} | {{user.name}}
+	  </a>
+	  <!-- TODO show current match <app-live-match>?-->
+  </li>
+</ul>

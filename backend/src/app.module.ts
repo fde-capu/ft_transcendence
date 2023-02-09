@@ -1,13 +1,20 @@
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PingController } from './ping/ping.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
+import { FortyTwoModule } from './forty-two/forty-two.module';
+import { PingController } from './ping/ping.controller';
+import { RegisterController } from './user/controller/registred.controller';
 import { User } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [UserModule, HttpModule, ConfigModule.forRoot(),
+  imports: [
+    UserModule,
+    HttpModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -21,8 +28,15 @@ import { UserModule } from './user/user.module';
         synchronize: true,
       }),
       inject: [ConfigService],
-    }),],
-  controllers: [PingController],
+    }),
+    AuthModule,
+    FortyTwoModule,
+  ],
+  controllers: [RegisterController, PingController],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TokenParserMiddleware).forRoutes('*');
+  }
+}

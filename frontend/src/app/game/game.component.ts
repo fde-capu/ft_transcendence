@@ -9,9 +9,9 @@ import { ActivatedRoute } from '@angular/router';
 export class GameComponent {
   constructor(private route: ActivatedRoute) {}
 
-  intraId: string = 'undefined_intraId';
-  fullName: string = 'undefined_fullName';
-  avatarLink: string = 'undefined_avatarLink';
+  intraId = 'undefined_intraId';
+  fullName = 'undefined_fullName';
+  avatarLink = 'undefined_avatarLink';
 
   ngOnInit() {
   }

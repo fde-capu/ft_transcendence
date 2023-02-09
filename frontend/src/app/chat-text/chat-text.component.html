@@ -1,0 +1,11 @@
+<div *ngIf="chatMessageService.chat.length" class="chat-text">
+  <ul>
+  <li *ngFor='let chatLine of chatMessageService.chat' class='chat-line'> 
+	<app-avatar [user]="chatLine.user"></app-avatar>
+	<span class='user-name-small hover_invert'>
+		{{chatLine.user.intraId}} | {{chatLine.user.name}}</span>
+		<span class='small'>:</span>
+		{{chatLine.message}}
+  </li>
+  </ul>
+</div>
