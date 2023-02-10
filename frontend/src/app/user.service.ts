@@ -30,6 +30,12 @@ export class UserService {
 			);
 	}
 
+	getAvailableUsers(): Observable<User[]> {
+		// Must return users online, not playing, and not logged user.
+		const users = USERS;
+		return of(users);
+	}
+
 	getLoggedUser(): Observable<User> {
 		return of(this.loggedUser);
 	}

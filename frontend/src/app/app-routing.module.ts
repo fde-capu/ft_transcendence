@@ -10,6 +10,7 @@ import { OnlineUsersComponent } from './online-users/online-users.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { CreateMatchComponent } from './create-match/create-match.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
     path: 'online',
     canActivate: [AuthGuard],
     component: OnlineUsersComponent,
+  },
+  {
+	path: 'create-match',
+	component: CreateMatchComponent,
   },
   {
     path: 'avatar',
