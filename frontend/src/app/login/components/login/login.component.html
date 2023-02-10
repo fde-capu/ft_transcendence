@@ -1,0 +1,12 @@
+<section *ngIf="!isAuthenticated">
+  <button (click)="signIn()">Sign In</button>
+  <qrcode [qrdata]="challengeUri" [width]="256"></qrcode>
+</section>
+<section *ngIf="challengeEnabled">
+  <form #challenge="ngForm" (ngSubmit)="solveChallenge(challenge)">
+    <input type="text" name="code" placeholder="MFA Code" autofocus required ngModel/>
+    <button type="submit">Send</button>
+  </form>
+  <button (click)="signOut()">Sign Out</button>
+  <p *ngIf="message">{{message}}</p>
+</section>
