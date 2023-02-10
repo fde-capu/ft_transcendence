@@ -33,6 +33,7 @@
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
 	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))) - (2 * var(--inner-padding-horizontal)));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
+	--inner-below-menu-height: calc(var(--inner-height) - 3em);
 	--app-window-width: calc((var(--inner-width) / var(--boxes-horizontal-fit)) - (2 * var(--border-thin)) - 1em);
 }
 @media (max-width: 900px) {
@@ -116,10 +117,14 @@ body
 	font-size: var(--font-medium);
 	display: inline-block;
 }
-
-
-
-
+.window-full {
+	margin: 0;
+	min-height: 511px;
+	min-width: 511px;
+	font-size: var(--font-medium);
+	height: var(--inner-below-menu-height);
+	width: var(--inner-width);
+}
 pre {
 	font-size: var(--font-small);
 }
@@ -180,6 +185,7 @@ a:hover, .hover_invert:hover {
 .user-name-small {
 	font-size: var(--font-small);
 	min-width: max-content;
+	padding: 0px 0.5em;
 }
 .small {
 	font-size: var(--font-small);
@@ -267,6 +273,7 @@ label
 	display: inline-block;
 	padding-right: 1ch;
 	cursor: inherit;
+	text-transform: lowercase;
 }
 label::after {
 	font-weight: normal;
@@ -350,17 +357,14 @@ td:nth-child(1) {
 	display: block;
 	white-space: nowrap;
 }
-.chat-whole-box {
-	font-size: var(--font-small);
-}
 .chat-text
 {
 	overflow: auto;
 	border: none;
-	height: calc(100% - 2em - (var(--border-thin)));
+	height: calc(var(--inner-below-menu-height) - 8em);
 }
 .chat-input-text {
-	height: 1em;
+	height: 3em;
 	background: var(--color-sublow);
 	resize: none;
 	padding: 0px;
@@ -369,17 +373,36 @@ td:nth-child(1) {
 	box-shadow: inset 0px 8px 64px #77777719;
 	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
 }
-/* blinker is not in use and is crappy */
+/* blinker is kindda crappy */
 .blinker {
 	animation: text-blinker 0.618s step-end infinite;
+	height: 24px;
+	position: relative;
 }
+.slow-blinker {
+	animation: text-blinker 3.18s step-end infinite;
+	height: 24px;
+	position: relative;
+}
+.font-distorter {
+	animation: text-sizer 2.618s step-end infinite;
+}
+/* This is not working :( */
 @keyframes text-blinker {
-  0%	{ content-visibility: hidden; font-size: 0px; }
-  8%	{ content-visibility: visible; font-size: inherit; }
-  35%	{ content-visibility: hidden; font-size: 0px; }
-  42%	{ content-visibility: visible; font-size: inherit; }
-  60%	{ content-visibility: hidden; font-size: 0px; }
-  72%	{ content-visibility: visible; font-size: inherit; }
+  0%	{ visibility: hidden; }
+  4%	{ visibility: visible; }
+  35%	{ visibility: hidden; }
+  39%	{ visibility: visible; }
+  60%	{ visibility: hidden; }
+  68%	{ visibility: visible; }
+}
+@keyframes text-sizer {
+  0%	{ font-size: 100%; }
+  30%	{ font-size: 97%; }
+  35%	{ font-size: 102%; }
+  58%	{ font-size: 104%; }
+  60%	{ font-size: 94%; }
+  93%	{ font-size: 101%; }
 }
 /**/
 *::placeholder {
@@ -394,18 +417,17 @@ td:nth-child(1) {
 	animation: none;
 }
 .chat-input-box {
-	height: 1em;
-    position: absolute;
-    bottom: 0;
-	left: 0;
-	right: 0;
-	padding-right: 4em;
-	filter: drop-shadow(0px 16px 128px #aaaaaaaa);
+	height: 3em;
+	width: calc(var(--inner-width) - 2em);
+    position: fixed;
+	top: calc(var(--inner-below-menu-height) - 2em);
+	filter: drop-shadow(0px 16px 128px #aaaaaaff);
 	border-top: var(--border-thin);
+	padding: var(--font-medium);
 }
 .window-title {
-	font-variant-caps: all-petite-caps;
-	padding: 0px 0px 4px 12px;
+	font-variant-caps: all-caps;
+	padding: var(--font-medium);
 	margin: 0;
 	font-size: var(--font-large);
 	background: var(--color-shadow);
@@ -438,17 +460,16 @@ td:nth-child(1) {
 .main-menu-big {
 }
 .main-screen table {
-	border-spacing: 50px;
+	border-spacing: 30px;
 }
 .main-screen {
-	zoom: 150%;
+	zoom: 125%;
     display: flex;
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
 }
 .main-screen * {
-	margin: 0.5em;
 }
 .window-close {
 	width: 16px;
@@ -457,10 +478,10 @@ td:nth-child(1) {
 	background-position: center;
 	background-image:url('/assets/x.png');
 	opacity: .7;
-	padding: 0;
-	position: absolute;
-	top: 0;
-	right: 0;
+	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0 1em 0 0;
 }
 .window-menu-burger {
 	width: 16px;
@@ -469,23 +490,22 @@ td:nth-child(1) {
 	background-position: center;
 	background-image:url('/assets/burger.png');
 	padding: 0;
-	position: absolute;
-	top: 0px;
-	right: 16px;
+	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0 1em 0 0;
 }
 .window-options {
-	font-size: var(--font-small);
-	position: absolute;
-	top: 22px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
 	background: var(--color-sublow-transp);
 	z-index: 200;
     display: flex;
     justify-content: center;
     align-items: center;
 	flex-direction: column;
+	height: calc(var(--inner-below-menu-height) - 3em);
+	width: calc(var(--inner-width));
+	position:absolute;
+	overflow: auto;
 }
 .options
 {

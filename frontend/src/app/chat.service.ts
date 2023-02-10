@@ -1,4 +1,3 @@
-// This could be better called simple ChatService.
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ChatMessage } from './chat-message';
@@ -27,10 +26,6 @@ export class ChatMessageService {
 		this.chatMessage = [];
 	}
 
-	ngOnInit(): void {
-
-	}
-
 	mockChat(): void {
 		const self = this;
 		let n: ReturnType<typeof setTimeout>;
@@ -41,12 +36,30 @@ export class ChatMessageService {
 	}
 
 	getChatRoom(): Observable<ChatRoom> {
+		// TODO: Get ID from query/cookie.
+		// if (id is empty) return a NEW chat Room, with:
+		//		ChatRoom
+		// 		{
+		// 		 	id: string, // New unique-id.
+		// 		 	name: string, // Some random name like "User's Room".
+		// 		 	user: User[], // Array with current user on.
+		// 		 	admin: User[], // Array with current user on.
+		// 		 	history: ChatMessage[], // Empty.
+		// 		 	password: string, // Empty.
+		// 		 	isPrivate: boolean // True.
+		// 		}
+		// else (there is and id) subscribe to the the Observable.
 		const chatRoom = CHAT_ROOM[0];
 		return of(chatRoom);
 	}
 	getInChatUsers(): Observable<User[]> {
 		// TODO: it facilitates (always?) for the loggedUser to be in first position,
 		// then the administrators, then eveyone else.
+		const inChat = CHAT_ROOM[0].user;
+		return of(inChat);
+	}
+	getOutOfChatUsers(): Observable<User[]> {
+		// TODO: Everyone from userService.getOnlineUsers() minus who is already in.
 		const inChat = CHAT_ROOM[0].user;
 		return of(inChat);
 	}

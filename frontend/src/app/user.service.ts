@@ -20,9 +20,6 @@ export class UserService {
 		this.loggedUser = USERS[Math.floor(Math.random() * USERS.length)];
 	}
 
-	ngOnInit() {
-	}
-
 	getOnlineUsers(): Observable<User[]> {
 //		const users = USERS;
 //		return of(users);
