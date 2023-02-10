@@ -7,7 +7,7 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { AuthService } from '../service/auth.service';
 
 @Injectable({
@@ -51,7 +51,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         const isAuthenticated =
           value &&
           (!value.mfa.enabled || (value.mfa.enabled && value.mfa.verified));
-
+        console.log(`is authenticated: ${isAuthenticated}`);
         const goingToLoggingPage = state.url.includes('/login');
 
         if (!isAuthenticated && !goingToLoggingPage)

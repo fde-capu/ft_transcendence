@@ -39,6 +39,7 @@ const routes: Routes = [
   },
   {
     path: 'avatar',
+    canActivate: [AuthGuard],
     component: AvatarComponent,
   },
   {

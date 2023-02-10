@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { tap } from 'rxjs';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 
 @Component({
@@ -18,26 +19,25 @@ export class LoginComponent {
 
   message?: string;
 
-  constructor(private readonly authService: AuthService) {
-    this.authService
-      .getAuthContext()
-      .pipe(tap(e => console.log(e)))
-      .subscribe({
-        next: ctx => {
-          if (ctx) {
-            this.isAuthenticated = true;
-            this.challengeEnabled = ctx.mfa.enabled;
-          }
-        },
-      });
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {
+    this.authService.getAuthContext().subscribe({
+      next: ctx => {
+        this.isAuthenticated = !!ctx;
+        this.challengeEnabled = ctx?.mfa.enabled || false;
+        if (ctx?.mfa.verified) this.router.navigate(['/']);
+      },
+    });
   }
 
   signIn() {
     this.authService.signIn();
   }
 
-  solveChallenge(token: string) {
-    this.authService.solveChallenge(token).subscribe({
+  solveChallenge(form: NgForm) {
+    this.authService.solveChallenge(form.value.code).subscribe({
       next: () => {
         this.message = 'Nicely done!';
       },
@@ -45,5 +45,9 @@ export class LoginComponent {
         this.message = 'Yikes! Wrong code, bud!';
       },
     });
+  }
+
+  signOut() {
+    this.authService.signOut();
   }
 }

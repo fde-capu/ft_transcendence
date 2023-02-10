@@ -3,7 +3,10 @@
   <qrcode [qrdata]="challengeUri" [width]="256"></qrcode>
 </section>
 <section *ngIf="challengeEnabled">
-  <input #token type="text" name="code" placeholder="MFA Code"/>
-  <button type="submit" (click)="solveChallenge(token.value)">Send</button>
+  <form #challenge="ngForm" (ngSubmit)="solveChallenge(challenge)">
+    <input type="text" name="code" placeholder="MFA Code" autofocus required ngModel/>
+    <button type="submit">Send</button>
+  </form>
+  <button (click)="signOut()">Sign Out</button>
+  <p *ngIf="message">{{message}}</p>
 </section>
-<p *ngIf="message">{{message}}</p>
