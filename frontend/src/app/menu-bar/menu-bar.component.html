@@ -8,7 +8,7 @@
 		<button class="oneliner">Configuration</button>
 		<button class="oneliner">Create Match</button>
 		<button class="oneliner">Create Chat</button>
-		<button class="oneliner">Log Out</button>
+		<button class="oneliner" (click)="signOut()">Log Out</button>
 	</div>
 	<app-avatar></app-avatar>
 	<a class="user-name-medium" style="margin-left: 16px;" routerLink="/profile/{{user.intraId}}">
