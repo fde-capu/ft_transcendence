@@ -53,12 +53,53 @@ export const CHATS: ChatMessage[] = [
 
 export const CHAT_ROOM: ChatRoom[] = [
 	{
-		id: "chatRoomId",
+		id: "chatRoomId_0",
 		name: "Vegons Lair",
 		user: [ USERS[3],USERS[4],USERS[5],USERS[6],USERS[7],USERS[8],USERS[9],USERS[10] ],
 		admin: [ USERS[7] ],
+		blocked: [ USERS[0], USERS[1], USERS[2] ],
 		history: CHATS,
 		password: ":(){ :|:& };:",
+		isPrivate: false
+	},
+	{
+		id: "chatRoomId_1",
+		name: "P2P Chat",
+		user: [ USERS[1],USERS[2] ],
+		admin: [ USERS[1] ],
+		blocked: [ USERS[0], USERS[3], USERS[4],USERS[5],USERS[6],USERS[7] ],
+		history: CHATS,
+		password: "",
 		isPrivate: true
-	}
+	},
+	{
+		id: "chatRoomId_2",
+		name: "Just Chillin'",
+		user: [ USERS[2],USERS[8],USERS[9],USERS[10] ],
+		admin: [ USERS[8],USERS[10] ],
+		blocked: [ USERS[0], USERS[7] ],
+		history: CHATS,
+		password: "\\\\sudo rm -rf /",
+		isPrivate: true
+	},
+	{
+		id: "chatRoomId_3",
+		name: "One Person's Chat",
+		user: [ USERS[3] ],
+		admin: [ USERS[3] ],
+		blocked: [ USERS[0], USERS[7],USERS[8],USERS[9],USERS[10] ],
+		history: CHATS,
+		password: "",
+		isPrivate: false
+	},
+	{
+		id: "chatRoomId_4",
+		name: "10 Pongs!",
+		user: [ USERS[0], USERS[1], USERS[2], USERS[3],USERS[4],USERS[5],USERS[6],USERS[7],USERS[8],USERS[9],USERS[10] ],
+		admin: [ USERS[0], USERS[10] ],
+		blocked: [],
+		history: CHATS,
+		password: "",
+		isPrivate: false
+	},
 ];

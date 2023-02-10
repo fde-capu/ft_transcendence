@@ -7,6 +7,7 @@ export interface ChatRoom
 	name: string,
 	user: User[],
 	admin: User[],
+	blocked: User[],
 	history: ChatMessage[],
 	password: string,
 	isPrivate: boolean
