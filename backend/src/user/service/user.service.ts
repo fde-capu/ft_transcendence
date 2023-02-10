@@ -1,6 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { map } from 'rxjs';
+import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
+import { UserFortyTwoApi } from 'src/forty-two/service/user';
+import { Repository } from 'typeorm';
+import { User } from '../entity/user.entity';
 
 export interface TokenDTO {
   access_token: string;
@@ -17,33 +23,33 @@ export interface MeDTO {
   displayname: string;
   image: { versions: { micro: string } };
 }
+export interface registerResp {
+  login: string;
+  mfa: { enabled: boolean, verified: boolean };
+}
+
+
 
 @Injectable()
 export class UserService {
   constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
-  ) {}
+    private readonly fortyTwoService: FortyTwoService,
 
-  async getToken(code: string): Promise<TokenDTO> {
-    const responseToken = await this.httpService.axiosRef.post<TokenDTO>(
-      'https://api.intra.42.fr/oauth/token',
-      {
-        grant_type: 'authorization_code',
-        client_id: this.configService.get<string>('API42_CLIENT_ID'),
-        client_secret: this.configService.get<string>('API42_CLIENT_SECRET'),
-        redirect_uri: 'http://localhost:3000/user/register',
-        code,
-      },
-    );
-    return responseToken.data;
+  ) { }
+
+  async registerUser(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
+    const existUser = await this.userRepository.findOneBy({ login: codeFrom42.login });
+    if (existUser === null)
+      await this.userRepository.insert({ login: codeFrom42.login, email: codeFrom42.email });
+    return ({ login: codeFrom42.login, mfa: { enabled: true, verified: false } });
   }
-
-  async getMe({ access_token }: TokenDTO): Promise<MeDTO> {
-    const response = await this.httpService.axiosRef.get<MeDTO>(
-      'https://api.intra.42.fr/v2/me',
-      { headers: { Authorization: `Bearer ${access_token}` } },
-    );
-    return response.data;
+  
+  async getUserByLogin(login: string) {
+    const resp = await this.userRepository.findOneBy({ login });
+    if (resp === null)
+      throw new NotFoundException();
+    return resp;
   }
 }
