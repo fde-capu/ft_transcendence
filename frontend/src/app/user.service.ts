@@ -2,9 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import {
-  Subject
-} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { User } from './user';
 import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
@@ -16,7 +14,7 @@ import { TokenInfoResponse } from './token-info-response';
   providedIn: 'root'
 })
 export class UserService {
-	loggedUser = new Subject();
+	loggedUser = new BehaviorSubject<User | undefined>({} as User);
 	authContext!: TokenInfoResponse | undefined;
 	private usersUrl = 'http://localhost:3000/user';
 
@@ -40,6 +38,7 @@ export class UserService {
 	}
 
 	getLoggedUser(): Observable<User> {
+		//console.log("getLoggedUser() run.", this.loggedUser);
 		return this.loggedUser.asObservable() as Observable<User>;
 	}
 
