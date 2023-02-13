@@ -16,10 +16,10 @@ export class ProfileComponent {
 		private route: ActivatedRoute,
 	) {};
 
-	user: User = {} as User;
+	loggedUser: User | undefined = undefined;
+	user: User | undefined = undefined;
 	owner: Boolean = false;
 	profileType: string = "USER";
-	id: string | undefined = undefined;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -28,35 +28,33 @@ export class ProfileComponent {
 	getUser(): void {
 		//console.log("Getting user");
 		this.route.params.subscribe((params: Params) => {
-			this.id = params['intraId'];
-			//console.log("Got info from route.params.", this.id);
-			if (this.id) {
+			const id = params['intraId'];
+			//console.log("Got info from route.params.", id, id != undefined);
+			if (id != undefined) {
 				// TODO: Reject /profile/unexistent-user
-				//console.log("You asked for", this.id);
-				this.userService.getUserById(this.id)
-					.subscribe(user => this.user = user);
-				let ownership: User = {} as User;
-				this.userService.getLoggedUser()
-					.subscribe(user => { ownership = user });
-				this.user = !this.user ? ownership : this.user;
-				this.owner = ownership === this.user;
-				this.profileType = (this.owner ? "YOUR" :
-					this.isFriend() ? "FRIEND" : "USER");
+				//console.log("You asked for", id);
+				this.userService.getUserById(id)
+					.subscribe(user => {
+						//console.log("Seting to ", user);
+						this.user = user ? user : undefined;
+						this.setOwnership();
+					});
 			}
 		});
 		this.userService.getLoggedUser().subscribe(user => {
-			//console.log("Got signal from getLoggedUser(). this.id = ", this.id);
-			if (!this.id)
-			{
-				//console.log("!this.id", !this.id);
-				this.user = user;
-			}
+			//console.log("Got signal from getLoggedUser(): ", user.intraId);
+			this.loggedUser = user;
+			this.setOwnership();
 		});
-//		this.userService.getLoggedUser().subscribe(user => {
-//			console.log("Signal from getLoggedUser()");
-//			this.user = user;
-//		});
 	}
+	setOwnership() {
+		//console.log("setOwnership; logged, called:", this.loggedUser, this.user);
+		this.owner = !this.user || this.loggedUser?.intraId === this.user.intraId && (!!this.user || !!this.loggedUser);
+		this.user = this.user ? this.user : this.loggedUser;
+		//console.log("This owner", this.owner);
+		this.profileType = (this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER");
+	}
+
 	onClose() {
 		alert('Closes this profile.');
 	}

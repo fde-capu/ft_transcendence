@@ -1,5 +1,5 @@
 <h2>{{ profileType }} Profile</h2>
-<table>
+<table *ngIf="user">
 	<tr *ngIf="owner; else name_simple">
 		<td>
 			<label>name</label>

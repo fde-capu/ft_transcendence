@@ -22,16 +22,12 @@ export class UserService {
 		private http: HttpClient,
 		private readonly authService: AuthService
 	) {
-		// TODO: implement backport to get next object from backed.
+		// TODO: implement backport to get next object from backed (unmock).
 		this.authService.getAuthContext().subscribe(
 			ctx => {
 				this.authContext = ctx;
 				this.loggedUser.next( this.authContext?.sub ?
-					{
-						intraId: this.authContext.sub,
-						name: "name?",
-						image: "image?"
-					} : undefined
+					USERS[11] : undefined
 				);
 			}
 		);
@@ -76,7 +72,7 @@ export class UserService {
 		);
 	}
 
-	isFriend(user: User): Boolean {
+	isFriend(user: User | undefined): Boolean {
 		return Math.random() > .6;
 	}
 
