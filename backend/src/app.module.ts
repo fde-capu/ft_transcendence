@@ -6,8 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
 import { FortyTwoModule } from './forty-two/forty-two.module';
 import { PingController } from './ping/ping.controller';
-import { RegisterController } from './user/controller/registred.controller';
 import { User } from './user/entity/user.entity';
+import { UserService } from './user/service/user.service';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -32,8 +32,9 @@ import { UserModule } from './user/user.module';
     AuthModule,
     FortyTwoModule,
   ],
-  controllers: [RegisterController, PingController],
-  providers: [],
+  controllers: [PingController],
+  providers: [
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
