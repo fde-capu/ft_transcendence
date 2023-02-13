@@ -1,9 +1,5 @@
-import { HttpService } from '@nestjs/axios';
-import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { map } from 'rxjs';
-import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
@@ -34,9 +30,6 @@ export interface registerResp {
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private readonly httpService: HttpService,
-    private readonly fortyTwoService: FortyTwoService,
-
   ) { }
 
   async registerUser(codeFrom42: UserFortyTwoApi): Promise<registerResp> {

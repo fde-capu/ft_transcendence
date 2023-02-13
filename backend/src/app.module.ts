@@ -2,8 +2,8 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entity/user.entity';
+import { UserService } from './user/service/user.service';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -21,9 +21,19 @@ import { UserModule } from './user/user.module';
         synchronize: true,
       }),
       inject: [ConfigService],
+<<<<<<< HEAD
     }),],
   controllers: [PingController],
   providers: [],
+=======
+    }),
+    AuthModule,
+    FortyTwoModule,
+  ],
+  controllers: [PingController],
+  providers: [
+  ],
+>>>>>>> ea25fd6 (fix imports of auth module)
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
