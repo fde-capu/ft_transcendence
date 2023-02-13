@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { User } from '../user';
+import { AuthService } from 'src/app/auth/service/auth.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -7,6 +7,11 @@ import { User } from '../user';
   styleUrls: ['./main-menu.component.css']
 })
 export class MainMenuComponent {
-	@Input() user: User = {} as User;
 	@Input() big: Boolean = false;
+	constructor(
+		private readonly authService: AuthService
+	) {};
+	signOut() {
+		this.authService.signOut();
+	}
 }

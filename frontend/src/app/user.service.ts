@@ -2,42 +2,62 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import {
+  Subject
+} from 'rxjs';
 import { User } from './user';
 import { USERS } from './mocks';
+import { AuthService } from './auth/service/auth.service';
+import { TokenInfoResponse } from './token-info-response';
 
-// TODO: all is mocked. Unmock them!
+// TODO: Check if its all unmocked. If so, remove `import { USERS } ...` above.
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-	loggedUser!: User;
+	loggedUser = new Subject();
+	authContext!: TokenInfoResponse | undefined;
 	private usersUrl = 'http://localhost:3000/user';
 
 	constructor(
-		private http: HttpClient
+		private http: HttpClient,
+		private readonly authService: AuthService
 	) {
-		this.loggedUser = USERS[Math.floor(Math.random() * USERS.length)];
+		// TODO: implement backport to get next object from backed.
+		this.authService.getAuthContext().subscribe(
+			ctx => {
+				this.authContext = ctx;
+				this.loggedUser.next(
+					{
+						intraId: this.authContext?.sub ? this.authContext.sub : "intraId?",
+						name: "name?",
+						image: "image?"
+					}
+				);
+			}
+		);
+	}
+
+	getLoggedUser(): Observable<User> {
+		return this.loggedUser.asObservable() as Observable<User>;
 	}
 
 	getOnlineUsers(): Observable<User[]> {
-//		const users = USERS;
-//		return of(users);
-		return this.http.get<User[]>(this.usersUrl)
-			.pipe(
-				tap(_ => console.log(_)),
-				catchError(this.handleError<User[]>('getOnlineUsers', []))
-			);
+		const users = USERS;
+		return of(users);
+//		CURRENTLY BROKEN (study code):
+//		return this.http.get<User[]>(this.usersUrl)
+//			.pipe(
+//				tap(_ => console.log(_)),
+//				catchError(this.handleError<User[]>('getOnlineUsers', []))
+//			);
 	}
 
 	getAvailableUsers(): Observable<User[]> {
 		// Must return users online, not playing, and not logged user.
 		const users = USERS;
 		return of(users);
-	}
-
-	getLoggedUser(): Observable<User> {
-		return of(this.loggedUser);
 	}
 
 	getUserById(intraId: string | null): Observable<User> {
