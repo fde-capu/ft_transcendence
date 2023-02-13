@@ -10,7 +10,7 @@ import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
 
-// TODO: Check if its all unmocked. If so, remove `import { USERS } ...` above.
+// TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +28,12 @@ export class UserService {
 		this.authService.getAuthContext().subscribe(
 			ctx => {
 				this.authContext = ctx;
-				this.loggedUser.next(
+				this.loggedUser.next( this.authContext?.sub ?
 					{
-						intraId: this.authContext?.sub ? this.authContext.sub : "intraId?",
+						intraId: this.authContext.sub,
 						name: "name?",
 						image: "image?"
-					}
+					} : undefined
 				);
 			}
 		);
