@@ -71,7 +71,7 @@ export class AuthService {
           this.tokenService.sign({
             sub: r.login,
             exp: Math.floor(Date.now() / this.thousand) + expiresIn,
-            mfa: r.mfa,
+            mfa: {enable: r.mfa_enable, verified: r.mfa_verified},
             fortyTwo,
           }),
         ),

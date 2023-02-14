@@ -2,8 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
-import { User } from './user/entity/user.entity';
-import { UserService } from './user/service/user.service';
+import { Users } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -17,7 +16,7 @@ import { UserModule } from './user/user.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User],
+        entities: [Users],
         synchronize: true,
       }),
       inject: [ConfigService],
