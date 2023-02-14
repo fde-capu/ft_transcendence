@@ -51,7 +51,7 @@ export class UserService {
     }
     await this.updateUser(codeFrom42.login, { mfa_enable: true,  mfa_verified: false });
     //se os mfa forem sempre atualizados no banco de dados, poderiamos retornar oq recebemos do mesmo, na variavel 'existUser'
-    return ({ login: codeFrom42.login, mfa_enable: true,  mfa_verified: false }); 
+    return ({ login: existUser.login, mfa_enable: true,  mfa_verified: false }); 
   }
   
   async updateUser(login: string, user: Users){
