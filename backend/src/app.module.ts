@@ -6,8 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
 import { FortyTwoModule } from './forty-two/forty-two.module';
 import { PingController } from './ping/ping.controller';
-import { User } from './user/entity/user.entity';
-import { UserService } from './user/service/user.service';
+import { Users } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -24,7 +23,7 @@ import { UserModule } from './user/user.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User],
+        entities: [Users],
         synchronize: true,
       }),
       inject: [ConfigService],
