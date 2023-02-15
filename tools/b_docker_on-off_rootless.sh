@@ -14,4 +14,5 @@ if [ "$OLD_CONTEXT" = "rootless" ] ; then
 else
 	docker context use rootless;
 	systemctl --user start docker;
+	docker context use rootless; # Yes, redundant; I've read is needed..?
 fi;
