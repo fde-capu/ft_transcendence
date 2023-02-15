@@ -1,21 +1,8 @@
 #!/bin/sh
 
-ask()
-{
-	echo -n "$1 [y/N] ";
-	read answer;
-	[ "$answer" != "${answer#[Yy]}" ] && return 0;
-	return 1;
-}
-
-do_docker_stop()
-{
-	systemctl --user stop docker 2> /dev/null;
-	sudo systemctl stop docker.service 2> /dev/null;
-	systemctl --user daemon-reload 2> /dev/null;
-	sudo systemctl disable --now docker.service docker.socket;
-	return 0;
-}
+MYSELF="$(realpath "$0")";
+MYDIR="${MYSELF%/*}";
+. $MYDIR/z_helper_functions.sh --source-only
 
 	[ "$(docker ps -aq)" != "" ] && \
 		ask "Clean docker containers?" && \
@@ -34,13 +21,9 @@ do_docker_stop()
 	ask "Do apt upgrade (system wide)?" && sudo apt upgrade && \
 		ask "Do apt autoremove?" && sudo apt autoremove;
 
-	ask "Reinstall npm?" && sudo apt install -y npm;
-	ask "Install npm-n? Usefull to get latest stable." && sudo npm install -g n;
-	ask "Run n stable? Sets npm version." && sudo n stable;
-	ask "Install latest npm?" && sudo npm install -g npm@latest;
-	ask "Install nestjs/cli@latest?" && sudo npm install -g @nestjs/cli@latest;
+	ask "Run npm check for latest stable?" && $MYDIR/npm_check.sh
 
-	ask "Reset ft_transcendence project database?" && sudo rm -rf vol_database;
+	ask "Reset ft_transcendence project database?" && $MYDIR/c_dataclean.sh;
 
 	if ask "Install dependencies for rootless docker?" ; then
 
@@ -57,13 +40,14 @@ do_docker_stop()
 		[ "$subgid" -lt "65536" ] && echo "Subordinate gid $subgid fail." && exit 2;
 # Needed by rootless:
 		ask "Install/check dbus-user-session? (Needed by rootless)" && sudo apt install -y dbus-user-session;
-		ask "Install/check fuse-overlayfs? (Recomended by rootless)" && sudo apt install -y fuse-overlayfs; # recomended
+# TODO? Run docker with overlay2 instead (recomended/supported by Docker EE, by current Docker official documentation):
+		ask "Install/check fuse-overlayfs? (Recomended by rootless)" && sudo apt install -y fuse-overlayfs; # recomended to use some overlay fs.
 # Rootless docker requires version of slirp4netns greater than v0.4.0 \
 # (when vpnkit is not installed). Check you have this with
 #	slirp4netns --version
 # If you do not have this download and install with \
 #	sudo apt install -y slirp4netns
-# Script to check about this:
+# Script to do whats described above:
 		vp1=`slirp4netns --version | awk '{print $3}' | awk -F "." '{print $1}'`;
 		vp2=`slirp4netns --version | awk '{print $3}' | awk -F "." '{print $2}'`;
 		[ "$vp1" -gt "0" ] && need_install="false" ||

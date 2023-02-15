@@ -19,18 +19,22 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@golevelup/ts-jest": "^0.3.4",
     "@nestjs/axios": "^1.0.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/typeorm": "^9.0.1",
     "cookie-parser": "^1.4.6",
+    "pg": "^8.8.0",
     "helmet": "^6.0.1",
     "jose": "^4.11.2",
     "otplib": "^12.0.1",
     "ps": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "typeorm": "^0.3.11",
     "yargs-parser": "^21.1.1"
   },
   "devDependencies": {
