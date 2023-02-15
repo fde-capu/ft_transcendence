@@ -9,7 +9,7 @@ import { USERS } from '../mocks';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-	@Input() user: User = {} as User;
+	@Input() user: User | undefined = undefined;
 	ANOTHERUSERMOCK: User = USERS[7];
 
 	constructor (

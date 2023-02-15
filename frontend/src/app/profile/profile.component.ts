@@ -76,4 +76,3 @@ export class ProfileComponent {
 //   :: I gess "in game" info doesn't need friendship.
 
 // - Implement user score.
-
