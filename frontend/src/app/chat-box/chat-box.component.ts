@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ChatRoom } from '../chat-room';
-import { ChatMessageService } from '../chat-message.service';
+import { ChatMessageService } from '../chat.service';
+import { UserService } from '../user.service';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
 
@@ -12,28 +13,52 @@ import { User } from '../user';
 export class ChatBoxComponent {
 	constructor (
 		public chatMessageService: ChatMessageService,
+		public userService: UserService,
 		public fun: HelperFunctionsService
 	) {}
-	chatRoomOn = true;
+	chatRoomOn = true; // After last merge, is this in user?
 	chatRoom: ChatRoom = {} as ChatRoom;
 	windowTitle = "CHAT";
 	windowName = "";
 	windowExtras = "";
-	optionsOn = false;
-	usersOn: User[] = [];
-	@Input() user?: User;
+	optionsOn = true; // Initialize to true only if is querystrin
+	usersOnChat: User[] = []; // Everyone that is logged on the room.
+	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
+	done: Boolean = false;
+	@Input() user: User = {} as User;
 
 	ngOnInit() {
+		// TODO: Check for querystring empty: it means its a new creation.
+		// In this case (empty query):
+		//		Async await call to endpoint requiring new room.
+		//		...when its done, redirect to "/chat/chatId?optionsOn=true".
+		// If there is a query, continue:
+		this.done = true;
+		this.userService.getLoggedUser().subscribe(
+			user => { this.user = user; }
+		);
 		this.chatMessageService.getChatRoom().subscribe(
-			chatRoom => this.chatRoom = chatRoom
+			chatRoom => {
+				this.chatRoom = chatRoom;
+				this.imprint();
+			}
 		);
 		this.chatMessageService.getInChatUsers().subscribe(
-			inChat => this.usersOn = inChat
+			inChat => {
+				this.usersOnChat = inChat;
+				this.imprint();
+			}
 		);
-		this.imprintInfo();
+		this.chatMessageService.getOutOfChatUsers().subscribe(
+			outChat => {
+				this.usersOutOfChat = outChat;
+				this.imprint();
+			}
+		);
+		this.imprint();
 	}
 
-	imprintInfo() {
+	imprint() {
 		this.windowName = this.windowTitle + ": " + this.chatRoom.name;
 		this.windowExtras = ""
 		+ (this.chatRoom.isPrivate ? "PRIVATE" : "PUBLIC")
@@ -45,7 +70,6 @@ export class ChatBoxComponent {
 		if (this.optionsOn)
 		{
 			return this.onMenu();
-
 		}
 		alert (`
 			// TODO: User exits Chat Room, the window closes.
@@ -53,29 +77,25 @@ export class ChatBoxComponent {
 		`);
 	}
 
-	menuFor(user: User)
-	{
-		alert(user.name);
-	}
-
 	onMenu() {
-		this.optionsOn = this.optionsOn ? false : true;
+		this.optionsOn = !this.optionsOn;
 	}
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
-		this.imprintInfo();
+		this.imprint();
 	}
 
 	cleanPassword() {
 		this.chatRoom.password = "";
-		this.imprintInfo();
+		this.imprint();
 	}
 
-	isAdmin(user: User): boolean {
+	isAdmin(user: User = this.user): boolean {
 		for (const admin of this.chatRoom.admin)
 			if (admin == user)
 				return true;
+		return user == this.user; // TODO: Remove this line, it's a mock so user is always admin.
 		return false;
 	}
 

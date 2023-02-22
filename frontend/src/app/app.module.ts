@@ -17,6 +17,7 @@ import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { ChatInputComponent } from './chat-input/chat-input.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { WindowTitleComponent } from './window-title/window-title.component';
+import { MainMenuComponent } from './main-menu/main-menu.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { WindowTitleComponent } from './window-title/window-title.component';
     ChatInputComponent,
     ChatBoxComponent,
     WindowTitleComponent,
+	MainMenuComponent,
   ],
   imports: [
     BrowserModule,

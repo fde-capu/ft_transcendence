@@ -23,7 +23,6 @@ export class MenuBarComponent {
 		this.userService.getLoggedUser()
 			.subscribe(user => this.user = user);
 	}
-
 	onClickBurger(): void {
 		this.menuOpen = !this.menuOpen;
 	}

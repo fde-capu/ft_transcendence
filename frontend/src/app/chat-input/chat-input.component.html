@@ -1,4 +1,4 @@
-<div class="chat-input-box oneliner" id="chatBox">
+<div class="chat-input-box" id="chatBox">
   <textarea class="chat-input-text" placeholder=" <- Type here."
 	(keydown.enter)="send($event)"
 	[(ngModel)]="message"
@@ -8,7 +8,4 @@
 	type="button" (click)="send($event);"
 	style="position: absolute; right: 0; bottom: 0"
   >Enter</button>
-<!-- Many will not be used here:
-  <button type="button" (click)="chatMessageService.clear()">Clear Chat</button>
--->
 </div>

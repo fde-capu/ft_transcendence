@@ -1,5 +1,5 @@
 /* TODO: Solve for many resolutions */
-
+/* TODO: (BUG) check visuals deformed when using DarkReader Chrome extension. If we care. */
 :root {
 	cursor:url("assets/cursor.png") 8 8, cell;
 	--color-high:#eee;
@@ -18,20 +18,48 @@
 
 	--body-margin: 40px;
 	--body-border-width: 8px;
-	--box-padding-horizontal: 104px;
-	--box-padding-vertical: 104px;
+	--inner-padding-vertical: 3em;
+	--inner-padding-horizontal: 1em;
 	--border-thin: 4px solid var(--color-border);
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
+	--font-x-large: 32px;
 	--font-large: 28px;
 	--font-medium: 24px;
 	--font-small: 20px;
 
-	/* Styles based of paramteres above: */
+	/* Styles based of paramteres above (no need to touch?): */
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
-	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))));
+	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))) - (2 * var(--inner-padding-horizontal)));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
+	--inner-below-menu-height: calc(var(--inner-height) - 3em);
+	--app-window-width: calc((var(--inner-width) / var(--boxes-horizontal-fit)) - (2 * var(--border-thin)) - 1em);
+}
+@media (max-width: 900px) {
+	:root {
+		--boxes-horizontal-fit: 1;
+	}
+}
+@media (min-width: 901px) and (max-width: 1500px) {
+	:root {
+		--boxes-horizontal-fit: 2;
+	}
+}
+@media (min-width: 1501px) and (max-width: 2000px) {
+	:root {
+		--boxes-horizontal-fit: 3;
+	}
+}
+@media (min-width: 2001px) and (max-width: 2800px) {
+	:root {
+		--boxes-horizontal-fit: 4;
+	}
+}
+@media (min-width: 2801px) {
+	:root {
+		--boxes-horizontal-fit: 5;
+	}
 }
 body
 {
@@ -54,14 +82,57 @@ body
 		;
 	color-interpolation-filters: srgb;
 	height: calc(100vh - (6.4 * (var(--margin-plus-border))));
-	word-break: break-all;
+	word-break: break-word;
+}
+.outter-box
+{
+	width: var(--inner-width);
+	height: var(--inner-height);
+	overflow: overlay;
+	margin: var(--body-margin);
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: var(--inner-padding-horizontal);
+	padding-right: var(--inner-padding-horizontal);
+	border: var(--body-border-width) solid var(--color-border);
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.inner-box
+{
+	text-align: center;
+	min-width: 448px;
+}
+.inner-box * {
+	text-align: initial;
+}
+.window {
+	width: var(--app-window-width);
+	margin-right: 1rem;
+	margin-bottom: 1rem;
+	height: 511px;
+	overflow: auto;
+	position: relative;
+	font-size: var(--font-medium);
+	display: inline-block;
+}
+.window-full {
+	margin: 0;
+	min-height: 511px;
+	min-width: 511px;
+	font-size: var(--font-medium);
+	height: var(--inner-below-menu-height);
+	width: var(--inner-width);
 }
 pre {
-	font-size: 40%;
+	font-size: var(--font-small);
 }
 h1 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
+	display: inline-block;
+	width: var(--inner-width);
 }
 h2 {
 	font-variant-caps: all-petite-caps;
@@ -110,14 +181,14 @@ a:hover, .hover_invert:hover {
 .user-name-medium {
 	min-width: max-content;
 	padding: 2px 10px;
-	font-size: 100%;
 }
 .user-name-small {
 	font-size: var(--font-small);
 	min-width: max-content;
+	padding: 0px 0.5em;
 }
 .small {
-	font-size: 66.66%;
+	font-size: var(--font-small);
 }
 .inline {
 	display: inline;
@@ -155,7 +226,7 @@ ul
 ul
 {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
 }
 li
 {
@@ -187,7 +258,7 @@ li
 hr {
 	border: 5px dashed var(--color-high);
 	width: 200px;
-	margin: 40px 0 10px 0;
+	margin: 1em 0;
 }
 .profile-image {
 	width: 128px;
@@ -202,6 +273,7 @@ label
 	display: inline-block;
 	padding-right: 1ch;
 	cursor: inherit;
+	text-transform: lowercase;
 }
 label::after {
 	font-weight: normal;
@@ -217,33 +289,13 @@ table > tr, table > td {
 td:nth-child(1) {
 	text-align: right;
 }
-.outter-box
-{
-	max-width: var(--inner-width);
-	max-height: calc(100vh - (2 * (var(--margin-plus-border))));
-	height: 100%;
-	overflow: overlay;
-
-	margin: var(--body-margin);
-	padding-top: 0;
-	padding-bottom: var(--box-padding-horizontal);
-	padding-left: var(--box-padding-vertical);
-	padding-right: var(--box-padding-vertical);
-	border: var(--body-border-width) solid var(--color-border);
-}
-/* Firefox */
-/* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-sublow) var(--color-sublow);
-} */
-/* Chrome, Edge and Safari */
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-track {
   border-radius: 0px;
-  background-color: var(--color-sublow);
+  background-color: transparent;
 }
 *::-webkit-scrollbar-thumb {
   border-radius: 0px;
@@ -290,33 +342,29 @@ td:nth-child(1) {
 	height: 64px;
 	padding: 0;
 	border-bottom: var(--border-thin);
-	position: relative;
+	position: relative; /* Fixed would also be good; for that, many other configuration is needed. This is a design choice. */
 	top: 0;
-	left: calc(-1 * var(--box-padding-horizontal));
-	width: calc(100% + (2 * var(--box-padding-horizontal)));
+	left: calc(-1 * var(--inner-padding-horizontal));
+	width: calc(100% + (2 * var(--inner-padding-horizontal)));
 	z-index: 2000;
 }
-.oneliner {
-	display: flex;
-	white-space: nowrap;
+.score-big {
+    font-size: var(--font-x-large);
+    position: absolute;
+    right: 2em;
 }
-.chat-whole-box {
-	border: var(--border-thin);
-	width: 512px;
-	height: 512px;
-	overflow: auto;
-	position: relative;
-	font-size: var(--font-small);
+.oneliner {
+	display: block;
+	white-space: nowrap;
 }
 .chat-text
 {
 	overflow: auto;
 	border: none;
-	width: 512px;
-	height: calc(100% - 44px);
+	height: calc(var(--inner-below-menu-height) - 8em);
 }
 .chat-input-text {
-	height: 1em;
+	height: 3em;
 	background: var(--color-sublow);
 	resize: none;
 	padding: 0px;
@@ -325,17 +373,36 @@ td:nth-child(1) {
 	box-shadow: inset 0px 8px 64px #77777719;
 	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
 }
-/* blinker is not in use and is crappy */
+/* blinker is kindda crappy */
 .blinker {
 	animation: text-blinker 0.618s step-end infinite;
+	height: 24px;
+	position: relative;
 }
+.slow-blinker {
+	animation: text-blinker 3.18s step-end infinite;
+	height: 24px;
+	position: relative;
+}
+.font-distorter {
+	animation: text-sizer 2.618s step-end infinite;
+}
+/* This is not working :( */
 @keyframes text-blinker {
-  0%	{ content-visibility: hidden; font-size: 0px; }
-  8%	{ content-visibility: visible; font-size: inherit; }
-  35%	{ content-visibility: hidden; font-size: 0px; }
-  42%	{ content-visibility: visible; font-size: inherit; }
-  60%	{ content-visibility: hidden; font-size: 0px; }
-  72%	{ content-visibility: visible; font-size: inherit; }
+  0%	{ visibility: hidden; }
+  4%	{ visibility: visible; }
+  35%	{ visibility: hidden; }
+  39%	{ visibility: visible; }
+  60%	{ visibility: hidden; }
+  68%	{ visibility: visible; }
+}
+@keyframes text-sizer {
+  0%	{ font-size: 100%; }
+  30%	{ font-size: 97%; }
+  35%	{ font-size: 102%; }
+  58%	{ font-size: 104%; }
+  60%	{ font-size: 94%; }
+  93%	{ font-size: 101%; }
 }
 /**/
 *::placeholder {
@@ -350,17 +417,17 @@ td:nth-child(1) {
 	animation: none;
 }
 .chat-input-box {
-	height: 1em;
-    position: absolute;
-    bottom: 0;
-	width: calc(512px - 4em);
-	padding-right: 4em;
-	filter: drop-shadow(0px 16px 128px #aaaaaaaa);
+	height: 3em;
+	width: calc(var(--inner-width) - 2em);
+    position: fixed;
+	top: calc(var(--inner-below-menu-height) - 2em);
+	filter: drop-shadow(0px 16px 128px #aaaaaaff);
 	border-top: var(--border-thin);
+	padding: var(--font-medium);
 }
 .window-title {
-	font-variant-caps: all-petite-caps;
-	padding: 0px 0px 4px 12px;
+	font-variant-caps: all-caps;
+	padding: var(--font-medium);
 	margin: 0;
 	font-size: var(--font-large);
 	background: var(--color-shadow);
@@ -390,6 +457,20 @@ td:nth-child(1) {
 	padding: 32px;
 	z-index: 100;
 }
+.main-menu-big {
+}
+.main-screen table {
+	border-spacing: 30px;
+}
+.main-screen {
+	zoom: 125%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.main-screen * {
+}
 .window-close {
 	width: 16px;
 	height: 16px;
@@ -397,10 +478,10 @@ td:nth-child(1) {
 	background-position: center;
 	background-image:url('/assets/x.png');
 	opacity: .7;
-	padding: 0;
-	position: absolute;
-	top: 0;
-	right: 0;
+	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0 1em 0 0;
 }
 .window-menu-burger {
 	width: 16px;
@@ -409,22 +490,22 @@ td:nth-child(1) {
 	background-position: center;
 	background-image:url('/assets/burger.png');
 	padding: 0;
-	position: absolute;
-	top: 0px;
-	right: 16px;
+	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0 1em 0 0;
 }
 .window-options {
-	position: absolute;
-	top: 22px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
 	background: var(--color-sublow-transp);
 	z-index: 200;
     display: flex;
     justify-content: center;
     align-items: center;
 	flex-direction: column;
+	height: calc(var(--inner-below-menu-height) - 3em);
+	width: calc(var(--inner-width));
+	position:absolute;
+	overflow: auto;
 }
 .options
 {
