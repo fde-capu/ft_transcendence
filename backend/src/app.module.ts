@@ -8,6 +8,10 @@ import { FortyTwoModule } from './forty-two/forty-two.module';
 import { PingController } from './ping/ping.controller';
 import { Users } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
+import { GameModule } from './game/game.module';
+# These two: unused?:
+import { RegisterController } from './user/controller/registred.controller';
+import { UserService } from './user/service/user.service';
 
 @Module({
   imports: [
@@ -30,6 +34,7 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     FortyTwoModule,
+    GameModule,
   ],
   controllers: [PingController],
   providers: [
