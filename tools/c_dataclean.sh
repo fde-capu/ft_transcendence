@@ -1,10 +1,14 @@
 #!/bin/sh
 
-sudo rm -rf ../database/data/
+MYSELF="$(realpath "$0")";
+MYDIR="${MYSELF%/*}";
+FTTDIR="$MYDIR/..";
 
-sudo rm -rf ../backend/dist
-sudo rm -rf ../backend/node_modules
+sudo rm -rf $FTTDIR/database/data/
 
-sudo rm -rf ../frontend/dist
-sudo rm -rf ../frontend/node_modules
-sudo rm -rf ../frontend/.angular
+sudo rm -rf $FTTDIR/backend/dist
+sudo rm -rf $FTTDIR/backend/node_modules
+
+sudo rm -rf $FTTDIR/frontend/dist
+sudo rm -rf $FTTDIR/frontend/node_modules
+sudo rm -rf $FTTDIR/frontend/.angular

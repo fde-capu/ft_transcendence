@@ -1,10 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { environment } from './../../../environments/environment';
 import {
   catchError,
+  firstValueFrom,
   map,
   Observable,
   ReplaySubject,
@@ -12,6 +12,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 
 export interface TokenInfoResponse {
   sub: string;
@@ -47,12 +48,6 @@ export class AuthService {
         next: res => this.authContext.next(res),
         error: () => this.authContext.next(undefined),
       });
-    this.authContext.subscribe({
-      next: ctx => {
-        if (ctx) this.router.navigate(['/']);
-        else this.router.navigate(['/login']);
-      },
-    });
   }
 
   public getAuthContext(): Observable<TokenInfoResponse | undefined> {
@@ -68,10 +63,9 @@ export class AuthService {
       .get(`${environment.backendOrigin}/auth/logout`, {
         withCredentials: true,
       })
+      .pipe(tap(() => this.authContext.next(undefined)))
       .subscribe({
-        next: async () => {
-          this.authContext.next(undefined);
-        },
+        next: () => this.router.navigate(['/login']),
       });
   }
 
