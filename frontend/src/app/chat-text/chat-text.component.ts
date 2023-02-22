@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../chat-message';
-import { ChatMessageService } from '../chat.service';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'app-chat-text',
@@ -10,10 +10,10 @@ import { ChatMessageService } from '../chat.service';
 export class ChatTextComponent {
 	chatMessage: ChatMessage[] = [];
 	constructor (
-		public chatMessageService: ChatMessageService
+		public chatService: ChatService
 	) {}
 	ngOnInit() {
-		this.chatMessageService.getChatText().subscribe(
+		this.chatService.getChatText().subscribe(
 			chatMessage => {
 				// TODO: Show only last N messages? (Avoid long scrolls?)
 				this.chatMessage = chatMessage;

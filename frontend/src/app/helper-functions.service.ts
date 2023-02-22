@@ -50,4 +50,7 @@ export class HelperFunctionsService {
 		const exist = document.getElementById(el);
 		if (exist) exist.focus();
 	};
+	focus(el: string): void {
+		this.focusOn(el);
+	}
 }
