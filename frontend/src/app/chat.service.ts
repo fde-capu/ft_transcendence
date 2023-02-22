@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ChatMessage } from './chat-message';
@@ -36,6 +37,7 @@ export class ChatMessageService {
 	}
 
 	getChatRoom(): Observable<ChatRoom> {
+
 		// TODO: Get ID from query/cookie.
 		// if (id is empty) return a NEW chat Room, with:
 		//		ChatRoom
@@ -49,6 +51,7 @@ export class ChatMessageService {
 		// 		 	isPrivate: boolean // True.
 		// 		}
 		// else (there is and id) subscribe to the the Observable.
+
 		const chatRoom = CHAT_ROOM[0];
 		return of(chatRoom);
 	}
@@ -58,11 +61,13 @@ export class ChatMessageService {
 		const inChat = CHAT_ROOM[0].user;
 		return of(inChat);
 	}
-	getOutOfChatUsers(): Observable<User[]> {
+
+getOutOfChatUsers(): Observable<User[]> {
 		// TODO: Everyone from userService.getOnlineUsers() minus who is already in.
 		const inChat = CHAT_ROOM[0].user;
 		return of(inChat);
 	}
+
 	getChatText(): Observable<ChatMessage[]> {
 		return of(this.chatMessage);
 	}
