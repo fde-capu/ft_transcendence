@@ -10,12 +10,18 @@ import { OnlineUsersComponent } from './online-users/online-users.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { CreateMatchComponent } from './create-match/create-match.component';
 
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'home',
+  },
+  {
+    path: 'home',
     canActivate: [AuthGuard],
-    component: FttAuthenticatorComponent,
+    component: HomeComponent,
   },
   {
     path: 'game',
@@ -23,23 +29,27 @@ const routes: Routes = [
     component: GameComponent,
   },
   {
-    path: 'home',
-    component: HomeComponent,
-  },
-  {
     path: 'profile/:intraId',
+    canActivate: [AuthGuard],
     component: ProfileComponent,
   },
   {
     path: 'profile',
+    canActivate: [AuthGuard],
     component: ProfileComponent,
   },
   {
     path: 'online',
+    canActivate: [AuthGuard],
     component: OnlineUsersComponent,
   },
   {
+	path: 'create-match',
+	component: CreateMatchComponent,
+  },
+  {
     path: 'avatar',
+    canActivate: [AuthGuard],
     component: AvatarComponent,
   },
   {
@@ -52,7 +62,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
   },
   {
     path: 'error',

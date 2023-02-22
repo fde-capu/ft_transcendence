@@ -9,10 +9,10 @@
 .aliasing {
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAACXBIWXMAAAsSAAALEgHS3X78AAAAEElEQVQIHWNgYGD4BMQMDAAFtgDzhcd9ZwAAAABJRU5ErkJggg==');
 	opacity:.55;
-    z-index: 1000;
+    z-index: 999998;
 }
 .reflexes {
 	opacity:.15;
 	background-image: url('#reflexes');
-    z-index: 1003;
+    z-index: 999999;
 }

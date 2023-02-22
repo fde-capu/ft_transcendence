@@ -21,6 +21,7 @@
 	--inner-padding-vertical: 3em;
 	--inner-padding-horizontal: 1em;
 	--border-thin: 4px solid var(--color-border);
+	--border-thick: 16px solid var(--color-dark);
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
@@ -35,6 +36,7 @@
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
 	--inner-below-menu-height: calc(var(--inner-height) - 3em);
 	--app-window-width: calc((var(--inner-width) / var(--boxes-horizontal-fit)) - (2 * var(--border-thin)) - 1em);
+	--inner-minimum: 512px;
 }
 @media (max-width: 900px) {
 	:root {
@@ -125,6 +127,40 @@ body
 	height: var(--inner-below-menu-height);
 	width: var(--inner-width);
 }
+.outter-box
+{
+	width: var(--inner-width);
+	height: var(--inner-height);
+	overflow: overlay;
+	margin: var(--body-margin);
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: var(--inner-padding-horizontal);
+	padding-right: var(--inner-padding-horizontal);
+	border: var(--body-border-width) solid var(--color-border);
+/* Goes better without this: */
+/*	display: flex;
+    flex-direction: column;
+    justify-content: space-between; */
+}
+.inner-box
+{
+	min-width: var(--inner-minimum);
+}
+.inner-box * {
+	text-align: initial;
+}
+.window {
+	width: var(--app-window-width);
+	margin-right: 1rem;
+	margin-bottom: 1rem;
+	height: 511px;
+	overflow: auto;
+	position: relative;
+	font-size: var(--font-medium);
+	display: inline-block;
+}
+
 pre {
 	font-size: var(--font-small);
 }
@@ -142,7 +178,7 @@ h3 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
 }
-input, textarea
+input, textarea, select
 {
 	padding: 0;
 	text-shadow: inherit;
@@ -152,17 +188,22 @@ input, textarea
 	font-family: inherit;
 	font-size: inherit;
 	cursor: inherit;
+	min-width: 9em;
 }
-input:hover {
+select
+{
+	zoom: 97%;
+}
+input:hover, select:hover {
 	background: var(--color-high);
 	color: var(--color-low);
 }
-input:focus-visible {
+input:focus-visible, select:focus-visible {
 	outline-style: none;
 	background: var(--color-high);
 	color: var(--color-low);
 }
-input:selection {
+input:selection, select:selection {
 	-webkit-filter: invert(100%);
 }
 .inverted {
@@ -279,6 +320,9 @@ label::after {
 	font-weight: normal;
 	content: " :";
 }
+table {
+	margin: 0 auto;
+}
 table td {
 	padding-top: 4px;
 	padding-bottom: 4px;
@@ -357,6 +401,9 @@ td:nth-child(1) {
 	display: block;
 	white-space: nowrap;
 }
+.chat-whole-box {
+	font-size: var(--font-small);
+}
 .chat-text
 {
 	overflow: auto;
@@ -385,7 +432,9 @@ td:nth-child(1) {
 	position: relative;
 }
 .font-distorter {
-	animation: text-sizer 2.618s step-end infinite;
+	animation: text-blinker 6.18s step-end infinite;
+	height: 24px;
+	position: relative;
 }
 /* This is not working :( */
 @keyframes text-blinker {
@@ -469,8 +518,6 @@ td:nth-child(1) {
     flex-direction: row;
     flex-wrap: nowrap;
 }
-.main-screen * {
-}
 .window-close {
 	width: 16px;
 	height: 16px;
@@ -525,4 +572,23 @@ td:nth-child(1) {
 }
 .list-of-users button {
 	margin-left: -0.75em;
+}
+.overall {
+	position: absolute;
+    top: 0;
+	left: 0;
+	right: 0;
+    height: var(--inner-height);
+    text-align: center;
+    background: var(--color-sublow-transp);
+    z-index: 3000;
+    border: var(--border-thick);
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+	-webkit-filter:
+			drop-shadow(0px 0px 190px #00000055)
+			drop-shadow(0px 0px 90px #00000055);
 }

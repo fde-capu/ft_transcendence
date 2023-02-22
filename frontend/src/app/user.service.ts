@@ -21,6 +21,12 @@ export class UserService {
 		return of(users);
 	}
 
+	getAvailableUsers(): Observable<User[]> {
+		// Must return users online, not playing, and not logged user.
+		const users = USERS;
+		return of(users);
+	}
+
 	getLoggedUser(): Observable<User> {
 		return of(this.loggedUser);
 	}
@@ -34,6 +40,6 @@ export class UserService {
 	}
 
 	isFriend(user: User): Boolean {
-		return Math.random() > .6;
+		return Math.random() > .6; // TODO: Unmock.
 	}
 }
