@@ -2,15 +2,6 @@ import { Component } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 
-export interface TokenInfoResponse {
-  sub: string;
-  exp: number;
-  mfa: {
-    enabled: boolean;
-    verified: boolean;
-  };
-}
-
 @Component({
   selector: 'app-menu-bar',
   templateUrl: './menu-bar.component.html',

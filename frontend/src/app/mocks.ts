@@ -14,6 +14,7 @@ export const USERS: User[] = [
   { intraId: "zaphbeebl", name: 'Zaphod Beeblebrox', image: 'https://foo-url/', score: 7204 },
   { intraId: "arthudent", name: 'Arthur Dent', image: 'https://foo-url/', score: 18939 },
   { intraId: "fordperfe", name: 'Ford Perfect', image: 'https://foo-url/', score: 11374 },
+  { intraId: "fde-capu", name: 'Flávio CDC', image: 'https://foo-url/', score: 917133 },
 ];
 
 export const CHATS: ChatMessage[] = [

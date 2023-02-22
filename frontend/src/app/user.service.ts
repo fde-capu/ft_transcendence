@@ -1,10 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import {
-  Subject
-} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { User } from './user';
 import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
@@ -16,31 +13,27 @@ import { TokenInfoResponse } from './token-info-response';
   providedIn: 'root'
 })
 export class UserService {
-	loggedUser = new Subject();
-	authContext!: TokenInfoResponse | undefined;
 	private usersUrl = 'http://localhost:3000/user';
 
+	loggedUser: User | undefined = undefined;
+	authContext: TokenInfoResponse | undefined = undefined;
+
 	constructor(
-		private http: HttpClient,
 		private readonly authService: AuthService
 	) {
-		// TODO: implement backport to get next object from backed.
-		this.authService.getAuthContext().subscribe(
-			ctx => {
+//		private http: HttpClient,
+		// TODO: implement backport to get next object from backed (unmock).
+		this.authService.getAuthContext().subscribe
+		(
+			ctx =>
+			{
 				this.authContext = ctx;
-				this.loggedUser.next( this.authContext?.sub ?
-					{
-						intraId: this.authContext.sub,
-						name: "name?",
-						image: "image?"
-					} : undefined
-				);
 			}
 		);
 	}
-
-	getLoggedUser(): Observable<User> {
-		return this.loggedUser.asObservable() as Observable<User>;
+	getLoggedUser(): BehaviorSubject<User | undefined> {
+		//console.log("getLoggedUser() run.", this.loggedUser);
+		return of(this.loggedUser);
 	}
 
 	getOnlineUsers(): Observable<User[]> {
@@ -60,24 +53,25 @@ export class UserService {
 		return of(users);
 	}
 
-	getUserById(intraId: string | null): Observable<User> {
+	getUserById(intraId: string | null): BehaviorSubject<User | undefined> {
 		if (intraId !== null)
 			var user = USERS.find(h => h.intraId === intraId)!;
 		else
 			return this.getLoggedUser();
-		return of(user);
+		return new BehaviorSubject<User | undefined>(user);
 	}
 
 	getUser(id: string): Observable<User> {
-		const url = `${this.usersUrl}/${id}`;
-		return this.http.get<User>(url).pipe
-		(
-			tap(_ => console.log(`Got user id=${id}`)),
-			catchError(this.handleError<User>(`getUser id=${id}`))
-		);
+//		const url = `${this.usersUrl}/${id}`;
+//		return this.http.get<User>(url).pipe
+//		(
+//			tap(_ => console.log(`Got user id=${id}`)),
+//			catchError(this.handleError<User>(`getUser id=${id}`))
+//		);
+		return of(USERS[7]);
 	}
 
-	isFriend(user: User): Boolean {
+	isFriend(user: User | undefined): Boolean {
 		return Math.random() > .6;
 	}
 
@@ -92,3 +86,4 @@ export class UserService {
 		};
 	}
 }
+

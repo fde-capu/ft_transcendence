@@ -11,7 +11,7 @@ import { User } from '../user';
 })
 export class ChatInputComponent {
 	message = "";
-	user: User = {} as User;
+	user: User | undefined = undefined;
 	textArea: HTMLElement | null = null;
 	chatBox: HTMLElement | null = null;
 	constructor(
@@ -36,7 +36,7 @@ export class ChatInputComponent {
 		let newMessage!: ChatMessage;
 		newMessage = 
 		{
-			user: this.user,
+			user: this.user ? this.user : {} as User,
 			message: this.message
 		};
 		this.chatService.add(newMessage);
