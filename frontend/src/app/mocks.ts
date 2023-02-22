@@ -3,17 +3,17 @@ import { ChatMessage } from './chat-message';
 import { ChatRoom } from './chat-room';
 
 export const USERS: User[] = [
-  { intraId: "blabla", name: 'Blats Bla', image: 'https://foo-url/' },
-  { intraId: "bleble", name: 'Blebs Bleuble', image: 'https://foo-url/' },
-  { intraId: "blibli", name: 'Blib Lib Blib', image: 'https://foo-url/' },
-  { intraId: "bloblo", name: 'Blocoblomo Blo', image: 'https://foo-url/' },
-  { intraId: "blublu", name: 'Blumblu Blub', image: 'https://foo-url/' },
-  { intraId: "fulde-tal", name: 'Fulano de Tal', image: 'https://foo-url/' },
-  { intraId: "tric-mcmi", name: 'Tricia McMillan', image: 'https://foo-url/' },
-  { intraId: "marvin---", name: 'Marvin', image: 'https://foo-url/' },
-  { intraId: "zaphbeebl", name: 'Zaphod Beeblebrox', image: 'https://foo-url/' },
-  { intraId: "arthudent", name: 'Arthur Dent', image: 'https://foo-url/' },
-  { intraId: "fordperfe", name: 'Ford Perfect', image: 'https://foo-url/' },
+  { intraId: "blabla", name: 'Blats Bla', image: 'https://foo-url/', score: 33988 },
+  { intraId: "bleble", name: 'Blebs Bleuble', image: 'https://foo-url/', score: 74989 },
+  { intraId: "blibli", name: 'Blib Lib Blib', image: 'https://foo-url/', score: 484820 },
+  { intraId: "bloblo", name: 'Blocoblomo Blo', image: 'https://foo-url/', score: 45868 },
+  { intraId: "blublu", name: 'Blumblu Blub', image: 'https://foo-url/', score: 34365 },
+  { intraId: "fulde-tal", name: 'Fulano de Tal', image: 'https://foo-url/', score: 62818 },
+  { intraId: "tric-mcmi", name: 'Tricia McMillan', image: 'https://foo-url/', score: 90244 },
+  { intraId: "marvin---", name: 'Marvin', image: 'https://foo-url/', score: 97072 },
+  { intraId: "zaphbeebl", name: 'Zaphod Beeblebrox', image: 'https://foo-url/', score: 7204 },
+  { intraId: "arthudent", name: 'Arthur Dent', image: 'https://foo-url/', score: 18939 },
+  { intraId: "fordperfe", name: 'Ford Perfect', image: 'https://foo-url/', score: 11374 },
 ];
 
 export const CHATS: ChatMessage[] = [

@@ -1,6 +1,6 @@
-<div *ngIf="chatMessageService.chat.length" class="chat-text">
+<div *ngIf="chatMessage.length" class="chat-text scroller">
   <ul>
-  <li *ngFor='let chatLine of chatMessageService.chat' class='chat-line'> 
+  <li *ngFor='let chatLine of chatMessage' class='chat-line'> 
 	<app-avatar [user]="chatLine.user"></app-avatar>
 	<span class='user-name-small hover_invert'>
 		{{chatLine.user.intraId}} | {{chatLine.user.name}}</span>

@@ -13,19 +13,18 @@ import { USERS } from './mocks';
   providedIn: 'root'
 })
 export class ChatMessageService {
-	chat: ChatMessage[] = [];
+	chatMessage: ChatMessage[] = [];
 
 	constructor() {
 		this.mockChat();
 	}
 
 	add(chatMessage: ChatMessage) {
-		console.log(chatMessage.message);
-		this.chat.push(chatMessage);
+		this.chatMessage.push(chatMessage);
 	}
 
 	clear() {
-		this.chat = [];
+		this.chatMessage = [];
 	}
 
 	ngOnInit(): void {
@@ -45,11 +44,25 @@ export class ChatMessageService {
 		const chatRoom = CHAT_ROOM[0];
 		return of(chatRoom);
 	}
-
 	getInChatUsers(): Observable<User[]> {
 		// TODO: it facilitates (always?) for the loggedUser to be in first position,
 		// then the administrators, then eveyone else.
 		const inChat = CHAT_ROOM[0].user;
 		return of(inChat);
 	}
+	getChatText(): Observable<ChatMessage[]> {
+		return of(this.chatMessage);
+	}
 }
+
+// TODO:
+// - Implement direct-messaging.
+// - Chat creationg screen.
+// - "Block user" routine.
+
+// - The user should be able to invite other users to 
+//   play a Pong game through the chat interface.
+// - Should also be able to access user profiles.
+//  :: These two things will be done by the avatar element, however.
+
+// Matchmaking screen.

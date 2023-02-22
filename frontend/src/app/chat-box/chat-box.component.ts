@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ChatRoom } from '../chat-room';
-import { ChatMessageService } from '../chat-message.service';
+import { ChatMessageService } from '../chat.service';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
 
@@ -14,7 +14,7 @@ export class ChatBoxComponent {
 		public chatMessageService: ChatMessageService,
 		public fun: HelperFunctionsService
 	) {}
-	chatRoomOn = true;
+	chatRoomOn = true; // After last merge, is this in user?
 	chatRoom: ChatRoom = {} as ChatRoom;
 	windowTitle = "CHAT";
 	windowName = "";
@@ -30,10 +30,10 @@ export class ChatBoxComponent {
 		this.chatMessageService.getInChatUsers().subscribe(
 			inChat => this.usersOn = inChat
 		);
-		this.imprintInfo();
+		this.imprint();
 	}
 
-	imprintInfo() {
+	imprint() {
 		this.windowName = this.windowTitle + ": " + this.chatRoom.name;
 		this.windowExtras = ""
 		+ (this.chatRoom.isPrivate ? "PRIVATE" : "PUBLIC")
@@ -45,17 +45,11 @@ export class ChatBoxComponent {
 		if (this.optionsOn)
 		{
 			return this.onMenu();
-
 		}
 		alert (`
 			// TODO: User exits Chat Room, the window closes.
 			// If they are the only admin, who takes administration?
 		`);
-	}
-
-	menuFor(user: User)
-	{
-		alert(user.name);
 	}
 
 	onMenu() {
@@ -64,12 +58,12 @@ export class ChatBoxComponent {
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
-		this.imprintInfo();
+		this.imprint();
 	}
 
 	cleanPassword() {
 		this.chatRoom.password = "";
-		this.imprintInfo();
+		this.imprint();
 	}
 
 	isAdmin(user: User): boolean {
@@ -83,3 +77,6 @@ export class ChatBoxComponent {
 		return user === this.user;
 	}
 }
+// TODO Open user profile when clicking name.
+// TODO (BUG): When changing the Room name on one chatbox, the other reamins unchanged.
+// TODO (BUG): Subcomponents on chatbox are not getting right with multiple instances.

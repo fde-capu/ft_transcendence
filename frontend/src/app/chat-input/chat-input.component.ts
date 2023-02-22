@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { ChatMessageService } from '../chat-message.service';
+import { ChatMessageService } from '../chat.service';
 import { ChatMessage } from '../chat-message';
 import { UserService } from '../user.service';
 import { User } from '../user';
@@ -42,9 +42,6 @@ export class ChatInputComponent {
 		this.chatMessageService.add(newMessage);
 		this.message = "";
 		this.textArea && this.textArea.focus();
-		if (this.chatBox) {
-			this.chatBox.scrollTo({ left: 0, top: 2000, behavior: 'smooth' });
-		}
 	}
 	blink(el: string)
 	{
