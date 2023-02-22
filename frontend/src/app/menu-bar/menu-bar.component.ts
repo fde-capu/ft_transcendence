@@ -36,4 +36,5 @@ export class MenuBarComponent {
   signOut() {
     this.authService.signOut();
   }
+
 }
