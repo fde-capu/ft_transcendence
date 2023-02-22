@@ -10,7 +10,6 @@ import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
-import { GameComponent } from './game/components/game/game.component';
 
 const routes: Routes = [
   {
@@ -27,10 +26,18 @@ const routes: Routes = [
     path: 'game',
     canActivate: [AuthGuard],
     component: GameComponent,
-    loadChildren: () => import('./game/game.module').then(m => m.GameModule),
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
   },
   {
     path: 'profile/:intraId',
+    canActivate: [AuthGuard],
+    component: ProfileComponent,
+  },
+  {
+    path: 'profile',
     canActivate: [AuthGuard],
     component: ProfileComponent,
   },
@@ -63,6 +70,10 @@ const routes: Routes = [
   {
     path: 'error',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
+  },
+  {
+    path: 'game',
+    loadChildren: () => import('./game/game.module').then(m => m.GameModule),
   },
   {
     path: '**',
