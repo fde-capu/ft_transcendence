@@ -1,7 +1,6 @@
 import { catchError, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
 import { User } from './user';
 import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
@@ -31,7 +30,7 @@ export class UserService {
 			}
 		);
 	}
-	getLoggedUser(): BehaviorSubject<User | undefined> {
+	getLoggedUser(): Observable<User | undefined> {
 		//console.log("getLoggedUser() run.", this.loggedUser);
 		return of(this.loggedUser);
 	}
@@ -53,12 +52,12 @@ export class UserService {
 		return of(users);
 	}
 
-	getUserById(intraId: string | null): BehaviorSubject<User | undefined> {
+	getUserById(intraId: string | null): Observable<User | undefined> {
 		if (intraId !== null)
 			var user = USERS.find(h => h.intraId === intraId)!;
 		else
 			return this.getLoggedUser();
-		return new BehaviorSubject<User | undefined>(user);
+		return of(user);
 	}
 
 	getUser(id: string): Observable<User> {

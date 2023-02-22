@@ -2,6 +2,7 @@ version: "3.8"
 
 networks:
   samsara_net:
+    external: true
 
 services:
 
@@ -49,6 +50,8 @@ services:
       context: ./frontend
       target: ${FTT_MODE:-production}
     restart: unless-stopped
+    networks:
+      - samsara_net
     volumes:
       - ./frontend:/app
     ports:
