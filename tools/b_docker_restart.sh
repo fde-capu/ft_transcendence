@@ -1,8 +1,15 @@
 #!/bin/sh
 
-	systemctl --user stop docker 2> /dev/null;
-	sudo systemctl stop docker.service 2> /dev/null;
-	systemctl --user daemon-reload 2> /dev/null;
-	sudo systemctl disable --now docker.service docker.socket;
-	systemctl --user start docker
-	docker context use rootless
+MYSELF="$(realpath "$0")";
+MYDIR="${MYSELF%/*}";
+FTTDIR="$MYDIR/..";
+
+$MYDIR/b_docker_disable.sh;
+
+CONTEXT=$(docker info 2>/dev/null | grep Context | sed -e "s/.* //");
+if [ "$CONTEXT" = "rootless" ] ; then
+	systemctl --user start docker;
+	docker context use rootless;
+else
+	systemctl start docker;
+fi;

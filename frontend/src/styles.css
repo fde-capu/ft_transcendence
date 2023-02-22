@@ -35,7 +35,9 @@
 	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))) - (2 * var(--inner-padding-horizontal)));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
 	--app-window-width: calc((var(--inner-width) / var(--boxes-horizontal-fit)) - (2 * var(--border-thin)) - 1em);
+
 	--inner-minimum: 512px;
+
 }
 @media (max-width: 900px) {
 	:root {
@@ -453,16 +455,19 @@ td:nth-child(1) {
 .main-menu-big {
 }
 .main-screen table {
+
 	border-spacing: 30px;
 }
 .main-screen {
 	zoom: 125%;
+
     display: flex;
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
 }
 .main-screen * {
+	margin: 0.5em;
 }
 .window-close {
 	width: 16px;
