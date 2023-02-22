@@ -97,14 +97,14 @@ body
 	padding-left: var(--inner-padding-horizontal);
 	padding-right: var(--inner-padding-horizontal);
 	border: var(--body-border-width) solid var(--color-border);
-	display: flex;
+/* Goes better without this: */
+/*	display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; */
 }
 .inner-box
 {
-	text-align: center;
-	min-width: 448px;
+	min-width: var(--inner-minimum);
 }
 .inner-box * {
 	text-align: initial;
@@ -427,7 +427,7 @@ td:nth-child(1) {
 	position: relative;
 }
 .slow-blinker {
-	animation: text-blinker 3.18s step-end infinite;
+	animation: text-blinker 6.18s step-end infinite;
 	height: 24px;
 	position: relative;
 }

@@ -13,15 +13,7 @@ import {
   throwError,
 } from 'rxjs';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-
-export interface TokenInfoResponse {
-  sub: string;
-  exp: number;
-  mfa: {
-    enabled: boolean;
-    verified: boolean;
-  };
-}
+import { TokenInfoResponse } from '../../token-info-response';
 
 interface ChallengeResponse {
   secret: string;

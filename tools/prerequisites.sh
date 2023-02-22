@@ -15,7 +15,7 @@ MYDIR="${MYSELF%/*}";
 	ask "Reinstall containerd?" && \
 		rm -rf ~/.docker && \
 		sudo apt install -y containerd.io docker-ce;
-	ask "Stop docker service?" && do_docker_stop;
+	ask "Stop docker service?" && systemctl stop docker;
 
 	ask "Do apt update?" && sudo apt update;
 	ask "Do apt upgrade (system wide)?" && sudo apt upgrade && \

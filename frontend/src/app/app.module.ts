@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator.component';
-import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -25,7 +24,6 @@ import { CreateMatchComponent } from './create-match/create-match.component';
   declarations: [
     AppComponent,
     FttAuthenticatorComponent,
-    GameComponent,
     HomeComponent,
     HomeComponent,
     AvatarComponent,
@@ -38,8 +36,8 @@ import { CreateMatchComponent } from './create-match/create-match.component';
     ChatBoxComponent,
     WindowTitleComponent,
 	MainMenuComponent,
- ChatRoomListComponent,
- CreateMatchComponent,
+	ChatRoomListComponent,
+	CreateMatchComponent,
   ],
   imports: [
     BrowserModule,

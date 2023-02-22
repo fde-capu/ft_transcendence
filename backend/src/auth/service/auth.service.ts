@@ -13,7 +13,6 @@ import { TokenService } from './token.service';
 import { encode } from 'querystring';
 import { JWTPayload } from 'jose';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from 'src/user/service/user.service';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +23,6 @@ export class AuthService {
   constructor(
     private readonly fortyTwoService: FortyTwoService,
     private readonly tokenService: TokenService,
-    private readonly userService: UserService,
     private readonly otp: OtpService,
     readonly configService: ConfigService,
   ) {
@@ -62,16 +60,14 @@ export class AuthService {
           expiresIn = r.expires_in;
           fortyTwo = r;
         }),
-        // Get user login from 42 api,
+        // Get user login from 42 api
         switchMap((r) => this.fortyTwoService.getUserInfo(r.access_token)),
-        //store infos in DB
-        switchMap((r) => this.userService.registerUser(r)),
         // Create Session Token for the ft_transcendence
         map((r) =>
           this.tokenService.sign({
             sub: r.login,
             exp: Math.floor(Date.now() / this.thousand) + expiresIn,
-            mfa: {enable: r.mfa_enable, verified: r.mfa_verified},
+            mfa: { enabled: true, verified: false },
             fortyTwo,
           }),
         ),

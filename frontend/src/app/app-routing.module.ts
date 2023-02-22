@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator.component';
-import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OnlineUsersComponent } from './online-users/online-users.component';
@@ -27,6 +26,10 @@ const routes: Routes = [
     path: 'game',
     canActivate: [AuthGuard],
     component: GameComponent,
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
   },
   {
     path: 'profile/:intraId',
@@ -67,6 +70,10 @@ const routes: Routes = [
   {
     path: 'error',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
+  },
+  {
+    path: 'game',
+    loadChildren: () => import('./game/game.module').then(m => m.GameModule),
   },
   {
     path: '**',

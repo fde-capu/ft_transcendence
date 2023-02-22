@@ -10,7 +10,6 @@ import { AuthService } from 'src/app/auth/service/auth.service';
 })
 export class LoginComponent {
   isAuthenticated = false;
-
   challengeEnabled = false;
 
   // TODO: Remove it. It is only here for tests proposes. If you want to generate the code use this.authService.getChallenge()
@@ -27,6 +26,7 @@ export class LoginComponent {
       next: ctx => {
         this.isAuthenticated = !!ctx;
         this.challengeEnabled = ctx?.mfa.enabled || false;
+		this.message = ctx?.sub + ( this.challengeEnabled ? ", you have enabled 2FA. Please scan this quick response code on Google or Microsoft Authenticator if you haven't already:" : " passed without 2FA." );
         if (ctx?.mfa.verified) this.router.navigate(['/']);
       },
     });
@@ -42,7 +42,7 @@ export class LoginComponent {
         this.message = 'Nicely done!';
       },
       error: () => {
-        this.message = 'Yikes! Wrong code, bud!';
+        this.message += " [" + form.value.code + ']?? Yikes! Wrong code, bud!';
       },
     });
   }

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth/service/auth.service';
 import { User } from '../user';
 import { UserService } from '../user.service';
 
@@ -11,20 +10,18 @@ import { UserService } from '../user.service';
 export class MenuBarComponent {
   constructor(
     private userService: UserService,
-    private readonly authService: AuthService
   ) {}
 
-  user: User = {} as User;
-  isLogged = true;
-  // ^ TODO: make it into a user.service...
-  // ...or accept the user is always logged.
+  user?: User;
   menuOpen = false;
 
   ngOnInit(): void {
     this.getUser();
   }
   getUser(): void {
-    this.userService.getLoggedUser().subscribe(user => (this.user = user));
+    this.userService.getLoggedUser().subscribe(user => {
+		this.user = user;
+	});
   }
 
   onClickBurger(): void {

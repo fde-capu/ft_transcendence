@@ -25,7 +25,7 @@ export class ChatBoxComponent {
 	usersOnChat: User[] = []; // Everyone that is logged on the room.
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
 	done: Boolean = false;
-	@Input() user: User = {} as User;
+	@Input() user: User | undefined = undefined;
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -91,7 +91,7 @@ export class ChatBoxComponent {
 		this.imprint();
 	}
 
-	isAdmin(user: User = this.user): boolean {
+	isAdmin(user: User | undefined = this.user): boolean {
 		for (const admin of this.chatRoom.admin)
 			if (admin == user)
 				return true;
