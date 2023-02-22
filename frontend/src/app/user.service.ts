@@ -53,6 +53,7 @@ export class UserService {
 		return of(users);
 	}
 
+
 	getUserById(intraId: string | null): BehaviorSubject<User | undefined> {
 		if (intraId !== null)
 			var user = USERS.find(h => h.intraId === intraId)!;
@@ -86,4 +87,3 @@ export class UserService {
 		};
 	}
 }
-

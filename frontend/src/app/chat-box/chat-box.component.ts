@@ -103,3 +103,6 @@ export class ChatBoxComponent {
 		return user === this.user;
 	}
 }
+// TODO Open user profile when clicking name.
+// TODO (BUG): When changing the Room name on one chatbox, the other reamins unchanged.
+// TODO (BUG): Subcomponents on chatbox are not getting right with multiple instances.

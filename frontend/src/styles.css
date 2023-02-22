@@ -127,6 +127,40 @@ body
 	height: var(--inner-below-menu-height);
 	width: var(--inner-width);
 }
+.outter-box
+{
+	width: var(--inner-width);
+	height: var(--inner-height);
+	overflow: overlay;
+	margin: var(--body-margin);
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: var(--inner-padding-horizontal);
+	padding-right: var(--inner-padding-horizontal);
+	border: var(--body-border-width) solid var(--color-border);
+/* Goes better without this: */
+/*	display: flex;
+    flex-direction: column;
+    justify-content: space-between; */
+}
+.inner-box
+{
+	min-width: var(--inner-minimum);
+}
+.inner-box * {
+	text-align: initial;
+}
+.window {
+	width: var(--app-window-width);
+	margin-right: 1rem;
+	margin-bottom: 1rem;
+	height: 511px;
+	overflow: auto;
+	position: relative;
+	font-size: var(--font-medium);
+	display: inline-block;
+}
+
 pre {
 	font-size: var(--font-small);
 }
@@ -367,6 +401,9 @@ td:nth-child(1) {
 	display: block;
 	white-space: nowrap;
 }
+.chat-whole-box {
+	font-size: var(--font-small);
+}
 .chat-text
 {
 	overflow: auto;
@@ -395,7 +432,9 @@ td:nth-child(1) {
 	position: relative;
 }
 .font-distorter {
-	animation: text-sizer 2.618s step-end infinite;
+	animation: text-blinker 6.18s step-end infinite;
+	height: 24px;
+	position: relative;
 }
 /* This is not working :( */
 @keyframes text-blinker {
@@ -478,8 +517,6 @@ td:nth-child(1) {
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
-}
-.main-screen * {
 }
 .window-close {
 	width: 16px;

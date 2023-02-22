@@ -30,4 +30,7 @@ export class MenuBarComponent {
   menuOff(): void {
     this.menuOpen = false;
   }
+  signOut() {
+    this.authService.signOut();
+  }
 }
