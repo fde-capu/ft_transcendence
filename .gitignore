@@ -4,3 +4,4 @@ dist
 pgdata
 .vscode
 *.env
+package-lock.json
