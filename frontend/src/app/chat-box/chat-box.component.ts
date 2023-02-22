@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ChatRoom } from '../chat-room';
-import { ChatMessageService } from '../chat.service';
+import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
@@ -12,7 +12,7 @@ import { User } from '../user';
 })
 export class ChatBoxComponent {
 	constructor (
-		public chatMessageService: ChatMessageService,
+		public chatService: ChatService,
 		public userService: UserService,
 		public fun: HelperFunctionsService
 	) {}
@@ -37,19 +37,19 @@ export class ChatBoxComponent {
 		this.userService.getLoggedUser().subscribe(
 			user => { this.user = user; }
 		);
-		this.chatMessageService.getChatRoom().subscribe(
+		this.chatService.getChatRoom().subscribe(
 			chatRoom => {
 				this.chatRoom = chatRoom;
 				this.imprint();
 			}
 		);
-		this.chatMessageService.getInChatUsers().subscribe(
+		this.chatService.getInChatUsers().subscribe(
 			inChat => {
 				this.usersOnChat = inChat;
 				this.imprint();
 			}
 		);
-		this.chatMessageService.getOutOfChatUsers().subscribe(
+		this.chatService.getOutOfChatUsers().subscribe(
 			outChat => {
 				this.usersOutOfChat = outChat;
 				this.imprint();

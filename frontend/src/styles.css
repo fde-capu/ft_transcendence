@@ -34,13 +34,9 @@
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
 	--inner-width: calc(100vw - (2 * (var(--margin-plus-border))) - (2 * var(--inner-padding-horizontal)));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
-
 	--inner-below-menu-height: calc(var(--inner-height) - 3em);
 	--app-window-width: calc((var(--inner-width) / var(--boxes-horizontal-fit)) - (2 * var(--border-thin)) - 1em);
-	--app-window-width: calc((var(--inner-width) / var(--boxes-horizontal-fit)) - (2 * var(--border-thin)) - 1em);
-
 	--inner-minimum: 512px;
-
 }
 @media (max-width: 900px) {
 	:root {
@@ -130,7 +126,6 @@ body
 	font-size: var(--font-medium);
 	height: var(--inner-below-menu-height);
 	width: var(--inner-width);
-
 }
 .outter-box
 {
@@ -406,7 +401,6 @@ td:nth-child(1) {
 	display: block;
 	white-space: nowrap;
 }
-
 .chat-whole-box {
 	font-size: var(--font-small);
 }
@@ -441,7 +435,6 @@ td:nth-child(1) {
 	animation: text-blinker 6.18s step-end infinite;
 	height: 24px;
 	position: relative;
-
 }
 /* This is not working :( */
 @keyframes text-blinker {
@@ -524,10 +517,6 @@ td:nth-child(1) {
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
-}
-.main-screen * {
-	margin: 0.5em;
-
 }
 .window-close {
 	width: 16px;

@@ -18,8 +18,8 @@ import { ChatInputComponent } from './chat-input/chat-input.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { WindowTitleComponent } from './window-title/window-title.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
-
 
 @NgModule({
   declarations: [
@@ -38,6 +38,7 @@ import { CreateMatchComponent } from './create-match/create-match.component';
     ChatBoxComponent,
     WindowTitleComponent,
 	MainMenuComponent,
+ ChatRoomListComponent,
  CreateMatchComponent,
   ],
   imports: [

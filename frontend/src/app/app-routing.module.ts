@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OnlineUsersComponent } from './online-users/online-users.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 
@@ -54,6 +55,10 @@ const routes: Routes = [
   {
     path: 'chat',
     component: ChatBoxComponent,
+  },
+  {
+    path: 'rooms',
+    component: ChatRoomListComponent,
   },
   {
     path: 'login',

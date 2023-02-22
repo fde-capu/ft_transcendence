@@ -1,18 +1,17 @@
-
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { ChatMessage } from './chat-message';
-import { ChatRoom } from './chat-room';
-import { CHATS, CHAT_ROOM } from './mocks';
 import { User } from './user';
-import { USERS } from './mocks';
+import { ChatRoom } from './chat-room';
+import { USERS, CHATS, CHAT_ROOM } from './mocks';
 
 // TODO: all is mocked. Unmock them!
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatMessageService {
+export class ChatService {
 	chatMessage: ChatMessage[] = [];
 
 	constructor() {
@@ -37,7 +36,6 @@ export class ChatMessageService {
 	}
 
 	getChatRoom(): Observable<ChatRoom> {
-
 		// TODO: Get ID from query/cookie.
 		// if (id is empty) return a NEW chat Room, with:
 		//		ChatRoom
@@ -51,23 +49,29 @@ export class ChatMessageService {
 		// 		 	isPrivate: boolean // True.
 		// 		}
 		// else (there is and id) subscribe to the the Observable.
-
 		const chatRoom = CHAT_ROOM[0];
 		return of(chatRoom);
+	}
+	getVisibleChatRooms(): Observable<ChatRoom[]> {
+		// TODO: Visible Chat Rooms must be of one of the conditions:
+		// Is visible if the loggedUser is in the room.
+		// Is visible if the room is public.
+		// Should deliver this already filtered (prefered),
+		// or is it filtered here?
+		const rooms = CHAT_ROOM;
+		return of(rooms);
 	}
 	getInChatUsers(): Observable<User[]> {
 		// TODO: it facilitates (always?) for the loggedUser to be in first position,
 		// then the administrators, then eveyone else.
-		const inChat = CHAT_ROOM[0].user;
+		const inChat = CHAT_ROOM[1].user;
 		return of(inChat);
 	}
-
-getOutOfChatUsers(): Observable<User[]> {
+	getOutOfChatUsers(): Observable<User[]> {
 		// TODO: Everyone from userService.getOnlineUsers() minus who is already in.
-		const inChat = CHAT_ROOM[0].user;
+		const inChat = CHAT_ROOM[2].user;
 		return of(inChat);
 	}
-
 	getChatText(): Observable<ChatMessage[]> {
 		return of(this.chatMessage);
 	}
