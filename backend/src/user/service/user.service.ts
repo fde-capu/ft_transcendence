@@ -4,7 +4,6 @@ import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { Users } from '../entity/user.entity';
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 export interface TokenDTO {

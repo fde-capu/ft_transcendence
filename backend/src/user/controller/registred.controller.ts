@@ -3,9 +3,6 @@ import { MeDTO, UserService } from '../service/user.service';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Users } from '../entity/user.entity';
-import { Controller, Get, Query, Res } from '@nestjs/common';
-import { MeDTO, UserService } from '../service/user.service';
-import { Response } from 'express';
 
 @Controller('user/register')
 export class RegisterController {
