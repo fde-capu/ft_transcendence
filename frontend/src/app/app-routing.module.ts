@@ -10,6 +10,7 @@ import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
+import { GameComponent } from './game/components/game/game.component';
 
 const routes: Routes = [
   {

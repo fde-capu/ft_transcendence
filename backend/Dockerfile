@@ -10,7 +10,7 @@ COPY . /build
 WORKDIR /build
 #RUN npm ci
 RUN npm run build
-RUN npm prune --omit=dev
+#RUN npm prune --omit=dev
 RUN npm run start:prod
 #RUN rm -f ./dist/tsconfig.build.tsbuildinfo
 #RUN rm -rf ./dist/node_modules

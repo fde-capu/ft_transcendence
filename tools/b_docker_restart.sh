@@ -4,5 +4,5 @@ MYSELF="$(realpath "$0")";
 MYDIR="${MYSELF%/*}";
 FTTDIR="$MYDIR/..";
 
-systemctl stop docker
-systemctl start docker
+sudo systemctl stop docker
+sudo systemctl start docker

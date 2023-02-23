@@ -9,12 +9,13 @@ import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/user/entity/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [FortyTwoModule, UserModule,
     TypeOrmModule.forFeature([Users])
   ],
-  providers: [TokenService, OtpService, AuthService, UserService],
+  providers: [TokenService, OtpService, AuthService, UserService, ConfigService],
   controllers: [AuthController],
   exports: [TokenService],
 })
