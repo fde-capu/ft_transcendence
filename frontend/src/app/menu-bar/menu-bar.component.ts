@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { AuthService } from '../auth/service/auth.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -10,6 +11,7 @@ import { UserService } from '../user.service';
 export class MenuBarComponent {
   constructor(
     private userService: UserService,
+    private authService: AuthService,
   ) {}
 
   user?: User;
