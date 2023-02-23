@@ -1,4 +1,4 @@
-.PHONY: all re fclean clean test
+.PHONY: all re fclean clean test database backend frontend adminer redb reback
 
 all : dev
 
@@ -18,10 +18,15 @@ clean :
 	docker compose down
 
 fclean : clean
-	# Reset database, dist and node_modules etc.:
-	./tools/c_dataclean.sh
+	# Reset database (sudo because of user):
+	sudo rm -rf database/pgdata/
 
 ffclean: fclean
+	sudo rm -rf backend/dist
+	sudo rm -rf backend/node_modules
+	sudo rm -rf frontend/dist
+	sudo rm -rf frontend/node_modules
+	sudo rm -rf frontend/.angular
 	cd frontend && \
 		rm -f package-lock.json
 	cd backend && \
@@ -39,3 +44,29 @@ fffre : fffclean install all
 install :
 	cd frontend && npm install
 	cd backend && npm install
+
+database :
+	docker compose up --build database
+redb :
+	sudo rm -rf database/pgdata/
+	docker compose up --build database
+itdb:
+	docker exec -it database /bin/bash
+
+backend :
+	docker compose up --build backend
+reback :
+	sudo rm -rf backend/dist
+	sudo rm -rf backend/node_modules
+	cd backend && npm install
+	docker compose up --build backend
+
+frontend :
+	docker compose up --build frontend
+
+adminer :
+	docker compose up --build adminer
+
+db:database
+back:backend
+front:frontend

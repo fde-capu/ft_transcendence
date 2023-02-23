@@ -20,10 +20,21 @@ services:
     networks:
       - samsara_net
     volumes:
-      - ./database/data:/var/lib/postgresql/data
-      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/pgdata:/var/lib/postgresql/data
+      - ./database/pglog:/var/log/postgresql
+      - ./database/init.sh:/docker-entrypoint-initdb.d/init.sh
+    ports:
+      - 5432:5432
     env_file:
       - ./.env
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - samsara_net
 
   backend:
     container_name: backend
@@ -31,9 +42,6 @@ services:
       context: ./backend
       target: ${FTT_MODE:-production}
     restart: unless-stopped
-    depends_on:
-      database:
-        condition: service_healthy
     networks:
       - samsara_net
     volumes:
