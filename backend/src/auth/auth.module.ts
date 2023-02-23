@@ -7,27 +7,15 @@ import { AuthService } from './service/auth.service';
 import { UserService } from 'src/user/service/user.service';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
-//import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/user/entity/user.entity';
-
-//@Module({
-//  imports: [
-//	FortyTwoModule,
-//	UserModule,
-//    TypeOrmModule.forFeature([Users])
-//  ],
-//  providers: [TokenService, OtpService, AuthService, UserService],
-//  controllers: [AuthController],
-//  exports: [TokenService],
-//})
-//export class AuthModule {}
+import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [
-	FortyTwoModule,
-	UserModule
+  imports: [FortyTwoModule, UserModule,
+    TypeOrmModule.forFeature([Users])
   ],
-  providers: [TokenService, OtpService, AuthService],
+  providers: [TokenService, OtpService, AuthService, UserService, ConfigService],
   controllers: [AuthController],
   exports: [TokenService],
 })

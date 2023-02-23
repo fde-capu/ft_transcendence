@@ -4,31 +4,41 @@ import { Response } from 'express';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Users } from '../entity/user.entity';
 
-@Controller('user/register')
+@Controller('user')
 export class RegisterController {
   constructor(private readonly userService: UserService) {}
-  @Get()
-  async code(
-    @Query('code') code: string,
+  
+  // @Post('register')
+  // async register(){
+  //   return this.userService.register({login: 'jestevam', email: "jjuu.com"});
+  // }
+
+  @Put('update/:login')
+  @UseGuards(AuthGuard)
+  async updateUser(
+    @Param('login')login: string,
+    @Res() response: Response = null,
+    @Body()user: Users){
+    try {
+      await this.userService.updateUser(login, user);
+      return response.status(200).json({});
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+    this.userService.updateUser(login, user);
+  }
+
+  @Get('userByLogin')
+  @UseGuards(AuthGuard)
+  async getUserByLogin(
+    @Query('login') code: string,
     @Res() response: Response = null,
   ): Promise<any> {
-    if (!code || code === '')
-      return response.status(400).json({
-        error: 'Propoer code failed by API42.',
-      });
     try {
-      const tokenFrom42 = await this.userService.getToken(code);
-      const me = await this.userService.getMe(tokenFrom42);
-      // me = transform me into user_book dto. TODO
-      const transcendToken = me.login + '_TOKENIZED';
-      return response
-        .cookie('access_token', transcendToken)
-        .cookie('intra_id', me.login)
-        .redirect('http://localhost:4200/game');
+      const resp =  await this.userService.getUserByLogin(code);
+      return response.status(200).json(resp);
     } catch (e) {
-      console.log('RegisterController failed to generate unique token.');
-      console.log(e.response.data);
-      response.status(e.response.status).json(e.response.data);
+      response.status(e.status).json(e.data);
     }
   }
 }
