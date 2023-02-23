@@ -60,6 +60,8 @@ reback :
 	sudo rm -rf backend/node_modules
 	cd backend && npm install
 	docker compose up --build backend
+itback:
+	docker exec -it backend /bin/bash
 
 frontend :
 	docker compose up --build frontend

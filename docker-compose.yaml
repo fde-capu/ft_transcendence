@@ -23,8 +23,6 @@ services:
       - ./database/pgdata:/var/lib/postgresql/data
       - ./database/pglog:/var/log/postgresql
       - ./database/init.sh:/docker-entrypoint-initdb.d/init.sh
-    ports:
-      - 5432:5432
     env_file:
       - ./.env
 
