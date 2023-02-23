@@ -27,7 +27,6 @@ export interface registerResp {
   mfa_verified?: boolean,
 }
 
-
 @Injectable()
 export class UserService {
   constructor(
