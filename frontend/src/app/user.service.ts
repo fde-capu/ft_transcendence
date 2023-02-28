@@ -1,10 +1,12 @@
+import { DOCUMENT } from '@angular/common';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { User } from './user';
 import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -13,26 +15,25 @@ import { TokenInfoResponse } from './token-info-response';
 })
 export class UserService {
 	private usersUrl = 'http://localhost:3000/user';
+	private userByLoginUrl = 'http://localhost:3000/user/userByLogin';
 
-	loggedUser: User | undefined = undefined;
 	authContext: TokenInfoResponse | undefined = undefined;
 
 	constructor(
-		private readonly authService: AuthService
+		private readonly authService: AuthService,
+		private http: HttpClient,
 	) {
-//		private http: HttpClient,
 		// TODO: implement backport to get next object from backed (unmock).
-		this.authService.getAuthContext().subscribe
-		(
-			ctx =>
-			{
-				this.authContext = ctx;
-			}
-		);
+		this.authService.getAuthContext().subscribe( ctx => {
+			console.log("Got new authContext", this.authContext);
+			this.authContext = ctx;
+		} );
 	}
 	getLoggedUser(): Observable<User | undefined> {
-		//console.log("getLoggedUser() run.", this.loggedUser);
-		return of(this.loggedUser);
+		console.log("getLoggedUser() run.");
+		return this.http.get<User>(this.userByLoginUrl)
+		// ^ line above is the real change on this file for this commit.
+		// all other stuff here is still mocked.
 	}
 
 	getOnlineUsers(): Observable<User[]> {
@@ -52,13 +53,13 @@ export class UserService {
 		return of(users);
 	}
 
-
 	getUserById(intraId: string | null): Observable<User | undefined> {
 		if (intraId !== null)
 			var user = USERS.find(h => h.intraId === intraId)!;
 		else
 			return this.getLoggedUser();
 		return of(user);
+//		return new BehaviorSubject<User | undefined>(user);
 	}
 
 	getUser(id: string): Observable<User> {
@@ -86,3 +87,4 @@ export class UserService {
 		};
 	}
 }
+

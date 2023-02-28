@@ -36,8 +36,8 @@ fffclean: ffclean
 	./tools/b_docker_clean_CAUTION.sh
 	./tools/b_docker_restart.sh
 
-re : fclean install all
-fre : ffre
+re : fclean all
+fre : re
 ffre : ffclean install all
 fffre : fffclean install all
 

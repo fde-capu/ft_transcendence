@@ -9,8 +9,9 @@ import { AuthService } from 'src/app/auth/service/auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  isAuthenticated = false;
-  challengeEnabled = false;
+	step_one: Boolean = false;
+	step_two: Boolean = false;
+
 
   // TODO: Remove it. It is only here for tests proposes. If you want to generate the code use this.authService.getChallenge()
   challengeUri =
@@ -24,10 +25,18 @@ export class LoginComponent {
   ) {
     this.authService.getAuthContext().subscribe({
       next: ctx => {
-        this.isAuthenticated = !!ctx;
-        this.challengeEnabled = ctx?.mfa.enabled || false;
-		this.message = ctx?.sub + ( this.challengeEnabled ? ", you have enabled 2FA. Please scan this quick response code on Google or Microsoft Authenticator if you haven't already:" : " passed without 2FA." );
-        if (ctx?.mfa.verified) this.router.navigate(['/']);
+		if (!ctx) { this.step_one = true; return; }
+		this.step_one = false;
+		if (ctx.mfa.enabled)
+		{
+			if (ctx.mfa.verified === true)
+			{
+				this.router.navigate(['/']);
+				return;
+			}
+			this.step_two = true;
+			this.message = ctx?.sub + ", you have enabled 2FA. Please scan this quick response code on Google or Microsoft Authenticator if you haven't already:";
+		}
       },
     });
   }
@@ -49,5 +58,7 @@ export class LoginComponent {
 
   signOut() {
     this.authService.signOut();
+	this.step_two = false;
+	this.step_one = true;
   }
 }

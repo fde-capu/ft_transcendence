@@ -4,16 +4,16 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn({
-    name: 'user_id',
+    name: 'id',
   })
   id?: string;
 
   @Column({
     nullable: false,
     default: '',
-    name: 'username'
+    name: 'intraId'
   })
-  login?: string;
+  intraId?: string;
 
   @Column({
     nullable: false,
@@ -22,13 +22,21 @@ export class Users {
   email?: string;
 
   @Column({
-    
     default: true,
   })
   mfa_enable?: boolean;
+
   @Column({
     default: false,
   })
   mfa_verified?: boolean;
 
+  @Column()
+  name?: string;
+
+  @Column({default:'DEFAULT_IMAGE'})
+  image?: string;
+
+  @Column()
+  score?: number;
 }

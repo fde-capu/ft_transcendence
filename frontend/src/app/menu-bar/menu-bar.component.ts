@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
-import { AuthService } from '../auth/service/auth.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -11,19 +10,21 @@ import { AuthService } from '../auth/service/auth.service';
 export class MenuBarComponent {
   constructor(
     private userService: UserService,
-    private authService: AuthService,
   ) {}
 
-  user?: User;
+  user: User | undefined = undefined;
   menuOpen = false;
 
   ngOnInit(): void {
-    this.getUser();
+	this.getUser();
   }
   getUser(): void {
-    this.userService.getLoggedUser().subscribe(user => {
-		this.user = user;
-	});
+	this.userService.getLoggedUser().subscribe(
+		backUser => { 
+			console.log("menu-bar got subscrition", backUser);
+			this.user = backUser;
+		}
+	)
   }
 
   onClickBurger(): void {
@@ -31,8 +32,5 @@ export class MenuBarComponent {
   }
   menuOff(): void {
     this.menuOpen = false;
-  }
-  signOut() {
-    this.authService.signOut();
   }
 }
