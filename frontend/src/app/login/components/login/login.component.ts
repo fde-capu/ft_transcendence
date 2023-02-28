@@ -23,8 +23,10 @@ export class LoginComponent {
     private readonly authService: AuthService,
     private readonly router: Router
   ) {
+	console.log("login will subscribe to fas getAuthContext");
     this.authService.getAuthContext().subscribe({
       next: ctx => {
+		console.log("login got new ctx", ctx);
 		if (!ctx) { this.step_one = true; return; }
 		this.step_one = false;
 		if (ctx.mfa.enabled)

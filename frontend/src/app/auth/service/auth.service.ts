@@ -32,17 +32,25 @@ export class AuthService {
     private readonly httpClient: HttpClient,
     private readonly router: Router
   ) {
+	console.log("fas = frontend-auth-service: constructor, will subscrive to b/auth/info");
     this.httpClient
       .get<TokenInfoResponse>(`${environment.backendOrigin}/auth/info`, {
         withCredentials: true,
       })
       .subscribe({
-        next: res => this.authContext.next(res),
-        error: () => this.authContext.next(undefined),
+        next: res => {
+			console.log("fas got http subscription from b/auth/info:", res);
+			this.authContext.next(res)
+		},
+        error: () => {
+			console.log("fas got error, will undefine authContext");
+			this.authContext.next(undefined)
+		}
       });
   }
 
   public getAuthContext(): Observable<TokenInfoResponse | undefined> {
+	console.log("fas getAuthContext run. current ctx:", this.authContext);
     return this.authContext.asObservable();
   }
 
@@ -55,7 +63,10 @@ export class AuthService {
       .get(`${environment.backendOrigin}/auth/logout`, {
         withCredentials: true,
       })
-      .pipe(tap(() => this.authContext.next(undefined)))
+      .pipe(tap(() => {
+		console.log("fas signOut: ctx set to undefined");
+		this.authContext.next(undefined);
+	  }))
       .subscribe({
         next: () => this.router.navigate(['/login']),
       });
@@ -86,7 +97,10 @@ export class AuthService {
         }
       )
       .pipe(
-        tap(res => this.authContext.next(res)),
+        tap(res => {
+			console.log("fas solveChallange set new ctx:", res);
+			this.authContext.next(res)
+		}),
         map(() => true),
         catchError(() => throwError(() => new Error('Invalid token!')))
       );
@@ -101,7 +115,10 @@ export class AuthService {
         }
       )
       .pipe(
-        tap(res => this.authContext.next(res)),
+        tap(res => {
+			console.log("fas disableChallenge set new ctx:", res);
+			this.authContext.next(res)
+		}),
         map(() => true),
         catchError(() => throwError(() => new Error('You cannot do that!')))
       );

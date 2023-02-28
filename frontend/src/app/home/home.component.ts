@@ -10,7 +10,6 @@ import { USERS } from '../mocks';
 })
 export class HomeComponent {
 	@Input() user: User | undefined = undefined;
-	ANOTHERUSERMOCK: User = USERS[7];
 
 	constructor (
 		private userService: UserService
@@ -19,7 +18,11 @@ export class HomeComponent {
 		this.getUser();
 	}
 	getUser(): void {
+		console.log("Home will subscribe current user.");
 		this.userService.getLoggedUser()
-			.subscribe(user => this.user = user);
+			.subscribe(user => { 
+				this.user = user;
+				console.log("home know the current user", this.user);
+			});
 	}
 }

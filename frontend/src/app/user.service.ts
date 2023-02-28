@@ -14,26 +14,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
+	private currentUser: string|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin';
-
-	authContext: TokenInfoResponse | undefined = undefined;
 
 	constructor(
 		private readonly authService: AuthService,
 		private http: HttpClient,
 	) {
-		// TODO: implement backport to get next object from backed (unmock).
-		this.authService.getAuthContext().subscribe( ctx => {
-			console.log("Got new authContext", this.authContext);
-			this.authContext = ctx;
-		} );
+		console.log("fus = frontend-user-service: constructor.");
 	}
+
 	getLoggedUser(): Observable<User | undefined> {
-		console.log("getLoggedUser() run.");
+		console.log("fus getLoggedUser() run. Will call:", this.userByLoginUrl);
 		return this.http.get<User>(this.userByLoginUrl)
-		// ^ line above is the real change on this file for this commit.
-		// all other stuff here is still mocked.
 	}
 
 	getOnlineUsers(): Observable<User[]> {

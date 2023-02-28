@@ -76,7 +76,7 @@ export class AuthService {
           }),
         ),
         catchError((error: ErrorFortyTwoApi) => {
-			console.log(error);
+			console.log("createSessionToken got error:", error);
           throw new UnauthorizedException();
         }),
       ),
