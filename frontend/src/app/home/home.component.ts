@@ -9,20 +9,20 @@ import { USERS } from '../mocks';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-	@Input() user: User | undefined = undefined;
+	user: User | undefined = undefined;
 
 	constructor (
 		private userService: UserService
 	) {};
 	ngOnInit(): void {
-		this.getUser();
+//		this.getUser();
 	}
 	getUser(): void {
-		console.log("Home will subscribe current user.");
-		this.userService.getLoggedUser()
-			.subscribe(user => { 
-				this.user = user;
-				console.log("home know the current user", this.user);
-			});
+//		console.log("Home will subscribe current user.");
+//		this.userService.getLoggedUser()
+//			.subscribe(user => { 
+//				this.user = user;
+//				console.log("Home knows the current user:", this.user);
+//			});
 	}
 }

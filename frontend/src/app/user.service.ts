@@ -23,11 +23,15 @@ export class UserService {
 		private http: HttpClient,
 	) {
 		console.log("fus = frontend-user-service: constructor.");
+		this.getLoggedUser();
 	}
 
 	getLoggedUser(): Observable<User | undefined> {
 		console.log("fus getLoggedUser() run. Will call:", this.userByLoginUrl);
-		return this.http.get<User>(this.userByLoginUrl)
+		this.http.get<User>(this.userByLoginUrl).subscribe(raw => {
+			console.log("fus got subscription of gLU:", raw);
+		});
+		return of(undefined);
 	}
 
 	getOnlineUsers(): Observable<User[]> {
