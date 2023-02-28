@@ -49,6 +49,7 @@ const routes: Routes = [
   },
   {
 	path: 'create-match',
+    canActivate: [AuthGuard],
 	component: CreateMatchComponent,
   },
   {
@@ -58,10 +59,12 @@ const routes: Routes = [
   },
   {
     path: 'chat',
+    canActivate: [AuthGuard],
     component: ChatBoxComponent,
   },
   {
     path: 'rooms',
+    canActivate: [AuthGuard],
     component: ChatRoomListComponent,
   },
   {

@@ -62,20 +62,21 @@ export class AuthService {
           expiresIn = r.expires_in;
           fortyTwo = r;
         }),
-        // Get user login from 42 api,
+        // Get user intraId (called login on 42 api)
         switchMap((r) => this.fortyTwoService.getUserInfo(r.access_token)),
         //store infos in DB
-        switchMap((r) => this.userService.registerUser(r)),
+        switchMap((r) => this.userService.registerUserOk42(r)),
         // Create Session Token for the ft_transcendence
         map((r) =>
           this.tokenService.sign({
-            sub: r.login,
+            sub: r.intraId,
             exp: Math.floor(Date.now() / this.thousand) + expiresIn,
-            mfa: {enable: r.mfa_enable, verified: r.mfa_verified},
+            mfa: {enabled: r.mfa_enable, verified: r.mfa_verified},
             fortyTwo,
           }),
         ),
         catchError((error: ErrorFortyTwoApi) => {
+			console.log(error);
           throw new UnauthorizedException();
         }),
       ),

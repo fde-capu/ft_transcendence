@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/auth/service/auth.service';
 export class MainMenuComponent {
 	@Input() big: Boolean = false;
 	constructor(
-		private readonly authService: AuthService
+		private readonly authService: AuthService,
 	) {};
 	signOut() {
 		this.authService.signOut();

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
-import { MeDTO, UserService } from '../service/user.service';
+import { UserService } from '../service/user.service';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Users } from '../entity/user.entity';
@@ -10,32 +10,32 @@ export class RegisterController {
   
   // @Post('register')
   // async register(){
-  //   return this.userService.register({login: 'jestevam', email: "jjuu.com"});
+  //   return this.userService.register({intraId: 'jestevam', email: "jjuu.com"});
   // }
 
-  @Put('update/:login')
+  @Put('update/:intraId')
   @UseGuards(AuthGuard)
   async updateUser(
-    @Param('login')login: string,
+    @Param('intraId')intraId: string,
     @Res() response: Response = null,
     @Body()user: Users){
     try {
-      await this.userService.updateUser(login, user);
+      await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
     } catch (e) {
       response.status(e.status).json(e.data);
     }
-    this.userService.updateUser(login, user);
+    this.userService.updateUser(intraId, user);
   }
 
   @Get('userByLogin')
   @UseGuards(AuthGuard)
-  async getUserByLogin(
-    @Query('login') code: string,
+  async getUserByIntraId(
+    @Query('intraId') code: string,
     @Res() response: Response = null,
   ): Promise<any> {
     try {
-      const resp =  await this.userService.getUserByLogin(code);
+      const resp =  await this.userService.getUserByIntraId(code);
       return response.status(200).json(resp);
     } catch (e) {
       response.status(e.status).json(e.data);

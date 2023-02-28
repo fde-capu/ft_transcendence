@@ -32,10 +32,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         const goingToLoggingPage = state.url.includes('/login');
 
         if (!isAuthenticated && !goingToLoggingPage)
+		{
           return this.router.createUrlTree(['/login']);
+		}
 
         if (isAuthenticated && goingToLoggingPage)
+		{
           return this.router.createUrlTree(['/']);
+		}
 
         return true;
       })
@@ -55,10 +59,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         const goingToLoggingPage = state.url.includes('/login');
 
         if (!isAuthenticated && !goingToLoggingPage)
+		{
           return this.router.createUrlTree(['/login']);
+		}
 
         if (isAuthenticated && goingToLoggingPage)
+		{
           return this.router.createUrlTree(['/']);
+		}
 
         return true;
       })
