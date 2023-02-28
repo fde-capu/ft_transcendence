@@ -15,14 +15,14 @@ export class HomeComponent {
 		private userService: UserService
 	) {};
 	ngOnInit(): void {
-//		this.getUser();
+		this.getUser();
 	}
-	getUser(): void {
-//		console.log("Home will subscribe current user.");
-//		this.userService.getLoggedUser()
-//			.subscribe(user => { 
-//				this.user = user;
-//				console.log("Home knows the current user:", this.user);
-//			});
+	getUser() {
+		console.log("Home will set current user async.");
+		this.userService.getLoggedUser().subscribe
+			( user => {
+				this.user = user 
+				console.log("Home got", this.user);
+			});
 	}
 }

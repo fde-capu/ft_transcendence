@@ -27,6 +27,8 @@ export class AuthService {
   private authContext: Subject<TokenInfoResponse | undefined> =
     new ReplaySubject(1);
 
+	currentIntraId: string = "";
+
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly httpClient: HttpClient,
@@ -40,10 +42,12 @@ export class AuthService {
       .subscribe({
         next: res => {
 			console.log("fas got http subscription from b/auth/info:", res);
+			this.currentIntraId = res.sub;
 			this.authContext.next(res)
 		},
         error: () => {
 			console.log("fas got error, will undefine authContext");
+			this.currentIntraId = "";
 			this.authContext.next(undefined)
 		}
       });
@@ -65,6 +69,7 @@ export class AuthService {
       })
       .pipe(tap(() => {
 		console.log("fas signOut: ctx set to undefined");
+		this.currentIntraId = "";
 		this.authContext.next(undefined);
 	  }))
       .subscribe({
@@ -99,6 +104,7 @@ export class AuthService {
       .pipe(
         tap(res => {
 			console.log("fas solveChallange set new ctx:", res);
+			this.currentIntraId = res.sub;
 			this.authContext.next(res)
 		}),
         map(() => true),
@@ -117,10 +123,15 @@ export class AuthService {
       .pipe(
         tap(res => {
 			console.log("fas disableChallenge set new ctx:", res);
+			this.currentIntraId = res.sub;
 			this.authContext.next(res)
 		}),
         map(() => true),
         catchError(() => throwError(() => new Error('You cannot do that!')))
       );
+  }
+
+  public getCurrentIntraId(): string {
+	return this.currentIntraId;
   }
 }

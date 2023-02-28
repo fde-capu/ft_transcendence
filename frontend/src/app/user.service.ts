@@ -14,24 +14,23 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-	private currentUser: string|undefined = undefined;
+	private currentIntraId: string|undefined = undefined;
+	private currentUser: User|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
-	private userByLoginUrl = 'http://localhost:3000/user/userByLogin';
+	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 
 	constructor(
 		private readonly authService: AuthService,
 		private http: HttpClient,
 	) {
 		console.log("fus = frontend-user-service: constructor.");
-		this.getLoggedUser();
+		this.currentIntraId = authService.getCurrentIntraId();
 	}
 
-	getLoggedUser(): Observable<User | undefined> {
-		console.log("fus getLoggedUser() run. Will call:", this.userByLoginUrl);
-		this.http.get<User>(this.userByLoginUrl).subscribe(raw => {
-			console.log("fus got subscription of gLU:", raw);
-		});
-		return of(undefined);
+	// This function will 
+	getLoggedUser(): Observable<User> {
+		console.log("fus getLoggedUserFromBack() run. It knows:", this.currentIntraId);
+		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId)
 	}
 
 	getOnlineUsers(): Observable<User[]> {
