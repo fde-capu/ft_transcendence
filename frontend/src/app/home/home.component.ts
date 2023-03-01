@@ -9,7 +9,7 @@ import { USERS } from '../mocks';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-	user: User | undefined = undefined;
+	user?: User;
 
 	constructor (
 		private userService: UserService
