@@ -68,12 +68,14 @@ export class ProfileComponent {
 		this.owner = this.user.intraId == this.displayUser.intraId;
 		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
 	}
-
-	onClose() {
-		alert('Closes this profile.');
-	}
 	isFriend(): Boolean {
 		return this.userService.isFriend(this.user);
+	}
+
+	saveUser() {
+		if (!this.user) return ;
+		this.userService.saveUser(this.user)
+			.subscribe();
 	}
 }
 

@@ -18,12 +18,17 @@ export class UserService {
 	private currentUser: User|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
+	private updateUserUrl = 'http://localhost:3000/user/update/';
+	private saveHttpOptions = 
+				{
+					withCredentials: true,
+					'Content-Type': 'application/json'
+				}
 
 	constructor(
 		private readonly authService: AuthService,
 		private http: HttpClient,
 	) {
-		//console.log("fus = frontend-user-service: constructor.");
 		this.getCurrentIntraId();
 	}
 
@@ -38,6 +43,24 @@ export class UserService {
 	getLoggedUser(): Observable<User> {
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 	}
+
+	getUser(id: string): Observable<User> {
+		return this.getLoggedUser();
+	}
+
+	saveUser(u_user: User): Observable<any> {
+		return this.http.put(
+				this.updateUserUrl + u_user.intraId,
+				u_user,
+				this.saveHttpOptions
+			)
+			.pipe
+			(
+				tap(_ => console.log("fos got from saved:", _)),
+				catchError(this.handleError<any>('saveUser'))
+			);
+	}
+
 
 	getOnlineUsers(): Observable<User[]> {
 		const users = USERS;
@@ -54,16 +77,6 @@ export class UserService {
 		// Must return users online, not playing, and not logged user.
 		const users = USERS;
 		return of(users);
-	}
-
-	getUser(id: string): Observable<User> {
-//		const url = `${this.usersUrl}/${id}`;
-//		return this.http.get<User>(url).pipe
-//		(
-//			tap(_ => console.log(`Got user id=${id}`)),
-//			catchError(this.handleError<User>(`getUser id=${id}`))
-//		);
-		return of(USERS[7]);
 	}
 
 	isFriend(user: User | undefined): Boolean {

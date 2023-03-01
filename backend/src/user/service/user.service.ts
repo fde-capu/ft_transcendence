@@ -69,6 +69,7 @@ export class UserService {
     if (resp.affected === 0){
       throw new NotFoundException();
     }
+	console.log("updateUser resp", resp);
     return resp;
   }
 
@@ -91,3 +92,4 @@ export class UserService {
     return dto;
   }
 }
+
