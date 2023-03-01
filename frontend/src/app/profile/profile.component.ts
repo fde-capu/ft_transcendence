@@ -26,26 +26,12 @@ export class ProfileComponent {
 		this.getUser();
 	}
 	getUser(): void {
-		//console.log("Getting user");
-		this.route.params.subscribe((params: Params) => {
-			const id = params['intraId'];
-			//console.log("Got info from route.params.", id, id != undefined);
-			if (id != undefined) {
-				// TODO: Reject /profile/unexistent-user
-				//console.log("You asked for", id);
-				this.userService.getUserById(id)
-					.subscribe(user => {
-						//console.log("Seting to ", user);
-						this.user = user ? user : undefined;
-						this.setOwnership();
-					});
+		this.userService.getLoggedUser().subscribe(
+			backUser => { 
+				//console.log("menu-bar got subscrition", backUser);
+				this.user = backUser;
 			}
-		});
-		this.userService.getLoggedUser().subscribe(user => {
-			//console.log("Got signal from getLoggedUser(): ", user.intraId);
-			this.loggedUser = user;
-			this.setOwnership();
-		});
+		)
 	}
 	setOwnership() {
 		//console.log("setOwnership; logged, called:", this.loggedUser, this.user);
