@@ -56,7 +56,9 @@ export class UserService {
 			)
 			.pipe
 			(
-				tap(_ => console.log("fos got from saved:", _)),
+				tap(_ => 
+					console.log("fos got from saved:", _)
+				),
 				catchError(this.handleError<any>('saveUser'))
 			);
 	}

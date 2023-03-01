@@ -29,7 +29,7 @@ export class ProfileComponent {
 	getUser(): void {
 		this.userService.getLoggedUser().subscribe(
 			backUser => { 
-				console.log("profile got logged user.", backUser);
+				//console.log("profile got logged user.", backUser);
 				this.user = backUser;
 				this.getIdRequest();
 			}
@@ -38,22 +38,22 @@ export class ProfileComponent {
 	getIdRequest() {
 		this.route.params.subscribe((params: Params) => {
 			this.idRequest = params['intraId'];
-			console.log("profile got idReuqest", this.idRequest);
+			//console.log("profile got idReuqest", this.idRequest);
 			this.getDisplayUser();
 		});
 	}
 	getDisplayUser() {
-		console.log("idRequest", this.idRequest);
+		//console.log("idRequest", this.idRequest);
 		if (!this.idRequest)
 		{
 			this.displayUser = this.user;
 			this.setOwnership();
-			console.log("profile set displayUser = user");
+			//console.log("profile set displayUser = user");
 			return ;
 		}
 		this.userService.getUserById(this.idRequest).subscribe(
 			backUser => { 
-				console.log("profile got display user.", backUser);
+				//console.log("profile got display user.", backUser);
 				this.displayUser = backUser;
 				this.setOwnership();
 			}
@@ -73,9 +73,8 @@ export class ProfileComponent {
 	}
 
 	saveUser() {
-		if (!this.user) return ;
-		this.userService.saveUser(this.user)
-			.subscribe();
+		if (this.user)
+			this.userService.saveUser(this.user).subscribe();
 	}
 }
 
