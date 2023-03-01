@@ -38,6 +38,7 @@ export class ProfileComponent {
 	getIdRequest() {
 		this.route.params.subscribe((params: Params) => {
 			this.idRequest = params['intraId'];
+			console.log("profile got idReuqest", this.idRequest);
 			this.getDisplayUser();
 		});
 	}
@@ -47,6 +48,7 @@ export class ProfileComponent {
 		{
 			this.displayUser = this.user;
 			this.setOwnership();
+			console.log("profile set displayUser = user");
 			return ;
 		}
 		this.userService.getUserById(this.idRequest).subscribe(
@@ -58,8 +60,11 @@ export class ProfileComponent {
 		)
 	}
 	setOwnership() {
-		if (!this.user || !this.displayUser)
+		if (!this.displayUser || !this.user)
+		{
+			throw("Something wrong.");
 			return ;
+		}
 		this.owner = this.user.intraId == this.displayUser.intraId;
 		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
 	}

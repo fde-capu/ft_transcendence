@@ -24,11 +24,18 @@ export class UserService {
 		private http: HttpClient,
 	) {
 		//console.log("fus = frontend-user-service: constructor.");
+		this.getCurrentIntraId();
+	}
+
+	getCurrentIntraId() {
 		this.authService.getAuthContext().subscribe(_=>{this.currentIntraId=_?.sub});
 	}
 
+	getUserById(intraId: string | null): Observable<User | undefined> {
+		return this.http.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
+	}
+
 	getLoggedUser(): Observable<User> {
-		//console.log("fus getLoggedUserFromBack() run. It knows:", this.currentIntraId);
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 	}
 
@@ -47,15 +54,6 @@ export class UserService {
 		// Must return users online, not playing, and not logged user.
 		const users = USERS;
 		return of(users);
-	}
-
-	getUserById(intraId: string | null): Observable<User | undefined> {
-		if (intraId !== null)
-			var user = USERS.find(h => h.intraId === intraId)!;
-		else
-			return this.getLoggedUser();
-		return of(user);
-//		return new BehaviorSubject<User | undefined>(user);
 	}
 
 	getUser(id: string): Observable<User> {
