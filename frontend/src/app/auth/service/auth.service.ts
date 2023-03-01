@@ -32,25 +32,25 @@ export class AuthService {
     private readonly httpClient: HttpClient,
     private readonly router: Router
   ) {
-	console.log("fas = frontend-auth-service: constructor, will subscrive to b/auth/info");
+	//console.log("fas = frontend-auth-service: constructor, will subscrive to b/auth/info");
     this.httpClient
       .get<TokenInfoResponse>(`${environment.backendOrigin}/auth/info`, {
         withCredentials: true,
       })
       .subscribe({
         next: res => {
-			console.log("fas got http subscription from b/auth/info:", res);
+			//console.log("fas got http subscription from b/auth/info:", res);
 			this.authContext.next(res)
 		},
         error: () => {
-			console.log("fas got error, will undefine authContext");
+			//console.log("fas got error, will undefine authContext");
 			this.authContext.next(undefined)
 		}
       });
   }
 
   public getAuthContext(): Observable<TokenInfoResponse | undefined> {
-	console.log("fas getAuthContext run. current ctx:", this.authContext);
+	//console.log("fas getAuthContext run. current ctx:", this.authContext);
     return this.authContext.asObservable();
   }
 
@@ -64,7 +64,7 @@ export class AuthService {
         withCredentials: true,
       })
       .pipe(tap(() => {
-		console.log("fas signOut: ctx set to undefined");
+		//console.log("fas signOut: ctx set to undefined");
 		this.authContext.next(undefined);
 	  }))
       .subscribe({
@@ -98,7 +98,7 @@ export class AuthService {
       )
       .pipe(
         tap(res => {
-			console.log("fas solveChallange set new ctx:", res);
+			//console.log("fas solveChallange set new ctx:", res);
 			this.authContext.next(res)
 		}),
         map(() => true),
@@ -116,7 +116,7 @@ export class AuthService {
       )
       .pipe(
         tap(res => {
-			console.log("fas disableChallenge set new ctx:", res);
+			//console.log("fas disableChallenge set new ctx:", res);
 			this.authContext.next(res)
 		}),
         map(() => true),

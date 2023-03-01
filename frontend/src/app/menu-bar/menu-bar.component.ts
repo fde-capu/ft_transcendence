@@ -21,7 +21,7 @@ export class MenuBarComponent {
   getUser(): void {
 	this.userService.getLoggedUser().subscribe(
 		backUser => { 
-			console.log("menu-bar got subscrition", backUser);
+			//console.log("menu-bar got subscrition", backUser);
 			this.user = backUser;
 		}
 	)

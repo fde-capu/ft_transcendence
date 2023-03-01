@@ -22,10 +22,10 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
-	console.log("Guard canActivate? will call fas:getAuthContext");
+	//console.log("Guard canActivate? will call fas:getAuthContext");
     return this.authService.getAuthContext().pipe(
       map(value => {
-		console.log("Guard canActivate got:", value);
+		//console.log("Guard canActivate got:", value);
 
         const isAuthenticated = (
 			value &&
@@ -33,27 +33,27 @@ export class AuthGuard implements CanActivate {
 		  ) || false;
 
         const isInLoginPage = state.url.includes('/login');
-		console.log("Guard isAuthenticated:", isAuthenticated, "...isInLoginPage:" , isInLoginPage);
+		//console.log("Guard isAuthenticated:", isAuthenticated, "...isInLoginPage:" , isInLoginPage);
 
         if (!isAuthenticated && !isInLoginPage)
 		{
-			console.log("Guard canActivate says: go to /login");
+			//console.log("Guard canActivate says: go to /login");
           return this.router.createUrlTree(['/login']);
 		}
 
         if (isAuthenticated && isInLoginPage)
 		{
-			console.log("Guard canActivate says: go to /");
+			//console.log("Guard canActivate says: go to /");
           return this.router.createUrlTree(['/']);
 		}
 
         if (!isAuthenticated && isInLoginPage)
 		{
-			console.log("Guard canActivate says: wait a minute! Please login.");
+			//console.log("Guard canActivate says: wait a minute! Please login.");
 			return true;
 		}
 
-		console.log("Guard canActivate says: yes.");
+		//console.log("Guard canActivate says: yes.");
         return true;
       })
     );
