@@ -13,8 +13,6 @@ import { AuthService } from '../service/auth.service';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-	currentUser: string|undefined = undefined;
-
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router
@@ -55,8 +53,7 @@ export class AuthGuard implements CanActivate {
 			return true;
 		}
 
-		this.currentUser = value?.sub;
-		console.log("Guard canActivate says yes, I know you:", this.currentUser);
+		console.log("Guard canActivate says: yes.");
         return true;
       })
     );

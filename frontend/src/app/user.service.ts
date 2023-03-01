@@ -24,13 +24,12 @@ export class UserService {
 		private http: HttpClient,
 	) {
 		console.log("fus = frontend-user-service: constructor.");
-		this.currentIntraId = authService.getCurrentIntraId();
+		this.authService.getAuthContext().subscribe(_=>{this.currentIntraId=_?.sub});
 	}
 
-	// This function will 
 	getLoggedUser(): Observable<User> {
 		console.log("fus getLoggedUserFromBack() run. It knows:", this.currentIntraId);
-		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId)
+		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 	}
 
 	getOnlineUsers(): Observable<User[]> {

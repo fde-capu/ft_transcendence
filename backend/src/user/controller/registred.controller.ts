@@ -29,6 +29,7 @@ export class RegisterController {
   }
 
   @Get('userByLogin')
+  @UseGuards(AuthGuard)
   async getUserByIntraId(
     @Query('intraId') code: string,
     @Res() response: Response = null,
