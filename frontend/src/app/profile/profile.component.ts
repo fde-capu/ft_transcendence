@@ -16,8 +16,9 @@ export class ProfileComponent {
 		private route: ActivatedRoute,
 	) {};
 
-	loggedUser: User | undefined = undefined;
 	user: User | undefined = undefined;
+	displayUser: User | undefined = undefined;
+	idRequest!: string;
 	owner: Boolean = false;
 	profileType: string = "USER";
 
@@ -28,17 +29,39 @@ export class ProfileComponent {
 	getUser(): void {
 		this.userService.getLoggedUser().subscribe(
 			backUser => { 
-				//console.log("menu-bar got subscrition", backUser);
+				console.log("profile got logged user.", backUser);
 				this.user = backUser;
+				this.getIdRequest();
+			}
+		)
+	}
+	getIdRequest() {
+		this.route.params.subscribe((params: Params) => {
+			this.idRequest = params['intraId'];
+			this.getDisplayUser();
+		});
+	}
+	getDisplayUser() {
+		console.log("idRequest", this.idRequest);
+		if (!this.idRequest)
+		{
+			this.displayUser = this.user;
+			this.setOwnership();
+			return ;
+		}
+		this.userService.getUserById(this.idRequest).subscribe(
+			backUser => { 
+				console.log("profile got display user.", backUser);
+				this.displayUser = backUser;
+				this.setOwnership();
 			}
 		)
 	}
 	setOwnership() {
-		//console.log("setOwnership; logged, called:", this.loggedUser, this.user);
-		this.owner = !this.user || this.loggedUser?.intraId === this.user.intraId && (!!this.user || !!this.loggedUser);
-		this.user = this.user ? this.user : this.loggedUser;
-		//console.log("This owner", this.owner);
-		this.profileType = (this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER");
+		if (!this.user || !this.displayUser)
+			return ;
+		this.owner = this.user.intraId == this.displayUser.intraId;
+		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
 	}
 
 	onClose() {
