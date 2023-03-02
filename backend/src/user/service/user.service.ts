@@ -69,7 +69,8 @@ export class UserService {
     .where("intraId = :intraId", { intraId: intraId })
     .execute();
     if (resp.affected === 0){
-      throw new NotFoundException();
+		console.log("updateUser got exception.");
+      throw new NotFoundException(); // SomethingWrongException() ..?
     }
 	//console.log("updateUser resp", resp);
     return resp;

@@ -38,4 +38,7 @@ export class Users {
 
   @Column()
   score?: number;
+
+  @Column()
+  isLogged?: boolean;
 }
