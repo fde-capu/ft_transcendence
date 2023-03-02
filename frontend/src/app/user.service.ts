@@ -6,7 +6,7 @@ import { User } from './user';
 import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
