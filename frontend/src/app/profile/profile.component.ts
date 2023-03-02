@@ -53,19 +53,21 @@ export class ProfileComponent {
 		}
 		this.userService.getUserById(this.idRequest).subscribe(
 			backUser => { 
-				//console.log("profile got display user.", backUser);
-				this.displayUser = backUser;
+				//console.log("profile got display user:", backUser);
+				if (backUser)
+					this.displayUser = backUser;
+				else
+					this.displayUser = undefined;
+				// ^Above seems redundant but condition is needed.
+				//console.log("new displayUser:", this.displayUser);
 				this.setOwnership();
 			}
 		)
 	}
 	setOwnership() {
-		if (!this.displayUser || !this.user)
-		{
-			throw("Something wrong.");
+		if (!this.user)
 			return ;
-		}
-		this.owner = this.user.intraId == this.displayUser.intraId;
+		this.owner = this.user.intraId == this.displayUser?.intraId;
 		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
 	}
 	isFriend(): Boolean {
@@ -73,13 +75,13 @@ export class ProfileComponent {
 	}
 
 	saveUser() {
-		if (this.user)
-			this.userService.saveUser(this.user).subscribe();
+		if (this.displayUser)
+			this.userService.saveUser(this.displayUser).subscribe();
 	}
 
 	switchMfa() {
-		if (this.user)
-			this.user.mfa_enabled = !this.user.mfa_enabled;
+		if (this.displayUser)
+			this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
 		this.saveUser();
 	}
 }

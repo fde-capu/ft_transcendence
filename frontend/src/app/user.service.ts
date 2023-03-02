@@ -6,7 +6,7 @@ import { User } from './user';
 import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -36,8 +36,14 @@ export class UserService {
 		this.authService.getAuthContext().subscribe(_=>{this.currentIntraId=_?.sub});
 	}
 
-	getUserById(intraId: string | null): Observable<User | undefined> {
-		return this.http.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
+	getUserById(intraId: string): Observable<User | undefined> {
+		return this.http
+			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
+			.pipe(
+					catchError( err => 
+						of(undefined)
+					)
+				 );
 	}
 
 	getLoggedUser(): Observable<User> {
@@ -89,7 +95,7 @@ export class UserService {
 		return (error: any): Observable<T> => {
 
 			// TODO: send the error to remote logging infrastructure
-			console.error(error); // log to console instead
+			console.error("handleError<T>:", error); // log to console instead
 
 			// Let the app keep running by returning an empty result.
 			return of(result as T);
