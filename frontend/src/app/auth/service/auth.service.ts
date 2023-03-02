@@ -68,7 +68,7 @@ export class AuthService {
 		this.authContext.next(undefined);
 	  }))
       .subscribe({
-        next: () => this.router.navigate(['/login']),
+        next: () => this.router.navigate(['/logout']),
       });
   }
 

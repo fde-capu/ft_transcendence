@@ -33,8 +33,8 @@ export class LoginComponent {
 		{
 			if (ctx.mfa.verified === true)
 			{
+				//console.log("Login authorized with MFA.");
 				this.router.navigate(['/']);
-				return;
 			}
 			this.step_two = true;
 			this.message = ctx?.sub + ", you have enabled 2FA. Please scan this quick response code on Google or Microsoft Authenticator if you haven't already:";
@@ -44,6 +44,7 @@ export class LoginComponent {
   }
 
   signIn() {
+	//console.log("Login signing in");
     this.authService.signIn();
   }
 

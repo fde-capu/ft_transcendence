@@ -15,7 +15,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class UserService {
 	private currentIntraId?: string;
-	private currentUser: User|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';

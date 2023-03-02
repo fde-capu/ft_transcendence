@@ -56,7 +56,7 @@ export class UserService {
 	  });
       existUser = await this.userRepository.save(createdUser);
     }
-	await this.updateUser(existUser.intraId, { mfa_verified: false });
+	await this.updateUser(existUser.intraId, { mfa_verified: false, isLogged: true });
 	// Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
 	// Aliás pode desimplementar o registro do mfa_verified na db.
     return ({ intraId: existUser.intraId, mfa_enabled: existUser.mfa_enabled,  mfa_verified: false }); 
@@ -94,6 +94,10 @@ export class UserService {
 	// Changed Database registry from "mfa_enable" (verb) to "mfa_enabled" (adjective).
 	//console.log("bus Returning:", dto.intraId);
     return dto;
+  }
+
+  logOut() {
+	console.log("bus logOut called.");
   }
 }
 

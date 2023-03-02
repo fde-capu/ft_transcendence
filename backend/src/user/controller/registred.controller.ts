@@ -20,8 +20,9 @@ export class RegisterController {
     @Res() response: Response = null,
     @Body()user: Users){
     try {
+		console.log("Registred will call updateUser.");
       await this.userService.updateUser(intraId, user);
-	  //console.log("Registred user saved:", user);
+	  console.log("Registred user saved:", user);
       return response.status(200).json({});
     } catch (e) {
       response.status(e.status).json(e.data);
