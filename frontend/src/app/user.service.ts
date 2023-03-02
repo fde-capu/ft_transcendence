@@ -49,7 +49,7 @@ export class UserService {
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 	}
 
-	getUser(id: string): Observable<User> {
+	getUser(): Observable<User> {
 		return this.getLoggedUser();
 	}
 

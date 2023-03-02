@@ -58,12 +58,9 @@ export class AuthController {
 
   @Get('logout')
   public logout(@Res() res: Response= null) {
-	console.log("Back: called for logout...")
-	this.userService.logOut();
-	console.log("Back: logout");
     res
       .clearCookie('authorization')
-      .json({ message: 'Did you have a good trip?' });
+      .json({ message: 'HOW CAN I PUT USERNAME HERE? Did you have a good trip?' });
   }
 
   @Get('info')

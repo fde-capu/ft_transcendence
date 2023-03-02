@@ -96,7 +96,8 @@ export class UserService {
     return dto;
   }
 
-  logOut() {
+  async logOut(intraId: string) {
+    let user = await this.userRepository.findOneBy({ intraId: intraId });
 	console.log("bus logOut called.");
   }
 }
