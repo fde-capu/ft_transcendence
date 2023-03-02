@@ -18,7 +18,6 @@ export class UserService {
 	private currentUser: User|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
-	private userMfaUrl = 'http://localhost:3000/user/mfa/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
 	private saveHttpOptions = 
 				{
