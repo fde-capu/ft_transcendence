@@ -21,6 +21,7 @@ export class RegisterController {
     @Body()user: Users){
     try {
       await this.userService.updateUser(intraId, user);
+	  console.log("Registred user saved:", user);
       return response.status(200).json({});
     } catch (e) {
       response.status(e.status).json(e.data);

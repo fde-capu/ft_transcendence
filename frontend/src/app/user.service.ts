@@ -18,6 +18,7 @@ export class UserService {
 	private currentUser: User|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
+	private userMfaUrl = 'http://localhost:3000/user/mfa/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
 	private saveHttpOptions = 
 				{
@@ -49,6 +50,7 @@ export class UserService {
 	}
 
 	saveUser(u_user: User): Observable<any> {
+		//console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
 				u_user,
@@ -62,7 +64,6 @@ export class UserService {
 				catchError(this.handleError<any>('saveUser'))
 			);
 	}
-
 
 	getOnlineUsers(): Observable<User[]> {
 		const users = USERS;

@@ -18,10 +18,12 @@ export interface UserDTO {
   name: string;
   image: string;
   score?: number;
+  mfa_enabled: boolean;
 }
+
 export interface registerResp {
   intraId?: string;
-  mfa_enable?: boolean,
+  mfa_enabled?: boolean,
   mfa_verified?: boolean,
 }
 
@@ -37,8 +39,8 @@ export class UserService {
   //     const createdUser =  this.userRepository.create({ intraId: codeFrom42.login, email: codeFrom42.email });
   //     return (await this.userRepository.save(createdUser));
   //   }
-  //   await this.updateUser(codeFrom42.login, { mfa_enable: true,  mfa_verified: false });
-  //   return ({ intraId: codeFrom42.login, mfa_enable: true,  mfa_verified: false });
+  //   await this.updateUser(codeFrom42.login, { mfa_enabled: true,  mfa_verified: false });
+  //   return ({ intraId: codeFrom42.login, mfa_enabled: true,  mfa_verified: false });
   // }
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
@@ -57,7 +59,7 @@ export class UserService {
 	await this.updateUser(existUser.intraId, { mfa_verified: false });
 	// Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
 	// Aliás pode desimplementar o registro do mfa_verified na db.
-    return ({ intraId: existUser.intraId, mfa_enable: existUser.mfa_enable,  mfa_verified: false }); 
+    return ({ intraId: existUser.intraId, mfa_enabled: existUser.mfa_enabled,  mfa_verified: false }); 
   }
   
   async updateUser(intraId: string, user: Users){
@@ -86,8 +88,10 @@ export class UserService {
 		intraId: resp.intraId,
 		name: resp.name,
 		image: resp.image,
-		score: resp.score
+		score: resp.score,
+		mfa_enabled: resp.mfa_enabled
 	};
+	// Changed Database registry from "mfa_enable" (verb) to "mfa_enabled" (adjective).
 	//console.log("bus Returning:", dto.intraId);
     return dto;
   }

@@ -52,6 +52,24 @@
 					></div>					</td>
 		</tr>
 	</ng-template>
+
+	<tr *ngIf="owner;">
+		<td>	<label>Two factor authentication</label>	</td>
+		<td>	
+			<span>
+				<div *ngIf="user.mfa_enabled">
+					<span class="inverted">[>ON<]</span> <a (click)="switchMfa();">[ OFF ]</a>
+				</div>
+				<div *ngIf="!user.mfa_enabled">
+					<a (click)="switchMfa();">[ ON ]</a> <span class="inverted">[>OFF<]</span>
+				</div>
+			</span>
+		</td>
+		<td>
+			<button type="button" (click)="switchMfa();">Change</button>
+		</td>
+	</tr>
+
 </table>
 
 <ng-template #user_unknown>
