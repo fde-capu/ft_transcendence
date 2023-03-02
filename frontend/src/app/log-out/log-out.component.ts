@@ -5,9 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './log-out.component.html',
   styleUrls: ['./log-out.component.css']
 })
-export class LogOutComponent {
-  constructor(
-  ) {}
-  ngOnInit(): void {
-  }
- }
+export class LogOutComponent {}

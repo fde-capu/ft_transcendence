@@ -49,8 +49,18 @@ export class UserService {
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 	}
 
-	getUser(): Observable<User> {
-		return this.getLoggedUser();
+	getUser(id: string): Observable<User | undefined> {
+		return this.getUserById(id);
+	}
+
+	signOut() {
+		this.getLoggedUser().subscribe(_=>{
+			console.log("fus: ", _.intraId, " will log out.");
+			_.isLogged = false;
+			this.saveUser(_).subscribe(_=>{
+				this.authService.signOut();
+			});
+		});
 	}
 
 	saveUser(u_user: User): Observable<any> {

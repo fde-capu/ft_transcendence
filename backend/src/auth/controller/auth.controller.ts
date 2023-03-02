@@ -14,7 +14,6 @@ import { JWTPayload } from 'jose';
 import { TokenPayload } from '../decorator/token-payload.decorator';
 import { AuthGuard } from '../guard/auth.guard';
 import { AuthService } from '../service/auth.service';
-import { UserService } from '../../user/service/user.service';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +22,6 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     readonly configService: ConfigService,
-	private userService: UserService
   ) {
     this.frontendOrigin = this.configService.get<string>('FRONTEND_ORIGIN');
   }
@@ -60,7 +58,7 @@ export class AuthController {
   public logout(@Res() res: Response= null) {
     res
       .clearCookie('authorization')
-      .json({ message: 'HOW CAN I PUT USERNAME HERE? Did you have a good trip?' });
+      .json({ message: 'Did you have a good trip?' });
   }
 
   @Get('info')

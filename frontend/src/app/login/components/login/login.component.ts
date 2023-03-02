@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
+import { UserService } from '../../../user.service';
+import { USERS } from '../../../mocks';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,6 @@ export class LoginComponent {
 	step_one: Boolean = false;
 	step_two: Boolean = false;
 
-
   // TODO: Remove it. It is only here for tests proposes. If you want to generate the code use this.authService.getChallenge()
   challengeUri =
     'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
@@ -20,6 +21,7 @@ export class LoginComponent {
   message?: string;
 
   constructor(
+	private userService: UserService,
     private readonly authService: AuthService,
     private readonly router: Router
   ) {
@@ -60,7 +62,7 @@ export class LoginComponent {
   }
 
   signOut() {
-    this.authService.signOut();
+    this.userService.signOut();
 	this.step_two = false;
 	this.step_one = true;
   }
