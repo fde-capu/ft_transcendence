@@ -34,10 +34,17 @@ export class RegisterController {
     @Query('intraId') code: string,
     @Res() response: Response = null,
   ): Promise<any> {
+	if (!code)
+	{
+		console.log("RegContr cant search undefined");
+		return response.status(400).json("Who should I search for?");
+	}
     try {
+		console.log("RegContr will search for", code);
       const resp =  await this.userService.getUserByIntraId(code);
       return response.status(200).json(resp);
     } catch (e) {
+		console.log("RegContr found exception", e);
       response.status(e.status).json(e.data);
     }
   }

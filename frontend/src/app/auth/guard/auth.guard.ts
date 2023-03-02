@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  CanActivateChild,
   Router,
   RouterStateSnapshot,
   UrlTree,
@@ -13,7 +12,7 @@ import { AuthService } from '../service/auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate, CanActivateChild {
+export class AuthGuard implements CanActivate {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router
@@ -23,51 +22,38 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
+	console.log("Guard canActivate? will call fas:getAuthContext");
     return this.authService.getAuthContext().pipe(
       map(value => {
-        const isAuthenticated =
-          value &&
-          (!value.mfa.enabled || (value.mfa.enabled && value.mfa.verified));
+		console.log("Guard canActivate got:", value);
 
-        const goingToLoggingPage = state.url.includes('/login');
+        const isAuthenticated = (
+			value &&
+			(!value.mfa.enabled || (value.mfa.enabled && value.mfa.verified))
+		  ) || false;
 
-        if (!isAuthenticated && !goingToLoggingPage)
+        const isInLoginPage = state.url.includes('/login');
+		console.log("Guard isAuthenticated:", isAuthenticated, "...isInLoginPage:" , isInLoginPage);
+
+        if (!isAuthenticated && !isInLoginPage)
 		{
+			console.log("Guard canActivate says: go to /login");
           return this.router.createUrlTree(['/login']);
 		}
 
-        if (isAuthenticated && goingToLoggingPage)
+        if (isAuthenticated && isInLoginPage)
 		{
+			console.log("Guard canActivate says: go to /");
           return this.router.createUrlTree(['/']);
 		}
 
-        return true;
-      })
-    );
-  }
-
-  canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> {
-    return this.authService.getAuthContext().pipe(
-      map(value => {
-        const isAuthenticated =
-          value &&
-          (!value.mfa.enabled || (value.mfa.enabled && value.mfa.verified));
-
-        const goingToLoggingPage = state.url.includes('/login');
-
-        if (!isAuthenticated && !goingToLoggingPage)
+        if (!isAuthenticated && isInLoginPage)
 		{
-          return this.router.createUrlTree(['/login']);
+			console.log("Guard canActivate says: wait a minute! Please login.");
+			return true;
 		}
 
-        if (isAuthenticated && goingToLoggingPage)
-		{
-          return this.router.createUrlTree(['/']);
-		}
-
+		console.log("Guard canActivate says: yes.");
         return true;
       })
     );

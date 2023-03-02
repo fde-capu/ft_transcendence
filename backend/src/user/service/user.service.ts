@@ -73,11 +73,12 @@ export class UserService {
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
+	console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
     if (resp === null)
 	{
 //      throw new NotFoundException();
-		console.log("Could not find", u_intraId, "returning undefined.");
+		console.log("bus Could not find", u_intraId, "returning undefined.");
 		return undefined;
 	}
 	const dto: UserDTO = {
@@ -86,6 +87,7 @@ export class UserService {
 		image: resp.image,
 		score: resp.score
 	};
+	console.log("bus Returning:", dto.intraId);
     return dto;
   }
 }

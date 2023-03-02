@@ -9,8 +9,7 @@ import { USERS } from '../mocks';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-	@Input() user: User | undefined = undefined;
-	ANOTHERUSERMOCK: User = USERS[7];
+	user?: User;
 
 	constructor (
 		private userService: UserService
@@ -18,8 +17,12 @@ export class HomeComponent {
 	ngOnInit(): void {
 		this.getUser();
 	}
-	getUser(): void {
-		this.userService.getLoggedUser()
-			.subscribe(user => this.user = user);
+	getUser() {
+		console.log("Home will set current user async.");
+		this.userService.getLoggedUser().subscribe
+			( user => {
+				this.user = user 
+				console.log("Home got", this.user);
+			});
 	}
 }
