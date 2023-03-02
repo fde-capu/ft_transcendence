@@ -42,3 +42,4 @@ export class Users {
   @Column()
   isLogged?: boolean;
 }
+// Don't forget to `make re` after editing this file!
