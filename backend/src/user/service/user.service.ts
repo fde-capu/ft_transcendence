@@ -90,9 +90,7 @@ export class UserService {
 		score: resp.score,
 		mfa_enabled: resp.mfa_enabled
 	};
-	// Changed Database registry from "mfa_enable" (verb) to "mfa_enabled" (adjective).
 	//console.log("bus Returning:", dto.intraId);
     return dto;
   }
 }
-
