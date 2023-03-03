@@ -3,34 +3,28 @@ import { User } from '../user';
 import { UserService } from '../user.service';
 
 @Component({
-  selector: 'app-menu-bar',
-  templateUrl: './menu-bar.component.html',
-  styleUrls: ['./menu-bar.component.css'],
+  selector: 'app-friends-list',
+  templateUrl: './friends-list.component.html',
+  styleUrls: ['./friends-list.component.css']
 })
-export class MenuBarComponent {
+export class FriendsListComponent {
   constructor(
     private userService: UserService,
   ) {}
-
   user?: User;
-  menuOpen = false;
-
+  friends: User[] = [];
   ngOnInit(): void {
 	this.getUser();
   }
   getUser(): void {
 	this.userService.getLoggedUser().subscribe(
 		backUser => { 
-			//console.log("menu-bar got subscrition", backUser);
+			//console.log("friends-list got subscrition", backUser);
 			this.user = backUser;
+			this.getFriends();
 		}
 	)
   }
-
-  onClickBurger(): void {
-    this.menuOpen = !this.menuOpen;
-  }
-  menuOff(): void {
-    this.menuOpen = false;
+  getFriends(): void {
   }
 }

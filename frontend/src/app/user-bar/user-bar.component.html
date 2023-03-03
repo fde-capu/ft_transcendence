@@ -1,0 +1,7 @@
+<div *ngIf="user">
+	<app-avatar [user]="user"></app-avatar>
+	<a class="user-name-medium" routerLink="/profile/{{user.intraId}}">
+		{{user.intraId}} | {{user.name}}
+	</a>
+</div>
+<!-- TODO show current match <app-live-match>?-->

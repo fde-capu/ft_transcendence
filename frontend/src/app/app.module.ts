@@ -20,6 +20,8 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { LogOutComponent } from './log-out/log-out.component';
+import { FriendsListComponent } from './friends-list/friends-list.component';
+import { UserBarComponent } from './user-bar/user-bar.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { LogOutComponent } from './log-out/log-out.component';
 	ChatRoomListComponent,
 	CreateMatchComponent,
  LogOutComponent,
+ FriendsListComponent,
+ UserBarComponent,
   ],
   imports: [
     BrowserModule,
