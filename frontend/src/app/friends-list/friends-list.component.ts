@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 
@@ -11,23 +11,13 @@ export class FriendsListComponent {
   constructor(
     private userService: UserService,
   ) {}
-  user?: User;
+	@Input() user: User | undefined;
   friends: User[] = [];
-  ngOnInit(): void {
-	this.getUser();
-  }
-  getUser(): void {
-	this.userService.getLoggedUser().subscribe(
-		backUser => { 
-			//console.log("friends-list got subscrition", backUser);
-			this.user = backUser;
-			this.getFriends();
-		}
-	)
-  }
+  ngOnChanges(): void {this.getFriends();}
   getFriends(): void {
-	this.userService.getFriends(this.user).subscribe(
-		b_friends => this.friends = b_friends
-	);
+	this.userService.getFriends(this.user).subscribe(_=>{
+		console.log("FriendsListComponent got", _);
+		this.friends = _;
+	});
   }
 }

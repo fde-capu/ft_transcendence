@@ -86,10 +86,10 @@ export class UserService {
 	}
 
 	getFriends(u_user?: User): Observable<User[]> {
-		if (!u_user)
-			this.getLoggedUser().subscribe(_=>u_user=_);
+		console.log("getFriends will look for friends of", u_user);
 		if (u_user)
 		{
+			console.log("getFriends will call http.");
 			return this.http.get<User[]>(this.friendsUrl+u_user.intraId,{withCredentials:true})
 				.pipe(
 					catchError(this.handleError<User[]>('getFriends', []))
