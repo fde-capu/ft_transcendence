@@ -19,6 +19,7 @@ export interface UserDTO {
   image: string;
   score?: number;
   mfa_enabled: boolean;
+  friends?: string[];
 }
 
 export interface registerResp {
@@ -52,7 +53,8 @@ export class UserService {
 		email: codeFrom42.email,
 		name: codeFrom42.displayname,
 		image: codeFrom42.image['micro'],
-		score: 0
+		score: 0,
+		friends: []
 	  });
       existUser = await this.userRepository.save(createdUser);
     }
@@ -77,14 +79,25 @@ export class UserService {
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
-	//console.log("bus Will search:", u_intraId);
+	console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
     if (resp === null)
 	{
-		//console.log("bus Could not find", u_intraId, ", throwing error.");
+		console.log("bus Could not find", u_intraId, ", throwing error.");
 		throw new NotFoundException();
 	}
 	return this.singleUserDto(resp);
+  }
+
+  async getFullUser(u_intraId: string): Promise<Users> {
+	console.log("bus getFull Will search:", u_intraId);
+    const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
+    if (resp === null)
+	{
+		console.log("bus getFull Could not find", u_intraId, ", throwing error.");
+		throw new NotFoundException();
+	}
+	return resp;
   }
 
   async logOut(intraId: string) {
@@ -100,9 +113,33 @@ export class UserService {
 		// TODO: remove main-user from this list.
 	}
 
+	async getFriends(intraId:string):Promise<UserDTO[]>
+	{
+		let out: UserDTO[] = [];
+		const u = await this.getFullUser(intraId);
+		console.log("Friends with:", u.intraId);
+		if(!u || !u.friends){
+			console.log("...got no friends");
+			return out;
+		}
+		for (const friend of u.friends)
+		{
+			console.log("...friend has", friend);
+//			try {
+				let n = await this.getUserByIntraId(friend);
+				if (!n) return;
+				console.log("...friend got DTO", n.intraId);
+				out.push(n);
+//			} catch { console.log("getFriends ignoring error."); return; }
+		}
+		console.log("getFriends returning", out);
+		return out;
+	}
+
 	singleUserDto(u_user: Users):UserDTO{
 		return this.makeUserDto([u_user])[0];
 	}
+
 	makeUserDto(u_users: Users[]):UserDTO[]{
 		if (!u_users.length)
 			return [];

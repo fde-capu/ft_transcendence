@@ -41,5 +41,9 @@ export class Users {
 
   @Column({default:false})
   isLogged?: boolean;
+
+  @Column("simple-array")
+  friends?: string[];
 }
+// Don't forget to update backend/src/user/service/user.service.tx:registerUserOk42
 // Don't forget to `make re` after editing this file!
