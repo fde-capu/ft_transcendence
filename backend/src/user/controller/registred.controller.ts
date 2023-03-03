@@ -56,7 +56,7 @@ export class RegisterController {
 	async getOnlineUsers(@Res()response:Response=null):Promise<any>
 	{
 		try {
-			console.log("online: fetching databaes.");
+			console.log("reg online: fetching databaes.");
 			const resp = await this.userService.getOnlineUsers();
 			return response.status(200).json(resp);
 		} catch (e) {
