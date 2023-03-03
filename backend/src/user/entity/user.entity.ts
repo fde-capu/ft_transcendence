@@ -1,4 +1,3 @@
-
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -24,7 +23,7 @@ export class Users {
   @Column({
     default: true,
   })
-  mfa_enable?: boolean;
+  mfa_enabled?: boolean;
 
   @Column({
     default: false,

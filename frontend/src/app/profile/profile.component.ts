@@ -76,6 +76,13 @@ export class ProfileComponent {
 		if (this.user)
 			this.userService.saveUser(this.user).subscribe();
 	}
+
+	switchMfa() {
+		if (this.user)
+			this.user.mfa_enabled = !this.user.mfa_enabled;
+		this.saveUser();
+	}
+
 }
 
 // TODO:

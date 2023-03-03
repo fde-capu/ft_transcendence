@@ -49,6 +49,8 @@ export class UserService {
 	}
 
 	saveUser(u_user: User): Observable<any> {
+
+		//console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
 				u_user,
@@ -57,12 +59,11 @@ export class UserService {
 			.pipe
 			(
 				tap(_ => 
-					console.log("fos got from saved:", _)
+					console.log("Saving ok, got:", _)
 				),
 				catchError(this.handleError<any>('saveUser'))
 			);
 	}
-
 
 	getOnlineUsers(): Observable<User[]> {
 		const users = USERS;
@@ -96,4 +97,3 @@ export class UserService {
 		};
 	}
 }
-
