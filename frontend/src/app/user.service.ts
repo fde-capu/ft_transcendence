@@ -49,6 +49,7 @@ export class UserService {
 	}
 
 	saveUser(u_user: User): Observable<any> {
+
 		//console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
@@ -96,4 +97,3 @@ export class UserService {
 		};
 	}
 }
-

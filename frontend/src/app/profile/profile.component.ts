@@ -82,6 +82,7 @@ export class ProfileComponent {
 			this.user.mfa_enabled = !this.user.mfa_enabled;
 		this.saveUser();
 	}
+
 }
 
 // TODO:
