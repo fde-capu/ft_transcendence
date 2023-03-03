@@ -10,6 +10,19 @@ styleUrls: ['./avatar.component.css']
 export class AvatarComponent {
 	@Input() user?: User;
 	popUpOn = false;
+	isFriend: boolean = false;
+
+	constructor(
+		private userService: UserService
+	){}
+
+	ngOnChanges() {
+		this.checkFriendship();
+	}
+
+	checkFriendship() {
+		this.userService.isFriend(this.user).subscribe(_=>this.isFriend=_);
+	}
 
 	onClick(): void {
 		this.popUpOn = this.popUpOn ? false : true;

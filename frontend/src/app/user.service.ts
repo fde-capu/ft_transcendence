@@ -98,8 +98,8 @@ export class UserService {
 		return of([]);
 	}
 
-	isFriend(user: User | undefined): Boolean {
-		return Math.random() > .6;
+	isFriend(user: User | undefined): Observable<boolean> {
+		return of(Math.random() > .6);
 	}
 
 	getAvailableUsers(): Observable<User[]> {

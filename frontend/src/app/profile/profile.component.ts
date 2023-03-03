@@ -3,6 +3,7 @@ import { User } from '../user';
 import { UserService } from '../user.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HelperFunctionsService } from '../helper-functions.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -64,13 +65,13 @@ export class ProfileComponent {
 			}
 		)
 	}
-	setOwnership() {
+	async setOwnership() {
 		if (!this.user)
 			return ;
 		this.owner = this.user.intraId == this.displayUser?.intraId;
-		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
+		this.profileType = this.owner ? "YOUR" : await this.isFriend() ? "FRIEND" : "USER";
 	}
-	isFriend(): Boolean {
+	isFriend(): Observable<boolean> {
 		return this.userService.isFriend(this.user);
 	}
 
