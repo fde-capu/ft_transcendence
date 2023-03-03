@@ -69,7 +69,7 @@ export class UserService {
     .where("intraId = :intraId", { intraId: intraId })
     .execute();
     if (resp.affected === 0){
-		console.log("updateUser got exception.");
+		//console.log("updateUser got exception.");
       throw new NotFoundException(); // SomethingWrongException() ..?
     }
 	//console.log("updateUser resp", resp);
@@ -84,40 +84,35 @@ export class UserService {
 		//console.log("bus Could not find", u_intraId, ", throwing error.");
 		throw new NotFoundException();
 	}
-	const dto: UserDTO = {
-		intraId: resp.intraId,
-		name: resp.name,
-		image: resp.image,
-		score: resp.score,
-		mfa_enabled: resp.mfa_enabled
-	};
-	// Changed Database registry from "mfa_enable" (verb) to "mfa_enabled" (adjective).
-	//console.log("bus Returning:", dto.intraId);
-    return dto;
+	return this.singleUserDto(resp);
   }
 
   async logOut(intraId: string) {
     let user = await this.userRepository.findOneBy({ intraId: intraId });
-	console.log("bus logOut called.");
+	//console.log("bus logOut called.");
   }
 
-	async getOnlineUsers():Promise<[UserDTO]>{
+	async getOnlineUsers():Promise<UserDTO[]>{
 		const resp = await this.userRepository.createQueryBuilder("onlineUsers")
-		.where("onlineUsers.isLogged = :isLogged", { isLogged: false })
+		.where("onlineUsers.isLogged = :isLogged", { isLogged: true })
 		.getMany();
-
 		return this.makeUserDto(resp);
 	}
 
-	makeUserDto(u_users: [Users]):[UserDTO]{
-		out: [UserDTO];
+	singleUserDto(u_user: Users):UserDTO{
+		return this.makeUserDto([u_user])[0];
+	}
+	makeUserDto(u_users: Users[]):UserDTO[]{
+		if (!u_users.length)
+			return [];
+		let out: UserDTO[] = [];
 		u_users.forEach(function(u){
 			const dto: UserDTO = {
-				intraId: u_users.intraId,
-				name: u_users.name,
-				image: u_users.image,
-				score: u_users.score,
-				mfa_enabled: u_users.mfa_enabled,
+				intraId: u.intraId,
+				name: u.name,
+				image: u.image,
+				score: u.score,
+				mfa_enabled: u.mfa_enabled,
 			};
 			out.push(dto);
 		});

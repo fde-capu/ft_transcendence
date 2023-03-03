@@ -64,7 +64,7 @@ export class AuthService {
         withCredentials: true,
       })
       .pipe(tap(_ => {
-		console.log("fas signOut: ctx set to undefined. Got:", _);
+		//console.log("fas signOut: ctx set to undefined. Got:", _);
 		this.authContext.next(undefined);
 	  }))
       .subscribe({

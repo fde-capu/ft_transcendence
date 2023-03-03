@@ -56,7 +56,7 @@ export class UserService {
 
 	signOut() {
 		this.getLoggedUser().subscribe(_=>{
-			console.log("fus: ", _.intraId, " will log out.");
+			//console.log("fus: ", _.intraId, " will log out.");
 			_.isLogged = false;
 			this.saveUser(_).subscribe(_=>{
 				this.authService.signOut();
@@ -73,20 +73,13 @@ export class UserService {
 			)
 			.pipe
 			(
-				tap(_ => 
-					console.log("Saving ok, got:", _)
-				),
 				catchError(this.handleError<any>('saveUser'))
 			);
 	}
 
 	getOnlineUsers(): Observable<User[]> {
-//		const users = USERS;
-//		return of(users);
-//		CURRENTLY BROKEN (study code):
 		return this.http.get<User[]>(this.onlineUsersUrl,{withCredentials:true})
 			.pipe(
-				tap(_ => console.log("Get online users:", _)),
 				catchError(this.handleError<User[]>('getOnlineUsers', []))
 			);
 	}
