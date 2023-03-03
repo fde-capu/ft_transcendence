@@ -36,8 +36,14 @@ export class UserService {
 		this.authService.getAuthContext().subscribe(_=>{this.currentIntraId=_?.sub});
 	}
 
-	getUserById(intraId: string | null): Observable<User | undefined> {
-		return this.http.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
+	getUserById(intraId: string): Observable<User | undefined> {
+		return this.http
+			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
+			.pipe(
+					catchError( err => 
+						of(undefined)
+					)
+				 );
 	}
 
 	getLoggedUser(): Observable<User> {
@@ -49,7 +55,6 @@ export class UserService {
 	}
 
 	saveUser(u_user: User): Observable<any> {
-
 		//console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
@@ -90,7 +95,7 @@ export class UserService {
 		return (error: any): Observable<T> => {
 
 			// TODO: send the error to remote logging infrastructure
-			console.error(error); // log to console instead
+			console.error("handleError<T>:", error); // log to console instead
 
 			// Let the app keep running by returning an empty result.
 			return of(result as T);

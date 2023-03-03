@@ -1,12 +1,12 @@
 <app-menu-bar></app-menu-bar>
 <h2>{{ profileType }} Profile</h2>
-<table *ngIf="user; else user_unknown">
+<table *ngIf="displayUser; else user_unknown">
 	<tr *ngIf="owner; else name_simple">
 		<td>
 			<label>name</label>
 		</td>
 		<td>
-			<input id="name" [(ngModel)]="user.name"
+			<input id="name" [(ngModel)]="displayUser.name"
 			(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
 			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); saveUser();"
 			(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
@@ -21,18 +21,18 @@
 	<ng-template #name_simple>
 		<tr>
 			<td>	<label>name</label>	</td>
-			<td>	{{user.name}}		</td>
+			<td>	{{displayUser.name}}		</td>
 		</tr>
 	</ng-template>
 
 	<tr>
 		<td>	<label>id</label>	</td>
-		<td>	{{user.intraId}}	</td>
+		<td>	{{displayUser.intraId}}	</td>
 	</tr>
 
 	<tr>
 		<td>	<label>image url</label>	</td>
-		<td>	{{user.image}}				</td>
+		<td>	{{displayUser.image}}				</td>
 	</tr>
 
 <!-- TODO get image dinamicaly -->
@@ -57,10 +57,10 @@
 		<td>	<label>Two factor authentication</label>	</td>
 		<td>
 			<span>
-				<div *ngIf="user.mfa_enabled">
+				<div *ngIf="displayUser.mfa_enabled">
 					<span class="inverted">[>ON<]</span> <a (click)="switchMfa();">[ OFF ]</a>
 				</div>
-				<div *ngIf="!user.mfa_enabled">
+				<div *ngIf="!displayUser.mfa_enabled">
 					<a (click)="switchMfa();">[ ON ]</a> <span class="inverted">[>OFF<]</span>
 				</div>
 			</span>

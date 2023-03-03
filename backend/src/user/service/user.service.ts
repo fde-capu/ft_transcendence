@@ -80,9 +80,8 @@ export class UserService {
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
     if (resp === null)
 	{
-//      throw new NotFoundException();
-		//console.log("bus Could not find", u_intraId, "returning undefined.");
-		return undefined;
+		//console.log("bus Could not find", u_intraId, ", throwing error.");
+		throw new NotFoundException();
 	}
 	const dto: UserDTO = {
 		intraId: resp.intraId,
@@ -91,9 +90,7 @@ export class UserService {
 		score: resp.score,
 		mfa_enabled: resp.mfa_enabled
 	};
-
 	//console.log("bus Returning:", dto.intraId);
     return dto;
   }
 }
-
