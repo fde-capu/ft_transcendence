@@ -97,6 +97,7 @@ export class UserService {
 		.where("onlineUsers.isLogged = :isLogged", { isLogged: true })
 		.getMany();
 		return this.makeUserDto(resp);
+		// TODO: remove main-user from this list.
 	}
 
 	singleUserDto(u_user: Users):UserDTO{

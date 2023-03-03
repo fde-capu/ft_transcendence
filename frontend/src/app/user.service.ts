@@ -16,6 +16,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class UserService {
 	private currentIntraId?: string;
 	private usersUrl = 'http://localhost:3000/user';
+	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
@@ -84,14 +85,27 @@ export class UserService {
 			);
 	}
 
-	getAvailableUsers(): Observable<User[]> {
-		// Must return users online, not playing, and not logged user.
-		const users = USERS;
-		return of(users);
+	getFriends(u_user?: User): Observable<User[]> {
+		if (!u_user)
+			this.getLoggedUser().subscribe(_=>u_user=_);
+		if (u_user)
+		{
+			return this.http.get<User[]>(this.friendsUrl+u_user.intraId,{withCredentials:true})
+				.pipe(
+					catchError(this.handleError<User[]>('getFriends', []))
+				);
+		}
+		return of([]);
 	}
 
 	isFriend(user: User | undefined): Boolean {
 		return Math.random() > .6;
+	}
+
+	getAvailableUsers(): Observable<User[]> {
+		// Must return users online, not playing, and not logged user.
+		const users = USERS;
+		return of(users);
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {

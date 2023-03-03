@@ -26,5 +26,8 @@ export class FriendsListComponent {
 	)
   }
   getFriends(): void {
+	this.userService.getFriends(this.user).subscribe(
+		b_friends => this.friends = b_friends
+	);
   }
 }
