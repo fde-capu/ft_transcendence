@@ -58,7 +58,7 @@ export class ProfileComponent {
 					this.displayUser = backUser;
 				else
 					this.displayUser = undefined;
-				// ^Above seems redundant but condition is needed.
+				// ^ Above seems redundant but condition is needed.
 				//console.log("new displayUser:", this.displayUser);
 				this.setOwnership();
 			}
