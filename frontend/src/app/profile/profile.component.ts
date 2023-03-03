@@ -16,8 +16,9 @@ export class ProfileComponent {
 		private route: ActivatedRoute,
 	) {};
 
-	loggedUser: User | undefined = undefined;
 	user: User | undefined = undefined;
+	displayUser: User | undefined = undefined;
+	idRequest!: string;
 	owner: Boolean = false;
 	profileType: string = "USER";
 
@@ -26,40 +27,54 @@ export class ProfileComponent {
 		this.getUser();
 	}
 	getUser(): void {
-		//console.log("Getting user");
-		this.route.params.subscribe((params: Params) => {
-			const id = params['intraId'];
-			//console.log("Got info from route.params.", id, id != undefined);
-			if (id != undefined) {
-				// TODO: Reject /profile/unexistent-user
-				//console.log("You asked for", id);
-				this.userService.getUserById(id)
-					.subscribe(user => {
-						//console.log("Seting to ", user);
-						this.user = user ? user : undefined;
-						this.setOwnership();
-					});
+		this.userService.getLoggedUser().subscribe(
+			backUser => { 
+				//console.log("profile got logged user.", backUser);
+				this.user = backUser;
+				this.getIdRequest();
 			}
+		)
+	}
+	getIdRequest() {
+		this.route.params.subscribe((params: Params) => {
+			this.idRequest = params['intraId'];
+			//console.log("profile got idReuqest", this.idRequest);
+			this.getDisplayUser();
 		});
-		this.userService.getLoggedUser().subscribe(user => {
-			//console.log("Got signal from getLoggedUser(): ", user.intraId);
-			this.loggedUser = user;
+	}
+	getDisplayUser() {
+		//console.log("idRequest", this.idRequest);
+		if (!this.idRequest)
+		{
+			this.displayUser = this.user;
 			this.setOwnership();
-		});
+			//console.log("profile set displayUser = user");
+			return ;
+		}
+		this.userService.getUserById(this.idRequest).subscribe(
+			backUser => { 
+				//console.log("profile got display user.", backUser);
+				this.displayUser = backUser;
+				this.setOwnership();
+			}
+		)
 	}
 	setOwnership() {
-		//console.log("setOwnership; logged, called:", this.loggedUser, this.user);
-		this.owner = !this.user || this.loggedUser?.intraId === this.user.intraId && (!!this.user || !!this.loggedUser);
-		this.user = this.user ? this.user : this.loggedUser;
-		//console.log("This owner", this.owner);
-		this.profileType = (this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER");
-	}
-
-	onClose() {
-		alert('Closes this profile.');
+		if (!this.displayUser || !this.user)
+		{
+			throw("Something wrong.");
+			return ;
+		}
+		this.owner = this.user.intraId == this.displayUser.intraId;
+		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
 	}
 	isFriend(): Boolean {
 		return this.userService.isFriend(this.user);
+	}
+
+	saveUser() {
+		if (this.user)
+			this.userService.saveUser(this.user).subscribe();
 	}
 }
 

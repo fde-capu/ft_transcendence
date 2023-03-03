@@ -44,7 +44,7 @@ export class UserService {
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
     let existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
     if (existUser === null){
-		// console.log(codeFrom42); // The big reply from 42API.
+		//console.log(codeFrom42); // The big reply from 42API.
       const createdUser =  this.userRepository.create({
 		intraId: codeFrom42.login,
 		email: codeFrom42.email,
@@ -69,16 +69,17 @@ export class UserService {
     if (resp.affected === 0){
       throw new NotFoundException();
     }
+	//console.log("updateUser resp", resp);
     return resp;
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
-	console.log("bus Will search:", u_intraId);
+	//console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
     if (resp === null)
 	{
 //      throw new NotFoundException();
-		console.log("bus Could not find", u_intraId, "returning undefined.");
+		//console.log("bus Could not find", u_intraId, "returning undefined.");
 		return undefined;
 	}
 	const dto: UserDTO = {
@@ -87,7 +88,8 @@ export class UserService {
 		image: resp.image,
 		score: resp.score
 	};
-	console.log("bus Returning:", dto.intraId);
+	//console.log("bus Returning:", dto.intraId);
     return dto;
   }
 }
+

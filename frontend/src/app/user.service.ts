@@ -18,19 +18,51 @@ export class UserService {
 	private currentUser: User|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
+	private updateUserUrl = 'http://localhost:3000/user/update/';
+	private saveHttpOptions = 
+				{
+					withCredentials: true,
+					'Content-Type': 'application/json'
+				}
 
 	constructor(
 		private readonly authService: AuthService,
 		private http: HttpClient,
 	) {
-		console.log("fus = frontend-user-service: constructor.");
+		this.getCurrentIntraId();
+	}
+
+	getCurrentIntraId() {
 		this.authService.getAuthContext().subscribe(_=>{this.currentIntraId=_?.sub});
 	}
 
+	getUserById(intraId: string | null): Observable<User | undefined> {
+		return this.http.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
+	}
+
 	getLoggedUser(): Observable<User> {
-		console.log("fus getLoggedUserFromBack() run. It knows:", this.currentIntraId);
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 	}
+
+	getUser(id: string): Observable<User> {
+		return this.getLoggedUser();
+	}
+
+	saveUser(u_user: User): Observable<any> {
+		return this.http.put(
+				this.updateUserUrl + u_user.intraId,
+				u_user,
+				this.saveHttpOptions
+			)
+			.pipe
+			(
+				tap(_ => 
+					console.log("fos got from saved:", _)
+				),
+				catchError(this.handleError<any>('saveUser'))
+			);
+	}
+
 
 	getOnlineUsers(): Observable<User[]> {
 		const users = USERS;
@@ -47,25 +79,6 @@ export class UserService {
 		// Must return users online, not playing, and not logged user.
 		const users = USERS;
 		return of(users);
-	}
-
-	getUserById(intraId: string | null): Observable<User | undefined> {
-		if (intraId !== null)
-			var user = USERS.find(h => h.intraId === intraId)!;
-		else
-			return this.getLoggedUser();
-		return of(user);
-//		return new BehaviorSubject<User | undefined>(user);
-	}
-
-	getUser(id: string): Observable<User> {
-//		const url = `${this.usersUrl}/${id}`;
-//		return this.http.get<User>(url).pipe
-//		(
-//			tap(_ => console.log(`Got user id=${id}`)),
-//			catchError(this.handleError<User>(`getUser id=${id}`))
-//		);
-		return of(USERS[7]);
 	}
 
 	isFriend(user: User | undefined): Boolean {
