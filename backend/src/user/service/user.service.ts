@@ -100,5 +100,27 @@ export class UserService {
     let user = await this.userRepository.findOneBy({ intraId: intraId });
 	console.log("bus logOut called.");
   }
-}
 
+	async getOnlineUsers():Promise<[UserDTO]>{
+		const resp = await this.userRepository.createQueryBuilder("onlineUsers")
+		.where("onlineUsers.isLogged = :isLogged", { isLogged: false })
+		.getMany();
+
+		return this.makeUserDto(resp);
+	}
+
+	makeUserDto(u_users: [Users]):[UserDTO]{
+		out: [UserDTO];
+		u_users.forEach(function(u){
+			const dto: UserDTO = {
+				intraId: u_users.intraId,
+				name: u_users.name,
+				image: u_users.image,
+				score: u_users.score,
+				mfa_enabled: u_users.mfa_enabled,
+			};
+			out.push(dto);
+		});
+		return out;
+	}
+}

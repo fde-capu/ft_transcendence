@@ -50,4 +50,18 @@ export class RegisterController {
       response.status(e.status).json(e.data);
     }
   }
+
+	@Get('online')
+	@UseGuards(AuthGuard)
+	async getOnlineUsers(@Res()response:Response=null):Promise<any>
+	{
+		try {
+			console.log("online: fetching databaes.");
+			const resp = await this.userService.getOnlineUsers();
+			return response.status(200).json(resp);
+		} catch (e) {
+			console.log("reg: online got catch", e);
+			response.status(e.status).json(e.data);
+		}
+	}
 }
