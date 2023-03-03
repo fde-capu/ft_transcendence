@@ -15,6 +15,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class UserService {
 	private currentIntraId?: string;
+	private currentUser?: User;
 	private usersUrl = 'http://localhost:3000/user';
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
@@ -34,7 +35,11 @@ export class UserService {
 	}
 
 	getCurrentIntraId() {
-		this.authService.getAuthContext().subscribe(_=>{this.currentIntraId=_?.sub});
+		this.authService.getAuthContext().subscribe(_=>{
+			this.currentIntraId=_?.sub;
+			if (this.currentIntraId)
+				this.getLoggedUser().subscribe(_=>{this.currentUser=_});
+		});
 	}
 
 	getUserById(intraId: string): Observable<User | undefined> {
@@ -86,7 +91,7 @@ export class UserService {
 	}
 
 	getFriends(u_user?: User): Observable<User[]> {
-		console.log("getFriends will look for friends of", u_user);
+		console.log("getFriends will look for friends of", u_user?.intraId);
 		if (u_user)
 		{
 			console.log("getFriends will call http.");
@@ -98,8 +103,18 @@ export class UserService {
 		return of([]);
 	}
 
-	isFriend(user: User | undefined): Observable<boolean> {
-		return of(Math.random() > .6);
+	isFriend(u_user: User | undefined): Observable<boolean> {
+		this.getFriends(this.currentUser).subscribe(_=>{
+			for(const friend of _)
+			{
+				if (friend.intraId == u_user?.intraId)
+					return true;
+			}
+			return false;
+		});
+		return of(false);
+		// TODO (improvement): getFriendsString from URL (shorter, faster).
+		// XXX get from here.
 	}
 
 	getAvailableUsers(): Observable<User[]> {
