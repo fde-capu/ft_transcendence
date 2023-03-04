@@ -91,10 +91,10 @@ export class UserService {
 	}
 
 	getFriends(u_user?: User): Observable<User[]> {
-		console.log("getFriends will look for friends of", u_user?.intraId);
+		//console.log("getFriends will look for friends of", u_user?.intraId);
 		if (u_user)
 		{
-			console.log("getFriends will call http.");
+			//console.log("getFriends will call http.");
 			return this.http.get<User[]>(this.friendsUrl+u_user.intraId,{withCredentials:true})
 				.pipe(
 					catchError(this.handleError<User[]>('getFriends', []))
@@ -117,6 +117,14 @@ export class UserService {
 		if (!this.currentUser||!user_b) return of(false);
 		if (!this.currentUser.friends) this.currentUser.friends = [];
 		this.currentUser.friends.push(user_b.intraId);
+		return this.saveUser(this.currentUser);
+	}
+
+	unFriend(user_b: User|undefined): Observable<any> {
+		if (!this.currentUser||!user_b||!this.currentUser.friends) return of(false);
+		for (var i = 0; i < this.currentUser.friends.length; i++)
+			if (this.currentUser.friends[i] == user_b.intraId)
+				this.currentUser.friends.splice(i, 1);
 		return this.saveUser(this.currentUser);
 	}
 

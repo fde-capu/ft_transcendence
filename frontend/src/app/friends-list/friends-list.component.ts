@@ -16,7 +16,7 @@ export class FriendsListComponent {
   ngOnChanges(): void {this.getFriends();}
   getFriends(): void {
 	this.userService.getFriends(this.user).subscribe(_=>{
-		console.log("FriendsListComponent got", _);
+		//console.log("FriendsListComponent got", _);
 		this.friends = _;
 	});
   }

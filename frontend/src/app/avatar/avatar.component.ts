@@ -23,7 +23,7 @@ export class AvatarComponent {
 	checkFriendship() {
 		this.userService.isFriend(this.user).subscribe(_=>{
 			this.isFriend=_;
-			console.log(this.user?.intraId, "checks friendship to you:", _);
+			//console.log(this.user?.intraId, "checks friendship to you:", _);
 		});
 	}
 
@@ -36,6 +36,7 @@ export class AvatarComponent {
 	}
 
 	unFriend(){
+		this.userService.unFriend(this.user).subscribe();
 	}
 
 	onHover(): void {

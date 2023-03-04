@@ -66,17 +66,17 @@ export class UserService {
   }
   
   async updateUser(intraId: string, user: Users){
-	console.log("updateUser user", user);
+	//console.log("updateUser user", user);
     const resp = await this.userRepository.createQueryBuilder()
     .update(Users)
     .set(user)
     .where("intraId = :intraId", { intraId: intraId })
     .execute();
     if (resp.affected === 0){
-		console.log("updateUser got exception.");
+		//console.log("updateUser got exception.");
       throw new NotFoundException(); // SomethingWrongException() ..?
     }
-	console.log("updateUser resp", resp);
+	//console.log("updateUser resp", resp);
     return resp;
   }
 
