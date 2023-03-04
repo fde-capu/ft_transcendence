@@ -14,9 +14,9 @@ import { TokenService } from 'src/auth/service/token.service';
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
-  namespace: 'game',
+  namespace: /\/room\/.*/,
 })
-export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
@@ -27,18 +27,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
-      client.emit('message', {
-        author: 'ft_transcendence',
-        payload: 'Welcome!',
-      });
-      console.log(`Entrou no jogo: ${client['subject']}`);
+      console.log(
+        `Entrou no na sala: ${client['subject']} - ${client.nsp.name}`,
+      );
     } catch (error) {
       client.disconnect(true);
     }
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected game ${client['subject']}`);
+    console.log(
+      `Client disconnected room: ${client['subject']} - ${client.nsp.name}`,
+    );
   }
 
   @SubscribeMessage('message')
@@ -46,7 +46,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
-    this.server.emit('message', {
+    client.nsp.emit('message', {
+      room: client.nsp.name,
       author: client['subject'],
       payload: payload,
     });
