@@ -1,4 +1,4 @@
-<h2>Friends</h2>
+<h2 *ngIf='friends.length'>Friends</h2>
 <ul>
   <li *ngFor='let friend of friends'>
 	<app-user-bar [user]="friend"></app-user-bar>
