@@ -104,21 +104,13 @@ export class UserService {
 	}
 
 	isFriend(user_b: User | undefined): Observable<boolean> {
-		return this.getFriends(this.currentUser).pipe(map(_=>{
-			//console.log("isFriend got ", _.length);
-			for(const friend of _)
-			{
-				//console.log("...checking",friend.intraId);
-				if (friend.intraId == user_b?.intraId)
-				{
-					//console.log("...true");
-					return true;
-				}
-			}
-			console.log("...false");
-			return false;
-		}));
-		// TODO (improvement): getFriendsString from URL (shorter, faster).
+		if (!this.currentUser||!this.currentUser.friends) return of(false);
+		for (const friend of this.currentUser.friends)
+		{
+			if (friend == user_b?.intraId)
+				return of(true);
+		}
+		return of(false);
 	}
 
 	makeFriend(user_b: User|undefined): Observable<any> {

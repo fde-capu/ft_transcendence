@@ -73,11 +73,11 @@ export class RegisterController {
   ):Promise<any>
   {
 	try {
-		console.log("reg friends: fetching friends.");
+		//console.log("reg friends: fetching friends.");
 		const resp = await this.userService.getFriends(intraId);
 		return response.status(200).json(resp);
 	} catch (e) {
-		console.log("reg: friends got catch", e);
+		//console.log("reg: friends got catch", e);
 		response.status(e.status).json(e.data);
 	}
   }
