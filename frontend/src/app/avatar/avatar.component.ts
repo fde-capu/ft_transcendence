@@ -21,7 +21,10 @@ export class AvatarComponent {
 	}
 
 	checkFriendship() {
-		this.userService.isFriend(this.user).subscribe(_=>this.isFriend=_);
+		this.userService.isFriend(this.user).subscribe(_=>{
+			this.isFriend=_;
+			console.log(this.user?.intraId, "checks friendship to you:", _);
+		});
 	}
 
 	onClick(): void {

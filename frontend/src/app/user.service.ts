@@ -103,15 +103,22 @@ export class UserService {
 		return of([]);
 	}
 
-	isFriend(u_user: User | undefined): Observable<boolean> {
-		this.getFriends(this.currentUser).subscribe(_=>{
+	isFriend(user_b: User | undefined): Observable<boolean> {
+		return this.getFriends(this.currentUser).pipe(map(_=>{
+			console.log("isFriend got ", _.length);
 			for(const friend of _)
 			{
-				if (friend.intraId == u_user?.intraId)
+				console.log("...checking",friend.intraId);
+				if (friend.intraId == user_b?.intraId)
+				{
+					console.log("...true");
 					return true;
+				}
 			}
+			console.log("...false");
 			return false;
-		});
+		}));
+		console.log("...finally false");
 		return of(false);
 		// TODO (improvement): getFriendsString from URL (shorter, faster).
 		// XXX get from here.
