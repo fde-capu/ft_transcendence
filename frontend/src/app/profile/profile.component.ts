@@ -69,10 +69,10 @@ export class ProfileComponent {
 		if (!this.user)
 			return ;
 		this.owner = this.user.intraId == this.displayUser?.intraId;
-		this.profileType = this.owner ? "YOUR" : await this.isFriend() ? "FRIEND" : "USER";
+		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
 	}
-	isFriend(): Observable<boolean> {
-		return this.userService.isFriend(this.user);
+	isFriend(): boolean {
+		return this.userService.isFriend(this.displayUser);
 	}
 
 	saveUser() {

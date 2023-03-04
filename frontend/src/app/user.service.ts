@@ -103,14 +103,14 @@ export class UserService {
 		return of([]);
 	}
 
-	isFriend(user_b: User | undefined): Observable<boolean> {
-		if (!this.currentUser||!this.currentUser.friends) return of(false);
+	isFriend(user_b: User | undefined): boolean {
+		if (!this.currentUser||!this.currentUser.friends) return false;
 		for (const friend of this.currentUser.friends)
 		{
 			if (friend == user_b?.intraId)
-				return of(true);
+				return true;
 		}
-		return of(false);
+		return false;
 	}
 
 	makeFriend(user_b: User|undefined): Observable<any> {
