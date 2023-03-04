@@ -85,7 +85,7 @@ export class UserService {
 			.pipe
 			(
 				map(_=>{
-					console.log("saveUser will call component refresh.");
+					//console.log("saveUser will call component refresh.");
 					this.router.navigate([this.router.url])
 				}),
 				catchError(this.handleError<any>('saveUser'))
