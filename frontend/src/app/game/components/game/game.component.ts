@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { GameService } from '../../service/game.service';
 import { RoomSocket } from '../../socket/room.socket';
 
 interface Message {
