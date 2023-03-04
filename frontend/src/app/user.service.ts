@@ -105,23 +105,27 @@ export class UserService {
 
 	isFriend(user_b: User | undefined): Observable<boolean> {
 		return this.getFriends(this.currentUser).pipe(map(_=>{
-			console.log("isFriend got ", _.length);
+			//console.log("isFriend got ", _.length);
 			for(const friend of _)
 			{
-				console.log("...checking",friend.intraId);
+				//console.log("...checking",friend.intraId);
 				if (friend.intraId == user_b?.intraId)
 				{
-					console.log("...true");
+					//console.log("...true");
 					return true;
 				}
 			}
 			console.log("...false");
 			return false;
 		}));
-		console.log("...finally false");
-		return of(false);
 		// TODO (improvement): getFriendsString from URL (shorter, faster).
-		// XXX get from here.
+	}
+
+	makeFriend(user_b: User|undefined): Observable<any> {
+		if (!this.currentUser||!user_b) return of(false);
+		if (!this.currentUser.friends) this.currentUser.friends = [];
+		this.currentUser.friends.push(user_b.intraId);
+		return this.saveUser(this.currentUser);
 	}
 
 	getAvailableUsers(): Observable<User[]> {

@@ -43,6 +43,7 @@ export class UserService {
   //   await this.updateUser(codeFrom42.login, { mfa_enabled: true,  mfa_verified: false });
   //   return ({ intraId: codeFrom42.login, mfa_enabled: true,  mfa_verified: false });
   // }
+  // ^ I guess the code above is not necessary.
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
     let existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
@@ -65,36 +66,37 @@ export class UserService {
   }
   
   async updateUser(intraId: string, user: Users){
+	console.log("updateUser user", user);
     const resp = await this.userRepository.createQueryBuilder()
     .update(Users)
     .set(user)
     .where("intraId = :intraId", { intraId: intraId })
     .execute();
     if (resp.affected === 0){
-		//console.log("updateUser got exception.");
+		console.log("updateUser got exception.");
       throw new NotFoundException(); // SomethingWrongException() ..?
     }
-	//console.log("updateUser resp", resp);
+	console.log("updateUser resp", resp);
     return resp;
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
-	console.log("bus Will search:", u_intraId);
+	//console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
     if (resp === null)
 	{
-		console.log("bus Could not find", u_intraId, ", throwing error.");
+		//console.log("bus Could not find", u_intraId, ", throwing error.");
 		throw new NotFoundException();
 	}
 	return this.singleUserDto(resp);
   }
 
   async getFullUser(u_intraId: string): Promise<Users> {
-	console.log("bus getFull Will search:", u_intraId);
+	//console.log("bus getFull Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
     if (resp === null)
 	{
-		console.log("bus getFull Could not find", u_intraId, ", throwing error.");
+		//console.log("bus getFull Could not find", u_intraId, ", throwing error.");
 		throw new NotFoundException();
 	}
 	return resp;
@@ -117,22 +119,19 @@ export class UserService {
 	{
 		let out: UserDTO[] = [];
 		const u = await this.getFullUser(intraId);
-		console.log("Friends with:", u.intraId);
+		//console.log("Friends with:", u.intraId);
 		if(!u || !u.friends){
-			console.log("...got no friends");
+			//console.log("...got no friends");
 			return out;
 		}
 		for (const friend of u.friends)
 		{
-			console.log("...friend has", friend);
-//			try {
-				let n = await this.getUserByIntraId(friend);
-				if (!n) return;
-				console.log("...friend got DTO", n.intraId);
-				out.push(n);
-//			} catch { console.log("getFriends ignoring error."); return; }
+			//console.log("...friend has", friend);
+			let n = await this.getUserByIntraId(friend);
+			if (!n) return;
+			out.push(n);
 		}
-		console.log("getFriends returning", out);
+		//console.log("getFriends returning", out);
 		return out;
 	}
 
@@ -151,6 +150,7 @@ export class UserService {
 				image: u.image,
 				score: u.score,
 				mfa_enabled: u.mfa_enabled,
+				friends: u.friends,
 			};
 			out.push(dto);
 		});
