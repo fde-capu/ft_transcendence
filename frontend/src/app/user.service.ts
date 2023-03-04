@@ -7,6 +7,7 @@ import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -30,8 +31,12 @@ export class UserService {
 	constructor(
 		private readonly authService: AuthService,
 		private http: HttpClient,
+		private router: Router,
 	) {
 		this.getCurrentIntraId();
+		this.router.routeReuseStrategy.shouldReuseRoute = () => {
+			return false;
+		};
 	}
 
 	getCurrentIntraId() {
@@ -79,6 +84,10 @@ export class UserService {
 			)
 			.pipe
 			(
+				map(_=>{
+					console.log("saveUser will call component refresh.");
+					this.router.navigate([this.router.url])
+				}),
 				catchError(this.handleError<any>('saveUser'))
 			);
 	}
