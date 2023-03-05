@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { Statistics } from '../statistics';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-statistics',
@@ -8,18 +9,20 @@ import { Statistics } from '../statistics';
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent {
+	constructor(
+		private userService: UserService
+	){};
 	@Input() user?: User;
 	stat: Statistics = {} as Statistics;
-	ngOnInit() {
-		this.stat.score = 0;
-		this.stat.matches = 0;
-		this.stat.scorePerMatches = 0;
-		this.stat.ranking = 0;
-		this.stat.wins = 0;
-		this.stat.looses = 0;
-		this.stat.winsPerLooses = 0;
-		this.stat.goalsMade = 0;
-		this.stat.goalsTaken = 0;
-		this.stat.goalsMadePerTaken = 0;
+	ngOnChanges() {
+		this.getStats();
+	}
+	getStats() {
+		if (!this.user)
+			return ;
+		this.userService.getStats(this.user.intraId).subscribe(_=>{
+			console.log("Statistics got:", _);
+			this.stat=_;
+		});
 	}
 }

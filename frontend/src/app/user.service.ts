@@ -8,6 +8,7 @@ import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Statistics } from './statistics';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -141,6 +142,21 @@ export class UserService {
 		// Must return users online, not playing, and not logged user.
 		const users = USERS;
 		return of(users);
+	}
+
+	getStats(u_intraId: string): Observable<Statistics> {
+		const stat = {} as Statistics;
+		stat.score = Math.random() * 999999;
+		stat.matches = Math.floor( Math.random() * 20 );
+		stat.scorePerMatches = stat.score/stat.matches;
+		stat.ranking = 0;
+		stat.wins = Math.floor( Math.random() * stat.matches );
+		stat.looses = Math.floor( stat.matches - stat.wins );
+		stat.winsPerLooses = stat.wins/stat.looses;
+		stat.goalsMade = Math.floor( (Math.random() * stat.matches) * (Math.random() * 5) );
+		stat.goalsTaken = Math.floor( (Math.random() * stat.matches) * (Math.random() * 5) );
+		stat.goalsMadePerTaken = stat.goalsMade/stat.goalsTaken;
+		return of(stat);
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {
