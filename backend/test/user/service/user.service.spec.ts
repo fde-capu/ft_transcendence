@@ -11,20 +11,20 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [UserService],
       imports: [HttpModule],
-    }).useMocker(() => createMock()).compile();
+    })
+      .useMocker(() => createMock())
+      .compile();
 
     service = module.get<UserService>(UserService);
   });
-  describe('registerUser', () =>{
+  describe('registerUser', () => {
     it('call methot without code', async () => {
-      try{
+      try {
         await service.registerUser('');
-      }
-      catch(err){
-        const error = new BadRequestException()
+      } catch (err) {
+        const error = new BadRequestException();
         expect(err).toEqual(error);
       }
     });
-
-  })
+  });
 });

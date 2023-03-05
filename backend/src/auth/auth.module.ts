@@ -12,10 +12,14 @@ import { Users } from 'src/user/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [FortyTwoModule, UserModule,
-    TypeOrmModule.forFeature([Users])
+  imports: [FortyTwoModule, UserModule, TypeOrmModule.forFeature([Users])],
+  providers: [
+    TokenService,
+    OtpService,
+    AuthService,
+    UserService,
+    ConfigService,
   ],
-  providers: [TokenService, OtpService, AuthService, UserService, ConfigService],
   controllers: [AuthController],
   exports: [TokenService],
 })

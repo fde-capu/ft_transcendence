@@ -10,7 +10,7 @@ export class Users {
   @Column({
     nullable: false,
     default: '',
-    name: 'intraId'
+    name: 'intraId',
   })
   intraId?: string;
 
@@ -33,7 +33,7 @@ export class Users {
   @Column()
   name?: string;
 
-  @Column({default:'DEFAULT_IMAGE'})
+  @Column({ default: 'DEFAULT_IMAGE' })
   image?: string;
 
   @Column()

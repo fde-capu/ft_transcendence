@@ -71,12 +71,12 @@ export class AuthService {
           this.tokenService.sign({
             sub: r.intraId,
             exp: Math.floor(Date.now() / this.thousand) + expiresIn,
-            mfa: {enabled: r.mfa_enabled, verified: r.mfa_verified},
+            mfa: { enabled: r.mfa_enabled, verified: r.mfa_verified },
             fortyTwo,
           }),
         ),
         catchError((error: ErrorFortyTwoApi) => {
-			//console.log("createSessionToken got error:", error);
+          //console.log("createSessionToken got error:", error);
           throw new UnauthorizedException();
         }),
       ),

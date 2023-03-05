@@ -6,12 +6,13 @@ import { RegisterController } from './controller/registred.controller';
 import { Users } from './entity/user.entity';
 import { UserService } from './service/user.service';
 
-
 @Module({
-  imports: [HttpModule, ConfigModule.forRoot(),
-    TypeOrmModule.forFeature([Users])
+  imports: [
+    HttpModule,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forFeature([Users]),
   ],
   controllers: [RegisterController],
   providers: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

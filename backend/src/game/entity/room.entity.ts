@@ -137,7 +137,7 @@ export class Room {
   }
 
   public leave(user: User): void {
-    if (this.host.getId() == user.getId()) {
+    if (this.host?.getId() == user.getId()) {
       this.host = this.getTeams()
         .flatMap((t) => t.getPlayers())
         .find((p) => p.getId() != user.getId());

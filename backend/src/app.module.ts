@@ -13,7 +13,10 @@ import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware
 import { FortyTwoModule } from './forty-two/forty-two.module';
 
 @Module({
-  imports: [UserModule, HttpModule, ConfigModule.forRoot(),
+  imports: [
+    UserModule,
+    HttpModule,
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -33,8 +36,7 @@ import { FortyTwoModule } from './forty-two/forty-two.module';
     GameModule,
   ],
   controllers: [PingController],
-  providers: [
-  ],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

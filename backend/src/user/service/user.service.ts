@@ -23,15 +23,15 @@ export interface UserDTO {
 
 export interface registerResp {
   intraId?: string;
-  mfa_enabled?: boolean,
-  mfa_verified?: boolean,
+  mfa_enabled?: boolean;
+  mfa_verified?: boolean;
 }
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
-  ) { }
+  ) {}
 
   // async register(codeFrom42: Users): Promise<Users> {
   //   const existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
@@ -44,53 +44,59 @@ export class UserService {
   // }
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
-    let existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
-    if (existUser === null){
-		//console.log(codeFrom42); // The big reply from 42API.
-      const createdUser =  this.userRepository.create({
-		intraId: codeFrom42.login,
-		email: codeFrom42.email,
-		name: codeFrom42.displayname,
-		image: codeFrom42.image['micro'],
-		score: 0
-	  });
+    let existUser = await this.userRepository.findOneBy({
+      intraId: codeFrom42.login,
+    });
+    if (existUser === null) {
+      //console.log(codeFrom42); // The big reply from 42API.
+      const createdUser = this.userRepository.create({
+        intraId: codeFrom42.login,
+        email: codeFrom42.email,
+        name: codeFrom42.displayname,
+        image: codeFrom42.image['micro'],
+        score: 0,
+      });
       existUser = await this.userRepository.save(createdUser);
     }
-	await this.updateUser(existUser.intraId, { mfa_verified: false });
-	// Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
-	// Aliás pode desimplementar o registro do mfa_verified na db.
-    return ({ intraId: existUser.intraId, mfa_enabled: existUser.mfa_enabled,  mfa_verified: false }); 
+    await this.updateUser(existUser.intraId, { mfa_verified: false });
+    // Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
+    // Aliás pode desimplementar o registro do mfa_verified na db.
+    return {
+      intraId: existUser.intraId,
+      mfa_enabled: existUser.mfa_enabled,
+      mfa_verified: false,
+    };
   }
-  
-  async updateUser(intraId: string, user: Users){
-    const resp = await this.userRepository.createQueryBuilder()
-    .update(Users)
-    .set(user)
-    .where("intraId = :intraId", { intraId: intraId })
-    .execute();
-    if (resp.affected === 0){
+
+  async updateUser(intraId: string, user: Users) {
+    const resp = await this.userRepository
+      .createQueryBuilder()
+      .update(Users)
+      .set(user)
+      .where('intraId = :intraId', { intraId: intraId })
+      .execute();
+    if (resp.affected === 0) {
       throw new NotFoundException();
     }
-	//console.log("updateUser resp", resp);
+    //console.log("updateUser resp", resp);
     return resp;
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
-	//console.log("bus Will search:", u_intraId);
+    //console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
-    if (resp === null)
-	{
-		//console.log("bus Could not find", u_intraId, ", throwing error.");
-		throw new NotFoundException();
-	}
-	const dto: UserDTO = {
-		intraId: resp.intraId,
-		name: resp.name,
-		image: resp.image,
-		score: resp.score,
-		mfa_enabled: resp.mfa_enabled
-	};
-	//console.log("bus Returning:", dto.intraId);
+    if (resp === null) {
+      //console.log("bus Could not find", u_intraId, ", throwing error.");
+      throw new NotFoundException();
+    }
+    const dto: UserDTO = {
+      intraId: resp.intraId,
+      name: resp.name,
+      image: resp.image,
+      score: resp.score,
+      mfa_enabled: resp.mfa_enabled,
+    };
+    //console.log("bus Returning:", dto.intraId);
     return dto;
   }
 }
