@@ -9,5 +9,17 @@ import { Statistics } from '../statistics';
 })
 export class StatisticsComponent {
 	@Input() user?: User;
-	stat?: Statistics;
+	stat: Statistics = {} as Statistics;
+	ngOnInit() {
+		this.stat.score = 0;
+		this.stat.matches = 0;
+		this.stat.scorePerMatches = 0;
+		this.stat.ranking = 0;
+		this.stat.wins = 0;
+		this.stat.looses = 0;
+		this.stat.winsPerLooses = 0;
+		this.stat.goalsMade = 0;
+		this.stat.goalsTaken = 0;
+		this.stat.goalsMadePerTaken = 0;
+	}
 }

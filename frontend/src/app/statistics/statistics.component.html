@@ -1,62 +1,53 @@
 <h2>Statistics</h2>
 <table>
-<tr><td>
+<tr><td width="50%">
 	<label>Score</label>
-</td><td>
-		<div>stat.score</div>
+</td><td width="50%">
+		<div>{{ stat.score | number:'6.0-0' }}</div>
 </td></tr>
 <tr><td>
 	<label>Matches</label>
 </td><td>
-		<div>stat.matches</div>
+		<div>{{ stat.matches }}</div>
 </td></tr>
 <tr><td>
 	<label>Mean score/matches</label>
 </td><td>
-		<div>stat.scorePerMatches</div>
+		<div>{{ stat.scorePerMatches | number:'6.0-0' }}</div>
 </td></tr>
 <tr><td>
 	<label>Ranking position</label>
 </td><td>
-		<div>stat.ranking</div>
+		<div>{{ stat.ranking ? stat.ranking : 'to be discovered' }}</div>
 </td></tr>
 <tr><td>
 	<label>Wins</label>
 </td><td>
-		<div>stat.wins</div>
+		<div>{{ stat.wins }}</div>
 </td></tr>
 <tr><td>
 	<label>Looses</label>
 </td><td>
-		<div>stat.looses</div>
+		<div>{{ stat.looses }}</div>
 </td></tr>
 <tr><td>
 	<label>Wins/Looses</label>
 </td><td>
-		<div>stat.winsPerLooses</div>
+		<div>{{ stat.winsPerLooses | number:'1.2-2' }}</div>
 </td></tr>
 <tr><td>
 	<label>Goals made</label>
 </td><td>
-		<div>stat.goalsMade</div>
+		<div>{{ stat.goalsMade }}</div>
 </td></tr>
 <tr><td>
 	<label>Goals taken</label>
 </td><td>
-		<div>stat.goalsTaken</div>
+		<div>{{ stat.goalsTaken }}</div>
 </td></tr>
 <tr><td>
 	<label>Goals made/taken</label>
 </td><td>
-		<div>stat.goalsMadePerTaken</div>
+		<div>{{ stat.goalsMadePerTaken | number:'1.2-2' }}</div>
 </td></tr>
-<tr><td>
-	<label>Playing time</label>
-</td><td>
-		<div>stat.playingTime</div>
-</td></tr>
-<tr><td>
-	<label>Score/minute</label>
-</td><td>
-		<div>stat.scorePerMinute</div>
-</td></tr></table>
+</table>
