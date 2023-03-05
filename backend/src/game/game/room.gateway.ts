@@ -10,35 +10,46 @@ import {
 import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
+import { RoomService } from './room.service';
+import { User } from '../entity/room.entity';
 
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
-  namespace: /\/room\/.*/,
+  namespace: /\/room\/.+/,
 })
 export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly tokenService: TokenService) {}
+  constructor(
+    private readonly tokenService: TokenService,
+    private readonly roomService: RoomService,
+  ) {}
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
+      console.log(client.nsp.name);
+      client['roomId'] = client.nsp.name.match(
+        /room\/(?<roomId>.+)\/?$/,
+      ).groups['roomId'];
+      const user = new User(subject, subject); // TODO: get name from user service
+      this.roomService.join(user, client['roomId']);
       console.log(
         `Entrou no na sala: ${client['subject']} - ${client.nsp.name}`,
       );
     } catch (error) {
+      console.error(error);
       client.disconnect(true);
     }
   }
 
   handleDisconnect(client: Socket) {
-    console.log(
-      `Client disconnected room: ${client['subject']} - ${client.nsp.name}`,
-    );
+    const user = new User(client['subject'], client['subject']);
+    this.roomService.leave(user, client['roomId']);
   }
 
   @SubscribeMessage('message')

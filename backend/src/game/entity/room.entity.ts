@@ -94,7 +94,9 @@ export class Room {
 
   private inGame = false;
 
-  public constructor(private readonly id: string, private host: User) {
+  private host?: User;
+
+  public constructor(private readonly id: string) {
     this.setMode(this.mode);
   }
 
@@ -129,6 +131,7 @@ export class Room {
         .map((t) => t.getPlayer(user))
         .find((p) => p != null);
     if (userInRoom) return;
+    if (!this.host) this.host = user;
     this.audience.push(user);
     this.assignPlayersToTeams();
   }
