@@ -138,12 +138,6 @@ export class UserService {
 		return this.saveUser(this.currentUser);
 	}
 
-	getAvailableUsers(): Observable<User[]> {
-		// Must return users online, not playing, and not logged user.
-		const users = USERS;
-		return of(users);
-	}
-
 	getStats(u_intraId: string): Observable<Statistics> {
 		const stat = {} as Statistics;
 		stat.score = Math.random() * 999999;
@@ -157,6 +151,12 @@ export class UserService {
 		stat.goalsTaken = Math.floor( (Math.random() * stat.matches) * (Math.random() * 5) );
 		stat.goalsMadePerTaken = stat.goalsMade/stat.goalsTaken;
 		return of(stat);
+	}
+
+	getAvailableUsers(): Observable<User[]> {
+		// Must return users online, not playing, and not logged user.
+		const users = USERS;
+		return of(users);
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {
