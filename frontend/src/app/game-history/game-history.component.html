@@ -1,0 +1,44 @@
+<h2>Match History</h2>
+
+<table *ngIf='history.length else no_matches'>
+	<tr>
+		<th>opponents</th>
+		<th>score</th>
+		<th>goals</th>
+		<th>win</th>
+		<th>date/duration</th>
+	</tr>
+  <tr *ngFor='let match of history'>
+	<td>
+		{{ match.playerA }}
+		<br>
+		{{ match.playerB }}
+	</td>
+	<td>
+		+{{ match.scoreA | number:'2.0-0' }}
+		<br>
+		+{{ match.scoreB | number:'2.0-0' }}
+	</td>
+	<td>
+		{{ match.goalsA }}
+		<br>
+		{{ match.goalsB }}
+	</td>
+	<td>
+		<span *ngIf='match.winA'><b>V</b></span>
+		<span *ngIf='!match.winA'>X</span>
+		<br>
+		<span *ngIf='match.winB'><b>V</b></span>
+		<span *ngIf='!match.winB'>X</span>
+	</td>
+	<td>
+		{{ match.date | date }}
+		<br>
+		{{ match.duration }} sec.
+	</td>
+  </tr>
+</table>
+
+<ng-template #no_matches>
+No matches.
+</ng-template>
