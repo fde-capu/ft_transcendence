@@ -18,7 +18,7 @@ import { Statistics } from './statistics';
 export class UserService {
 	private currentIntraId?: string;
 	private currentUser?: User;
-	private usersUrl = 'http://localhost:3000/user';
+	private statsUrl = 'http://localhost:3000/user/stats/?of=';
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
@@ -139,18 +139,11 @@ export class UserService {
 	}
 
 	getStats(u_intraId: string): Observable<Statistics> {
-		const stat = {} as Statistics;
-		stat.score = Math.random() * 999999;
-		stat.matches = Math.floor( Math.random() * 20 );
-		stat.scorePerMatches = stat.score/stat.matches;
-		stat.ranking = 0;
-		stat.wins = Math.floor( Math.random() * stat.matches );
-		stat.looses = Math.floor( stat.matches - stat.wins );
-		stat.winsPerLooses = stat.wins/stat.looses;
-		stat.goalsMade = Math.floor( (Math.random() * stat.matches) * (Math.random() * 5) );
-		stat.goalsTaken = Math.floor( (Math.random() * stat.matches) * (Math.random() * 5) );
-		stat.goalsMadePerTaken = stat.goalsMade/stat.goalsTaken;
-		return of(stat);
+		//console.log("getStats will look for stats of", u_intraId);
+		return this.http.get<Statistics>(this.statsUrl+u_intraId,{withCredentials:true})
+			.pipe(
+				catchError(this.handleError<Statistics>('getFriends'))
+			);
 	}
 
 	getAvailableUsers(): Observable<User[]> {

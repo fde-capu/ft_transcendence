@@ -1,5 +1,5 @@
-<h2>Statistics</h2>
-<table>
+<h2 *ngIf='stat'>Statistics</h2>
+<table *ngIf='stat'>
 <tr><td width="50%">
 	<label>Score</label>
 </td><td width="50%">
@@ -15,11 +15,13 @@
 </td><td>
 		<div>{{ stat.scorePerMatches | number:'0.0-0' }}</div>
 </td></tr>
+<!-- TODO
 <tr><td>
 	<label>Ranking position</label>
 </td><td>
 		<div>{{ stat.ranking ? stat.ranking : 'to be discovered' }}</div>
 </td></tr>
+-->
 <tr><td>
 	<label>Wins</label>
 </td><td>

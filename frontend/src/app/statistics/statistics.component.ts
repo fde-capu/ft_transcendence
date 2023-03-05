@@ -13,7 +13,7 @@ export class StatisticsComponent {
 		private userService: UserService
 	){};
 	@Input() user?: User;
-	stat: Statistics = {} as Statistics;
+	stat?: Statistics;
 	ngOnChanges() {
 		this.getStats();
 	}
@@ -21,7 +21,7 @@ export class StatisticsComponent {
 		if (!this.user)
 			return ;
 		this.userService.getStats(this.user.intraId).subscribe(_=>{
-			console.log("Statistics got:", _);
+			//console.log("Statistics got:", _);
 			this.stat=_;
 		});
 	}
