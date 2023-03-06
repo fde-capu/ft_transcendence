@@ -45,9 +45,7 @@ export class ChatRoomListComponent {
 	}
 	submitEntrance(room: ChatRoom) {
 		if (!this.password.get(room.id))
-		{
 			this.fun.focus('pass'+room.id);
-		}
 		else
 			alert('Request entrance on ' + room.name + ' useing password ' + this.password.get(room.id));
 	}
