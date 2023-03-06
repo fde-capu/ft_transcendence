@@ -1,6 +1,6 @@
 <h2>Match History</h2>
 
-<table *ngIf='history.length else no_matches'>
+<table *ngIf='user && history.length else no_matches'>
 	<tr>
 		<th>opponents</th>
 		<th>score</th>
@@ -25,16 +25,20 @@
 		{{ match.goalsB }}
 	</td>
 	<td>
-		<span *ngIf='match.winA'><b>V</b></span>
-		<span *ngIf='!match.winA'>X</span>
-		<br>
-		<span *ngIf='match.winB'><b>V</b></span>
-		<span *ngIf='!match.winB'>X</span>
+		<span *ngIf='match.idA == user.intraId'>
+			<span *ngIf='match.winA'><b>&#10004;</b><br><span style='color:#555555;'>&#x2717;</span></span>
+			<span *ngIf='!match.winA'>&#x2717;<br><span style='color:#555555;'>&#10004;</span></span>
+		</span>
+
+		<span *ngIf='match.idB == user.intraId'>
+			<span *ngIf='match.winB'><span style='color:#555555;'>&#x2717;</span><br><b>&#10004;</b></span>
+			<span *ngIf='!match.winB'><span style='color:#555555;'>&#10004;</span><br>&#x2717;</span>
+		</span>
 	</td>
 	<td>
-		{{ match.date | date }}
+		{{ match.date | date:'short':'UTC' }}
 		<br>
-		{{ match.duration }} sec.
+		{{ match.duration * 1000 | date:'mm:ss' }} min.
 	</td>
   </tr>
 </table>
