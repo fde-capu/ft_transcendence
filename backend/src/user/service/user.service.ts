@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { Users, UserDTO, StatisticsDTO } from '../entity/user.entity';
+import { GameHistory } from '../../game/game-record';
 
 export interface TokenDTO {
   access_token: string;
@@ -23,7 +24,9 @@ export interface registerResp {
 export class UserService {
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
+	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
   ) { }
+
 
   // async register(codeFrom42: Users): Promise<Users> {
   //   const existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
@@ -146,6 +149,40 @@ export class UserService {
 		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
 		// out.ranking = 0; // TODO if so
 		return out;
+	}
+
+	async getGameHistory(intraId:string):Promise<GameHistory[]>
+	{
+		let out: GameHistory[] = [];
+
+		const u = await this.getFullUser(intraId);
+		if(!u) return (out);
+
+		console.log("gGH creating as for", intraId);
+		const mock = this.historyRepository.create({
+			idA: 'fde-capu',
+			idB: 'blabl',
+			playerA: 'Flávio Carrara De Capua',
+			playerB: 'Blats Bla',
+			scoreA: 56789,
+			scoreB: 23456,
+			goalsA: 5,
+			goalsB: 3,
+			winA: true,
+			winB: false,
+			date: "1680000000000",
+			duration: 240,
+		});
+		console.log("gGH getting back");
+		let mockBack = await this.historyRepository.save(mock);
+		console.log("Mocked:", mock);
+		console.log("Mocked back:", mockBack);
+		
+		console.log("gGh Will search");
+		const resp = await this.historyRepository.findOneBy({ duration: 240 });
+		if (resp === null)
+			throw new NotFoundException();
+		return [resp, resp];
 	}
 
 	singleUserDto(u_user: Users):UserDTO{

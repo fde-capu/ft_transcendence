@@ -3,6 +3,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
 import { Users } from './user/entity/user.entity';
+import { GameHistory } from './game/game-record';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
 import { RegisterController } from './user/controller/registred.controller';
@@ -23,7 +24,7 @@ import { FortyTwoModule } from './forty-two/forty-two.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Users],
+        entities: [Users, GameHistory],
         synchronize: true,
       }),
       inject: [ConfigService],

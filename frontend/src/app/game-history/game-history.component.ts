@@ -17,9 +17,11 @@ export class GameHistoryComponent {
   ngOnChanges(): void {this.getGameHistory();}
   getGameHistory(): void {
 	if (!this.user) return ;
+	console.log("gGH for ", this.user.intraId);
 	this.userService.getGameHistory(this.user.intraId).subscribe(_=>{
 		console.log("getGameHistory got", _);
-		this.history = _;
+		if (_)
+			this.history = _;
 	});
   }
 }

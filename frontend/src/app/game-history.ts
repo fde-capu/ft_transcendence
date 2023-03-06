@@ -1,4 +1,6 @@
 export interface GameHistory {
+	idA: string;
+	idB: string;
 	playerA: string;
 	playerB: string;
 	scoreA: number;

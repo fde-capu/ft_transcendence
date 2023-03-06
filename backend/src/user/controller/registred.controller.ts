@@ -99,4 +99,20 @@ export class RegisterController {
 	}
   }
 
+  @Get('history')
+  @UseGuards(AuthGuard)
+  async getGameHistory(
+    @Query('of') intraId: string,
+	@Res() response:Response=null
+  ):Promise<any>
+  {
+	try {
+		console.log("reg history: fetching.");
+		const resp = await this.userService.getGameHistory(intraId);
+		return response.status(200).json(resp);
+	} catch (e) {
+		console.log("reg history got catch", e);
+		response.status(e.status).json(e.data);
+	}
+  }
 }

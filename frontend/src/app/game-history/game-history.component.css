@@ -8,8 +8,9 @@ td, th {
 	text-align: center;
 	min-width: 2em;
 	padding: 0 0.5em;
+	white-space: nowrap;
 }
 
-td:nth-child(1) {
+td:nth-child(1), td:nth-child(5) {
 	text-align: left;
 }

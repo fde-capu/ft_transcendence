@@ -10,9 +10,9 @@
 	</tr>
   <tr *ngFor='let match of history'>
 	<td>
-		{{ match.playerA }}
+		{{ match.idA }} | {{ match.playerA }}
 		<br>
-		{{ match.playerB }}
+		{{ match.idB }} | {{ match.playerB }}
 	</td>
 	<td>
 		+{{ match.scoreA | number:'2.0-0' }}

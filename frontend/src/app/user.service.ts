@@ -20,6 +20,7 @@ export class UserService {
 	private currentIntraId?: string;
 	private currentUser?: User;
 	private statsUrl = 'http://localhost:3000/user/stats/?of=';
+	private historyUrl = 'http://localhost:3000/user/history/?of=';
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
@@ -148,19 +149,11 @@ export class UserService {
 	}
 
 	getGameHistory(u_intraId: string): Observable<GameHistory[]> {
-		console.log("getGameHistory will call http for ", u_intraId);
-		const mock: GameHistory = {} as GameHistory;
-		mock.playerA = 'fde-capu | Flávio Carrara De Capua';
-		mock.playerB = 'blabla | Blats Bla';
-		mock.scoreA = 56789;
-		mock.scoreB = 23456;
-		mock.goalsA = 5;
-		mock.goalsB = 3;
-		mock.winA = true;
-		mock.winB = false;
-		mock.date = 123456;
-		mock.duration = 240;
-		return of([mock, mock, mock]);
+		//console.log("getGameHistory will call http for ", u_intraId);
+		return this.http.get<GameHistory[]>(this.historyUrl+u_intraId,{withCredentials:true})
+			.pipe(
+				catchError(this.handleError<GameHistory[]>('getGameHistory'))
+			);
 	}
 
 	getAvailableUsers(): Observable<User[]> {
