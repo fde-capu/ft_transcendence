@@ -44,7 +44,12 @@ export class ChatRoomListComponent {
 		return false;
 	}
 	submitEntrance(room: ChatRoom) {
-		alert('Request entrance on ' + room.name + ' useing password ' + this.password.get(room.id));
+		if (!this.password.get(room.id))
+		{
+			this.fun.focus('pass'+room.id);
+		}
+		else
+			alert('Request entrance on ' + room.name + ' useing password ' + this.password.get(room.id));
 	}
 }
 
