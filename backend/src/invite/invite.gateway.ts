@@ -55,7 +55,7 @@ export class InvitationGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
-	console.log("Invitation got", payload);
+	//console.log("Invitation got", payload);
     this.server.emit('invitation', {
       author: client['subject'],
       payload: payload,

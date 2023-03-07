@@ -28,7 +28,7 @@ export class InvitationScreenComponent {
 	){}
 
 	ngOnInit() {
-		console.log("invite init");
+		//console.log("invite init");
 		this.getUser();
 		this.socketSubscription();
 	}
@@ -40,12 +40,14 @@ export class InvitationScreenComponent {
 	}
 
 	socketSubscription() {
-		console.log("Invitation subscribing.");
+		//console.log("Invitation subscribing.");
 		this.invitationService.getInvitation().subscribe(
 			_ => {
-				console.log("Invitation subscription got", _);
+				//console.log("Invitation subscription got", _);
 				if (_.payload.to == this.user?.intraId || _.payload.from == this.user?.intraId) 
 				{
+					this.sentScreen = (_.payload.from == this.user?.intraId)
+						&& (!_.payload.isReply);
 					this.receiveScreen = (_.payload.to == this.user?.intraId)
 						&& (!_.payload.isReply);
 					this.declineScreen = (_.payload.from == this.user?.intraId)
@@ -95,7 +97,7 @@ export class InvitationScreenComponent {
 	}
 
 	 mockInvite() {
-		this.sentScreen = this.invitationService.invite(
+		this.invitationService.invite(
 			{
 				from: 'fde-capu',
 				to: 'mockUser',
