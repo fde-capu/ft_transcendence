@@ -11,6 +11,7 @@ import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { GameComponent } from './game/components/game/game.component';
+import { InvitationScreenComponent } from './invitation-screen/invitation-screen.component';
 import { LogOutComponent } from './log-out/log-out.component';
 
 const routes: Routes = [
@@ -28,6 +29,11 @@ const routes: Routes = [
     path: 'game',
     canActivate: [AuthGuard],
     component: GameComponent,
+  },
+  {
+    path: 'invite',
+    canActivate: [AuthGuard],
+    component: InvitationScreenComponent,
   },
   {
     path: 'profile/:intraId',
@@ -79,6 +85,10 @@ const routes: Routes = [
   {
     path: 'game',
     loadChildren: () => import('./game/game.module').then(m => m.GameModule),
+  },
+  {
+    path: 'invite',
+    loadChildren: () => import('./invitation.module').then(m => m.InviteModule),
   },
   {
     path: '**',

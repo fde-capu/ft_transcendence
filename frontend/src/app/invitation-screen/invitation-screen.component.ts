@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { InvitationService } from '../invitation.service';
 import { Invitation } from '../invitation';
@@ -16,11 +17,26 @@ export class InvitationScreenComponent {
 		route: '/rooms'
 	}];
 	lastInvite?: Invitation;
+  messages: { author: string; payload: string }[] = [];
 
 	constructor (
 		private readonly router: Router,
 		private readonly invitationService: InvitationService,
-	){}
+	){
+		console.log("invite constructor");
+		this.socketSubscription();
+	}
+
+	socketSubscription() {
+		console.log("Invitation subscribing.");
+		this.invitationService.getInvitation().subscribe(
+			_ => {
+				console.log("Invitation subscription got", _);
+				this.messages = [...this.messages, _];
+				console.log("this.messages", this.messages);
+			},
+		);
+	}
 
 	accept() {
 		this.finish();

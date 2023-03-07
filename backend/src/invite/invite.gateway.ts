@@ -13,7 +13,7 @@ import { TokenService } from 'src/auth/service/token.service';
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
-  namespace: 'invitations',
+  namespace: 'invite',
 })
 export class InvitationGateway implements OnGatewayConnection {
   @WebSocketServer()
@@ -23,12 +23,13 @@ export class InvitationGateway implements OnGatewayConnection {
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
+		console.log("invite  handleConnection");
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
       client.emit('invitation', {
         author: 'ft_transcendence',
-        payload: 'Welcome!',
+        payload: 'Invitation!',
       });
     } catch (error) {
       client.disconnect(true);
@@ -40,6 +41,7 @@ export class InvitationGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
+	console.log("Invitation got", payload);
     this.server.emit('invitation', {
       author: client['subject'],
       payload: payload,

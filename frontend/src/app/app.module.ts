@@ -25,7 +25,6 @@ import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
 import { InvitationScreenComponent } from './invitation-screen/invitation-screen.component';
-import { InviteSocket } from './invite.socket';
 
 @NgModule({
   declarations: [
