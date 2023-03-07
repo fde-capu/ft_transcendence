@@ -75,9 +75,10 @@
 			</a>
 		</td>
 		<td>
-			<button *ngIf="!isMe(user)" style="margin-left:0;">Invite to Match</button>
 			<span *ngIf="isAdmin() && !isAdmin(user) && !isMe(user);">
+				<button style='margin-left:0;'>Kick</button>
 				<button>Ban</button>
+				<button>Mute</button>
 				<button>Promote</button>
 			</span>
 			<span *ngIf="isAdmin(user) && !isMe(user);"> <-[ Administrator ]</span>
