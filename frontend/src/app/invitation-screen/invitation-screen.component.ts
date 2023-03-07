@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import { InvitationService } from '../invitation.service';
 import { Invitation } from '../invitation';
+import { UserService } from '../user.service';
+import { User } from '../user';
 
 @Component({
   selector: 'app-invitation-screen',
@@ -10,21 +11,33 @@ import { Invitation } from '../invitation';
   styleUrls: ['./invitation-screen.component.css']
 })
 export class InvitationScreenComponent {
-	public invite: Invitation[] = [{
-		from: 'fde-caller',
-		to: 'fde-capu',
-		type: 'PRIVATE CHAT Blibuibs Barn',
-		route: '/rooms'
-	}];
+	public invite: Invitation[] = [];
 	lastInvite?: Invitation;
-  messages: { author: string; payload: string }[] = [];
+	user?: User;
 
 	constructor (
-		private readonly router: Router,
+		private readonly userService: UserService,
 		private readonly invitationService: InvitationService,
-	){
-		console.log("invite constructor");
+	){}
+
+	ngOnInit() {
+		console.log("invite init");
+		this.getUser();
 		this.socketSubscription();
+		this.invitationService.invite(
+			{
+				from: 'fde-caller',
+				to: 'fde-capu',
+				type: 'PRIVATE CHAT Blibuibs Barn',
+				route: '/rooms'
+			}
+		);
+	}
+
+	getUser(): void {
+		this.userService.getLoggedUser().subscribe(
+			backUser => { this.user = backUser; }
+		)
 	}
 
 	socketSubscription() {
@@ -32,8 +45,8 @@ export class InvitationScreenComponent {
 		this.invitationService.getInvitation().subscribe(
 			_ => {
 				console.log("Invitation subscription got", _);
-				this.messages = [...this.messages, _];
-				console.log("this.messages", this.messages);
+				if (_.payload.to == this.user?.intraId)
+					this.invite.push(_.payload);
 			},
 		);
 	}
@@ -41,16 +54,13 @@ export class InvitationScreenComponent {
 	accept() {
 		this.finish();
 		if (!this.lastInvite) return;
-		this.lastInvite.answer = true;
-		this.invitationService.sendReply(this.lastInvite);
-		this.router.navigate([this.lastInvite.route]);
+		this.invitationService.replyTrue(this.lastInvite);
 	}
 
 	decline() {
 		this.finish();
 		if (!this.lastInvite) return;
-		this.lastInvite.answer = false;
-		this.invitationService.sendReply(this.lastInvite);
+		this.invitationService.replyFalse(this.lastInvite);
 	}
 
 	finish() {

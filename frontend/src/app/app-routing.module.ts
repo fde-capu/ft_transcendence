@@ -31,11 +31,6 @@ const routes: Routes = [
     component: GameComponent,
   },
   {
-    path: 'invite',
-    canActivate: [AuthGuard],
-    component: InvitationScreenComponent,
-  },
-  {
     path: 'profile/:intraId',
     canActivate: [AuthGuard],
     component: ProfileComponent,

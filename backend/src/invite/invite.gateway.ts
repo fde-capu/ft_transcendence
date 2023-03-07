@@ -10,6 +10,14 @@ import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
 
+export interface Invitation {
+	from: string;
+	to: string;
+	type: string;
+	route: string;
+	answer?: boolean;
+}
+
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
@@ -22,18 +30,24 @@ export class InvitationGateway implements OnGatewayConnection {
   constructor(private readonly tokenService: TokenService) {}
 
   async handleConnection(client: Socket, ...args: any[]) {
-    try {
-		console.log("invite  handleConnection");
-      const { authorization } = parse(client.handshake.headers.cookie);
-      const { sub: subject } = await this.tokenService.inspect(authorization);
-      client['subject'] = subject;
-      client.emit('invitation', {
-        author: 'ft_transcendence',
-        payload: 'Invitation!',
-      });
-    } catch (error) {
-      client.disconnect(true);
-    }
+//	const mock: Invitation = {
+//		from: 'fde-capu',
+//		to: 'fde-capu',
+//		type: "Any type",
+//		route: "/online"
+//	}
+//    try {
+//		console.log("invite  handleConnection");
+//      const { authorization } = parse(client.handshake.headers.cookie);
+//      const { sub: subject } = await this.tokenService.inspect(authorization);
+//      client['subject'] = subject;
+//      client.emit('invitation', {
+//        author: 'ft_transcendence',
+//        payload: mock,
+//      });
+//    } catch (error) {
+//      client.disconnect(true);
+//    }
   }
 
   @SubscribeMessage('invitation')
