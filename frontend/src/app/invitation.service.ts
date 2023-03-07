@@ -15,9 +15,14 @@ export class InvitationService {
 		console.log("Invite service constructor");
 	}
 
-	invite(u_invite: Invitation) {
+	invite(u_invite: Invitation): boolean {
 		console.log("Sendind invitation:", u_invite);
 		this.socket.emit('invitation', u_invite);
+		return true;
+	}
+
+	go(path: string) {
+		this.router.navigate([path]);
 	}
 
 	sendReply(invite: Invitation) {
@@ -25,7 +30,7 @@ export class InvitationService {
 		console.log("Sendind reply:", invite);
 		this.socket.emit('invitation', invite);
 		if (invite.answer)
-			this.router.navigate([invite.route]);
+			this.go(invite.route);
 	}
 
 	replyTrue(invite: Invitation) {

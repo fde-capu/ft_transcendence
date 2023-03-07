@@ -4,6 +4,7 @@ import { InvitationService } from '../invitation.service';
 import { Invitation } from '../invitation';
 import { UserService } from '../user.service';
 import { User } from '../user';
+import { HelperFunctionsService } from '../helper-functions.service';
 
 @Component({
   selector: 'app-invitation-screen',
@@ -14,11 +15,15 @@ export class InvitationScreenComponent {
 	public invite: Invitation[] = [];
 	lastInvite?: Invitation;
 	user?: User;
+	receiveScreen?: boolean;
 	declineScreen?: boolean;
+	acceptScreen?: boolean;
+	sentScreen?: boolean;
 
 	constructor (
 		private readonly userService: UserService,
 		private readonly invitationService: InvitationService,
+		private readonly fun: HelperFunctionsService,
 	){}
 
 	ngOnInit() {
@@ -38,14 +43,16 @@ export class InvitationScreenComponent {
 		this.invitationService.getInvitation().subscribe(
 			_ => {
 				console.log("Invitation subscription got", _);
-				if (_.payload.to == this.user?.intraId && !_.payload.isReply) 
+				if (_.payload.to == this.user?.intraId || _.payload.from == this.user?.intraId) 
 				{
+					this.receiveScreen = _.payload.to == this.user?.intraId;
+					this.declineScreen = (_.payload.from == this.user?.intraId)
+						&& (_.payload.isReply)
+						&& (!_.payload.answer);
+					this.acceptScreen = (_.payload.from == this.user?.intraId)
+						&& (_.payload.isReply)
+						&& (_.payload.answer);
 					this.invite.push(_.payload);
-					return ;
-				}
-				if (_.payload.from == this.user?.intraId && _.payload.isReply)
-				{
-					this.declineScreen = true;
 				}
 			},
 		);
@@ -67,14 +74,52 @@ export class InvitationScreenComponent {
 		this.lastInvite = this.invite.shift();
 	}
 
+	finalOk() {
+		this.finish();
+		if (!this.lastInvite) return;
+		const go = this.acceptScreen;
+		this.receiveScreen = false;
+		this.declineScreen = false;
+		this.acceptScreen = false;
+		this.sentScreen = false;
+		if (go)
+			this.invitationService.go(this.lastInvite.route);
+	}
+
 	 mockInvite() {
-		this.invitationService.invite(
+		this.sentScreen = this.invitationService.invite(
 			{
 				from: 'fde-capu',
-				to: 'fde-capu',
+				to: 'mockUser',
 				type: 'PRIVATE CHAT Blibuibs Barn',
 				route: '/rooms',
 				isReply: false
+			}
+		);
+	 }
+
+	 mockDecline() {
+		this.invitationService.invite(
+			{
+				from: 'fde-capu',
+				to: 'mockUser',
+				type: 'PRIVATE CHAT Blibuibs Barn',
+				route: '/rooms',
+				isReply: true,
+				answer: false
+			}
+		);
+	 }
+
+	 mockAccept() {
+		this.invitationService.invite(
+			{
+				from: 'fde-capu',
+				to: 'mockUser',
+				type: 'PRIVATE CHAT Blibuibs Barn',
+				route: '/rooms',
+				isReply: true,
+				answer: true
 			}
 		);
 	 }
