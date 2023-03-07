@@ -19,6 +19,7 @@ export class InvitationScreenComponent {
 	declineScreen?: boolean;
 	acceptScreen?: boolean;
 	sentScreen?: boolean;
+	clickGo?: boolean;
 
 	constructor (
 		private readonly userService: UserService,
@@ -45,7 +46,8 @@ export class InvitationScreenComponent {
 				console.log("Invitation subscription got", _);
 				if (_.payload.to == this.user?.intraId || _.payload.from == this.user?.intraId) 
 				{
-					this.receiveScreen = _.payload.to == this.user?.intraId;
+					this.receiveScreen = (_.payload.to == this.user?.intraId)
+						&& (!_.payload.isReply);
 					this.declineScreen = (_.payload.from == this.user?.intraId)
 						&& (_.payload.isReply)
 						&& (!_.payload.answer);
@@ -68,6 +70,7 @@ export class InvitationScreenComponent {
 		this.finish();
 		if (!this.lastInvite) return;
 		this.invitationService.replyFalse(this.lastInvite);
+		this.receiveScreen = false;
 	}
 
 	finish() {
@@ -77,7 +80,8 @@ export class InvitationScreenComponent {
 	finalOk() {
 		this.finish();
 		if (!this.lastInvite) return;
-		const go = this.acceptScreen;
+		const go = this.acceptScreen && this.clickGo;
+		this.clickGo = false;
 		this.receiveScreen = false;
 		this.declineScreen = false;
 		this.acceptScreen = false;
@@ -91,7 +95,7 @@ export class InvitationScreenComponent {
 			{
 				from: 'fde-capu',
 				to: 'mockUser',
-				type: 'PRIVATE CHAT Blibuibs Barn',
+				type: 'Go to the chatroom lobby (/rooms).',
 				route: '/rooms',
 				isReply: false
 			}
@@ -103,7 +107,7 @@ export class InvitationScreenComponent {
 			{
 				from: 'fde-capu',
 				to: 'mockUser',
-				type: 'PRIVATE CHAT Blibuibs Barn',
+				type: 'Go to the chatroom lobby (/rooms).',
 				route: '/rooms',
 				isReply: true,
 				answer: false
@@ -116,10 +120,22 @@ export class InvitationScreenComponent {
 			{
 				from: 'fde-capu',
 				to: 'mockUser',
-				type: 'PRIVATE CHAT Blibuibs Barn',
+				type: 'Go to the chatroom lobby (/rooms).',
 				route: '/rooms',
 				isReply: true,
 				answer: true
+			}
+		);
+	 }
+
+	 mockReceive() {
+		this.invitationService.invite(
+			{
+				from: 'mockUser',
+				to: 'fde-capu',
+				type: 'Go to the chatroom lobby (/rooms).',
+				route: '/rooms',
+				isReply: false
 			}
 		);
 	 }

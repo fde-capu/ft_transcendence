@@ -26,8 +26,11 @@ From:<br>
 Invitation to:<br>
 {{ invite[0].type }}<br>
 <br>
+<hr>
+<br>
 <b>DECLINED</b>
 <br>
+<hr>
 <button (click)='finalOk();'>Ok</button>
 </div>
 
@@ -37,13 +40,20 @@ From:<br>
 Invitation to:<br>
 {{ invite[0].type }}<br>
 <br>
+<hr>
+<br>
 <b>ACCEPTED</b>
 <br>
-<button (click)='finalOk();'>Ok</button>
+<hr>
+<br>
+<button (click)='finalOk();'>Close</button>
+<button (click)='clickGo = true; finalOk();'>Go to Route</button>
 </div>
 
 Mocks (sender):<br>
-<button (click)='mockInvite()'>Invitation</button>
-<button (click)='mockDecline()'>Decline</button>
-<button (click)='mockAccept()'>Accept</button>
-<br>
+<button (click)='mockInvite()'>Invite</button>
+<button (click)='mockDecline()'>Got declined</button>
+<button (click)='mockAccept()'>Got accepted</button>
+<br><br>
+Mocks (receiver):<br>
+<button (click)='mockReceive()'>Receive</button>
