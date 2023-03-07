@@ -7,4 +7,5 @@ export interface Invitation {
 	route: string;
 	answer?: boolean;
 	isReply: boolean;
+	instantaneous?: boolean;
 }

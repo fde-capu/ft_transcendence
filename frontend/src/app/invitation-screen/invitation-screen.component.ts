@@ -53,7 +53,11 @@ export class InvitationScreenComponent {
 						&& (!_.payload.answer);
 					this.acceptScreen = (_.payload.from == this.user?.intraId)
 						&& (_.payload.isReply)
-						&& (_.payload.answer);
+						&& (_.payload.answer) && (!_.payload.instantaneous);
+					if ((_.payload.from == this.user?.intraId)
+						&& (_.payload.isReply)
+						&& (_.payload.answer) && (_.payload.instantaneous))
+							return this.invitationService.go(_.payload.route);
 					this.invite.push(_.payload);
 				}
 			},
@@ -124,6 +128,20 @@ export class InvitationScreenComponent {
 				route: '/rooms',
 				isReply: true,
 				answer: true
+			}
+		);
+	 }
+
+	 mockAcceptInstantaneous() {
+		this.invitationService.invite(
+			{
+				from: 'fde-capu',
+				to: 'mockUser',
+				type: 'Go to the chatroom lobby (/rooms).',
+				route: '/rooms',
+				isReply: true,
+				answer: true,
+				instantaneous: true
 			}
 		);
 	 }
