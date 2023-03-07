@@ -398,7 +398,7 @@ td:nth-child(1) {
 .score-big {
     font-size: var(--font-x-large);
     position: absolute;
-    right: 2em;
+    right: 1em;
 }
 .oneliner {
 	display: block;

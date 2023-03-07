@@ -1,0 +1,14 @@
+table {
+	max-width: 800px;
+}
+
+td {
+	min-width: 128px;
+}
+
+td:nth-child(1),
+td:nth-child(3),
+td:nth-child(5) {
+	text-align: right;
+}
+
