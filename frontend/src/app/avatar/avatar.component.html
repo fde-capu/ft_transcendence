@@ -6,10 +6,12 @@
 	<div class='avatar-menu' *ngIf="popUpOn" (mouseenter)='onHover()' (mouseleave)='onHoverOut()'>
 		<div style="margin-bottom: 4px;">{{user.intraId}} | {{user.name}}</div>
 		<button class="oneliner" routerLink="/profile/{{user.intraId}}">Profile</button>
-		<button class="oneliner">Private Message</button>
-		<button class="oneliner" *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
-		<button class="oneliner" *ngIf="isFriend" (click)='unFriend()'>Unfriend :(</button>
-		<button class="oneliner">INVITE TO GAME</button>
+		<span *ngIf='!isMe'>
+			<button class="oneliner">Private Message</button>
+			<button class="oneliner" *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
+			<button class="oneliner" *ngIf="isFriend" (click)='unFriend()'>Unfriend :(</button>
+			<button class="oneliner">INVITE TO GAME</button>
+		</span>
 	</div>
 </div>
 <ng-template #plain>
