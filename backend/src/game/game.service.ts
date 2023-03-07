@@ -11,7 +11,7 @@ export class GameService {
   ) {}
 
 
-	// At the end of each match, backend must call this:
+	// TODO At the end of each match, backend must call this:
 	// userService.setGameHistory({GameHistory})
 	async setGameHistory(record:GameHistory):Promise<GameHistory>
 	{
