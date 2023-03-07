@@ -21,6 +21,7 @@ export class InvitationService {
 	}
 
 	sendReply(invite: Invitation) {
+		invite.isReply = true;
 		console.log("Sendind reply:", invite);
 		this.socket.emit('invitation', invite);
 		if (invite.answer)

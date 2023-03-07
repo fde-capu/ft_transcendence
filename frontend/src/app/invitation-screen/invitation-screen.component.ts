@@ -14,6 +14,7 @@ export class InvitationScreenComponent {
 	public invite: Invitation[] = [];
 	lastInvite?: Invitation;
 	user?: User;
+	declineScreen?: boolean;
 
 	constructor (
 		private readonly userService: UserService,
@@ -24,14 +25,6 @@ export class InvitationScreenComponent {
 		console.log("invite init");
 		this.getUser();
 		this.socketSubscription();
-		this.invitationService.invite(
-			{
-				from: 'fde-caller',
-				to: 'fde-capu',
-				type: 'PRIVATE CHAT Blibuibs Barn',
-				route: '/rooms'
-			}
-		);
 	}
 
 	getUser(): void {
@@ -45,8 +38,15 @@ export class InvitationScreenComponent {
 		this.invitationService.getInvitation().subscribe(
 			_ => {
 				console.log("Invitation subscription got", _);
-				if (_.payload.to == this.user?.intraId)
+				if (_.payload.to == this.user?.intraId && !_.payload.isReply) 
+				{
 					this.invite.push(_.payload);
+					return ;
+				}
+				if (_.payload.from == this.user?.intraId && _.payload.isReply)
+				{
+					this.declineScreen = true;
+				}
 			},
 		);
 	}
@@ -66,4 +66,16 @@ export class InvitationScreenComponent {
 	finish() {
 		this.lastInvite = this.invite.shift();
 	}
+
+	 mockInvite() {
+		this.invitationService.invite(
+			{
+				from: 'fde-capu',
+				to: 'fde-capu',
+				type: 'PRIVATE CHAT Blibuibs Barn',
+				route: '/rooms',
+				isReply: false
+			}
+		);
+	 }
 }

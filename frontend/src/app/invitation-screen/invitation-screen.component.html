@@ -1,9 +1,20 @@
-<div class="overall" *ngIf='invite.length'>
+<div class="overall" *ngIf='invite.length && !declineScreen'>
 	<h2>New Invitation</h2>
 	{{ invite[0].from }} wants you to join
 	<br>
 	a {{ invite[0].type }}.
 	<br><br>
-	<button (click)='accept()'>Accept</button>
-	<button (click)='decline()'>Decline</button>
+	<button (click)='accept()'>
+		<span *ngIf='invite[0].buttonOk'> {{ invite[0].buttonOk }} </span>
+		<span *ngIf='!invite[0].buttonOk'>Accept</span>
+	</button>
+	<button (click)='decline()'>
+		<span *ngIf='invite[0].buttonCancel'> {{ invite[0].buttonCancel }}</span>
+		<span *ngIf='!invite[0].buttonCancel'>Decline</span>
+	</button>
 </div>
+<div class="overall" *ngIf='declineScreen'>
+Invitation declined.
+<button (click)='declineScreen = false;'>Ok</button>
+</div>
+<button (click)='mockInvite()'>Mock Invitation</button>
