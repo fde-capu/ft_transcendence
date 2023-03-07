@@ -300,9 +300,9 @@ li
 	border-bottom: 4px dashed var(--color-border);
 }
 hr {
-	border: 5px dashed var(--color-high);
+	border: 2px dashed var(--color-border);
 	width: 200px;
-	margin: 1em 0;
+	margin: 0.25em 0;
 }
 .profile-image {
 	width: 128px;
@@ -535,7 +535,7 @@ td:nth-child(1) {
 	float: right;
 	position: relative;
 	bottom: 2em;
-	margin: 0 0 0 0;
+	margin: 0.25em 0 0 0;
 }
 .window-menu-burger {
 	width: 16px;
@@ -547,7 +547,7 @@ td:nth-child(1) {
 	float: right;
 	position: relative;
 	bottom: 2em;
-	margin: 0 1em 0 0;
+	margin: 0.25em 1em 0 0;
 }
 .window-options {
 	background: var(--color-sublow-transp);
