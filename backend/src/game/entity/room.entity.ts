@@ -1,4 +1,6 @@
 export class User {
+  private connected = true;
+
   constructor(private readonly id: string, private readonly name: string) {}
 
   public getId(): string {
@@ -7,6 +9,14 @@ export class User {
 
   public getName(): string {
     return this.name;
+  }
+
+  public getConnected(): boolean {
+    return this.connected;
+  }
+
+  public setConnected(value: boolean): void {
+    this.connected = value;
   }
 }
 
@@ -26,56 +36,56 @@ export class Player extends User {
   }
 
   static fromUser(user: User): Player {
-    return new Player(user.getId(), user.getName());
+    const player = new Player(user.getId(), user.getName());
+    player.setConnected(user.getConnected());
+    return player;
+  }
+
+  public setConnected(value: boolean): void {
+    if (!value) this.setReady(false);
+    super.setConnected(value);
   }
 }
 
 export class Team {
-  private players: Map<string, Player> = new Map();
+  private players: { [id: string]: Player } = {};
 
-  public constructor(
-    private readonly name: string,
-    private readonly capacity: number = 1,
-  ) {
+  public constructor(private readonly capacity: number = 1) {
     if (capacity <= 0)
       throw new Error('Capacity must be a positive non-zero value');
   }
 
-  public getName(): string {
-    return this.name;
-  }
-
   public isReady(): boolean {
-    return Array.from(this.players.values()).reduce(
+    return Object.values(this.players).reduce(
       (c, p) => c && p.isReady(),
-      this.players.size == this.capacity,
+      this.isFull(),
     );
   }
 
   public resetReadyStatus(): void {
-    Array.from(this.players.values()).forEach((p) => p.setReady(false));
+    Object.values(this.players).forEach((p) => p.setReady(false));
   }
 
   public isFull(): boolean {
-    return this.players.size == this.capacity;
+    return Object.keys(this.players).length == this.capacity;
   }
 
   public addPlayer(player: User): void {
-    if (this.players.size + 1 > this.capacity)
+    if (Object.keys(this.players).length + 1 > this.capacity)
       throw new Error('Capacity overflow');
-    this.players.set(player.getId(), Player.fromUser(player));
+    this.players[player.getId()] = Player.fromUser(player);
   }
 
   public removePlayer(player: User): void {
-    this.players.delete(player.getId());
+    delete this.players[player.getId()];
   }
 
   public getPlayers(): Array<Player> {
-    return Array.from(this.players.values());
+    return Object.values(this.players);
   }
 
   public getPlayer(user: User): Player | undefined {
-    return this.players.get(user.getId());
+    return this.players[user.getId()];
   }
 }
 
@@ -86,7 +96,7 @@ export enum Mode {
 }
 
 export class Room {
-  private teams: Map<string, Team> = new Map();
+  private teams: { [id: string]: Team } = {};
 
   private audience: Array<User> = [];
 
@@ -109,7 +119,7 @@ export class Room {
   }
 
   public getTeams(): Array<Team> {
-    return Array.from(this.teams.values());
+    return Object.values(this.teams);
   }
 
   private assignPlayersToTeams(): void {
@@ -130,7 +140,11 @@ export class Room {
       this.getTeams()
         .map((t) => t.getPlayer(user))
         .find((p) => p != null);
-    if (userInRoom) return;
+    if (userInRoom) {
+      userInRoom.setConnected(true);
+      return;
+    }
+    user.setConnected(true);
     if (!this.host) this.host = user;
     this.audience.push(user);
     this.assignPlayersToTeams();
@@ -167,22 +181,22 @@ export class Room {
     ];
     switch (mode) {
       case Mode.PONG:
-        this.teams = new Map([
-          ['left', new Team('left', 1)],
-          ['right', new Team('right', 1)],
-        ]);
+        this.teams = {
+          left: new Team(1),
+          right: new Team(1),
+        };
       case Mode.PONGDOUBLE:
-        this.teams = new Map([
-          ['left', new Team('left', 2)],
-          ['right', new Team('right', 2)],
-        ]);
+        this.teams = {
+          left: new Team(2),
+          right: new Team(2),
+        };
       case Mode.QUADRAPONG:
-        this.teams = new Map([
-          ['left', new Team('left', 1)],
-          ['right', new Team('right', 1)],
-          ['top', new Team('top', 1)],
-          ['bottom', new Team('bottom', 1)],
-        ]);
+        this.teams = {
+          left: new Team(1),
+          right: new Team(1),
+          top: new Team(1),
+          bottom: new Team(1),
+        };
     }
     this.mode = mode;
     this.assignPlayersToTeams();
@@ -200,5 +214,19 @@ export class Room {
 
   public getUsers(): Array<User> {
     return this.audience.concat(this.getTeams().flatMap((t) => t.getPlayers()));
+  }
+
+  public disconnect(user: User): void {
+    const u = this.getUsers().find((u) => u.getId() == user.getId());
+    if (u) {
+      u.setConnected(false);
+      setTimeout(() => {
+        if (!u.getConnected()) this.leave(u);
+      }, 5000);
+    }
+  }
+
+  public isEmpty(): boolean {
+    return !!this.host;
   }
 }

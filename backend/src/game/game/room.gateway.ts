@@ -37,12 +37,9 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
         /room\/(?<roomId>.+)\/?$/,
       ).groups['roomId'];
       const user = new User(subject, subject); // TODO: get name from user service
-      this.roomService.join(user, client['roomId']);
-      console.log(
-        `Entrou no na sala: ${client['subject']} - ${client.nsp.name}`,
-      );
+      const room = this.roomService.join(user, client['roomId']);
+      client.emit('game:room:info', room);
     } catch (error) {
-      console.error(error);
       client.disconnect(true);
     }
   }

@@ -1,13 +1,5 @@
-<ul *ngFor="let entry of rooms | keyvalue">
-  <li>
-    <span>{{ entry.key }}</span>
-    <button (click)="leave(entry.key)">Leave</button>
+<ul>
+  <li *ngFor="let player of players">
+    {{ player.id }}
   </li>
 </ul>
-
-<input #room type="text" placeholder="Room">
-<button type="submit" (click)="join(room.value)">Entrar</button>
-
-<input #data type="text" placeholder="Data">
-<button type="submit" (click)="send(data.value)">Enviar</button>
-<p *ngFor="let msg of messages">{{ msg.author }}: {{ msg.payload }}</p>

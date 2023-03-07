@@ -1,1 +1,12 @@
-<h2>room</h2>
+<main *ngIf="!room">
+  <h2>Loading...</h2>
+</main>
+
+<main *ngIf="room">
+  <h2>Room {{ room.id }}</h2>
+  <div>
+    <button>Leave</button>
+    <button>Ready</button>
+  </div>
+</main>
+

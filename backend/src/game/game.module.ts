@@ -4,9 +4,10 @@ import { GameGateway } from './game/game.gateway';
 import { RoomGateway } from './game/room.gateway';
 import { LobbyGateway } from './game/lobby.gateway';
 import { RoomService } from './game/room.service';
+import { GameService } from './game/game.service';
 
 @Module({
   imports: [AuthModule],
-  providers: [GameGateway, RoomGateway, LobbyGateway, RoomService],
+  providers: [GameGateway, RoomGateway, LobbyGateway, RoomService, GameService],
 })
 export class GameModule {}

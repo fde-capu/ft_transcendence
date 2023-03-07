@@ -1,6 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, tap } from 'rxjs';
 import { LobbySocket } from '../../socket/lobby.socket';
 
 interface Room {
@@ -24,10 +23,14 @@ export class LobbyComponent implements OnDestroy {
     private readonly route: ActivatedRoute
   ) {
     this.lobbySocket = new LobbySocket();
+
     this.lobbySocket
       .fromEvent<Array<Room>>('game:room:list')
-      .pipe(tap(r => console.table(r)))
       .subscribe({ next: r => (this.rooms = r) });
+
+    this.lobbySocket
+      .fromEvent<Room>('game:room:info')
+      .subscribe({ next: r => this.joinRoom(r.id) });
   }
 
   ngOnDestroy(): void {
@@ -43,10 +46,6 @@ export class LobbyComponent implements OnDestroy {
   }
 
   quickMatch(): void {
-    if (this.rooms.length == 0) {
-      this.createRoom();
-      // TODO: redirect to the new room
-    }
     throw new Error('Method not implemented.');
     // TODO: redirect to random room page or create one
   }
