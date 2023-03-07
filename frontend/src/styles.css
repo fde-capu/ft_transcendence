@@ -415,12 +415,15 @@ td:nth-child(1) {
 	height: calc(var(--inner-below-menu-height) - 9em);
 }
 .chat-input-text {
-	height: 3em;
+	border-radius: 0.5em;
+	padding: 0.5em;
+	height: 2.25em;
 	background: var(--color-sublow);
 	resize: none;
-	padding: 0px;
 	width: 100%;
 	position: relative;
+	left: -0.5em;
+	top: -0.5em;
 	box-shadow: inset 0px 8px 64px #77777719;
 	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
 }
