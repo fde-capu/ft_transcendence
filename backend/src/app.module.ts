@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
 import { FortyTwoModule } from './forty-two/forty-two.module';
 import { InvitationGateway } from './invite/invite.gateway';
+import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
   imports: [UserModule, HttpModule, ConfigModule.forRoot(),
@@ -36,7 +37,8 @@ import { InvitationGateway } from './invite/invite.gateway';
   ],
   controllers: [PingController],
   providers: [
-	InvitationGateway
+	InvitationGateway,
+	ChatGateway
   ],
 })
 export class AppModule implements NestModule {

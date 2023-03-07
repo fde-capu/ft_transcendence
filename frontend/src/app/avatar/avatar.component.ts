@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { InvitationService } from '../invitation.service';
 
 @Component({
 selector: 'app-avatar',
@@ -12,13 +13,16 @@ export class AvatarComponent {
 	popUpOn = false;
 	isFriend: boolean = false;
 	isMe: boolean = false;
+	loggedUser?: User;
 
 	constructor(
-		private userService: UserService
+		private userService: UserService,
+		private readonly invitationService: InvitationService,
 	){}
 
 	checkMe() {
 		this.userService.getLoggedUser().subscribe(_=>{
+			this.loggedUser = _;
 			this.isMe = _.intraId == this.user?.intraId;
 		});
 	}
@@ -26,6 +30,10 @@ export class AvatarComponent {
 	ngOnChanges() {
 		this.checkFriendship();
 		this.checkMe();
+	}
+
+	inviteToChat() {
+		this.invitationService.inviteToChat(this.loggedUser?.intraId, this.user?.intraId);
 	}
 
 	checkFriendship() {

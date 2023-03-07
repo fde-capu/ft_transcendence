@@ -15,7 +15,7 @@ export class InvitationService {
 		//console.log("Invite service constructor");
 	}
 
-	invite(u_invite: Invitation): boolean {
+	invite(u_invite: Invitation) {
 		//console.log("Sendind invitation:", u_invite);
 		this.socket.emit('invitation', u_invite);
 		return true;
@@ -46,5 +46,16 @@ export class InvitationService {
 	getInvitation() {
 		//console.log("Invite service getting from socket.");
 		return this.socket.fromEvent<any>('invitation');
+	}
+
+	inviteToChat(from: string = "", to: string = "") {
+		this.invite({
+			from: from,
+			to: to,
+			type: "PRIVATE CHAT: " + from + " | " + to,
+			route: "/home",
+			instantaneous: true,
+			isReply: false
+		});
 	}
 }

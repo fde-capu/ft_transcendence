@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ChatSocket } from './chat.socket';
 import { Observable, of } from 'rxjs';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { ChatMessage } from './chat-message';
@@ -14,7 +15,9 @@ import { USERS, CHATS, CHAT_ROOM } from './mocks';
 export class ChatService {
 	chatMessage: ChatMessage[] = [];
 
-	constructor() {
+	constructor(
+		private readonly socket: ChatSocket,
+	) {
 		this.mockChat();
 	}
 
