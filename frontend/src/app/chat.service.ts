@@ -41,36 +41,21 @@ export class ChatService {
 	}
 
 	getChatRoom(roomId: string|null): Observable<ChatRoom> {
-		console.log("A getChatRoom called", ChatService.chatRooms);
+		console.log("getChatRoom called", ChatService.chatRooms);
 		if (!roomId)
 		{
 			// Create new chatRoom, UNMOCK TODO
 			return of(CHAT_ROOM[0]);
 		}
-		console.log("B getChatRoom called", ChatService.chatRooms);
 		for (const room in ChatService.chatRooms)
 		{
 			if (ChatService.chatRooms[room].id == roomId)
 				return of(ChatService.chatRooms[room]);
 		}
-//		this.router.navigate(['/rooms']);
-//		return of({} as ChatRoom);
-		// TODO: Get ID from query/cookie.
-		// if (id is empty) return a NEW chat Room, with:
-		//		ChatRoom
-		// 		{
-		// 		 	id: string, // New unique-id.
-		// 		 	name: string, // Some random name like "User's Room".
-		// 		 	user: User[], // Array with current user on.
-		// 		 	admin: User[], // Array with current user on.
-		// 		 	history: ChatMessage[], // Empty.
-		// 		 	password: string, // Empty.
-		// 		 	isPrivate: boolean // True.
-		// 		}
-		// else (there is an id) subscribe to the the Observable.
 		const chatRoom = CHAT_ROOM[0];
 		return of(chatRoom);
 	}
+
 	getVisibleChatRooms(intraId: string|undefined): Observable<ChatRoom[]> {
 		let userIn: boolean = false;
 		let isPrivate: boolean = false;
