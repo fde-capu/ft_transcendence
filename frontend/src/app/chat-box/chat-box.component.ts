@@ -4,6 +4,7 @@ import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
+import { ActivatedRoute, ParamMap, RoutesRecognized } from '@angular/router';
 
 @Component({
   selector: 'app-chat-box',
@@ -14,7 +15,8 @@ export class ChatBoxComponent {
 	constructor (
 		public chatService: ChatService,
 		public userService: UserService,
-		public fun: HelperFunctionsService
+		public fun: HelperFunctionsService,
+		public route: ActivatedRoute,
 	) {}
 	chatRoomOn = true; // After last merge, is this in user?
 	chatRoom: ChatRoom = {} as ChatRoom;
@@ -37,12 +39,16 @@ export class ChatBoxComponent {
 		this.socketSubscription();
 		this.chatService.mockChat(); // TODO REMOVE XXX
 
-		this.chatService.getChatRoom().subscribe(
+		this.chatService.getChatRoom(
+			this.route.snapshot.paramMap.get('roomId')
+		).subscribe(
 			chatRoom => {
 				this.chatRoom = chatRoom;
+				console.log("ChatBox Init to chatroom", chatRoom);
 				this.imprint();
 			}
 		);
+
 		this.chatService.getInChatUsers().subscribe(
 			inChat => {
 				this.usersOnChat = inChat;
@@ -114,6 +120,7 @@ export class ChatBoxComponent {
 	}
 
 	isAdmin(user: User | undefined = this.user): boolean {
+		if (!this.chatRoom?.admin.length) return false;
 		for (const admin of this.chatRoom.admin)
 			if (admin == user)
 				return true;

@@ -56,6 +56,11 @@ const routes: Routes = [
     component: AvatarComponent,
   },
   {
+    path: 'chat/:roomId',
+    canActivate: [AuthGuard],
+    component: ChatBoxComponent,
+  },
+  {
     path: 'chat',
     canActivate: [AuthGuard],
     component: ChatBoxComponent,

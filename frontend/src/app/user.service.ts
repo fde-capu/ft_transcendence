@@ -17,7 +17,7 @@ import { Statistics } from './statistics';
   providedIn: 'root'
 })
 export class UserService {
-	private currentIntraId?: string;
+	public currentIntraId?: string;
 	private currentUser?: User;
 	private statsUrl = 'http://localhost:3000/user/stats/?of=';
 	private historyUrl = 'http://localhost:3000/user/history/?of=';

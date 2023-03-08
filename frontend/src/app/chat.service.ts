@@ -1,11 +1,13 @@
+import { ActivatedRoute, Router, ParamMap, RoutesRecognized } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { ChatSocket } from './chat.socket';
 import { Observable, of } from 'rxjs';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { ChatMessage } from './chat-message';
+import { UserService } from './user.service';
 import { User } from './user';
 import { ChatRoom } from './chat-room';
 import { USERS, CHATS, CHAT_ROOM } from './mocks';
+import { HelperFunctionsService } from './helper-functions.service';
 
 // TODO: all is mocked. Unmock them!
 
@@ -14,9 +16,14 @@ import { USERS, CHATS, CHAT_ROOM } from './mocks';
 })
 export class ChatService {
 	chatMessage: ChatMessage[] = [];
+	static chatRooms: ChatRoom[] = [];
 
 	constructor(
 		private readonly socket: ChatSocket,
+		public route: ActivatedRoute,
+		private readonly router: Router,
+		private fun: HelperFunctionsService,
+		private userService: UserService,
 	) {
 		this.mockChat();
 	}
@@ -29,7 +36,35 @@ export class ChatService {
 		this.chatMessage = [];
 	}
 
-	getChatRoom(): Observable<ChatRoom> {
+	getChatRoom(roomId: string|null): Observable<ChatRoom> {
+		console.log("A getChatRoom called", ChatService.chatRooms);
+		if (!roomId)
+		{
+			this.userService.getLoggedUser().subscribe(_=>{
+				const newId = this.fun.randomWord(42);
+				const newChat: ChatRoom = {
+					id: newId,
+					name: _.name+"'s Chat",
+					user: [_],
+					admin: [_],
+					history: [],
+					blocked: [],
+					password: "",
+					isPrivate: true 
+				}
+				ChatService.chatRooms.push(newChat);
+				this.router.navigate(['/chat/'+newId]);
+				return ; // Necessary.
+			});
+		}
+		console.log("B getChatRoom called", ChatService.chatRooms);
+		for (const room in ChatService.chatRooms)
+		{
+			if (ChatService.chatRooms[room].id == roomId)
+				return of(ChatService.chatRooms[room]);
+		}
+		this.router.navigate(['/rooms']);
+		return of({} as ChatRoom);
 		// TODO: Get ID from query/cookie.
 		// if (id is empty) return a NEW chat Room, with:
 		//		ChatRoom
@@ -43,8 +78,8 @@ export class ChatService {
 		// 		 	isPrivate: boolean // True.
 		// 		}
 		// else (there is an id) subscribe to the the Observable.
-		const chatRoom = CHAT_ROOM[0];
-		return of(chatRoom);
+//		const chatRoom = CHAT_ROOM[0];
+//		return of(chatRoom);
 	}
 	getVisibleChatRooms(): Observable<ChatRoom[]> {
 		// TODO: Visible Chat Rooms must be of one of the conditions:
@@ -81,8 +116,8 @@ export class ChatService {
 		n = setTimeout(function(){
 			console.log("Chat emitting.");
 			self.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
-			self.mockChat();
-		}, Math.random() * 10000 + 5000 / 5.33);
+//			self.mockChat();
+		}, Math.random() * 10000 + 5000);
 	}
 
 }

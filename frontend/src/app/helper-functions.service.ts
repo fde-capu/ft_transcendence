@@ -53,4 +53,11 @@ export class HelperFunctionsService {
 	focus(el: string): void {
 		this.focusOn(el);
 	}
+	randomWord(amount: number): string {
+		if (amount <= 0) return "";
+		const letters = "abcdefghijklmnopqrstuvwxyz";
+		return letters[
+			Math.floor(Math.random() * letters.length)
+		] + this.randomWord(--amount);
+	}
 }
