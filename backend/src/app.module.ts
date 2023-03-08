@@ -7,6 +7,7 @@ import { GameHistory } from './game/game-record';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
 import { RegisterController } from './user/controller/registred.controller';
+import { ChatService } from './chat/chat.service';
 import { ChatController } from './chat/chat.controller';
 import { UserService } from './user/service/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -39,7 +40,8 @@ import { ChatGateway } from './chat/chat.gateway';
   controllers: [PingController, ChatController],
   providers: [
 	InvitationGateway,
-	ChatGateway
+	ChatGateway,
+	ChatService
   ],
 })
 export class AppModule implements NestModule {

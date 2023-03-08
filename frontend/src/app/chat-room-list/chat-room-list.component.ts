@@ -20,16 +20,20 @@ export class ChatRoomListComponent {
 	) {};
 	password = new Map<string, string>;
 	ngOnInit(): void {
-		this.getChatRooms();
 		this.getCurrentUser();
 	}
+
 	getChatRooms(): void {
-		this.chatService.getVisibleChatRooms()
+		this.chatService.getVisibleChatRooms(this.user?.intraId)
 			.subscribe(rooms => this.visibleRooms = rooms);
 	}
 	getCurrentUser(): void {
 		this.userService.getLoggedUser()
-			.subscribe(user => this.user = user);
+			.subscribe(user => {
+				this.user = user;
+				this.getChatRooms();
+			}
+			);
 	}
 	loggedUserIsIn(room: ChatRoom): Boolean {
 		for (const user of room.user)

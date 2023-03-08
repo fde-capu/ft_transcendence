@@ -17,7 +17,7 @@ import { HelperFunctionsService } from './helper-functions.service';
   providedIn: 'root'
 })
 export class ChatService {
-	private roomsUrl = 'http://localhost:3000/chatrooms';
+	private roomsUrl = 'http://localhost:3000/chatrooms/';
 	chatMessage: ChatMessage[] = [];
 	static chatRooms: ChatRoom[] = [];
 
@@ -85,14 +85,10 @@ export class ChatService {
 //		const chatRoom = CHAT_ROOM[0];
 //		return of(chatRoom);
 	}
-	getVisibleChatRooms(): Observable<ChatRoom[]> {
-		// TODO: Visible Chat Rooms must be of one of the conditions:
-		// Is visible if the loggedUser is in the room.
-		// Is visible if the room is public.
-		// Should deliver this already filtered (prefered),
-		// or is it filtered here?
-
-		return this.http.get<ChatRoom[]>(this.roomsUrl,{withCredentials:true})
+	getVisibleChatRooms(intraId: string|undefined): Observable<ChatRoom[]> {
+		let userIn: boolean = false;
+		let isPrivate: boolean = false;
+		return this.http.get<ChatRoom[]>(this.roomsUrl+intraId,{withCredentials:true})
 			.pipe(
 				catchError(this.handleError<ChatRoom[]>('getVisibleChatRooms'))
 			);
