@@ -54,7 +54,7 @@
 	</ng-template>
 
 	<tr *ngIf="owner;">
-		<td>	<label>Two factor authentication</label>	</td>
+		<td>	<label>2FA</label>	</td>
 		<td>
 			<span>
 				<div *ngIf="displayUser.mfa_enabled">
@@ -72,6 +72,7 @@
 
 </table>
 
+<app-statistics [user]="displayUser"></app-statistics>
 <app-friends-list [user]="displayUser"></app-friends-list> 
 
 <ng-template #user_unknown>

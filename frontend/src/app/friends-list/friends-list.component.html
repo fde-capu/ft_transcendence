@@ -1,6 +1,9 @@
-<h2 *ngIf='friends.length'>Friends</h2>
-<ul>
+<h2>Friends</h2>
+<ul *ngIf='friends.length else no_friends'>
   <li *ngFor='let friend of friends'>
 	<app-user-bar [user]="friend"></app-user-bar>
   </li>
 </ul>
+<ng-template #no_friends>
+No friends.
+</ng-template>

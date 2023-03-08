@@ -22,6 +22,7 @@ import { CreateMatchComponent } from './create-match/create-match.component';
 import { LogOutComponent } from './log-out/log-out.component';
 import { FriendsListComponent } from './friends-list/friends-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { UserBarComponent } from './user-bar/user-bar.component';
  LogOutComponent,
  FriendsListComponent,
  UserBarComponent,
+ StatisticsComponent,
   ],
   imports: [
     BrowserModule,

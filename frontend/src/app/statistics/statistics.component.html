@@ -1,0 +1,55 @@
+<h2 *ngIf='stat'>Statistics</h2>
+<table *ngIf='stat'>
+<tr><td width="50%">
+	<label>Score</label>
+</td><td width="50%">
+		<div>{{ stat.score | number:'6.0-0' }}</div>
+</td></tr>
+<tr><td>
+	<label>Matches</label>
+</td><td>
+		<div>{{ stat.matches }}</div>
+</td></tr>
+<tr><td>
+	<label>Mean score/matches</label>
+</td><td>
+		<div>{{ stat.scorePerMatches | number:'0.0-0' }}</div>
+</td></tr>
+<!-- TODO
+<tr><td>
+	<label>Ranking position</label>
+</td><td>
+		<div>{{ stat.ranking ? stat.ranking : 'to be discovered' }}</div>
+</td></tr>
+-->
+<tr><td>
+	<label>Wins</label>
+</td><td>
+		<div>{{ stat.wins }}</div>
+</td></tr>
+<tr><td>
+	<label>Looses</label>
+</td><td>
+		<div>{{ stat.looses }}</div>
+</td></tr>
+<tr><td>
+	<label>Wins/Looses</label>
+</td><td>
+		<div>{{ stat.winsPerLooses | number:'1.2-2' }}</div>
+</td></tr>
+<tr><td>
+	<label>Goals made</label>
+</td><td>
+		<div>{{ stat.goalsMade }}</div>
+</td></tr>
+<tr><td>
+	<label>Goals taken</label>
+</td><td>
+		<div>{{ stat.goalsTaken }}</div>
+</td></tr>
+<tr><td>
+	<label>Goals made/taken</label>
+</td><td>
+		<div>{{ stat.goalsMadePerTaken | number:'1.2-2' }}</div>
+</td></tr>
+</table>

@@ -8,6 +8,7 @@ import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Statistics } from './statistics';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
 export class UserService {
 	private currentIntraId?: string;
 	private currentUser?: User;
-	private usersUrl = 'http://localhost:3000/user';
+	private statsUrl = 'http://localhost:3000/user/stats/?of=';
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
@@ -135,6 +136,14 @@ export class UserService {
 			if (this.currentUser.friends[i] == user_b.intraId)
 				this.currentUser.friends.splice(i, 1);
 		return this.saveUser(this.currentUser);
+	}
+
+	getStats(u_intraId: string): Observable<Statistics> {
+		//console.log("getStats will look for stats of", u_intraId);
+		return this.http.get<Statistics>(this.statsUrl+u_intraId,{withCredentials:true})
+			.pipe(
+				catchError(this.handleError<Statistics>('getFriends'))
+			);
 	}
 
 	getAvailableUsers(): Observable<User[]> {

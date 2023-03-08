@@ -236,6 +236,7 @@ a:hover, .hover_invert:hover {
 }
 button
 {
+	white-space: nowrap;
 	text-shadow: inherit;
 	cursor: inherit;
 	text-align: inherit;
