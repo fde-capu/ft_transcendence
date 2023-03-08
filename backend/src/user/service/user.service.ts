@@ -27,7 +27,6 @@ export class UserService {
 	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
   ) {}
 
-
   // async register(codeFrom42: Users): Promise<Users> {
   //   const existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
   //   if (existUser === null){

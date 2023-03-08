@@ -11,6 +11,8 @@ td, th {
 	white-space: nowrap;
 }
 
-td:nth-child(1), td:nth-child(5) {
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(6) {
 	text-align: left;
 }

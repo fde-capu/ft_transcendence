@@ -1,10 +1,13 @@
+<app-menu-bar></app-menu-bar>
 <table>
 <tr *ngFor="let room of visibleRooms">
 	<td>
 		<span *ngIf="room.isPrivate">PRIVATE </span>
 		<span *ngIf="!room.isPrivate">PUBLIC </span>
 		<span *ngIf="room.password">PROTECTED</span>
-		CHAT:<b>
+		CHAT:
+	</td><td>
+		<b>
 		{{ room.name }}
 		</b>
 	</td>
@@ -16,11 +19,11 @@
 		<span *ngIf="!loggedUserIsIn(room) && !loggedUserIsBlocked(room)">
 			<button *ngIf="!room.password" routerLink="/chat/{{room.id}}">JOIN</button>
 			<span *ngIf="room.password">
+				<button id="btn{{room.id}}" (click)='submitEntrance(room)'>JOIN</button>
 				<input id="pass{{room.id}}" [ngModel]="password.get(room.id)" (ngModelChange)="password.set(room.id, $event)"
 					(keydown.enter)="fun.blur('pass' + room.id); fun.blink('btn' + room.id); submitEntrance(room)"
 					placeholder="<- Type password."
 				/>
-				<button id="btn{{room.id}}">JOIN</button>
 			</span>
 		</span>
 		<span *ngIf="loggedUserIsBlocked(room)"><- BLOCKED!</span>
