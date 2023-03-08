@@ -4,4 +4,5 @@ export interface User {
 	image: string;
 	score?: number;
 	mfa_enabled?: boolean;
+	isLogged?: boolean;
 }

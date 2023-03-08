@@ -20,6 +20,7 @@ export class RegisterController {
     @Res() response: Response = null,
     @Body()user: Users){
     try {
+		//console.log("Registred will call updateUser.");
       await this.userService.updateUser(intraId, user);
 	  //console.log("Registred user saved:", user);
       return response.status(200).json({});
@@ -49,4 +50,18 @@ export class RegisterController {
       response.status(e.status).json(e.data);
     }
   }
+
+	@Get('online')
+	@UseGuards(AuthGuard)
+	async getOnlineUsers(@Res()response:Response=null):Promise<any>
+	{
+		try {
+			//console.log("reg online: fetching databaes.");
+			const resp = await this.userService.getOnlineUsers();
+			return response.status(200).json(resp);
+		} catch (e) {
+			//console.log("reg: online got catch", e);
+			response.status(e.status).json(e.data);
+		}
+	}
 }

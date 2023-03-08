@@ -19,6 +19,7 @@ import { WindowTitleComponent } from './window-title/window-title.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
+import { LogOutComponent } from './log-out/log-out.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { CreateMatchComponent } from './create-match/create-match.component';
 	MainMenuComponent,
 	ChatRoomListComponent,
 	CreateMatchComponent,
+ LogOutComponent,
   ],
   imports: [
     BrowserModule,

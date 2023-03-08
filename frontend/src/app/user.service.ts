@@ -15,8 +15,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class UserService {
 	private currentIntraId?: string;
-	private currentUser: User|undefined = undefined;
 	private usersUrl = 'http://localhost:3000/user';
+	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
 	private saveHttpOptions = 
@@ -50,8 +50,18 @@ export class UserService {
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 	}
 
-	getUser(id: string): Observable<User> {
-		return this.getLoggedUser();
+	getUser(id: string): Observable<User | undefined> {
+		return this.getUserById(id);
+	}
+
+	signOut() {
+		this.getLoggedUser().subscribe(_=>{
+			//console.log("fus: ", _.intraId, " will log out.");
+			_.isLogged = false;
+			this.saveUser(_).subscribe(_=>{
+				this.authService.signOut();
+			});
+		});
 	}
 
 	saveUser(u_user: User): Observable<any> {
@@ -63,22 +73,15 @@ export class UserService {
 			)
 			.pipe
 			(
-				tap(_ => 
-					console.log("Saving ok, got:", _)
-				),
 				catchError(this.handleError<any>('saveUser'))
 			);
 	}
 
 	getOnlineUsers(): Observable<User[]> {
-		const users = USERS;
-		return of(users);
-//		CURRENTLY BROKEN (study code):
-//		return this.http.get<User[]>(this.usersUrl)
-//			.pipe(
-//				tap(_ => console.log(_)),
-//				catchError(this.handleError<User[]>('getOnlineUsers', []))
-//			);
+		return this.http.get<User[]>(this.onlineUsersUrl,{withCredentials:true})
+			.pipe(
+				catchError(this.handleError<User[]>('getOnlineUsers', []))
+			);
 	}
 
 	getAvailableUsers(): Observable<User[]> {
