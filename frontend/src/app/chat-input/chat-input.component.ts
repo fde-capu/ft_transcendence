@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, Input } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { ChatMessage } from '../chat-message';
 import { UserService } from '../user.service';
@@ -10,6 +10,7 @@ import { User } from '../user';
   styleUrls: ['./chat-input.component.css']
 })
 export class ChatInputComponent {
+	@Input() room: string = "";
 	message = "";
 	user: User | undefined = undefined;
 	textArea: HTMLElement | null = null;
@@ -36,6 +37,7 @@ export class ChatInputComponent {
 		let newMessage!: ChatMessage;
 		newMessage = 
 		{
+			roomId: this.room,
 			user: this.user ? this.user : {} as User,
 			message: this.message
 		};

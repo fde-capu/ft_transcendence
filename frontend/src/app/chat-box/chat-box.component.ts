@@ -71,6 +71,10 @@ export class ChatBoxComponent {
 		this.chatService.getMessages().subscribe(
 			_ => {
 				console.log("Chat subscription got", _.payload);
+				if (_.payload.roomId != this.chatRoom.id) {
+					console.log("Disregarding message", _.payload);
+					return ;
+				}
 				this.chatService.add(_.payload);
 			},
 		);

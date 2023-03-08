@@ -80,10 +80,9 @@ export class ChatService {
 		let n: ReturnType<typeof setTimeout>;
 		n = setTimeout(function(){
 			console.log("Chat emitting.");
-//			self.add(CHATS[Math.floor(Math.random() * CHATS.length)]);
 			self.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
 			self.mockChat();
-		}, Math.random() * 10000 + 5000 / 5);
+		}, Math.random() * 10000 + 5000 / 5.33);
 	}
 
 }
