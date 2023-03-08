@@ -1,4 +1,6 @@
 import { ActivatedRoute, Router, ParamMap, RoutesRecognized } from '@angular/router';
+import { catchError, map, tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChatSocket } from './chat.socket';
 import { Observable, of } from 'rxjs';
@@ -15,6 +17,7 @@ import { HelperFunctionsService } from './helper-functions.service';
   providedIn: 'root'
 })
 export class ChatService {
+	private roomsUrl = 'http://localhost:3000/chatrooms';
 	chatMessage: ChatMessage[] = [];
 	static chatRooms: ChatRoom[] = [];
 
@@ -24,6 +27,7 @@ export class ChatService {
 		private readonly router: Router,
 		private fun: HelperFunctionsService,
 		private userService: UserService,
+		private http: HttpClient,
 	) {
 		this.mockChat();
 	}
@@ -87,8 +91,11 @@ export class ChatService {
 		// Is visible if the room is public.
 		// Should deliver this already filtered (prefered),
 		// or is it filtered here?
-		const rooms = CHAT_ROOM;
-		return of(rooms);
+
+		return this.http.get<ChatRoom[]>(this.roomsUrl,{withCredentials:true})
+			.pipe(
+				catchError(this.handleError<ChatRoom[]>('getVisibleChatRooms'))
+			);
 	}
 	getInChatUsers(): Observable<User[]> {
 		// TODO: it facilitates (always?) for the loggedUser to be in first position,
@@ -120,6 +127,16 @@ export class ChatService {
 		}, Math.random() * 10000 + 5000);
 	}
 
+	private handleError<T>(operation = 'operation', result?: T) {
+		return (error: any): Observable<T> => {
+
+			// TODO: send the error to remote logging infrastructure
+			console.error("handleError<T>:", error); // log to console instead
+
+			// Let the app keep running by returning an empty result.
+			return of(result as T);
+		};
+	}
 }
 
 // TODO:

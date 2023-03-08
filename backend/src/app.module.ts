@@ -7,6 +7,7 @@ import { GameHistory } from './game/game-record';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
 import { RegisterController } from './user/controller/registred.controller';
+import { ChatController } from './chat/chat.controller';
 import { UserService } from './user/service/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
@@ -35,7 +36,7 @@ import { ChatGateway } from './chat/chat.gateway';
     FortyTwoModule,
     GameModule,
   ],
-  controllers: [PingController],
+  controllers: [PingController, ChatController],
   providers: [
 	InvitationGateway,
 	ChatGateway
