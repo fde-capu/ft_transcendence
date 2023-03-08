@@ -19,7 +19,7 @@ export class ChatController {
       const resp = await this.chatService.getVisibleRooms(intraId);
       return response.status(200).json(resp);
     } catch (e) {
-      response.status(e.status).json(e.data);
+      return response.status(e.status).json(e.data);
     }
   }
 }

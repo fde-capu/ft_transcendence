@@ -1,13 +1,12 @@
 import { ChatMessage } from './chat-message';
-import { User } from './user';
 
 export interface ChatRoom
 {
 	id: string,
 	name: string,
-	user: User[],
-	admin: User[],
-	blocked: User[],
+	user: string[],
+	admin: string[],
+	blocked: string[],
 	history: ChatMessage[],
 	password: string,
 	isPrivate: boolean

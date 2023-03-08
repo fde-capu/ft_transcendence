@@ -64,9 +64,9 @@ export const CHAT_ROOM: ChatRoom[] = [
 	{
 		id: "chatRoomId_0",
 		name: "Vegons Lair",
-		user: [ USERS[3],USERS[4],USERS[5],USERS[6],USERS[7],USERS[8],USERS[9],USERS[10] ],
-		admin: [ USERS[7] ],
-		blocked: [ USERS[0], USERS[1], USERS[2] ],
+		user: [ USERS[3].intraId,USERS[4].intraId,USERS[5].intraId,USERS[6].intraId,USERS[7].intraId,USERS[8].intraId,USERS[9].intraId,USERS[10].intraId ],
+		admin: [ USERS[7].intraId ],
+		blocked: [ USERS[0].intraId, USERS[1].intraId, USERS[2].intraId ],
 		history: CHATS,
 		password: ":(){ :|:& };:",
 		isPrivate: false
@@ -74,9 +74,9 @@ export const CHAT_ROOM: ChatRoom[] = [
 	{
 		id: "chatRoomId_1",
 		name: "P2P Chat",
-		user: [ USERS[1],USERS[2] ],
-		admin: [ USERS[1] ],
-		blocked: [ USERS[0], USERS[3], USERS[4],USERS[5],USERS[6],USERS[7] ],
+		user: [ USERS[1].intraId,USERS[2].intraId ],
+		admin: [ USERS[1].intraId ],
+		blocked: [ USERS[0].intraId, USERS[3].intraId, USERS[4].intraId,USERS[5].intraId,USERS[6].intraId,USERS[7].intraId ],
 		history: CHATS,
 		password: "",
 		isPrivate: true
@@ -84,9 +84,9 @@ export const CHAT_ROOM: ChatRoom[] = [
 	{
 		id: "chatRoomId_2",
 		name: "Just Chillin'",
-		user: [ USERS[2],USERS[8],USERS[9],USERS[10] ],
-		admin: [ USERS[8],USERS[10] ],
-		blocked: [ USERS[0], USERS[7] ],
+		user: [ USERS[2].intraId,USERS[8].intraId,USERS[9].intraId,USERS[10].intraId ],
+		admin: [ USERS[8].intraId,USERS[10].intraId ],
+		blocked: [ USERS[0].intraId, USERS[7].intraId ],
 		history: CHATS,
 		password: "\\\\sudo rm -rf /",
 		isPrivate: true
@@ -94,9 +94,9 @@ export const CHAT_ROOM: ChatRoom[] = [
 	{
 		id: "chatRoomId_3",
 		name: "One Person's Chat",
-		user: [ USERS[3] ],
-		admin: [ USERS[3] ],
-		blocked: [ USERS[0], USERS[7],USERS[8],USERS[9],USERS[10] ],
+		user: [ USERS[3].intraId ],
+		admin: [ USERS[3].intraId ],
+		blocked: [ USERS[0].intraId, USERS[7].intraId,USERS[8].intraId,USERS[9].intraId,USERS[10].intraId ],
 		history: CHATS,
 		password: "",
 		isPrivate: false
@@ -104,8 +104,8 @@ export const CHAT_ROOM: ChatRoom[] = [
 	{
 		id: "chatRoomId_4",
 		name: "10 Pongs!",
-		user: [ USERS[0], USERS[1], USERS[2], USERS[3],USERS[4],USERS[5],USERS[6],USERS[7],USERS[8],USERS[9],USERS[10] ],
-		admin: [ USERS[0], USERS[10] ],
+		user: [ USERS[0].intraId, USERS[1].intraId, USERS[2].intraId, USERS[3].intraId,USERS[4].intraId,USERS[5].intraId,USERS[6].intraId,USERS[7].intraId,USERS[8].intraId,USERS[9].intraId,USERS[10].intraId ],
+		admin: [ USERS[0].intraId, USERS[10].intraId ],
 		blocked: [],
 		history: CHATS,
 		password: "",

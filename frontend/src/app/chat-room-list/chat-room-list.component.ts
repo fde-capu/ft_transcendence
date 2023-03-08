@@ -22,7 +22,6 @@ export class ChatRoomListComponent {
 	ngOnInit(): void {
 		this.getCurrentUser();
 	}
-
 	getChatRooms(): void {
 		this.chatService.getVisibleChatRooms(this.user?.intraId)
 			.subscribe(rooms => this.visibleRooms = rooms);
@@ -37,13 +36,13 @@ export class ChatRoomListComponent {
 	}
 	loggedUserIsIn(room: ChatRoom): Boolean {
 		for (const user of room.user)
-			if (user == this.user)
+			if (user == this.user?.intraId)
 				return true;
 		return false;
 	}
 	loggedUserIsBlocked(room: ChatRoom): Boolean {
 		for (const user of room.blocked)
-			if (user == this.user)
+			if (user == this.user?.intraId)
 				return true;
 		return false;
 	}
@@ -54,4 +53,3 @@ export class ChatRoomListComponent {
 			alert('Request entrance on ' + room.name + ' useing password ' + this.password.get(room.id));
 	}
 }
-

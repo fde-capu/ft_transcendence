@@ -3,12 +3,13 @@ import { ChatRoomDTO } from './chat-room';
 
 @Injectable()
 export class ChatService {
+
+	static allRooms: ChatRoomDTO[] = [];
+
   constructor(
   ) {
 		this.mockRooms(); // TODO remove XXX
 	}
-
-	static allRooms: ChatRoomDTO[] = [];
 
 	async getAllRooms():Promise<ChatRoomDTO[]>
 	{
@@ -41,12 +42,11 @@ export class ChatService {
 				out.push(ChatService.allRooms[i]);
 		}
 		return out;
-
 	}
 
 	mockRooms() {
 		ChatService.allRooms.push({
-					id: "FOO-1-id",
+					id: "chatRoomId_0",
 					name: "1 Mock's Chat",
 					user: ['fde-capu'],
 					admin: [],
@@ -55,7 +55,7 @@ export class ChatService {
 					isPrivate: true 
 		});
 		ChatService.allRooms.push({
-					id: "FOO2-id",
+					id: "chatRoomId_1",
 					name: "2 Mock's Chat",
 					user: [],
 					admin: ['fde-capu'],
@@ -64,7 +64,7 @@ export class ChatService {
 					isPrivate: true 
 		});
 		ChatService.allRooms.push({
-					id: "FOO-3-id",
+					id: "chatRoomId_2",
 					name: "3 Mock's Chat",
 					user: [],
 					admin: [],
@@ -73,7 +73,7 @@ export class ChatService {
 					isPrivate: true 
 		});
 		ChatService.allRooms.push({
-					id: "FOO-4-id",
+					id: "chatRoomId_3",
 					name: "4 Mock's Chat",
 					user: [],
 					admin: [],

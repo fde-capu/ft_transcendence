@@ -33,7 +33,7 @@ export class ChatGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
-	console.log("Chat got", payload);
+//	console.log("Chat got", payload);
     this.server.emit('chat', {
       author: client['subject'],
       payload: payload,

@@ -18,7 +18,6 @@ export class ChatBoxComponent {
 		public fun: HelperFunctionsService,
 		public route: ActivatedRoute,
 	) {}
-	chatRoomOn = true; // After last merge, is this in user?
 	chatRoom: ChatRoom = {} as ChatRoom;
 	windowTitle = "CHAT";
 	windowName = "";
@@ -27,7 +26,7 @@ export class ChatBoxComponent {
 	usersOnChat: User[] = []; // Everyone that is logged on the room.
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
 	done: Boolean = false;
-	@Input() user: User | undefined = undefined;
+	user?: User;
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -37,7 +36,6 @@ export class ChatBoxComponent {
 		// If there is a query, continue:
 		this.getUser();
 		this.socketSubscription();
-		this.chatService.mockChat(); // TODO REMOVE XXX
 
 		this.chatService.getChatRoom(
 			this.route.snapshot.paramMap.get('roomId')
@@ -51,13 +49,18 @@ export class ChatBoxComponent {
 
 		this.chatService.getInChatUsers().subscribe(
 			inChat => {
-				this.usersOnChat = inChat;
+				this.userService.getMany(inChat).subscribe(_=>{
+					this.usersOnChat = _;
+				});
 				this.imprint();
 			}
 		);
+
 		this.chatService.getOutOfChatUsers().subscribe(
 			outChat => {
-				this.usersOutOfChat = outChat;
+				this.userService.getMany(outChat).subscribe(_=>{
+					this.usersOutOfChat = _;
+				});
 				this.imprint();
 			}
 		);
@@ -120,11 +123,11 @@ export class ChatBoxComponent {
 	}
 
 	isAdmin(user: User | undefined = this.user): boolean {
-		if (!this.chatRoom?.admin.length) return false;
+		if (!this.chatRoom?.admin?.length || !user || !this.user) return false;
 		for (const admin of this.chatRoom.admin)
-			if (admin == user)
+			if (admin == user.intraId)
 				return true;
-		return user == this.user; // TODO: Remove this line, it's a mock so user is always admin.
+		return user.intraId == this.user.intraId; // TODO: Remove this line, it's a mock so user is always admin.
 		return false;
 	}
 

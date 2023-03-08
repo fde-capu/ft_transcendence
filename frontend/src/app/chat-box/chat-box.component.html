@@ -1,4 +1,5 @@
 <app-menu-bar></app-menu-bar>
+<app-invitation-screen></app-invitation-screen>
 <div *ngIf="!done">Please hold on...</div>
 <div *ngIf="done" class="window-full">
 <app-window-title
@@ -68,7 +69,7 @@
 
 	<hr>
 
-	<h3>Logged users</h3>
+	<h3>In-Chat</h3>
 	<table class="list-of-users">
 		<tr *ngFor="let user of usersOnChat">
 		<td>
@@ -89,7 +90,7 @@
 		</tr>
 	</table>
 
-	<h3 *ngIf="isAdmin()">Online users</h3>
+	<h3 *ngIf="isAdmin()">Online Users</h3>
 	<table *ngIf="isAdmin()" class="list-of-users">
 		<tr *ngFor="let user of usersOutOfChat">
 		<td>
@@ -102,8 +103,8 @@
 		</td>
 		</tr>
 	</table>
+
 </div>
 <app-chat-text></app-chat-text>
 <app-chat-input [room]='chatRoom.id'></app-chat-input>
 </div>
-

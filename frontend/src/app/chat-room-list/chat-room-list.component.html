@@ -18,7 +18,9 @@
 			<button>LEAVE</button>
 		</span>
 		<span *ngIf="!loggedUserIsIn(room) && !loggedUserIsBlocked(room)">
-			<button *ngIf="!room.password" routerLink="/chat/{{room.id}}">JOIN</button>
+			<button *ngIf="!room.password && !loggedUserIsIn(room)" routerLink="/chat/{{room.id}}">JOIN</button>
+			<button *ngIf="!room.password && loggedUserIsIn(room)" routerLink="/chat/{{room.id}}">ENTER</button>
+			<button *ngIf="!room.password && loggedUserIsIn(room)" routerLink="/chatleave/{{room.id}}">LEAVE</button>
 			<span *ngIf="room.password">
 				<button id="btn{{room.id}}" (click)='submitEntrance(room)'>JOIN</button>
 				<input id="pass{{room.id}}" [ngModel]="password.get(room.id)" (ngModelChange)="password.set(room.id, $event)"

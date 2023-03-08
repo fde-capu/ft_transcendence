@@ -156,6 +156,21 @@ export class UserService {
 			);
 	}
 
+	getMany(ulist: string[]): Observable<User[]> {
+		let out: User[] = [];
+		for (const one of ulist)
+		{
+			this.getUserById(one).subscribe(_=>{
+				if (_)
+				{
+					console.log("getMany:", _);
+					out.push(_)
+				}
+			});
+		}
+		return of(out);
+	}
+
 	getAvailableUsers(): Observable<User[]> {
 		// Must return users online, not playing, and not logged user.
 		const users = USERS;
