@@ -64,4 +64,22 @@ export class RegisterController {
 			response.status(e.status).json(e.data);
 		}
 	}
+
+  @Get('friends')
+  @UseGuards(AuthGuard)
+  async getFriends(
+    @Query('with') intraId: string,
+	@Res() response:Response=null
+  ):Promise<any>
+  {
+	try {
+		//console.log("reg friends: fetching friends.");
+		const resp = await this.userService.getFriends(intraId);
+		return response.status(200).json(resp);
+	} catch (e) {
+		//console.log("reg: friends got catch", e);
+		response.status(e.status).json(e.data);
+	}
+  }
+
 }

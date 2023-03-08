@@ -7,6 +7,7 @@ import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -15,7 +16,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class UserService {
 	private currentIntraId?: string;
+	private currentUser?: User;
 	private usersUrl = 'http://localhost:3000/user';
+	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
@@ -28,12 +31,20 @@ export class UserService {
 	constructor(
 		private readonly authService: AuthService,
 		private http: HttpClient,
+		private router: Router,
 	) {
 		this.getCurrentIntraId();
+		this.router.routeReuseStrategy.shouldReuseRoute = () => {
+			return false;
+		};
 	}
 
 	getCurrentIntraId() {
-		this.authService.getAuthContext().subscribe(_=>{this.currentIntraId=_?.sub});
+		this.authService.getAuthContext().subscribe(_=>{
+			this.currentIntraId=_?.sub;
+			if (this.currentIntraId)
+				this.getLoggedUser().subscribe(_=>{this.currentUser=_});
+		});
 	}
 
 	getUserById(intraId: string): Observable<User | undefined> {
@@ -73,6 +84,10 @@ export class UserService {
 			)
 			.pipe
 			(
+				map(_=>{
+					//console.log("saveUser will call component refresh.");
+					this.router.navigate([this.router.url])
+				}),
 				catchError(this.handleError<any>('saveUser'))
 			);
 	}
@@ -84,14 +99,48 @@ export class UserService {
 			);
 	}
 
+	getFriends(u_user?: User): Observable<User[]> {
+		//console.log("getFriends will look for friends of", u_user?.intraId);
+		if (u_user)
+		{
+			//console.log("getFriends will call http.");
+			return this.http.get<User[]>(this.friendsUrl+u_user.intraId,{withCredentials:true})
+				.pipe(
+					catchError(this.handleError<User[]>('getFriends', []))
+				);
+		}
+		return of([]);
+	}
+
+	isFriend(user_b: User | undefined): boolean {
+		if (!this.currentUser||!this.currentUser.friends) return false;
+		for (const friend of this.currentUser.friends)
+		{
+			if (friend == user_b?.intraId)
+				return true;
+		}
+		return false;
+	}
+
+	makeFriend(user_b: User|undefined): Observable<any> {
+		if (!this.currentUser||!user_b) return of(false);
+		if (!this.currentUser.friends) this.currentUser.friends = [];
+		this.currentUser.friends.push(user_b.intraId);
+		return this.saveUser(this.currentUser);
+	}
+
+	unFriend(user_b: User|undefined): Observable<any> {
+		if (!this.currentUser||!user_b||!this.currentUser.friends) return of(false);
+		for (var i = 0; i < this.currentUser.friends.length; i++)
+			if (this.currentUser.friends[i] == user_b.intraId)
+				this.currentUser.friends.splice(i, 1);
+		return this.saveUser(this.currentUser);
+	}
+
 	getAvailableUsers(): Observable<User[]> {
 		// Must return users online, not playing, and not logged user.
 		const users = USERS;
 		return of(users);
-	}
-
-	isFriend(user: User | undefined): Boolean {
-		return Math.random() > .6;
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {

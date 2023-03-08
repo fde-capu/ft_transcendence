@@ -19,6 +19,7 @@ export interface UserDTO {
   image: string;
   score?: number;
   mfa_enabled: boolean;
+  friends?: string[];
 }
 
 export interface registerResp {
@@ -42,6 +43,7 @@ export class UserService {
   //   await this.updateUser(codeFrom42.login, { mfa_enabled: true,  mfa_verified: false });
   //   return ({ intraId: codeFrom42.login, mfa_enabled: true,  mfa_verified: false });
   // }
+  // ^ I guess the code above is not necessary.
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
     let existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
@@ -52,7 +54,8 @@ export class UserService {
 		email: codeFrom42.email,
 		name: codeFrom42.displayname,
 		image: codeFrom42.image['micro'],
-		score: 0
+		score: 0,
+		friends: []
 	  });
       existUser = await this.userRepository.save(createdUser);
     }
@@ -63,6 +66,7 @@ export class UserService {
   }
   
   async updateUser(intraId: string, user: Users){
+	//console.log("updateUser user", user);
     const resp = await this.userRepository.createQueryBuilder()
     .update(Users)
     .set(user)
@@ -87,6 +91,17 @@ export class UserService {
 	return this.singleUserDto(resp);
   }
 
+  async getFullUser(u_intraId: string): Promise<Users> {
+	//console.log("bus getFull Will search:", u_intraId);
+    const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
+    if (resp === null)
+	{
+		//console.log("bus getFull Could not find", u_intraId, ", throwing error.");
+		throw new NotFoundException();
+	}
+	return resp;
+  }
+
   async logOut(intraId: string) {
     let user = await this.userRepository.findOneBy({ intraId: intraId });
 	//console.log("bus logOut called.");
@@ -97,11 +112,33 @@ export class UserService {
 		.where("onlineUsers.isLogged = :isLogged", { isLogged: true })
 		.getMany();
 		return this.makeUserDto(resp);
+		// TODO: remove main-user from this list.
+	}
+
+	async getFriends(intraId:string):Promise<UserDTO[]>
+	{
+		let out: UserDTO[] = [];
+		const u = await this.getFullUser(intraId);
+		//console.log("Friends with:", u.intraId);
+		if(!u || !u.friends){
+			//console.log("...got no friends");
+			return out;
+		}
+		for (const friend of u.friends)
+		{
+			//console.log("...friend has", friend);
+			let n = await this.getUserByIntraId(friend);
+			if (!n) return;
+			out.push(n);
+		}
+		//console.log("getFriends returning", out);
+		return out;
 	}
 
 	singleUserDto(u_user: Users):UserDTO{
 		return this.makeUserDto([u_user])[0];
 	}
+
 	makeUserDto(u_users: Users[]):UserDTO[]{
 		if (!u_users.length)
 			return [];
@@ -113,6 +150,7 @@ export class UserService {
 				image: u.image,
 				score: u.score,
 				mfa_enabled: u.mfa_enabled,
+				friends: u.friends,
 			};
 			out.push(dto);
 		});
