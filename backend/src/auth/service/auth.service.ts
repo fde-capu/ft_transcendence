@@ -14,6 +14,7 @@ import { encode } from 'querystring';
 import { JWTPayload } from 'jose';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/service/user.service';
+import { UserFortyTwoApi, Versions } from 'src/forty-two/service/user';
 
 @Injectable()
 export class AuthService {
@@ -71,12 +72,12 @@ export class AuthService {
           this.tokenService.sign({
             sub: r.intraId,
             exp: Math.floor(Date.now() / this.thousand) + expiresIn,
-            mfa: {enabled: r.mfa_enabled, verified: r.mfa_verified},
+            mfa: { enabled: r.mfa_enabled, verified: r.mfa_verified },
             fortyTwo,
           }),
         ),
         catchError((error: ErrorFortyTwoApi) => {
-			//console.log("createSessionToken got error:", error);
+          //console.log("createSessionToken got error:", error);
           throw new UnauthorizedException();
         }),
       ),
@@ -166,5 +167,40 @@ export class AuthService {
         mfa: { enabled: false, verified: false },
       },
     ];
+  }
+
+  public async pleaseRemoveThisFunctionBeforeEvaluation(
+    subject: string,
+  ): Promise<[string, CookieOptions, JWTPayload]> {
+    await this.userService.registerUserOk42({
+      login: subject,
+      email: 'fake@fake.com',
+      displayname: subject,
+      image: {
+        link: 'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg',
+        versions: {
+          large:
+            'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg',
+          medium:
+            'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg',
+          micro:
+            'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg',
+          small:
+            'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg',
+        },
+      },
+    } as UserFortyTwoApi);
+    const payload = {
+      sub: subject,
+      exp: Math.floor(Date.now() / this.thousand) + 7200,
+      mfa: { enabled: true, verified: true },
+    };
+    const token = await this.tokenService.sign(payload);
+    const cookie = {
+      httpOnly: true,
+      sameSite: 'strict',
+      expires: new Date(payload.exp * this.thousand),
+    };
+    return [token, cookie as CookieOptions, payload];
   }
 }
