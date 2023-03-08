@@ -10,8 +10,7 @@ export class GameService {
 	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
   ) {}
 
-
-	// At the end of each match, backend must call this:
+	// TODO At the end of each match, backend must call this:
 	// userService.setGameHistory({GameHistory})
 	async setGameHistory(record:GameHistory):Promise<GameHistory>
 	{

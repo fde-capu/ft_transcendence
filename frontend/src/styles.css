@@ -173,7 +173,7 @@ h1 {
 }
 h2 {
 	font-variant-caps: all-petite-caps;
-	margin: 4px 24px 4px 24px;
+	margin: 4px 24px 0px 24px;
 }
 h3 {
 	font-variant-caps: all-petite-caps;
@@ -439,11 +439,15 @@ td:nth-child(1) {
 	position: relative;
 }
 .font-distorter {
-	animation: text-blinker 6.18s step-end infinite;
+	animation: text-sizer 9.18s step-end infinite;
 	height: 24px;
 	position: relative;
 }
-/* This is not working :( */
+.font-positioner {
+	animation: text-positioner 14.18s step-end infinite;
+	height: 24px;
+	position: relative;
+}
 @keyframes text-blinker {
   0%	{ visibility: hidden; }
   4%	{ visibility: visible; }
@@ -459,6 +463,14 @@ td:nth-child(1) {
   58%	{ font-size: 104%; }
   60%	{ font-size: 94%; }
   93%	{ font-size: 101%; }
+}
+@keyframes text-positioner {
+  0%	{  top: -12px; left: 12px; }
+  24%	{  top: -5px; left: 7px;}
+  27%	{  top: 2px; left: 2px;}
+  51%	{  top: 6px; left: 10px;}
+  70%	{  top: 12px; left: -9px;}
+  80%	{  top: 3px; left: -17px;}
 }
 /**/
 *::placeholder {
