@@ -1,35 +1,34 @@
-<h2>Lobby</h2>
-
-<div>
-  <button (click)="quickMatch()">Quick match</button>
-  <button (click)="createRoom()">Create new room</button>
-</div>
-
-<main *ngIf="!rooms.length">
-  <h3>There is no room available at moment</h3>
-  <button (click)="createRoom()">Create new room</button>
-</main>
-
-<main *ngIf="!!rooms.length">
-  <table>
-    <caption>
-      Game rooms
-    </caption>
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Mode</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let room of rooms">
-        <th>{{ room.id }}</th>
-        <th>{{ room.mode }}</th>
-        <th>{{ room.status }}</th>
-        <th><button (click)="joinRoom(room.id)">Join</button></th>
-      </tr>
-    </tbody>
-  </table>
+<main>
+  <header>
+    <h2>Lobby</h2>
+  </header>
+  <aside>
+    <div>
+      <button>Quick match</button>
+      <button>Create new room</button>
+    </div>
+  </aside>
+  <section>
+    <table>
+      <caption>
+        Game rooms
+      </caption>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Mode</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>xpto</th>
+          <th>PONG</th>
+          <th>Waiting</th>
+          <th><button>Join</button></th>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </main>
