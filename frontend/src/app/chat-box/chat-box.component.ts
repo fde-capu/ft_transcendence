@@ -33,10 +33,10 @@ export class ChatBoxComponent {
 		//		Async await call to endpoint requiring new room.
 		//		...when its done, redirect to "/chat/chatId?optionsOn=true".
 		// If there is a query, continue:
-		this.done = true;
-		this.userService.getLoggedUser().subscribe(
-			user => { this.user = user; }
-		);
+		this.getUser();
+		this.socketSubscription();
+		this.chatService.mockChat(); // TODO REMOVE XXX
+
 		this.chatService.getChatRoom().subscribe(
 			chatRoom => {
 				this.chatRoom = chatRoom;
@@ -55,7 +55,25 @@ export class ChatBoxComponent {
 				this.imprint();
 			}
 		);
+
+		this.done = true;
 		this.imprint();
+	}
+
+	getUser(): void {
+		this.userService.getLoggedUser().subscribe(
+			backUser => { this.user = backUser; }
+		)
+	}
+
+	socketSubscription() {
+		console.log("Chat subscribing.");
+		this.chatService.getMessages().subscribe(
+			_ => {
+				console.log("Chat subscription got", _.payload);
+				this.chatService.add(_.payload);
+			},
+		);
 	}
 
 	imprint() {

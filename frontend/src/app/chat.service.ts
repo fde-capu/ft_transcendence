@@ -29,15 +29,6 @@ export class ChatService {
 		this.chatMessage = [];
 	}
 
-	mockChat(): void {
-		const self = this;
-		let n: ReturnType<typeof setTimeout>;
-		n = setTimeout(function(){
-			self.add(CHATS[Math.floor(Math.random() * CHATS.length)]);
-			self.mockChat();
-		}, Math.random() * 10000 + 5000);
-	}
-
 	getChatRoom(): Observable<ChatRoom> {
 		// TODO: Get ID from query/cookie.
 		// if (id is empty) return a NEW chat Room, with:
@@ -51,7 +42,7 @@ export class ChatService {
 		// 		 	password: string, // Empty.
 		// 		 	isPrivate: boolean // True.
 		// 		}
-		// else (there is and id) subscribe to the the Observable.
+		// else (there is an id) subscribe to the the Observable.
 		const chatRoom = CHAT_ROOM[0];
 		return of(chatRoom);
 	}
@@ -78,9 +69,27 @@ export class ChatService {
 	getChatText(): Observable<ChatMessage[]> {
 		return of(this.chatMessage);
 	}
+
+	getMessages() {
+		//console.log("Invite service getting from socket.");
+		return this.socket.fromEvent<any>('chat');
+	}
+
+	mockChat(): void {
+		const self = this;
+		let n: ReturnType<typeof setTimeout>;
+		n = setTimeout(function(){
+			console.log("Chat emitting.");
+//			self.add(CHATS[Math.floor(Math.random() * CHATS.length)]);
+			self.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
+			self.mockChat();
+		}, Math.random() * 10000 + 5000 / 5);
+	}
+
 }
 
 // TODO:
+
 // - Implement direct-messaging.
 // - Chat creationg screen.
 // - "Block user" routine.
