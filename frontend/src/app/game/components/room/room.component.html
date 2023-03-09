@@ -9,7 +9,7 @@
       <fieldset>
         <legend>Game Mode</legend>
         <label>
-          <input type="radio" name="mode" value="PONG">
+          <input type="radio" name="mode" value="PONG" checked>
           <span>PONG</span>
         </label>
         <label>
@@ -20,18 +20,21 @@
           <input type="radio" name="mode" value="QUADRAPONG">
           <span>QUADRAPONG</span>
         </label>
-      </fieldset>
       <button type="submit">Set Mode</button>
+      </fieldset>
     </form>
     <form>
       <fieldset>
         <legend>Invite</legend>
         <label>
           Player:
-          <input type="text" name="player" placeholder="name">
+			<select name="playerToInvite">
+				<option value="" disabled selected hidden>Please Choose...</option>
+				<option *ngFor="let user of availableUsers">{{user.intraId}} | {{user.name}}</option>
+			</select>
         </label>
+		<button (click)='doInvitation()'>Invite</button>
       </fieldset>
-      <button type="submit">Invite</button>
     </form>
     <button>Leave</button>
     <button>Ready</button>
