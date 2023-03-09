@@ -8,8 +8,15 @@ import { LobbyComponent } from './components/lobby/lobby.component';
 import { RoomComponent } from './components/room/room.component';
 
 @NgModule({
-  declarations: [GameComponent, LobbyComponent, RoomComponent],
-  imports: [CommonModule, GameRoutingModule],
+  declarations: [
+	GameComponent,
+	LobbyComponent,
+	RoomComponent,
+  ],
+  imports: [
+	CommonModule,
+	GameRoutingModule
+  ],
   providers: [GameSocket],
 })
 export class GameModule {}
