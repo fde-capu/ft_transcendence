@@ -34,11 +34,11 @@ export class ChatBoxComponent {
 		//		Async await call to endpoint requiring new room.
 		//		...when its done, redirect to "/chat/chatId?optionsOn=true".
 		// If there is a query, continue:
-		this.getUser();
+		this.getUserAndStuff();
 		// ^ Not the best place, maybe everyone should subscribe once and get all messages.
 	}
 
-	getUser(): void {
+	getUserAndStuff(): void {
 		this.userService.getLoggedUser().subscribe(
 			backUser => {
 				this.user = backUser;
@@ -69,11 +69,13 @@ export class ChatBoxComponent {
 		this.chatService.getMessages().subscribe(
 			_ => {
 				console.log("Chat subscription got", _.payload);
-				if (_.payload.roomId != this.chatRoom.id) {
+				if (
+					(_.payload.roomId != this.chatRoom.id)
+				){
 					console.log("Disregarding message", _.payload);
 					return ;
-				}
-				this.chatService.add(_.payload);
+				} else
+					this.chatService.add(_.payload);
 			},
 		);
 	}
@@ -141,7 +143,6 @@ export class ChatBoxComponent {
 		for (const admin of this.chatRoom.admin)
 			if (admin == user.intraId)
 				return true;
-		return user.intraId == this.user.intraId; // TODO: Remove this line, it's a mock so user is always admin.
 		return false;
 	}
 

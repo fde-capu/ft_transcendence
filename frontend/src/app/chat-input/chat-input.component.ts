@@ -41,7 +41,7 @@ export class ChatInputComponent {
 			user: this.user ? this.user : {} as User,
 			message: this.message
 		};
-		this.chatService.add(newMessage);
+		this.chatService.sendMessage(newMessage);
 		this.message = "";
 		this.textArea && this.textArea.focus();
 	}

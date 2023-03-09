@@ -29,7 +29,12 @@ export class ChatService {
 		private userService: UserService,
 		private http: HttpClient,
 	) {
-//		this.mockChat();
+//		this.mockChat(); // Mock MUST be on backend
+	}
+
+	sendMessage(chatMessage: ChatMessage) {
+		console.log("Chat emitting.");
+		this.socket.emit('chat', chatMessage);
 	}
 
 	add(chatMessage: ChatMessage) {
@@ -80,7 +85,7 @@ export class ChatService {
 	}
 
 	getMessages() {
-		//console.log("Invite service getting from socket.");
+		//console.log("Chat service getting from socket.");
 		return this.socket.fromEvent<any>('chat');
 	}
 
