@@ -35,15 +35,49 @@ export class ChatBoxComponent {
 		//		...when its done, redirect to "/chat/chatId?optionsOn=true".
 		// If there is a query, continue:
 		this.getUser();
-		this.socketSubscription();
 		// ^ Not the best place, maybe everyone should subscribe once and get all messages.
-		this.getChatRoom();
-		this.getInChatUsers();
-		this.getOutOfChatUsers();
-
-		this.done = true;
-		this.imprint();
 	}
+
+	getUser(): void {
+		this.userService.getLoggedUser().subscribe(
+			backUser => {
+				this.user = backUser;
+				this.initChatRoom();
+			}
+		)
+	}
+
+	initChatRoom(): void {
+		this.chatService.getChatRoom(
+			this.route.snapshot.paramMap.get('roomId')
+		).subscribe(
+			chatRoom => {
+				this.chatRoom = chatRoom;
+				console.log("ChatBox Init to chatroom", chatRoom);
+				this.socketSubscription();
+				this.getInChatUsers();
+				this.getOutOfChatUsers();
+				this.optionsOn = this.isAdmin();
+				this.done = true;
+				this.imprint();
+			}
+		);
+	}
+
+	socketSubscription() {
+		console.log("Chat subscribing.");
+		this.chatService.getMessages().subscribe(
+			_ => {
+				console.log("Chat subscription got", _.payload);
+				if (_.payload.roomId != this.chatRoom.id) {
+					console.log("Disregarding message", _.payload);
+					return ;
+				}
+				this.chatService.add(_.payload);
+			},
+		);
+	}
+
 
 	getOutOfChatUsers(): void {
 		this.chatService.getOutOfChatUsers().subscribe(
@@ -68,37 +102,6 @@ export class ChatBoxComponent {
 		);
 	}
 
-	getChatRoom(): void {
-		this.chatService.getChatRoom(
-			this.route.snapshot.paramMap.get('roomId')
-		).subscribe(
-			chatRoom => {
-				this.chatRoom = chatRoom;
-				console.log("ChatBox Init to chatroom", chatRoom);
-				this.imprint();
-			}
-		);
-	}
-
-	getUser(): void {
-		this.userService.getLoggedUser().subscribe(
-			backUser => { this.user = backUser; }
-		)
-	}
-
-	socketSubscription() {
-		console.log("Chat subscribing.");
-		this.chatService.getMessages().subscribe(
-			_ => {
-				console.log("Chat subscription got", _.payload);
-				if (_.payload.roomId != this.chatRoom.id) {
-					console.log("Disregarding message", _.payload);
-					return ;
-				}
-				this.chatService.add(_.payload);
-			},
-		);
-	}
 
 	imprint() {
 		this.windowName = this.windowTitle + ": " + this.chatRoom.name;
