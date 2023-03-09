@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Query,
   Res,
@@ -11,6 +12,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { JWTPayload } from 'jose';
+import { Subject } from 'rxjs';
 import { TokenPayload } from '../decorator/token-payload.decorator';
 import { AuthGuard } from '../guard/auth.guard';
 import { AuthService } from '../service/auth.service';
@@ -94,6 +96,17 @@ export class AuthController {
     const [token, options, response] = await this.authService.disableChallenge(
       payload,
     );
+    return res.cookie('authorization', token, options).json(response);
+  }
+
+  // TODO: PLEASE, PLEASE, PLEASE REMOVE IT BEFORE EVALUATION
+  @Get('fake/:subject')
+  public async pleaseRemoveThisFunctionBeforeEvaluation(
+    @Res() res: Response,
+    @Param('subject') subject: string,
+  ) {
+    const [token, options, response] =
+      await this.authService.pleaseRemoveThisFunctionBeforeEvaluation(subject);
     return res.cookie('authorization', token, options).json(response);
   }
 }
