@@ -15,8 +15,13 @@ import { ConfigService } from '@nestjs/config';
 @Module({
   imports: [FortyTwoModule, UserModule,
     TypeOrmModule.forFeature([Users, GameHistory])
+  providers: [
+    TokenService,
+    OtpService,
+    AuthService,
+    UserService,
+    ConfigService,
   ],
-  providers: [TokenService, OtpService, AuthService, UserService, ConfigService],
   controllers: [AuthController],
   exports: [TokenService],
 })

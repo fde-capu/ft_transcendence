@@ -46,9 +46,9 @@ const routes: Routes = [
     component: OnlineUsersComponent,
   },
   {
-	path: 'create-match',
+    path: 'create-match',
     canActivate: [AuthGuard],
-	component: CreateMatchComponent,
+    component: CreateMatchComponent,
   },
   {
     path: 'avatar',
@@ -77,10 +77,6 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
-  },
-  {
-    path: 'error',
-    loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
   },
   {
     path: 'game',

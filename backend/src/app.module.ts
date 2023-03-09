@@ -18,7 +18,10 @@ import { InvitationGateway } from './invite/invite.gateway';
 import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
-  imports: [UserModule, HttpModule, ConfigModule.forRoot(),
+  imports: [
+    UserModule,
+    HttpModule,
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

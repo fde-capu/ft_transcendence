@@ -9,10 +9,12 @@ import { GameHistory } from '../game/game-record';
 import { GameService } from '../game/game.service';
 
 @Module({
-  imports: [HttpModule, ConfigModule.forRoot(),
-    TypeOrmModule.forFeature([Users, GameHistory])
+  imports: [
+    HttpModule,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forFeature([Users, GameHistory]),
   ],
   controllers: [RegisterController],
   providers: [UserService, GameService],
 })
-export class UserModule { }
+export class UserModule {}

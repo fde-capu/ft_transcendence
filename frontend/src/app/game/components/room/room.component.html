@@ -1,0 +1,76 @@
+<main>
+  <header>
+    <h2>Room 12345</h2>
+  </header>
+  <aside>
+    <form>
+      <fieldset>
+        <legend>Game Mode</legend>
+        <label>
+          <input type="radio" name="mode" value="PONG">
+          <span>PONG</span>
+        </label>
+        <label>
+          <input type="radio" name="mode" value="PONGDOUBLE">
+          <span>PONGDOUBLE</span>
+        </label>
+        <label>
+          <input type="radio" name="mode" value="QUADRAPONG">
+          <span>QUADRAPONG</span>
+        </label>
+      </fieldset>
+      <button type="submit">Set Mode</button>
+    </form>
+    <form>
+      <fieldset>
+        <legend>Invite</legend>
+        <label>
+          Player:
+          <input type="text" name="player" placeholder="name">
+        </label>
+      </fieldset>
+      <button type="submit">Invite</button>
+    </form>
+    <button>Leave</button>
+    <button>Ready</button>
+    <button disabled="true">Start</button>
+  </aside>
+  <section>
+    <table>
+      <caption>Players</caption>
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Name</th>
+          <th>Ready</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Left</td>
+          <td>msales-a</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Left</td>
+          <td>msales-b</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Right</td>
+          <td>msales-c</td>
+          <td>Yes</td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <h3>Audience</h3>
+      <ul>
+        <li>foo</li>
+        <li>bar</li>
+        <li>foobar</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<app-game></app-game>

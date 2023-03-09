@@ -1,33 +1,33 @@
 {
   "name": "frontend",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
+    "build": "ng build",
+    "lint": "ng lint",
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check",
-    "start:prod": "node dist/main",
     "start:dev": "npm run watch",
-    "build": "ng build",
-    "watch": "ng serve --host 0.0.0.0 --disable-host-check --watch --configuration development",
+    "start:prod": "node dist/main",
     "test": "ng test",
-    "lint": "ng lint"
+    "watch": "ng serve --host 0.0.0.0 --disable-host-check --watch --configuration development"
   },
-  "private": true,
   "dependencies": {
-    "@angular/common": "latest",
-    "@angular/forms": "^15.1.1",
-    "ng": "latest",
     "@angular/animations": "^15.0.0",
+    "@angular/common": "latest",
     "@angular/compiler": "^15.0.0",
     "@angular/core": "^15.0.0",
+    "@angular/forms": "^15.1.1",
     "@angular/platform-browser": "^15.0.0",
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
     "angularx-qrcode": "^15.0.1",
-    "rxjs": "~7.5.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.12.0",
+    "ng": "latest",
     "ngx-socket-io": "^4.4.0",
-    "socket.io": "^4.5.4"
+    "rxjs": "~7.5.0",
+    "socket.io": "^4.5.4",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.12.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.0.4",
