@@ -28,6 +28,7 @@ import { MenuBarModule } from './menu-bar/menu-bar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,

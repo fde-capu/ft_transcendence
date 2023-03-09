@@ -22,4 +22,3 @@ import { MenuBarModule } from '../menu-bar/menu-bar.module';
   providers: [GameSocket],
 })
 export class GameModule {}
-

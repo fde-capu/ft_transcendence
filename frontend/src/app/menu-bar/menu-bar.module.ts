@@ -5,7 +5,6 @@ import { AvatarModule } from '../avatar/avatar.module';
 import { U2uActionsModule } from '../u2u-actions/u2u-actions.module';
 import { MenuBarRoutingModule } from './menu-bar-routing.module';
 import { MainMenuModule } from '../main-menu/main-menu.module';
-import { AppRoutingModule } from '../app-routing.module';
 
 
 @NgModule({
@@ -17,7 +16,6 @@ import { AppRoutingModule } from '../app-routing.module';
 	AvatarModule,
 	U2uActionsModule,
 	MainMenuModule,
-	AppRoutingModule,
 	MenuBarRoutingModule,
   ],
   exports: [
