@@ -5,4 +5,5 @@ export interface User {
 	score?: number;
 	mfa_enabled?: boolean;
 	isLogged?: boolean;
+	friends?: string[];
 }

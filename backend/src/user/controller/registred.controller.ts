@@ -1,12 +1,16 @@
 import { Body, Controller, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user.service';
+import { GameService } from '../../game/game.service';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Users } from '../entity/user.entity';
 
 @Controller('user')
 export class RegisterController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+	private readonly userService: UserService,
+	private readonly gameService: GameService,
+  ) {}
   
   // @Post('register')
   // async register(){
@@ -64,4 +68,55 @@ export class RegisterController {
 			response.status(e.status).json(e.data);
 		}
 	}
+
+  @Get('friends')
+  @UseGuards(AuthGuard)
+  async getFriends(
+    @Query('with') intraId: string,
+	@Res() response:Response=null
+  ):Promise<any>
+  {
+	try {
+		//console.log("reg friends: fetching friends.");
+		const resp = await this.userService.getFriends(intraId);
+		return response.status(200).json(resp);
+	} catch (e) {
+		//console.log("reg friends got catch", e);
+		response.status(e.status).json(e.data);
+	}
+  }
+
+  @Get('stats')
+  @UseGuards(AuthGuard)
+  async getStats(
+    @Query('of') intraId: string,
+	@Res() response:Response=null
+  ):Promise<any>
+  {
+	try {
+		//console.log("reg stats: fetching.");
+		const resp = await this.userService.getStats(intraId);
+		return response.status(200).json(resp);
+	} catch (e) {
+		//console.log("reg stats got catch", e);
+		response.status(e.status).json(e.data);
+	}
+  }
+
+  @Get('history')
+  @UseGuards(AuthGuard)
+  async getGameHistory(
+    @Query('of') intraId: string,
+	@Res() response:Response=null
+  ):Promise<any>
+  {
+	try {
+		//console.log("reg history: fetching.");
+		const resp = await this.gameService.getGameHistory(intraId);
+		return response.status(200).json(resp);
+	} catch (e) {
+		//console.log("reg history got catch", e);
+		response.status(e.status).json(e.data);
+	}
+  }
 }

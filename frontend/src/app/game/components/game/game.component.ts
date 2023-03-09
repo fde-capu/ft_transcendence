@@ -12,7 +12,7 @@ export class GameComponent {
   constructor(private readonly gameService: GameService) {
     this.gameService.getMessage().subscribe({
       next: msg => {
-        console.log(msg);
+        //console.log(msg);
         this.messages = [...this.messages, msg];
       },
     });

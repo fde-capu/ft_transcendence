@@ -23,6 +23,7 @@ export class GameGateway implements OnGatewayConnection {
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
+		console.log("game handleConnection");
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
@@ -40,6 +41,7 @@ export class GameGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
+	//console.log("Game got", payload);
     this.server.emit('message', {
       author: client['subject'],
       payload: payload,

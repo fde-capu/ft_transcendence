@@ -9,11 +9,12 @@ import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/user/entity/user.entity';
+import { GameHistory } from '../game/game-record';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [FortyTwoModule, UserModule,
-    TypeOrmModule.forFeature([Users])
+    TypeOrmModule.forFeature([Users, GameHistory])
   ],
   providers: [TokenService, OtpService, AuthService, UserService, ConfigService],
   controllers: [AuthController],
