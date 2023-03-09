@@ -7,7 +7,7 @@ import { GameHistory } from './game-history';
 import { USERS } from './mocks';
 import { AuthService } from './auth/service/auth.service';
 import { TokenInfoResponse } from './token-info-response';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Statistics } from './statistics';
 
@@ -53,15 +53,12 @@ export class UserService {
 	getUserById(intraId: string): Observable<User | undefined> {
 		return this.http
 			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
-			.pipe(
-					catchError( err => 
-						of(undefined)
-					)
-				 );
+			.pipe(catchError(this.handleError<any>('getUserById')))
 	}
 
 	getLoggedUser(): Observable<User> {
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
+			.pipe(catchError(err => of({} as User)));
 	}
 
 	getUser(id: string): Observable<User | undefined> {
@@ -166,6 +163,8 @@ export class UserService {
 					console.log("getMany:", _);
 					out.push(_)
 				}
+			}, error => {
+				console.log("getMany Error");
 			});
 		}
 		return of(out);

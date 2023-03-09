@@ -22,7 +22,7 @@ export class ChatBoxComponent {
 	windowTitle = "CHAT";
 	windowName = "";
 	windowExtras = "";
-	optionsOn = true; // Initialize to true only if is querystrin
+	optionsOn = false;
 	usersOnChat: User[] = []; // Everyone that is logged on the room.
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
 	done: Boolean = false;
@@ -36,7 +36,39 @@ export class ChatBoxComponent {
 		// If there is a query, continue:
 		this.getUser();
 		this.socketSubscription();
+		// ^ Not the best place, maybe everyone should subscribe once and get all messages.
+		this.getChatRoom();
+		this.getInChatUsers();
+		this.getOutOfChatUsers();
 
+		this.done = true;
+		this.imprint();
+	}
+
+	getOutOfChatUsers(): void {
+		this.chatService.getOutOfChatUsers().subscribe(
+			outChat => {
+				this.userService.getMany(outChat).subscribe(_=>{
+					this.usersOutOfChat = _;
+				}, error => {
+					console.log("Cough error");
+				})
+				this.imprint();
+			}
+		);
+	}
+
+	getInChatUsers(): void {
+		this.chatService.getInChatUsers().subscribe(
+			inChat => {
+				this.userService.getMany(inChat).subscribe(_=>{
+					this.usersOnChat = _;
+				});
+			}
+		);
+	}
+
+	getChatRoom(): void {
 		this.chatService.getChatRoom(
 			this.route.snapshot.paramMap.get('roomId')
 		).subscribe(
@@ -46,27 +78,6 @@ export class ChatBoxComponent {
 				this.imprint();
 			}
 		);
-
-		this.chatService.getInChatUsers().subscribe(
-			inChat => {
-				this.userService.getMany(inChat).subscribe(_=>{
-					this.usersOnChat = _;
-				});
-				this.imprint();
-			}
-		);
-
-		this.chatService.getOutOfChatUsers().subscribe(
-			outChat => {
-				this.userService.getMany(outChat).subscribe(_=>{
-					this.usersOutOfChat = _;
-				});
-				this.imprint();
-			}
-		);
-
-		this.done = true;
-		this.imprint();
 	}
 
 	getUser(): void {
