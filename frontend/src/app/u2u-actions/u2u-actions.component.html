@@ -1,0 +1,5 @@
+<h2 *ngIf='caption'>Actions</h2>
+<button class="oneliner">Private Message</button>
+<button class="oneliner" *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
+<button class="oneliner" *ngIf="isFriend" (click)='unFriend()'>Unfriend :(</button>
+<button class="oneliner">INVITE TO GAME</button>

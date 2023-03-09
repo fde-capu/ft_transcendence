@@ -25,6 +25,7 @@ import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
 import { InvitationScreenComponent } from './invitation-screen/invitation-screen.component';
+import { U2uActionsComponent } from './u2u-actions/u2u-actions.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { InvitationScreenComponent } from './invitation-screen/invitation-screen
  StatisticsComponent,
  GameHistoryComponent,
  InvitationScreenComponent,
+ U2uActionsComponent,
   ],
   imports: [
     BrowserModule,
