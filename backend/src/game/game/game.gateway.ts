@@ -5,46 +5,87 @@ import {
   ConnectedSocket,
   OnGatewayConnection,
   WebSocketServer,
+  OnGatewayDisconnect,
+  OnGatewayInit,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
+import { Client, GameService } from './game.service';
 
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
   namespace: 'game',
 })
-export class GameGateway implements OnGatewayConnection {
+export class GameGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly tokenService: TokenService) {}
+  public constructor(
+    private readonly tokenService: TokenService,
+    private readonly gameService: GameService,
+  ) {}
 
-  async handleConnection(client: Socket, ...args: any[]) {
+  public afterInit(server: Server): void {
+    this.gameService.setServer(server);
+  }
+
+  public async handleConnection(client: Client): Promise<void> {
+    await this.authorize(client);
+    this.gameService.connect(client);
+  }
+
+  public handleDisconnect(client: Client): void {
+    this.gameService.disconnect(client);
+  }
+
+  @SubscribeMessage('game:room:list')
+  public roomList(@ConnectedSocket() client: Socket): void {
+    throw new Error('Not implemented!');
+  }
+
+  @SubscribeMessage('game:room:create')
+  public roomCreate(@ConnectedSocket() client: Socket): void {
+    throw new Error('Not implemented!');
+  }
+
+  @SubscribeMessage('game:room:info')
+  public roomInfo(@ConnectedSocket() client: Socket): void {
+    throw new Error('Not implemented!');
+  }
+
+  @SubscribeMessage('game:room:join')
+  public roomJoin(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: string,
+  ): void {
+    throw new Error('Not implemented!');
+  }
+
+  @SubscribeMessage('game:room:leave')
+  public roomLeave(@ConnectedSocket() client: Socket): void {
+    throw new Error('Not implemented!');
+  }
+
+  @SubscribeMessage('game:player:ready')
+  public playerReady(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: string,
+  ): void {
+    throw new Error('Not implemented!');
+  }
+
+  private async authorize(client: Socket): Promise<void> {
     try {
 		console.log("game handleConnection");
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
-      client.emit('message', {
-        author: 'ft_transcendence',
-        payload: 'Welcome!',
-      });
     } catch (error) {
       client.disconnect(true);
     }
-  }
-
-  @SubscribeMessage('message')
-  handleMessage(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() payload: string,
-  ) {
-	//console.log("Game got", payload);
-    this.server.emit('message', {
-      author: client['subject'],
-      payload: payload,
-    });
   }
 }
