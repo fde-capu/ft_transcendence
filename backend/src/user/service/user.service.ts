@@ -16,8 +16,8 @@ export interface TokenDTO {
 
 export interface registerResp {
   intraId?: string;
-  mfa_enabled?: boolean,
-  mfa_verified?: boolean,
+  mfa_enabled?: boolean;
+  mfa_verified?: boolean;
 }
 
 @Injectable()
@@ -56,6 +56,7 @@ export class UserService {
 	  });
       existUser = await this.userRepository.save(createdUser);
     }
+
 	await this.updateUser(existUser.intraId, { mfa_verified: false, isLogged: true });
 	// Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
 	// Aliás pode desimplementar o registro do mfa_verified na db.
@@ -73,13 +74,14 @@ export class UserService {
 		//console.log("updateUser got exception.");
       throw new NotFoundException(); // SomethingWrongException() ..?
     }
-	//console.log("updateUser resp", resp);
+    //console.log("updateUser resp", resp);
     return resp;
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
-	//console.log("bus Will search:", u_intraId);
+    //console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
+
     if (resp === null)
 	{
 		//console.log("bus Could not find", u_intraId, ", throwing error.");

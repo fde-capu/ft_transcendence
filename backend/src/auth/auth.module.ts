@@ -13,10 +13,15 @@ import { GameHistory } from '../game/game-record';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
+  providers: [
+    TokenService,
+    OtpService,
+    AuthService,
+    UserService,
+    ConfigService,
+  ],
   imports: [FortyTwoModule, UserModule,
     TypeOrmModule.forFeature([Users, GameHistory])
-  ],
-  providers: [TokenService, OtpService, AuthService, UserService, ConfigService],
   controllers: [AuthController],
   exports: [TokenService],
 })

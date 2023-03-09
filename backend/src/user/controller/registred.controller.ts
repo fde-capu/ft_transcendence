@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { GameService } from '../../game/game.service';
 import { Response } from 'express';
@@ -20,13 +30,14 @@ export class RegisterController {
   @Put('update/:intraId')
   @UseGuards(AuthGuard)
   async updateUser(
-    @Param('intraId')intraId: string,
+    @Param('intraId') intraId: string,
     @Res() response: Response = null,
-    @Body()user: Users){
+    @Body() user: Users,
+  ) {
     try {
 		//console.log("Registred will call updateUser.");
       await this.userService.updateUser(intraId, user);
-	  //console.log("Registred user saved:", user);
+      //console.log("Registred user saved:", user);
       return response.status(200).json({});
     } catch (e) {
       response.status(e.status).json(e.data);
@@ -40,17 +51,16 @@ export class RegisterController {
     @Query('intraId') code: string,
     @Res() response: Response = null,
   ): Promise<any> {
-	if (!code)
-	{
-		//console.log("RegContr cant search undefined");
-		return response.status(400).json("Who should I search for?");
-	}
+    if (!code) {
+      //console.log("RegContr cant search undefined");
+      return response.status(400).json('Who should I search for?');
+    }
     try {
-		//console.log("RegContr will search for", code);
-      const resp =  await this.userService.getUserByIntraId(code);
+      //console.log("RegContr will search for", code);
+      const resp = await this.userService.getUserByIntraId(code);
       return response.status(200).json(resp);
     } catch (e) {
-		//console.log("RegContr found exception", e);
+      //console.log("RegContr found exception", e);
       response.status(e.status).json(e.data);
     }
   }

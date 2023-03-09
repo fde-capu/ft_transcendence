@@ -15,7 +15,10 @@ import { FortyTwoModule } from './forty-two/forty-two.module';
 import { InvitationGateway } from './invite/invite.gateway';
 
 @Module({
-  imports: [UserModule, HttpModule, ConfigModule.forRoot(),
+  imports: [
+    UserModule,
+    HttpModule,
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
