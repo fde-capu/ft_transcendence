@@ -26,11 +26,6 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'game',
-    canActivate: [AuthGuard],
-    component: GameComponent,
-  },
-  {
     path: 'profile/:intraId',
     canActivate: [AuthGuard],
     component: ProfileComponent,
