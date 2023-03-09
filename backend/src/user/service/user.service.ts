@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
-import { Users } from '../entity/user.entity';
+import { Users, UserDTO, StatisticsDTO } from '../entity/user.entity';
+import { GameHistory } from '../../game/game-record';
 
 export interface TokenDTO {
   access_token: string;
@@ -11,15 +12,6 @@ export interface TokenDTO {
   refresh_token: string;
   scope: string;
   created_at: number;
-}
-
-export interface UserDTO {
-  intraId: string;
-  name: string;
-  image: string;
-  score?: number;
-  mfa_enabled: boolean;
-  friends?: string[];
 }
 
 export interface registerResp {
@@ -32,7 +24,8 @@ export interface registerResp {
 export class UserService {
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
-  ) { }
+	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
+  ) {}
 
   // async register(codeFrom42: Users): Promise<Users> {
   //   const existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
@@ -54,8 +47,12 @@ export class UserService {
 		email: codeFrom42.email,
 		name: codeFrom42.displayname,
 		image: codeFrom42.image['micro'],
+		friends: [],
 		score: 0,
-		friends: []
+		matches : 0,
+		wins : 0,
+		goalsMade : 0,
+		goalsTaken : 0,
 	  });
       existUser = await this.userRepository.save(createdUser);
     }
@@ -135,6 +132,24 @@ export class UserService {
 		return out;
 	}
 
+	async getStats(intraId:string):Promise<StatisticsDTO>
+	{
+		let out: StatisticsDTO = {} as StatisticsDTO;
+		const u = await this.getFullUser(intraId);
+		if(!u) return out;
+		out.score = u.score;
+		out.matches = u.matches;
+		out.wins = u.wins;
+		out.goalsMade = u.goalsMade;
+		out.goalsTaken = u.goalsTaken;
+		out.scorePerMatches = out.score/out.matches;
+		out.looses = out.matches - out.wins;
+		out.winsPerLooses = out.wins/out.looses;
+		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
+		// out.ranking = 0; // TODO if so
+		return out;
+	}
+
 	singleUserDto(u_user: Users):UserDTO{
 		return this.makeUserDto([u_user])[0];
 	}
@@ -154,6 +169,24 @@ export class UserService {
 			};
 			out.push(dto);
 		});
+		return out;
+	}
+
+	async getStats(intraId:string):Promise<StatisticsDTO>
+	{
+		let out: StatisticsDTO = {} as StatisticsDTO;
+		const u = await this.getFullUser(intraId);
+		if(!u) return out;
+		out.score = u.score;
+		out.matches = u.matches;
+		out.wins = u.wins;
+		out.goalsMade = u.goalsMade;
+		out.goalsTaken = u.goalsTaken;
+		out.scorePerMatches = out.score/out.matches;
+		out.looses = out.matches - out.wins;
+		out.winsPerLooses = out.wins/out.looses;
+		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
+		// out.ranking = 0; // TODO if so
 		return out;
 	}
 }

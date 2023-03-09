@@ -11,18 +11,25 @@ export class AvatarComponent {
 	@Input() user?: User;
 	popUpOn = false;
 	isFriend: boolean = false;
+	isMe: boolean = false;
 
 	constructor(
 		private userService: UserService
 	){}
 
+	checkMe() {
+		this.userService.getLoggedUser().subscribe(_=>{
+			this.isMe = _.intraId == this.user?.intraId;
+		});
+	}
+
 	ngOnChanges() {
 		this.checkFriendship();
+		this.checkMe();
 	}
 
 	checkFriendship() {
-			this.isFriend=
-		this.userService.isFriend(this.user)
+		this.isFriend=this.userService.isFriend(this.user)
 	}
 
 	onClick(): void {
