@@ -11,6 +11,7 @@ import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { GameComponent } from './game/components/game/game.component';
+import { LogOutComponent } from './log-out/log-out.component';
 
 const routes: Routes = [
   {
@@ -24,8 +25,9 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'game',
+    canActivate: [AuthGuard],
+    component: GameComponent,
   },
   {
     path: 'profile/:intraId',
@@ -61,6 +63,10 @@ const routes: Routes = [
     path: 'rooms',
     canActivate: [AuthGuard],
     component: ChatRoomListComponent,
+  },
+  {
+	path: 'logout',
+	component: LogOutComponent,
   },
   {
     path: 'login',

@@ -63,12 +63,12 @@ export class AuthService {
       .get(`${environment.backendOrigin}/auth/logout`, {
         withCredentials: true,
       })
-      .pipe(tap(() => {
-		//console.log("fas signOut: ctx set to undefined");
+      .pipe(tap(_ => {
+		//console.log("fas signOut: ctx set to undefined. Got:", _);
 		this.authContext.next(undefined);
 	  }))
       .subscribe({
-        next: () => this.router.navigate(['/login']),
+        next: () => this.router.navigate(['/logout']),
       });
   }
 

@@ -58,25 +58,22 @@ export class UserService {
       });
       existUser = await this.userRepository.save(createdUser);
     }
-    await this.updateUser(existUser.intraId, { mfa_verified: false });
-    // Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
-    // Aliás pode desimplementar o registro do mfa_verified na db.
-    return {
-      intraId: existUser.intraId,
-      mfa_enabled: existUser.mfa_enabled,
-      mfa_verified: false,
-    };
-  }
 
-  async updateUser(intraId: string, user: Users) {
-    const resp = await this.userRepository
-      .createQueryBuilder()
-      .update(Users)
-      .set(user)
-      .where('intraId = :intraId', { intraId: intraId })
-      .execute();
-    if (resp.affected === 0) {
-      throw new NotFoundException();
+	await this.updateUser(existUser.intraId, { mfa_verified: false, isLogged: true });
+	// Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
+	// Aliás pode desimplementar o registro do mfa_verified na db.
+    return ({ intraId: existUser.intraId, mfa_enabled: existUser.mfa_enabled,  mfa_verified: false }); 
+  }
+  
+  async updateUser(intraId: string, user: Users){
+    const resp = await this.userRepository.createQueryBuilder()
+    .update(Users)
+    .set(user)
+    .where("intraId = :intraId", { intraId: intraId })
+    .execute();
+    if (resp.affected === 0){
+		//console.log("updateUser got exception.");
+      throw new NotFoundException(); // SomethingWrongException() ..?
     }
     //console.log("updateUser resp", resp);
     return resp;
@@ -85,18 +82,44 @@ export class UserService {
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
     //console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
-    if (resp === null) {
-      //console.log("bus Could not find", u_intraId, ", throwing error.");
-      throw new NotFoundException();
-    }
-    const dto: UserDTO = {
-      intraId: resp.intraId,
-      name: resp.name,
-      image: resp.image,
-      score: resp.score,
-      mfa_enabled: resp.mfa_enabled,
-    };
-    //console.log("bus Returning:", dto.intraId);
-    return dto;
+
+    if (resp === null)
+	{
+		//console.log("bus Could not find", u_intraId, ", throwing error.");
+		throw new NotFoundException();
+	}
+	return this.singleUserDto(resp);
   }
+
+  async logOut(intraId: string) {
+    let user = await this.userRepository.findOneBy({ intraId: intraId });
+	//console.log("bus logOut called.");
+  }
+
+	async getOnlineUsers():Promise<UserDTO[]>{
+		const resp = await this.userRepository.createQueryBuilder("onlineUsers")
+		.where("onlineUsers.isLogged = :isLogged", { isLogged: true })
+		.getMany();
+		return this.makeUserDto(resp);
+	}
+
+	singleUserDto(u_user: Users):UserDTO{
+		return this.makeUserDto([u_user])[0];
+	}
+	makeUserDto(u_users: Users[]):UserDTO[]{
+		if (!u_users.length)
+			return [];
+		let out: UserDTO[] = [];
+		u_users.forEach(function(u){
+			const dto: UserDTO = {
+				intraId: u.intraId,
+				name: u.name,
+				image: u.image,
+				score: u.score,
+				mfa_enabled: u.mfa_enabled,
+			};
+			out.push(dto);
+		});
+		return out;
+	}
 }

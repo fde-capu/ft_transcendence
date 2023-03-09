@@ -6,7 +6,7 @@ No more C! No more C++!
 This project is about doing something you’ve never done before.
 Remind yourself the beginning of your journey in computer science.
 Look at you now. Time to shine!
-Version: 11.2
+Version: 12
 Contents
 I Preamble 2
 II Mandatory part 3
@@ -38,7 +38,7 @@ Back and Forward buttons of the browser.
 Google Chrome and one additional web browser of your choice.
 • The user should encounter no unhandled errors and no warnings when browsing the
 website.
-• Everything has to be launch by a single call to: docker compose up --build
+• Everything has to be launch by a single call to: docker-compose up --build
 When your computers in clusters run under Linux, you will use
 Docker in rootless mode for security reasons. This comes with 2
 sideways: 1) your Docker runtime files must be located in /goinfre
@@ -93,7 +93,8 @@ until they leave it.
 it, and also remove it.
 ◦ The channel owner is a channel administrator. They can set other users as
 administrators.
-◦ The administrators of a channel can ban or mute users for a limited time.
+◦ A user who is an administrator of a channel can kick, ban or mute (for a
+limited time) other users, but not the channel owners.
 • The user should be able to invite other users to play a Pong game through the chat
 interface.
 • The user should be able to access other players profiles through the chat interface.

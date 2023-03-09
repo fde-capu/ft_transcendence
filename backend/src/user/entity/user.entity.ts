@@ -38,4 +38,8 @@ export class Users {
 
   @Column()
   score?: number;
+
+  @Column({default:false})
+  isLogged?: boolean;
 }
+// Don't forget to `make re` after editing this file!

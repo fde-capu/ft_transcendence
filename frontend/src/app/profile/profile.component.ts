@@ -88,7 +88,6 @@ export class ProfileComponent {
 
 // TODO:
 
-// Put 2FA option on profile.
 // Statistics (must be in user profile)
 //   :: wins/looses, ladder, achievements etc. (+goals, +time playing)
 //      -? visible to all logged users?
