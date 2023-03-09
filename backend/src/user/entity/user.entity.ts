@@ -1,5 +1,27 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+export interface UserDTO {
+  intraId: string;
+  name: string;
+  image: string;
+  score?: number;
+  mfa_enabled: boolean;
+  friends?: string[];
+}
+
+export interface StatisticsDTO {
+	score: number;
+	matches: number;
+	wins: number;
+	goalsMade: number;
+	goalsTaken: number;
+	scorePerMatches: number; // *
+	looses: number; // *
+	winsPerLooses: number; // *
+	goalsMadePerTaken: number; // *
+	// * No need to be on database, because its calculated.
+}
+
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn({
@@ -10,7 +32,7 @@ export class Users {
   @Column({
     nullable: false,
     default: '',
-    name: 'intraId'
+    name: 'intraId',
   })
   intraId?: string;
 
@@ -21,7 +43,7 @@ export class Users {
   email?: string;
 
   @Column({
-    default: true,
+    default: false,
   })
   mfa_enabled?: boolean;
 
@@ -33,7 +55,7 @@ export class Users {
   @Column()
   name?: string;
 
-  @Column({default:'DEFAULT_IMAGE'})
+  @Column({ default: 'DEFAULT_IMAGE' })
   image?: string;
 
   @Column()
@@ -44,6 +66,18 @@ export class Users {
 
   @Column("simple-array")
   friends?: string[];
+
+	@Column()
+	matches?: number;
+
+	@Column()
+	wins?: number;
+
+	@Column()
+	goalsMade?: number;
+
+	@Column()
+	goalsTaken?: number;
 }
 // Don't forget to update backend/src/user/service/user.service.tx:registerUserOk42
 // Don't forget to `make re` after editing this file!
