@@ -7,6 +7,7 @@ import { GameSocket } from './socket/game.socket';
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { RoomComponent } from './components/room/room.component';
 
+import { MenuBarModule } from '../menu-bar/menu-bar.module';
 @NgModule({
   declarations: [
 	GameComponent,
@@ -15,8 +16,10 @@ import { RoomComponent } from './components/room/room.component';
   ],
   imports: [
 	CommonModule,
-	GameRoutingModule
+	GameRoutingModule,
+	MenuBarModule,
   ],
   providers: [GameSocket],
 })
 export class GameModule {}
+
