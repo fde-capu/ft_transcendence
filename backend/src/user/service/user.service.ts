@@ -27,7 +27,6 @@ export class UserService {
 	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
   ) {}
 
-
   // async register(codeFrom42: Users): Promise<Users> {
   //   const existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
   //   if (existUser === null){
@@ -130,6 +129,24 @@ export class UserService {
 			out.push(n);
 		}
 		//console.log("getFriends returning", out);
+		return out;
+	}
+
+	async getStats(intraId:string):Promise<StatisticsDTO>
+	{
+		let out: StatisticsDTO = {} as StatisticsDTO;
+		const u = await this.getFullUser(intraId);
+		if(!u) return out;
+		out.score = u.score;
+		out.matches = u.matches;
+		out.wins = u.wins;
+		out.goalsMade = u.goalsMade;
+		out.goalsTaken = u.goalsTaken;
+		out.scorePerMatches = out.score/out.matches;
+		out.looses = out.matches - out.wins;
+		out.winsPerLooses = out.wins/out.looses;
+		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
+		// out.ranking = 0; // TODO if so
 		return out;
 	}
 

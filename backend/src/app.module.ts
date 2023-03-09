@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
 import { FortyTwoModule } from './forty-two/forty-two.module';
+import { InvitationGateway } from './invite/invite.gateway';
 
 @Module({
   imports: [UserModule, HttpModule, ConfigModule.forRoot(),
@@ -35,6 +36,7 @@ import { FortyTwoModule } from './forty-two/forty-two.module';
   ],
   controllers: [PingController],
   providers: [
+	InvitationGateway
   ],
 })
 export class AppModule implements NestModule {

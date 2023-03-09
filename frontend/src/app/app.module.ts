@@ -24,6 +24,7 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
+import { InvitationScreenComponent } from './invitation-screen/invitation-screen.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { GameHistoryComponent } from './game-history/game-history.component';
  UserBarComponent,
  StatisticsComponent,
  GameHistoryComponent,
+ InvitationScreenComponent,
   ],
   imports: [
     BrowserModule,

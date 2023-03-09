@@ -2,6 +2,7 @@
 
 <table *ngIf='user && history.length else no_matches'>
 	<tr>
+		<th>id</th>
 		<th>opponents</th>
 		<th>score</th>
 		<th>goals</th>
@@ -9,10 +10,15 @@
 		<th>date/duration</th>
 	</tr>
   <tr *ngFor='let match of history'>
-	<td>
-		{{ match.idA }} | {{ match.playerA }}
+    <td>
+		{{ match.idA }}
 		<br>
-		{{ match.idB }} | {{ match.playerB }}
+		{{ match.idB }}
+	</td>
+	<td>
+		 {{ match.playerA }}
+		<br>
+		 {{ match.playerB }}
 	</td>
 	<td>
 		+{{ match.scoreA | number:'2.0-0' }}
@@ -44,5 +50,7 @@
 </table>
 
 <ng-template #no_matches>
+<div class='message-centered'>
 No matches.
+</div>
 </ng-template>
