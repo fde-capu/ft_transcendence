@@ -17,5 +17,3 @@ import { U2uActionsComponent } from './u2u-actions.component';
   ]
 })
 export class U2uActionsModule { }
-
-

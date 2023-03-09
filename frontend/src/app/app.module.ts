@@ -21,12 +21,12 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
-import { InvitationScreenComponent } from './invitation-screen/invitation-screen.component';
 
 import { U2uActionsModule } from './u2u-actions/u2u-actions.module';
 import { MenuBarModule } from './menu-bar/menu-bar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
+import { InviteModule } from './invitation.module';
 
 
 @NgModule({
@@ -49,7 +49,6 @@ import { MainMenuModule } from './main-menu/main-menu.module';
  UserBarComponent,
  StatisticsComponent,
  GameHistoryComponent,
- InvitationScreenComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +59,7 @@ import { MainMenuModule } from './main-menu/main-menu.module';
 	MenuBarModule,
 	AvatarModule,
 	MainMenuModule,
+	InviteModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
@@ -67,4 +67,3 @@ import { MainMenuModule } from './main-menu/main-menu.module';
 	],
 })
 export class AppModule {}
-

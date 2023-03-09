@@ -6,8 +6,9 @@ import { GameComponent } from './components/game/game.component';
 import { GameSocket } from './socket/game.socket';
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { RoomComponent } from './components/room/room.component';
-
 import { MenuBarModule } from '../menu-bar/menu-bar.module';
+import { InviteModule } from '../invitation.module';
+
 @NgModule({
   declarations: [
 	GameComponent,
@@ -18,6 +19,7 @@ import { MenuBarModule } from '../menu-bar/menu-bar.module';
 	CommonModule,
 	GameRoutingModule,
 	MenuBarModule,
+	InviteModule,
   ],
   providers: [GameSocket],
 })
