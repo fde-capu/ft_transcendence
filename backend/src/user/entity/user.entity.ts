@@ -43,7 +43,7 @@ export class Users {
   email?: string;
 
   @Column({
-    default: true,
+    default: false,
   })
   mfa_enabled?: boolean;
 
