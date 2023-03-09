@@ -5,6 +5,8 @@
 	<button class="oneliner" routerLink="/rooms">Chat Rooms</button>
 	<button class="oneliner" routerLink="/game">Game Lobby</button>
 	<button class="oneliner" routerLink="/chat">Create Chat</button>
+	<button class="oneliner" routerLink="/create-match">Create Match</button>
+	<hr *ngIf='!big'>
 	<button class="oneliner" *ngIf="!big" (click)="signOut()">Log Out</button>
 </div>
 

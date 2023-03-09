@@ -11,6 +11,7 @@ import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { GameComponent } from './game/components/game/game.component';
+import { InvitationScreenComponent } from './invitation-screen/invitation-screen.component';
 import { LogOutComponent } from './log-out/log-out.component';
 
 const routes: Routes = [
@@ -77,6 +78,10 @@ const routes: Routes = [
     loadChildren: () => import('./game/game.module').then(m => m.GameModule),
   },
   {
+    path: 'invite',
+    loadChildren: () => import('./invitation.module').then(m => m.InviteModule),
+  },
+  {
     path: '**',
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
   },
@@ -86,6 +91,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       preloadingStrategy: PreloadAllModules,
+	  onSameUrlNavigation: 'reload'
     }),
   ],
   exports: [RouterModule],

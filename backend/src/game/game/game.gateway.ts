@@ -80,6 +80,7 @@ export class GameGateway
 
   private async authorize(client: Socket): Promise<void> {
     try {
+		console.log("game handleConnection");
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;

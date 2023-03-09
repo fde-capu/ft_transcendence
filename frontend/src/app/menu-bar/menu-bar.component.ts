@@ -12,7 +12,7 @@ export class MenuBarComponent {
     private userService: UserService,
   ) {}
 
-  user: User | undefined = undefined;
+  user?: User;
   menuOpen = false;
 
   ngOnInit(): void {
