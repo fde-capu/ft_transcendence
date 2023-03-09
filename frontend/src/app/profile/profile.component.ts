@@ -22,6 +22,7 @@ export class ProfileComponent {
 	idRequest!: string;
 	owner: Boolean = false;
 	profileType: string = "USER";
+	isFriend: boolean = false;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -68,11 +69,9 @@ export class ProfileComponent {
 	async setOwnership() {
 		if (!this.user)
 			return ;
+		this.isFriend = this.userService.isFriend(this.displayUser);
 		this.owner = this.user.intraId == this.displayUser?.intraId;
-		this.profileType = this.owner ? "YOUR" : this.isFriend() ? "FRIEND" : "USER";
-	}
-	isFriend(): boolean {
-		return this.userService.isFriend(this.displayUser);
+		this.profileType = this.owner ? "YOUR" : this.isFriend ? "FRIEND" : "USER";
 	}
 
 	saveUser() {

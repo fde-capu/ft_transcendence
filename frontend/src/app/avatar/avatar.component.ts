@@ -44,14 +44,6 @@ export class AvatarComponent {
 		this.popUpOn = this.popUpOn ? false : true;
 	}
 
-	makeFriend(){
-		this.userService.makeFriend(this.user).subscribe();
-	}
-
-	unFriend(){
-		this.userService.unFriend(this.user).subscribe();
-	}
-
 	onHover(): void {
 		const self = this;
 		this.popUpOn = true;

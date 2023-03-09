@@ -73,6 +73,7 @@
 
 </table>
 
+<app-u2u-actions *ngIf='!owner' [isFriend]='isFriend' [user]='displayUser' [caption]='true'></app-u2u-actions>
 <app-friends-list [user]="displayUser"></app-friends-list> 
 <app-statistics [user]="displayUser"></app-statistics>
 <app-game-history [user]="displayUser"></app-game-history>
