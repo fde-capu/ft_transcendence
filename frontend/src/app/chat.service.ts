@@ -45,20 +45,20 @@ export class ChatService {
 		this.chatMessage = [];
 	}
 
-	getChatRoom(roomId: string|null): ChatRoom {
+	getChatRoom(roomId: string|null): Observable<ChatRoom> {
 		console.log("getChatRoom called", ChatService.chatRooms);
 		if (!roomId)
 		{
 			// Create new chatRoom, UNMOCK TODO
-			return (CHAT_ROOM[0]);
+			return of(CHAT_ROOM[0]);
 		}
 		for (const room in ChatService.chatRooms)
 		{
 			if (ChatService.chatRooms[room].id == roomId)
-				return (ChatService.chatRooms[room]);
+				return of(ChatService.chatRooms[room]);
 		}
 		const chatRoom = CHAT_ROOM[0];
-		return (chatRoom);
+		return of(chatRoom);
 	}
 
 	getVisibleChatRooms(intraId: string|undefined): Observable<ChatRoom[]> {
