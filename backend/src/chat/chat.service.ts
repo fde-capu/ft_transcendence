@@ -47,38 +47,72 @@ export class ChatService {
 	mockRooms() {
 		ChatService.allRooms.push({
 					id: "chatRoomId_0",
-					name: "1 Mock's Chat",
+					name: "fde-capu is user",
 					user: ['fde-capu'],
 					admin: [],
 					blocked: [],
+					muted: [],
 					password: "",
 					isPrivate: true 
 		});
 		ChatService.allRooms.push({
 					id: "chatRoomId_1",
-					name: "2 Mock's Chat",
+					name: "fde-capu is only admin not user",
 					user: [],
 					admin: ['fde-capu'],
 					blocked: [],
+					muted: [],
 					password: "",
 					isPrivate: true 
 		});
 		ChatService.allRooms.push({
 					id: "chatRoomId_2",
-					name: "3 Mock's Chat",
-					user: [],
+					name: "fde-capu is user but is password protected",
+					user: ['fde-capu'],
 					admin: [],
 					blocked: [],
+					muted: [],
 					password: "user42",
 					isPrivate: true 
 		});
 		ChatService.allRooms.push({
 					id: "chatRoomId_3",
-					name: "4 Mock's Chat",
+					name: "no one is user nor admin",
 					user: [],
 					admin: [],
 					blocked: [],
+					muted: [],
 					password: "user42",
+					isPrivate: false 
+		});
+		ChatService.allRooms.push({
+					id: "chatRoomId_4",
+					name: "no one is user nor admin, w/o password",
+					user: [],
+					admin: [],
+					blocked: [],
+					muted: [],
+					password: "",
+					isPrivate: false 
+		});
+		ChatService.allRooms.push({
+					id: "chatRoomId_5",
+					name: "fde-capu is blocked",
+					user: [],
+					admin: [],
+					blocked: ['fde-capu'],
+					muted: [],
+					password: "",
+					isPrivate: false 
+		});
+		ChatService.allRooms.push({
+					id: "chatRoomId_6",
+					name: "fde-capu is user but muted",
+					user: [],
+					admin: [],
+					blocked: [],
+					muted: ['fde-capu'],
+					password: "",
 					isPrivate: false 
 		});
 	}

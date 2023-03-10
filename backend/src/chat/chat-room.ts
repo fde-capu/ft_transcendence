@@ -5,6 +5,7 @@ export interface ChatRoomDTO
 	user: string[],
 	admin: string[],
 	blocked: string[],
+	muted: string[],
 	password: string,
 	isPrivate: boolean
 }

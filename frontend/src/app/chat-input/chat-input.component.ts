@@ -3,6 +3,7 @@ import { ChatService } from '../chat.service';
 import { ChatMessage } from '../chat-message';
 import { UserService } from '../user.service';
 import { User } from '../user';
+import { ChatRoom } from '../chat-room';
 
 @Component({
   selector: 'app-chat-input',
@@ -10,7 +11,7 @@ import { User } from '../user';
   styleUrls: ['./chat-input.component.css']
 })
 export class ChatInputComponent {
-	@Input() room: string = "";
+	@Input() room?: ChatRoom;
 	message = "";
 	user: User | undefined = undefined;
 	textArea: HTMLElement | null = null;
@@ -25,6 +26,9 @@ export class ChatInputComponent {
 		this.chatBox = document.getElementById('chatBox');
 		this.textArea && this.textArea.focus();
 	}
+	ngOnChanges() {
+		this.loggedUserIsMuted(this.room);
+	}
 	getUser(): void {
 		this.userService.getLoggedUser()
 			.subscribe(user => this.user = user );
@@ -33,11 +37,15 @@ export class ChatInputComponent {
 	{
 		event.preventDefault();
 		this.blink('send-button');
-		if (!this.message) return ;
+		if (
+			!this.message
+		||	!this.room
+		) return ;
 		let newMessage!: ChatMessage;
+
 		newMessage = 
 		{
-			roomId: this.room,
+			roomId: this.room.id,
 			user: this.user ? this.user : {} as User,
 			message: this.message
 		};
@@ -54,5 +62,12 @@ export class ChatInputComponent {
 		n = setTimeout(function() {
 				exist.classList.remove('inverted');
 				}, 200);
+	}
+	loggedUserIsMuted(room?: ChatRoom): Boolean {
+		if (!room) return false;
+		for (const user of room.muted)
+			if (user == this.user?.intraId)
+				return true;
+		return false;
 	}
 }

@@ -38,6 +38,9 @@ export class ChatRoomListComponent {
 		for (const user of room.user)
 			if (user == this.user?.intraId)
 				return true;
+		for (const user of room.admin)
+			if (user == this.user?.intraId)
+				return true;
 		return false;
 	}
 	loggedUserIsBlocked(room: ChatRoom): Boolean {

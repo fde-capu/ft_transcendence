@@ -10,12 +10,6 @@ import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
 
-export interface Chatter {
-	from: string;
-	to: string;
-	type: string;
-}
-
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
   cookie: true,
