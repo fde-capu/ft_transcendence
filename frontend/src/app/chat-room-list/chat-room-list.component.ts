@@ -22,9 +22,8 @@ export class ChatRoomListComponent {
 	ngOnInit(): void {
 		this.getCurrentUser();
 	}
-	getChatRooms(): void {
-		this.chatService.getVisibleChatRooms(this.user?.intraId)
-			.subscribe(rooms => this.visibleRooms = rooms);
+	async getChatRooms() {
+		this.visibleRooms = await this.chatService.getVisibleChatRooms(this.user?.intraId);
 	}
 	getCurrentUser(): void {
 		this.userService.getLoggedUser()

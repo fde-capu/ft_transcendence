@@ -16,11 +16,8 @@ export class ChatTextComponent {
 	) {}
 	ngOnChanges() {
 		this.chatService.messageList.subscribe(_=>{
-				if (_ && _.roomId == this.room.id)
-				{
-					console.log("PUSHING", _);
-					this.chatMessage.push(_);
-				}
+			if (_ && _.roomId == this.room.id)
+				this.chatMessage.push(_);
 		});
 	}
 }

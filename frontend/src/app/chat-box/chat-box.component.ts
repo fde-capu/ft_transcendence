@@ -48,14 +48,13 @@ export class ChatBoxComponent {
 	}
 
 	async initChatRoom() {
-		console.log("ChatBox Init to chatroom", this.chatRoom);
+		//console.log("ChatBox Init");
 		this.id = this.route.snapshot.paramMap.get('roomId');
 		await this.chatService.subscribeOnce();
-
 		this.chatRoom = this.chatService.getOrInitChatRoom(
 			this.id	
 		);
-
+		this.chatRoom = this.chatService.putUserInRoom(this.chatRoom);
 		this.getOutOfChatUsers();
 		this.done = true;
 		this.imprint();
@@ -94,11 +93,13 @@ export class ChatBoxComponent {
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
+		this.chatService.roomChanged(this.chatRoom);
 		this.imprint();
 	}
 
 	cleanPassword() {
 		this.chatRoom.password = "";
+		console.log("cleanPassword");
 		this.imprint();
 	}
 

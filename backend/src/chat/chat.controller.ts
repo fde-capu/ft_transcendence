@@ -16,7 +16,7 @@ export class ChatController {
 	@Res() response:Response=null
   ): Promise<any> {
 	try {
-      const resp = await this.chatService.getVisibleRooms(intraId);
+      const resp = await this.chatService.getAllRooms(intraId);
       return response.status(200).json(resp);
     } catch (e) {
       return response.status(e.status).json(e.data);

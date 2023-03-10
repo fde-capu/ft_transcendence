@@ -32,16 +32,40 @@ export class ChatGateway implements OnGatewayConnection {
     @MessageBody() payload: string,
   ) {
 	console.log("Chat got", payload);
-	if (payload == 'update')
+	let data: any;
+	data = payload;
+
+	console.log("Chat data", data);
+	if (data.room_changed)
 	{
-		this.server.emit('chat', {update_rooms: this.chatService.allRooms() });
-	}
-	else
-	{
+		console.log("-> room_changed");
+		this.chatService.roomChanged(data.room_changed);
 		this.server.emit('chat', {
 			author: client['subject'],
-			payload: payload,
-		});
+			payload: {
+				update_rooms: this.chatService.allRooms()
+			}
+		}
+		);
+		return ;
 	}
+	if (payload == "update")
+	{
+		console.log("-> allRooms");
+		this.server.emit('chat', {
+			author: client['subject'],
+			payload: {
+				update_rooms: this.chatService.allRooms()
+			}
+		}
+		);
+		return ;
+	}
+	console.log("-> copy of payload");
+	this.server.emit('chat', {
+		author: client['subject'],
+		payload: payload,
+	});
+	return ;
   }
 }

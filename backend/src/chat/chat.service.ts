@@ -11,7 +11,7 @@ export class ChatService {
 		this.mockRooms(); // TODO remove XXX
 	}
 
-	async getAllRooms():Promise<ChatRoomDTO[]>
+	async getAllRooms(intraId?:string):Promise<ChatRoomDTO[]>
 	{
 		return ChatService.allRooms;
 	}
@@ -21,30 +21,11 @@ export class ChatService {
 		return ChatService.allRooms;
 	}
 
-	getVisibleRooms(intraId: string): ChatRoomDTO[]
+	roomChanged(u_room: ChatRoomDTO)
 	{
-		// TODO: Visible Chat Rooms must be of one of the conditions:
-		// Is visible if the loggedUser is in the room.
-		// Is visible if the room is public.
-		let out: ChatRoomDTO[] = [];
-		let put: boolean = false;
-		for (const room of ChatService.allRooms)
-		{
-			put = false;
-			if (!room.isPrivate)
-				put = true;
-			for (const u of room.user)
-			{
-				if (u == intraId)
-					put = true;
-			}
-			for (const u in room.admin)
-				if (room.admin[u] == intraId)
-					put = true;
-			if (put)
-				out.push(room);
-		}
-		return out;
+		for (const i in ChatService.allRooms)
+			if (ChatService.allRooms[i].id == u_room.id)
+				ChatService.allRooms[i] = u_room;
 	}
 
 	mockRooms() {
@@ -60,7 +41,7 @@ export class ChatService {
 		});
 		ChatService.allRooms.push({
 					id: "chatRoomId_1",
-					name: "fde-capu is only admin not user",
+					name: "fde-capu user and admin",
 					user: ['fde-capu'],
 					admin: ['fde-capu'],
 					blocked: [],

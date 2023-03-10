@@ -18,11 +18,11 @@ import { HelperFunctionsService } from './helper-functions.service';
 })
 export class ChatService {
 	private roomsUrl = 'http://localhost:3000/chatrooms/';
-	static chatRooms: ChatRoom[] = [];
 	user: User | undefined = undefined;
 	static doneOnce: boolean = false;
 	static firstUpdate: boolean = false;
 
+	static allRooms: ChatRoom[] = [];
 	public readonly messageList = new BehaviorSubject<ChatMessage>({} as ChatMessage);
 
 	constructor(
@@ -43,27 +43,27 @@ export class ChatService {
 	think(msg: any)
 	{
 		console.log("Thinking about: ", msg);
-		if (msg.payload) // Check room, and if user can receive first, then
+		if (msg.payload.roomId) // This checks if is a simple message.
 		{
-			for (const room of ChatService.chatRooms)
+			for (const room of ChatService.allRooms)
 				if (room.id == msg.payload.roomId)
 				{
-					console.log("push on behaviorsubject", msg.payload);
+					// Now see if is not blocked etc TODO
 					this.messageList.next(msg.payload);
 				}
 		}
-		if (msg.update_rooms)
+		if (msg.payload.update_rooms)
 		{
-			console.log("think setting rooms", msg.update_rooms);
-			ChatService.chatRooms = msg.update_rooms;
+			console.log("Thinking about updating rooms.");
+			ChatService.allRooms = msg.payload.update_rooms;
 			ChatService.firstUpdate = true;
 		}
 		// Maybe add() to some history,
 		// maybe create new chat room
 		// maybe change users status
-		// basically all chatRooms updates
+		// basically all allRooms updates
 		// and messages.
-				// for (const room of ChatService.chatRooms)
+				// for (const room of ChatService.allRooms)
 	}
 
 	// Promise<void> is needed \/
@@ -72,15 +72,13 @@ export class ChatService {
 			this.socketSubscription();
 		if (ChatService.firstUpdate) return;
 		await new Promise(resolve => setTimeout(resolve, 1000));
-		console.log("timeout");
 		if (!ChatService.firstUpdate) return await this.subscribeOnce();
 	}
 
 	socketSubscription() {
-		console.log("ChatService subscribing to socket.");
+		//console.log("ChatService subscribing to socket.");
 		this.getMessages().subscribe(
 			_ => {
-				console.log("Chat subscription got", _);
 					this.think(_);
 			},
 		);
@@ -89,53 +87,93 @@ export class ChatService {
 	}
 
 	requestUpdate() {
-		console.log("Requesting update");
-		this.socket.emit('chat', 'update');
+		//console.log("Requesting update");
+
+		this.socket.emit('chat', "update");
+	}
+
+	putUserInRoom(room: ChatRoom): ChatRoom
+	{
+		if (!this.user || !room || !room.user) return room;
+		let isIn: boolean = false;
+		for (const user of room.user)
+			if (user == this.user.intraId)
+				isIn = true;
+		if (!isIn)
+		{
+			room.user.push(this.user.intraId);
+			return room;
+		}
+		return room;
+	}
+
+	roomChanged(room: ChatRoom)
+	{
+		this.socket.emit('chat', {
+			'room_changed': room
+		});
 	}
 
 	sendMessage(chatMessage: ChatMessage) {
-		console.log("Chat emitting.");
+		//console.log("Chat emitting.");
 		this.socket.emit('chat', chatMessage);
 	}
 
 	roomById(roomId?: string): ChatRoom {
-		if (!roomId) return {} as ChatRoom;
-		for (const room of ChatService.chatRooms)
+		if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length) return {} as ChatRoom;
+		for (const room of ChatService.allRooms)
 			if (room.id == roomId)
 				return room;
 		return {} as ChatRoom;
 	}
 
 	getOrInitChatRoom(roomId: string|null): ChatRoom {
-		console.log("getOrInitChatRoom called for", roomId);
 		if (!roomId)
 		{
 			// Create new chatRoom, UNMOCK TODO
 			return CHAT_ROOM[0];
 		}
-		console.log("getOrInitChatRoom calls roomById", roomId);
 		return this.roomById(roomId);
 	}
 
-	getVisibleChatRooms(intraId: string|undefined): Observable<ChatRoom[]> {
-		let userIn: boolean = false;
-		let isPrivate: boolean = false;
-		return this.http.get<ChatRoom[]>(this.roomsUrl+intraId,{withCredentials:true})
-			.pipe(
-				catchError(this.handleError<ChatRoom[]>('getVisibleChatRooms'))
-			);
+	async getVisibleChatRooms(intraId: string|undefined): Promise<ChatRoom[]> {
+		if (!ChatService.firstUpdate)
+		{
+			await new Promise(resolve => setTimeout(resolve, 1000));
+			return await this.getVisibleChatRooms(intraId);
+		}
+
+		console.log("Getting visibles");
+		let out: ChatRoom[] = [];
+		let put: boolean = false;
+		for (const room of ChatService.allRooms)
+		{
+			put = false;
+			if (!room.isPrivate)
+				put = true;
+			for (const u of room.user)
+			{
+				if (u == intraId)
+					put = true;
+			}
+			for (const u in room.admin)
+				if (room.admin[u] == intraId)
+					put = true;
+			if (put)
+				out.push(room);
+		}
+		console.log("Returning", out);
+		return out;
 	}
 
 	getInChatUsers(roomId?: string): string[] {
 		if (!roomId) return [];
-		console.log("gICU calls roomById", roomId);
 		return this.roomById(roomId).user;
 	}
 
 	userIsInChat(roomId?: string, intraId?: string): boolean
 	{
 		if (!roomId || !intraId) return false;
-		console.log("uIIC calls roomById", roomId);
 		const room = this.roomById(roomId);
 		for (const roomIntraId of room.user)
 			if (intraId == roomIntraId)
@@ -166,7 +204,6 @@ export class ChatService {
 
 	loggedUserIsMuted(roomId?: string): boolean {
 		if (!this.user || !roomId) return false;
-		console.log("loggedUserIsMuted calls roomById", roomId);
 		const room = this.roomById(roomId);
 		if (!room || !room.muted || !room.muted.length) return false;
 		for (const intraId of room.muted)
@@ -176,17 +213,15 @@ export class ChatService {
 	}
 
 	getChatHistory(roomId?: string): ChatMessage[] {
-		console.log("gCH calls roomById", roomId);
 		return this.roomById(roomId).history;
 	}
 
 	clearHistory(roomId?: string) {
-		console.log("cH calls roomById", roomId);
 		this.roomById(roomId).history = [];
 	}
 
 	getMessages() {
-		console.log("Chat service getting from socket.");
+		//console.log("Chat service getting from socket.");
 		return this.socket.fromEvent<any>('chat');
 	}
 
@@ -194,7 +229,7 @@ export class ChatService {
 		const self = this;
 		let n: ReturnType<typeof setTimeout>;
 		n = setTimeout(function(){
-			console.log("Chat emitting.");
+			//console.log("Mock emitting.");
 			self.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
 			self.mockChat();
 		}, Math.random() * 10000 + 5000);
@@ -224,4 +259,3 @@ export class ChatService {
 //  :: These two things will be done by the avatar element, however.
 
 // Matchmaking screen.
-
