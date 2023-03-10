@@ -18,10 +18,12 @@ import { HelperFunctionsService } from './helper-functions.service';
 })
 export class ChatService {
 	private roomsUrl = 'http://localhost:3000/chatrooms/';
-	static chatRooms: ChatRoom[] = new BehaviorSubject([]);
+	static chatRooms: ChatRoom[] = [];
 	user: User | undefined = undefined;
 	static doneOnce: boolean = false;
 	static firstUpdate: boolean = false;
+
+	public readonly messageList = new BehaviorSubject<ChatMessage>({} as ChatMessage);
 
 	constructor(
 		private readonly socket: ChatSocket,
@@ -45,7 +47,10 @@ export class ChatService {
 		{
 			for (const room of ChatService.chatRooms)
 				if (room.id == msg.payload.roomId)
+				{
 					console.log("push on behaviorsubject", msg.payload);
+					this.messageList.next(msg.payload);
+				}
 		}
 		if (msg.update_rooms)
 		{

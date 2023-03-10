@@ -2,7 +2,7 @@
   <ul>
   <li *ngFor='let chatLine of chatMessage' class='chat-line'> 
 	<app-avatar [user]="chatLine.user"></app-avatar>
-	<span class='user-name-small hover_invert'>
+	<span *ngIf='chatLine.user' class='user-name-small hover_invert'>
 		{{chatLine.user.intraId}} | {{chatLine.user.name}}</span>
 		<span class='small'>:</span>
 		{{chatLine.message}}

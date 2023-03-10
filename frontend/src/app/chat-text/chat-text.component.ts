@@ -15,6 +15,12 @@ export class ChatTextComponent {
 		public chatService: ChatService
 	) {}
 	ngOnChanges() {
-		this.chatMessage = this.room?.history;
+		this.chatService.messageList.subscribe(_=>{
+				if (_ && _.roomId == this.room.id)
+				{
+					console.log("PUSHING", _);
+					this.chatMessage.push(_);
+				}
+		});
 	}
 }
