@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../chat-message';
 import { ChatService } from '../chat.service';
+import { ChatRoom } from '../chat-room';
 
 @Component({
   selector: 'app-chat-text',
@@ -9,15 +10,11 @@ import { ChatService } from '../chat.service';
 })
 export class ChatTextComponent {
 	chatMessage: ChatMessage[] = [];
+	@Input() room: ChatRoom = {} as ChatRoom;
 	constructor (
 		public chatService: ChatService
 	) {}
-	ngOnInit() {
-		this.chatService.getChatText().subscribe(
-			chatMessage => {
-				// TODO: Show only last N messages? (Avoid long scrolls?)
-				this.chatMessage = chatMessage;
-			}
-		);
+	ngOnChanges() {
+		this.chatMessage = this.room?.history;
 	}
 }

@@ -20,16 +20,47 @@ export class ChatService {
 	private roomsUrl = 'http://localhost:3000/chatrooms/';
 	chatMessage: ChatMessage[] = [];
 	static chatRooms: ChatRoom[] = [];
+	user: User | undefined = undefined;
+	static connected: boolean = false;
 
 	constructor(
 		private readonly socket: ChatSocket,
 		public route: ActivatedRoute,
 		private readonly router: Router,
 		private fun: HelperFunctionsService,
-		private userService: UserService,
 		private http: HttpClient,
+		public userService: UserService,
 	) {
 //		this.mockChat(); // Mock MUST be on backend
+		this.userService.getLoggedUser().subscribe(_=>{
+			this.user = _;
+		});
+		this.subscribeSocketIfNotYet();
+	}
+
+	think(roomId: string, msg: string)
+	{
+		console.log("Thinking about: ", msg);
+		// Maybe add() to some history,
+		// maybe create new chat room
+		// maybe change users status
+	}
+
+	subscribeSocketIfNotYet() {
+		if (ChatService.connected) return;
+		this.socketSubscription();
+	}
+
+	socketSubscription() {
+		console.log("ChatService subscribing to socket.");
+		this.getMessages().subscribe(
+			_ => {
+				console.log("Chat subscription got", _.payload);
+				for (const room of ChatService.chatRooms)
+					this.think(room.id, _.payload);
+			},
+		);
+		ChatService.connected = true;
 	}
 
 	sendMessage(chatMessage: ChatMessage) {
@@ -45,20 +76,22 @@ export class ChatService {
 		this.chatMessage = [];
 	}
 
-	getChatRoom(roomId: string|null): Observable<ChatRoom> {
-		console.log("getChatRoom called", ChatService.chatRooms);
+	roomById(roomId?: string): ChatRoom {
+		if (!roomId) return {} as ChatRoom;
+		for (const room of ChatService.chatRooms)
+			if (room.id == roomId)
+				return room;
+		return {} as ChatRoom;
+	}
+
+	getOrInitChatRoom(roomId: string|null): ChatRoom {
+		console.log("getOrInitChatRoom called", ChatService.chatRooms);
 		if (!roomId)
 		{
 			// Create new chatRoom, UNMOCK TODO
-			return of(CHAT_ROOM[0]);
+			return CHAT_ROOM[0];
 		}
-		for (const room in ChatService.chatRooms)
-		{
-			if (ChatService.chatRooms[room].id == roomId)
-				return of(ChatService.chatRooms[room]);
-		}
-		const chatRoom = CHAT_ROOM[0];
-		return of(chatRoom);
+		return this.roomById(roomId);
 	}
 
 	getVisibleChatRooms(intraId: string|undefined): Observable<ChatRoom[]> {
@@ -69,19 +102,36 @@ export class ChatService {
 				catchError(this.handleError<ChatRoom[]>('getVisibleChatRooms'))
 			);
 	}
+
 	getInChatUsers(): Observable<string[]> {
 		// TODO: it facilitates (always?) for the loggedUser to be in first position,
 		// then the administrators, then eveyone else.
 		const inChat = CHAT_ROOM[1].user;
 		return of(inChat);
 	}
+
 	getOutOfChatUsers(): Observable<string[]> {
 		// TODO: Everyone from userService.getOnlineUsers() minus who is already in.
 		const inChat = CHAT_ROOM[2].user;
 		return of(inChat);
 	}
-	getChatText(): Observable<ChatMessage[]> {
-		return of(this.chatMessage);
+
+	loggedUserIsMuted(roomId?: string): boolean {
+		if (!this.user) return false;
+		const room = this.roomById(roomId);
+		if (!room || !room.muted || !room.muted.length) return false;
+		for (const intraId of room.muted)
+			if (intraId == this.user.intraId)
+				return true;
+		return false;
+	}
+
+	getChatHistory(roomId?: string): ChatMessage[] {
+		return this.roomById(roomId).history;
+	}
+
+	clearHistory(roomId?: string) {
+		this.roomById(roomId).history = [];
 	}
 
 	getMessages() {

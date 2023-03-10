@@ -1,4 +1,4 @@
-<div *ngIf="chatMessage.length" class="chat-text scroller">
+<div *ngIf="chatMessage && chatMessage.length" class="chat-text scroller">
   <ul>
   <li *ngFor='let chatLine of chatMessage' class='chat-line'> 
 	<app-avatar [user]="chatLine.user"></app-avatar>

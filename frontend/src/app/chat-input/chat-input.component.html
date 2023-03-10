@@ -4,6 +4,11 @@
 	[(ngModel)]="message"
 	autofocus
   ></textarea>
+  <button
+	id="clear-button" 
+	type="button" (click)="clearChat($event);"
+	style="position: absolute; right: 200px; bottom: 0"
+  >Clear</button>
   <button *ngIf='!muted'
 	id="send-button" 
 	type="button" (click)="send($event);"

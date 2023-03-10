@@ -27,6 +27,7 @@ export class ChatBoxComponent {
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
 	done: Boolean = false;
 	user?: User;
+	id?: string|null;
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -48,37 +49,17 @@ export class ChatBoxComponent {
 	}
 
 	initChatRoom(): void {
-		this.chatService.getChatRoom(
-			this.route.snapshot.paramMap.get('roomId')
-		).subscribe(
-			chatRoom => {
-				this.chatRoom = chatRoom;
-				console.log("ChatBox Init to chatroom", chatRoom);
-				this.socketSubscription();
-				this.getInChatUsers();
-				this.getOutOfChatUsers();
-				this.done = true;
-				this.imprint();
-			}
+		this.id = this.route.snapshot.paramMap.get('roomId');
+		this.chatRoom = this.chatService.getOrInitChatRoom(
+			this.id	
 		);
+		console.log("ChatBox Init to chatroom", this.chatRoom);
+		this.chatService.subscribeSocketIfNotYet();
+		this.getInChatUsers();
+		this.getOutOfChatUsers();
+		this.done = true;
+		this.imprint();
 	}
-
-	socketSubscription() {
-		console.log("Chat subscribing.");
-		this.chatService.getMessages().subscribe(
-			_ => {
-				console.log("Chat subscription got", _.payload);
-				if (
-					(_.payload.roomId != this.chatRoom.id)
-				){
-					console.log("Disregarding message", _.payload);
-					return ;
-				} else
-					this.chatService.add(_.payload);
-			},
-		);
-	}
-
 
 	getOutOfChatUsers(): void {
 		this.chatService.getOutOfChatUsers().subscribe(

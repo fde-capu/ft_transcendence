@@ -28,12 +28,12 @@ export class ChatInputComponent {
 	}
 	ngOnChanges() {
 		this.getUser();
+		this.muted = this.chatService.loggedUserIsMuted(this.room?.id);
 	}
 	getUser(): void {
 		this.userService.getLoggedUser()
 			.subscribe(user => {
 				this.user = user;
-				this.muted = this.loggedUserIsMuted(this.room);
 			});
 	}
 	send(event: Event)
@@ -56,6 +56,9 @@ export class ChatInputComponent {
 		this.message = "";
 		this.textArea && this.textArea.focus();
 	}
+	clearChat(event: Event) {
+		this.chatService.clearHistory(this.room?.id);
+	}
 	blink(el: string)
 	{
 		const exist = document.getElementById(el);
@@ -66,11 +69,5 @@ export class ChatInputComponent {
 				exist.classList.remove('inverted');
 				}, 200);
 	}
-	loggedUserIsMuted(room?: ChatRoom): boolean {
-		if (!room || !this.user) return false;
-		for (const user of room.muted)
-			if (user == this.user.intraId)
-				return true;
-		return false;
-	}
+
 }
