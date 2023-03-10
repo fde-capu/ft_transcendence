@@ -24,22 +24,22 @@ export class ChatService {
 		let out: ChatRoomDTO[] = [];
 		let put: boolean = false;
 		console.log("getVisibleRooms for ", intraId);
-		for (const i in ChatService.allRooms)
+		for (const room of ChatService.allRooms)
 		{
 			put = false;
-			if (!ChatService.allRooms[i].isPrivate)
+			if (!room.isPrivate)
 				put = true;
-			for (const u in ChatService.allRooms[i].user)
+			for (const u of room.user)
 			{
-				console.log("getVisibleRooms user on", ChatService.allRooms[i].user[u]);
-				if (ChatService.allRooms[i].user[u] == intraId)
+				console.log("getVisibleRooms user for", u);
+				if (u == intraId)
 					put = true;
 			}
-			for (const u in ChatService.allRooms[i].admin)
-				if (ChatService.allRooms[i].admin[u] == intraId)
+			for (const u in room.admin)
+				if (room.admin[u] == intraId)
 					put = true;
 			if (put)
-				out.push(ChatService.allRooms[i]);
+				out.push(room);
 		}
 		return out;
 	}
