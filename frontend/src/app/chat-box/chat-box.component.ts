@@ -104,9 +104,11 @@ export class ChatBoxComponent {
 
 	isAdmin(intraId?: string): boolean {
 		if (!this.user) return false;
-		if (!intraId)
-			return this.chatService.isAdmin(this.id, this.user.intraId);
-		return this.chatService.isAdmin(this.id, intraId);
+		if (!intraId) intraId = this.user.intraId;
+		for (const admin of this.chatRoom.admin)
+			if (admin == intraId)
+				return true;
+		return false;
 	}
 
 	isMe(intraId: string): boolean {

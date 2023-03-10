@@ -1,8 +1,10 @@
 <div class="chat-input-box" id="chatBox">
-  <textarea class="chat-input-text" placeholder=" <- Type here."
+  <textarea *ngIf='!muted' class="chat-input-text" placeholder=" <- Type here."
 	(keydown.enter)="send($event)"
 	[(ngModel)]="message"
 	autofocus
+  ></textarea>
+  <textarea *ngIf='muted' disabled class="chat-input-text" placeholder=" --- You have been MUTED! --- "
   ></textarea>
   <button
 	id="clear-button" 
@@ -14,9 +16,4 @@
 	type="button" (click)="send($event);"
 	style="position: absolute; right: 0; bottom: 0"
   >Enter</button>
-  <button *ngIf='muted'
-	id="muted-button" 
-	type="button"
-	style="position: absolute; right: 0; bottom: 0"
-  >Your Are Muted</button>
 </div>

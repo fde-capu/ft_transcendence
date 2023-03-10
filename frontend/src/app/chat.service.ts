@@ -3,7 +3,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChatSocket } from './chat.socket';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { ChatMessage } from './chat-message';
 import { UserService } from './user.service';
 import { User } from './user';
@@ -18,8 +18,7 @@ import { HelperFunctionsService } from './helper-functions.service';
 })
 export class ChatService {
 	private roomsUrl = 'http://localhost:3000/chatrooms/';
-	chatMessage: ChatMessage[] = [];
-	static chatRooms: ChatRoom[] = [];
+	static chatRooms: ChatRoom[] = new BehaviorSubject([]);
 	user: User | undefined = undefined;
 	static doneOnce: boolean = false;
 	static firstUpdate: boolean = false;
@@ -43,7 +42,11 @@ export class ChatService {
 	{
 		console.log("Thinking about: ", msg);
 		if (msg.payload) // Check room, and if user can receive first, then
-			this.add(msg.payload);
+		{
+			for (const room of ChatService.chatRooms)
+				if (room.id == msg.payload.roomId)
+					console.log("push on behaviorsubject", msg.payload);
+		}
 		if (msg.update_rooms)
 		{
 			console.log("think setting rooms", msg.update_rooms);
@@ -58,6 +61,7 @@ export class ChatService {
 				// for (const room of ChatService.chatRooms)
 	}
 
+	// Promise<void> is needed \/
 	async subscribeOnce(): Promise<void> {
 		if (!ChatService.doneOnce)
 			this.socketSubscription();
@@ -66,16 +70,6 @@ export class ChatService {
 		console.log("timeout");
 		if (!ChatService.firstUpdate) return await this.subscribeOnce();
 	}
-
-//	mockChat(): void {
-//		const self = this;
-//		let n: ReturnType<typeof setTimeout>;
-//		n = setTimeout(function(){
-//			console.log("Chat emitting.");
-//			self.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
-//			self.mockChat();
-//		}, Math.random() * 10000 + 5000);
-//	}
 
 	socketSubscription() {
 		console.log("ChatService subscribing to socket.");
@@ -99,26 +93,11 @@ export class ChatService {
 		this.socket.emit('chat', chatMessage);
 	}
 
-	add(chatMessage: ChatMessage) {
-		this.chatMessage.push(chatMessage);
-	}
-
-	clear() {
-		this.chatMessage = [];
-	}
-
 	roomById(roomId?: string): ChatRoom {
-		console.log("CS roomById", roomId);
 		if (!roomId) return {} as ChatRoom;
 		for (const room of ChatService.chatRooms)
-		{
 			if (room.id == roomId)
-			{
-				console.log("CS returning", room);
 				return room;
-			}
-		}
-		console.log("CS returning empty");
 		return {} as ChatRoom;
 	}
 
@@ -162,7 +141,6 @@ export class ChatService {
 	isAdmin(roomId?: string|null, intraId?: string): boolean
 	{
 		if (!roomId || !intraId) return false;
-		console.log("iA calls roomById", roomId);
 		const room = this.roomById(roomId);
 		for (const roomIntraId of room.admin)
 			if (intraId == roomIntraId)
@@ -183,7 +161,7 @@ export class ChatService {
 
 	loggedUserIsMuted(roomId?: string): boolean {
 		if (!this.user || !roomId) return false;
-		console.log("lUIM calls roomById", roomId);
+		console.log("loggedUserIsMuted calls roomById", roomId);
 		const room = this.roomById(roomId);
 		if (!room || !room.muted || !room.muted.length) return false;
 		for (const intraId of room.muted)

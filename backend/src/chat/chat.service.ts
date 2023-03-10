@@ -28,7 +28,6 @@ export class ChatService {
 		// Is visible if the room is public.
 		let out: ChatRoomDTO[] = [];
 		let put: boolean = false;
-		console.log("getVisibleRooms for ", intraId);
 		for (const room of ChatService.allRooms)
 		{
 			put = false;
@@ -36,7 +35,6 @@ export class ChatService {
 				put = true;
 			for (const u of room.user)
 			{
-				console.log("getVisibleRooms user for", u);
 				if (u == intraId)
 					put = true;
 			}
@@ -63,7 +61,7 @@ export class ChatService {
 		ChatService.allRooms.push({
 					id: "chatRoomId_1",
 					name: "fde-capu is only admin not user",
-					user: [],
+					user: ['fde-capu'],
 					admin: ['fde-capu'],
 					blocked: [],
 					muted: [],
@@ -92,9 +90,9 @@ export class ChatService {
 		});
 		ChatService.allRooms.push({
 					id: "chatRoomId_4",
-					name: "no one is user nor admin, w/o password",
-					user: [],
-					admin: [],
+					name: "some people are there but not you, w/o password",
+					user: ['tanana', 'findim'],
+					admin: ['tanana'],
 					blocked: [],
 					muted: [],
 					password: "",
