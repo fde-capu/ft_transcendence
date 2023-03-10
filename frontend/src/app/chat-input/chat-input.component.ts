@@ -16,22 +16,25 @@ export class ChatInputComponent {
 	user: User | undefined = undefined;
 	textArea: HTMLElement | null = null;
 	chatBox: HTMLElement | null = null;
+	muted: boolean = false;
 	constructor(
 		public chatService: ChatService,
 		public userService: UserService
 	) {}
 	ngOnInit(): void {
-		this.getUser();
 		this.textArea = document.getElementById('chat-input-text');
 		this.chatBox = document.getElementById('chatBox');
 		this.textArea && this.textArea.focus();
 	}
 	ngOnChanges() {
-		this.loggedUserIsMuted(this.room);
+		this.getUser();
 	}
 	getUser(): void {
 		this.userService.getLoggedUser()
-			.subscribe(user => this.user = user );
+			.subscribe(user => {
+				this.user = user;
+				this.muted = this.loggedUserIsMuted(this.room);
+			});
 	}
 	send(event: Event)
 	{
@@ -63,10 +66,10 @@ export class ChatInputComponent {
 				exist.classList.remove('inverted');
 				}, 200);
 	}
-	loggedUserIsMuted(room?: ChatRoom): Boolean {
-		if (!room) return false;
+	loggedUserIsMuted(room?: ChatRoom): boolean {
+		if (!room || !this.user) return false;
 		for (const user of room.muted)
-			if (user == this.user?.intraId)
+			if (user == this.user.intraId)
 				return true;
 		return false;
 	}

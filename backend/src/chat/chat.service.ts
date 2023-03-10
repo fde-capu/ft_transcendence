@@ -108,7 +108,7 @@ export class ChatService {
 		ChatService.allRooms.push({
 					id: "chatRoomId_6",
 					name: "fde-capu is user but muted",
-					user: [],
+					user: ['fde-capu'],
 					admin: [],
 					blocked: [],
 					muted: ['fde-capu'],

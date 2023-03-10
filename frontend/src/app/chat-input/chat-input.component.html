@@ -4,8 +4,14 @@
 	[(ngModel)]="message"
 	autofocus
   ></textarea>
-  <button id="send-button" 
+  <button *ngIf='!muted'
+	id="send-button" 
 	type="button" (click)="send($event);"
 	style="position: absolute; right: 0; bottom: 0"
   >Enter</button>
+  <button *ngIf='muted'
+	id="muted-button" 
+	type="button"
+	style="position: absolute; right: 0; bottom: 0"
+  >Your Are Muted</button>
 </div>

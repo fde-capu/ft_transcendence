@@ -48,19 +48,16 @@ export class ChatBoxComponent {
 	}
 
 	initChatRoom(): void {
+		this.chatRoom =
 		this.chatService.getChatRoom(
 			this.route.snapshot.paramMap.get('roomId')
-		).subscribe(
-			chatRoom => {
-				this.chatRoom = chatRoom;
-				console.log("ChatBox Init to chatroom", chatRoom);
+		);
+				console.log("ChatBox Init to chatroom", this.chatRoom);
 				this.socketSubscription();
 				this.getInChatUsers();
 				this.getOutOfChatUsers();
 				this.done = true;
 				this.imprint();
-			}
-		);
 	}
 
 	socketSubscription() {
