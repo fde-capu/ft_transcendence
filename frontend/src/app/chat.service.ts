@@ -21,7 +21,8 @@ export class ChatService {
 	chatMessage: ChatMessage[] = [];
 	static chatRooms: ChatRoom[] = [];
 	user: User | undefined = undefined;
-	static connected: boolean = false;
+	static doneOnce: boolean = false;
+	static firstUpdate: boolean = false;
 
 	constructor(
 		private readonly socket: ChatSocket,
@@ -35,32 +36,62 @@ export class ChatService {
 		this.userService.getLoggedUser().subscribe(_=>{
 			this.user = _;
 		});
-		this.subscribeSocketIfNotYet();
+		this.subscribeOnce();
 	}
 
-	think(roomId: string, msg: string)
+	think(msg: any)
 	{
 		console.log("Thinking about: ", msg);
+		if (msg.payload) // Check room, and if user can receive first, then
+			this.add(msg.payload);
+		if (msg.update_rooms)
+		{
+			console.log("think setting rooms", msg.update_rooms);
+			ChatService.chatRooms = msg.update_rooms;
+			ChatService.firstUpdate = true;
+		}
 		// Maybe add() to some history,
 		// maybe create new chat room
 		// maybe change users status
+		// basically all chatRooms updates
+		// and messages.
+				// for (const room of ChatService.chatRooms)
 	}
 
-	subscribeSocketIfNotYet() {
-		if (ChatService.connected) return;
-		this.socketSubscription();
+	async subscribeOnce(): Promise<void> {
+		if (!ChatService.doneOnce)
+			this.socketSubscription();
+		if (ChatService.firstUpdate) return;
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		console.log("timeout");
+		if (!ChatService.firstUpdate) return await this.subscribeOnce();
 	}
+
+//	mockChat(): void {
+//		const self = this;
+//		let n: ReturnType<typeof setTimeout>;
+//		n = setTimeout(function(){
+//			console.log("Chat emitting.");
+//			self.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
+//			self.mockChat();
+//		}, Math.random() * 10000 + 5000);
+//	}
 
 	socketSubscription() {
 		console.log("ChatService subscribing to socket.");
 		this.getMessages().subscribe(
 			_ => {
-				console.log("Chat subscription got", _.payload);
-				for (const room of ChatService.chatRooms)
-					this.think(room.id, _.payload);
+				console.log("Chat subscription got", _);
+					this.think(_);
 			},
 		);
-		ChatService.connected = true;
+		ChatService.doneOnce = true;
+		this.requestUpdate();
+	}
+
+	requestUpdate() {
+		console.log("Requesting update");
+		this.socket.emit('chat', 'update');
 	}
 
 	sendMessage(chatMessage: ChatMessage) {
@@ -77,20 +108,28 @@ export class ChatService {
 	}
 
 	roomById(roomId?: string): ChatRoom {
+		console.log("CS roomById", roomId);
 		if (!roomId) return {} as ChatRoom;
 		for (const room of ChatService.chatRooms)
+		{
 			if (room.id == roomId)
+			{
+				console.log("CS returning", room);
 				return room;
+			}
+		}
+		console.log("CS returning empty");
 		return {} as ChatRoom;
 	}
 
 	getOrInitChatRoom(roomId: string|null): ChatRoom {
-		console.log("getOrInitChatRoom called", ChatService.chatRooms);
+		console.log("getOrInitChatRoom called for", roomId);
 		if (!roomId)
 		{
 			// Create new chatRoom, UNMOCK TODO
 			return CHAT_ROOM[0];
 		}
+		console.log("getOrInitChatRoom calls roomById", roomId);
 		return this.roomById(roomId);
 	}
 
@@ -103,21 +142,48 @@ export class ChatService {
 			);
 	}
 
-	getInChatUsers(): Observable<string[]> {
-		// TODO: it facilitates (always?) for the loggedUser to be in first position,
-		// then the administrators, then eveyone else.
-		const inChat = CHAT_ROOM[1].user;
-		return of(inChat);
+	getInChatUsers(roomId?: string): string[] {
+		if (!roomId) return [];
+		console.log("gICU calls roomById", roomId);
+		return this.roomById(roomId).user;
 	}
 
-	getOutOfChatUsers(): Observable<string[]> {
-		// TODO: Everyone from userService.getOnlineUsers() minus who is already in.
-		const inChat = CHAT_ROOM[2].user;
-		return of(inChat);
+	userIsInChat(roomId?: string, intraId?: string): boolean
+	{
+		if (!roomId || !intraId) return false;
+		console.log("uIIC calls roomById", roomId);
+		const room = this.roomById(roomId);
+		for (const roomIntraId of room.user)
+			if (intraId == roomIntraId)
+				return true;
+		return false;
+	}
+
+	isAdmin(roomId?: string|null, intraId?: string): boolean
+	{
+		if (!roomId || !intraId) return false;
+		console.log("iA calls roomById", roomId);
+		const room = this.roomById(roomId);
+		for (const roomIntraId of room.admin)
+			if (intraId == roomIntraId)
+				return true;
+		return false;
+	}
+
+	getOutOfChatUsers(roomId?: string): Observable<User[]> {
+		if (!roomId) return of([]);
+		let out: User[] = [];
+		this.userService.getOnlineUsers().subscribe(_=>{
+			for (const user of _)
+				if (!this.userIsInChat(roomId, user.intraId))
+					out.push(user);
+		});
+		return of(out);
 	}
 
 	loggedUserIsMuted(roomId?: string): boolean {
-		if (!this.user) return false;
+		if (!this.user || !roomId) return false;
+		console.log("lUIM calls roomById", roomId);
 		const room = this.roomById(roomId);
 		if (!room || !room.muted || !room.muted.length) return false;
 		for (const intraId of room.muted)
@@ -127,15 +193,17 @@ export class ChatService {
 	}
 
 	getChatHistory(roomId?: string): ChatMessage[] {
+		console.log("gCH calls roomById", roomId);
 		return this.roomById(roomId).history;
 	}
 
 	clearHistory(roomId?: string) {
+		console.log("cH calls roomById", roomId);
 		this.roomById(roomId).history = [];
 	}
 
 	getMessages() {
-		//console.log("Chat service getting from socket.");
+		console.log("Chat service getting from socket.");
 		return this.socket.fromEvent<any>('chat');
 	}
 
@@ -173,3 +241,4 @@ export class ChatService {
 //  :: These two things will be done by the avatar element, however.
 
 // Matchmaking screen.
+

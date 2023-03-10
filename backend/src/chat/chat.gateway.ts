@@ -9,6 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
+import { ChatService } from './chat.service';
 
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
@@ -18,7 +19,10 @@ import { TokenService } from 'src/auth/service/token.service';
 export class ChatGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
-  constructor(private readonly tokenService: TokenService) {}
+  constructor(
+	private readonly tokenService: TokenService,
+	private chatService: ChatService,
+  ) {}
 
   async handleConnection(client: Socket, ...args: any[]) {}
 
@@ -27,10 +31,17 @@ export class ChatGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
-//	console.log("Chat got", payload);
-    this.server.emit('chat', {
-      author: client['subject'],
-      payload: payload,
-    });
+	console.log("Chat got", payload);
+	if (payload == 'update')
+	{
+		this.server.emit('chat', {update_rooms: this.chatService.allRooms() });
+	}
+	else
+	{
+		this.server.emit('chat', {
+			author: client['subject'],
+			payload: payload,
+		});
+	}
   }
 }

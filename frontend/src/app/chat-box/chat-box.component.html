@@ -71,10 +71,13 @@
 
 	<h3>In-Chat</h3>
 	<table class="list-of-users">
-		<tr *ngFor="let user of usersOnChat">
+		<tr *ngFor="let user of chatRoom.user">
 		<td>
-			<a routerLink="/profile/{{user.intraId}}">
+			<a routerLink="/profile/{{user}}">
+				<!--
 				{{ user.intraId }} | {{ user.name }}
+				-->
+				{{ user }}
 			</a>
 		</td>
 		<td>

@@ -16,7 +16,12 @@ export class ChatService {
 		return ChatService.allRooms;
 	}
 
-	async getVisibleRooms(intraId: string):Promise<ChatRoomDTO[]>
+	allRooms(): ChatRoomDTO[]
+	{
+		return ChatService.allRooms;
+	}
+
+	getVisibleRooms(intraId: string): ChatRoomDTO[]
 	{
 		// TODO: Visible Chat Rooms must be of one of the conditions:
 		// Is visible if the loggedUser is in the room.

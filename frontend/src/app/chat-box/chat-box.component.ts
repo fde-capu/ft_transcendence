@@ -23,7 +23,6 @@ export class ChatBoxComponent {
 	windowName = "";
 	windowExtras = "";
 	optionsOn = false;
-	usersOnChat: User[] = []; // Everyone that is logged on the room.
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
 	done: Boolean = false;
 	user?: User;
@@ -48,14 +47,15 @@ export class ChatBoxComponent {
 		)
 	}
 
-	initChatRoom(): void {
+	async initChatRoom() {
+		console.log("ChatBox Init to chatroom", this.chatRoom);
 		this.id = this.route.snapshot.paramMap.get('roomId');
+		await this.chatService.subscribeOnce();
+
 		this.chatRoom = this.chatService.getOrInitChatRoom(
 			this.id	
 		);
-		console.log("ChatBox Init to chatroom", this.chatRoom);
-		this.chatService.subscribeSocketIfNotYet();
-		this.getInChatUsers();
+
 		this.getOutOfChatUsers();
 		this.done = true;
 		this.imprint();
@@ -64,26 +64,10 @@ export class ChatBoxComponent {
 	getOutOfChatUsers(): void {
 		this.chatService.getOutOfChatUsers().subscribe(
 			outChat => {
-				this.userService.getMany(outChat).subscribe(_=>{
-					this.usersOutOfChat = _;
-				}, error => {
-					console.log("Cough error");
-				})
-				this.imprint();
+				this.usersOutOfChat = outChat;
 			}
 		);
 	}
-
-	getInChatUsers(): void {
-		this.chatService.getInChatUsers().subscribe(
-			inChat => {
-				this.userService.getMany(inChat).subscribe(_=>{
-					this.usersOnChat = _;
-				});
-			}
-		);
-	}
-
 
 	imprint() {
 		this.windowName = this.windowTitle + ": " + this.chatRoom.name;
@@ -118,16 +102,15 @@ export class ChatBoxComponent {
 		this.imprint();
 	}
 
-	isAdmin(user: User | undefined = this.user): boolean {
-		if (!this.chatRoom?.admin?.length || !user || !this.user) return false;
-		for (const admin of this.chatRoom.admin)
-			if (admin == user.intraId)
-				return true;
-		return false;
+	isAdmin(intraId?: string): boolean {
+		if (!this.user) return false;
+		if (!intraId)
+			return this.chatService.isAdmin(this.id, this.user.intraId);
+		return this.chatService.isAdmin(this.id, intraId);
 	}
 
-	isMe(user: User): boolean {
-		return user === this.user;
+	isMe(intraId: string): boolean {
+		return this.user?.intraId === this.user;
 	}
 }
 // TODO Open user profile when clicking name.

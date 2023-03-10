@@ -153,18 +153,18 @@ export class UserService {
 			);
 	}
 
-	getMany(ulist: string[]): Observable<User[]> {
+	intraIdsToUsers(ulist: string[]): Observable<User[]> {
 		let out: User[] = [];
 		for (const one of ulist)
 		{
 			this.getUserById(one).subscribe(_=>{
 				if (_)
 				{
-					console.log("getMany:", _);
+					console.log("intraIdsToUsers:", _);
 					out.push(_)
 				}
 			}, error => {
-				console.log("getMany Error");
+				console.log("intraIdsToUsers Error");
 			});
 		}
 		return of(out);
