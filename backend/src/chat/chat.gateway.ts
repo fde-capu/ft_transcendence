@@ -49,7 +49,7 @@ export class ChatGateway implements OnGatewayConnection {
 		);
 		return ;
 	}
-	if (payload == "update")
+	if (payload == "get_rooms")
 	{
 		console.log("-> allRooms");
 		this.server.emit('chat', {

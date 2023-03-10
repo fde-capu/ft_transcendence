@@ -24,6 +24,8 @@ export class ChatRoomListComponent {
 	}
 	async getChatRooms() {
 		this.visibleRooms = await this.chatService.getVisibleChatRooms(this.user?.intraId);
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		await this.getChatRooms();
 	}
 	getCurrentUser(): void {
 		this.userService.getLoggedUser()

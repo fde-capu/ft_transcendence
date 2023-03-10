@@ -54,7 +54,6 @@ export class ChatService {
 		}
 		if (msg.payload.update_rooms)
 		{
-			console.log("Thinking about updating rooms.");
 			ChatService.allRooms = msg.payload.update_rooms;
 			ChatService.firstUpdate = true;
 		}
@@ -87,9 +86,9 @@ export class ChatService {
 	}
 
 	requestUpdate() {
-		//console.log("Requesting update");
+		//console.log("Requesting get_rooms");
 
-		this.socket.emit('chat', "update");
+		this.socket.emit('chat', "get_rooms");
 	}
 
 	putUserInRoom(room: ChatRoom): ChatRoom
@@ -142,8 +141,6 @@ export class ChatService {
 			await new Promise(resolve => setTimeout(resolve, 1000));
 			return await this.getVisibleChatRooms(intraId);
 		}
-
-		console.log("Getting visibles");
 		let out: ChatRoom[] = [];
 		let put: boolean = false;
 		for (const room of ChatService.allRooms)
@@ -162,7 +159,6 @@ export class ChatService {
 			if (put)
 				out.push(room);
 		}
-		console.log("Returning", out);
 		return out;
 	}
 
