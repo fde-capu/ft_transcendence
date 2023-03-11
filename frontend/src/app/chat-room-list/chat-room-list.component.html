@@ -14,23 +14,17 @@
 		</b>
 	</td>
 	<td>
-		<span *ngIf="loggedUserIsIn(room)">
-			<button routerLink="/chat/{{room.id}}">ENTER</button>
-			<button>LEAVE</button>
-		</span>
-		<span *ngIf="!loggedUserIsIn(room) && !loggedUserIsBlocked(room)">
-			<button *ngIf="!room.password && !loggedUserIsIn(room)" routerLink="/chat/{{room.id}}">JOIN</button>
-			<button *ngIf="!room.password && loggedUserIsIn(room)" routerLink="/chat/{{room.id}}">ENTER</button>
-			<button *ngIf="!room.password && loggedUserIsIn(room)" routerLink="/chatleave/{{room.id}}">LEAVE</button>
+		<span *ngIf="!loggedUserIsBlocked(room)">
+			<button *ngIf="!room.password" routerLink="/chat/{{room.id}}">ENTER</button>
 			<span *ngIf="room.password">
-				<button id="btn{{room.id}}" (click)='submitEntrance(room)'>JOIN</button>
+				<button id="btn{{room.id}}" (click)='submitEntrance(room)'>ENTER</button>
 				<input id="pass{{room.id}}" [ngModel]="password.get(room.id)" (ngModelChange)="password.set(room.id, $event)"
-					(keydown.enter)="fun.blur('pass' + room.id); fun.blink('btn' + room.id); submitEntrance(room)"
+					(keydown.enter)="fun.blur('pass' + room.id); fun.blink('btn' + room.id); submitEntrance(room);"
 					placeholder="<- Type password."
 				/>
 			</span>
 		</span>
-		<span *ngIf="loggedUserIsBlocked(room)"><- BLOCKED!</span>
+		<span *ngIf="loggedUserIsBlocked(room)"><- YOU HAVE BEEN BLOCKED!</span>
 	</td>
 </tr>
 </table>

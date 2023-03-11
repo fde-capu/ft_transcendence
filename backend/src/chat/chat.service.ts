@@ -30,6 +30,16 @@ export class ChatService {
 
 	mockRooms() {
 		ChatService.allRooms.push({
+					id: "chatRoomId_-1",
+					name: "room is empty",
+					user: [],
+					admin: [],
+					blocked: [],
+					muted: [],
+					password: "",
+					isPrivate: false 
+		});
+		ChatService.allRooms.push({
 					id: "chatRoomId_0",
 					name: "fde-capu is user",
 					user: ['fde-capu'],
@@ -38,6 +48,16 @@ export class ChatService {
 					muted: [],
 					password: "",
 					isPrivate: true 
+		});
+		ChatService.allRooms.push({
+					id: "chatRoomId_0B",
+					name: "fde-capu is user",
+					user: ['fde-capu'],
+					admin: [],
+					blocked: [],
+					muted: [],
+					password: "",
+					isPrivate: false 
 		});
 		ChatService.allRooms.push({
 					id: "chatRoomId_1",

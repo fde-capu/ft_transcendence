@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { ChatRoom } from '../chat-room';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
@@ -16,7 +17,8 @@ export class ChatRoomListComponent {
 	constructor(
 		private chatService: ChatService,
 		private userService: UserService,
-		public fun: HelperFunctionsService
+		public fun: HelperFunctionsService,
+		private router: Router,
 	) {};
 	password = new Map<string, string>;
 	ngOnInit(): void {
@@ -24,7 +26,7 @@ export class ChatRoomListComponent {
 	}
 	async getChatRooms() {
 		this.visibleRooms = await this.chatService.getVisibleChatRooms(this.user?.intraId);
-		await new Promise(resolve => setTimeout(resolve, 1000));
+		await new Promise(resolve => setTimeout(resolve, 3000)); // Is 3 seconds too lazy?
 		await this.getChatRooms();
 	}
 	getCurrentUser(): void {
@@ -35,25 +37,30 @@ export class ChatRoomListComponent {
 			}
 			);
 	}
-	loggedUserIsIn(room: ChatRoom): Boolean {
-		for (const user of room.user)
-			if (user == this.user?.intraId)
-				return true;
-		for (const user of room.admin)
-			if (user == this.user?.intraId)
-				return true;
-		return false;
-	}
 	loggedUserIsBlocked(room: ChatRoom): Boolean {
 		for (const user of room.blocked)
 			if (user == this.user?.intraId)
 				return true;
 		return false;
 	}
-	submitEntrance(room: ChatRoom) {
+	async submitEntrance(room: ChatRoom) {
 		if (!this.password.get(room.id))
 			this.fun.focus('pass'+room.id);
 		else
-			alert('Request entrance on ' + room.name + ' useing password ' + this.password.get(room.id));
+		{
+			if (this.password.get(room.id) != room.password)
+			{
+				this.password.set(room.id, "  [ !!! WRONG !!! ]");
+				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.password.set(room.id, "");
+				return ;
+			}
+			this.router.navigate(['/chat/' + room.id]);
+		}
 	}
 }
