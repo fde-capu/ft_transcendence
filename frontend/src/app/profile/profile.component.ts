@@ -44,7 +44,7 @@ export class ProfileComponent {
 			this.getDisplayUser();
 		});
 	}
-	getDisplayUser() {
+	async getDisplayUser() {
 		//console.log("idRequest", this.idRequest);
 		if (!this.idRequest)
 		{
@@ -65,6 +65,8 @@ export class ProfileComponent {
 				this.setOwnership();
 			}
 		)
+		await new Promise(resolve => setTimeout(resolve, 5000));
+		await this.getDisplayUser();
 	}
 	async setOwnership() {
 		if (!this.user)
