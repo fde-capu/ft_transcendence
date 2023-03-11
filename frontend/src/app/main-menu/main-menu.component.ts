@@ -7,7 +7,7 @@ import { UserService } from 'src/app/user.service';
   styleUrls: ['./main-menu.component.css']
 })
 export class MainMenuComponent {
-	@Input() big: Boolean = false;
+	@Input() big = false;
 	constructor(
 		private readonly userService: UserService,
 	) {};

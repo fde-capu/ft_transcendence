@@ -9,18 +9,18 @@
       <fieldset>
         <legend>Game Mode</legend>
         <label>
-          <input type="radio" name="mode" value="PONG" checked>
+          <input type="radio" name="mode" value="PONG" checked />
           <span>PONG</span>
         </label>
         <label>
-          <input type="radio" name="mode" value="PONGDOUBLE">
+          <input type="radio" name="mode" value="PONGDOUBLE" />
           <span>PONGDOUBLE</span>
         </label>
         <label>
-          <input type="radio" name="mode" value="QUADRAPONG">
+          <input type="radio" name="mode" value="QUADRAPONG" />
           <span>QUADRAPONG</span>
         </label>
-      <button type="submit">Set Mode</button>
+        <button type="submit">Set Mode</button>
       </fieldset>
     </form>
     <form>
@@ -28,12 +28,14 @@
         <legend>Invite</legend>
         <label>
           Player:
-			<select name="playerToInvite">
-				<option value="" disabled selected hidden>Please Choose...</option>
-				<option *ngFor="let user of availableUsers">{{user.intraId}} | {{user.name}}</option>
-			</select>
+          <select name="playerToInvite">
+            <option value="" disabled selected hidden>Please Choose...</option>
+            <option *ngFor="let user of availableUsers">
+              {{ user.intraId }} | {{ user.name }}
+            </option>
+          </select>
         </label>
-		<button (click)='doInvitation()'>Invite</button>
+        <button (click)="doInvitation()">Invite</button>
       </fieldset>
     </form>
     <button>Leave</button>
@@ -42,7 +44,9 @@
   </aside>
   <section>
     <table>
-      <caption>Players</caption>
+      <caption>
+        Players
+      </caption>
       <thead>
         <tr>
           <th>Team</th>
