@@ -13,8 +13,10 @@ export class OnlineUsersComponent {
 	ngOnInit(): void {
 		this.getOnlineUsers();
 	}
-	getOnlineUsers(): void {
+	async getOnlineUsers() {
 		this.userService.getOnlineUsers()
 			.subscribe(users => this.users = users);
+		await new Promise(resolve => setTimeout(resolve, 5000));
+		await this.getOnlineUsers();
 	}
 }
