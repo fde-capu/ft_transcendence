@@ -10,16 +10,16 @@ export interface UserDTO {
 }
 
 export interface StatisticsDTO {
-	score: number;
-	matches: number;
-	wins: number;
-	goalsMade: number;
-	goalsTaken: number;
-	scorePerMatches: number; // *
-	looses: number; // *
-	winsPerLooses: number; // *
-	goalsMadePerTaken: number; // *
-	// * No need to be on database, because its calculated.
+  score: number;
+  matches: number;
+  wins: number;
+  goalsMade: number;
+  goalsTaken: number;
+  scorePerMatches: number; // *
+  looses: number; // *
+  winsPerLooses: number; // *
+  goalsMadePerTaken: number; // *
+  // * No need to be on database, because its calculated.
 }
 
 @Entity()
@@ -61,23 +61,23 @@ export class Users {
   @Column()
   score?: number;
 
-  @Column({default:false})
+  @Column({ default: false })
   isLogged?: boolean;
 
-  @Column("simple-array")
+  @Column('simple-array')
   friends?: string[];
 
-	@Column()
-	matches?: number;
+  @Column()
+  matches?: number;
 
-	@Column()
-	wins?: number;
+  @Column()
+  wins?: number;
 
-	@Column()
-	goalsMade?: number;
+  @Column()
+  goalsMade?: number;
 
-	@Column()
-	goalsTaken?: number;
+  @Column()
+  goalsTaken?: number;
 }
 // Don't forget to update backend/src/user/service/user.service.tx:registerUserOk42
 // Don't forget to `make re` after editing this file!

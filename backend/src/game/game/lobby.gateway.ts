@@ -25,7 +25,7 @@ export class LobbyGateway implements OnGatewayConnection {
     private readonly roomService: RoomService,
   ) {}
 
-  async handleConnection(client: Socket, ...args: any[]) {
+  async handleConnection(client: Socket) {
     try {
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
@@ -37,7 +37,7 @@ export class LobbyGateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('game:room:create')
-  handleMessage(@ConnectedSocket() client: Socket, ...args: any[]) {
+  handleMessage(@ConnectedSocket() client: Socket) {
     const user = new User(client['subject'], client['subject']); // TODO: get name from user service
     const room = this.roomService.create(user);
     client.emit('game:room:info', room);

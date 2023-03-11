@@ -39,8 +39,6 @@ export class GameService {
     this.emit('game:player:list', this.players);
   }
 
-  public create() {}
-
   private emit(event: string, data: any): void {
     const getCircularReplacer = () => {
       const seen = new WeakSet();

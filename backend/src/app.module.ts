@@ -6,8 +6,6 @@ import { Users } from './user/entity/user.entity';
 import { GameHistory } from './game/game-record';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
-import { RegisterController } from './user/controller/registred.controller';
-import { UserService } from './user/service/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
@@ -38,9 +36,7 @@ import { InvitationGateway } from './invite/invite.gateway';
     GameModule,
   ],
   controllers: [PingController],
-  providers: [
-	InvitationGateway
-  ],
+  providers: [InvitationGateway],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
