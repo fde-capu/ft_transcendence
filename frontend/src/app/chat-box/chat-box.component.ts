@@ -51,11 +51,10 @@ export class ChatBoxComponent {
 		//console.log("ChatBox Init");
 		this.id = this.route.snapshot.paramMap.get('roomId');
 		await this.chatService.subscribeOnce();
-		this.chatRoom = this.chatService.getOrInitChatRoom(
-			this.id	
-		);
+		this.chatRoom = this.chatService.getOrInitChatRoom(this.id);
 		this.chatRoom = this.chatService.putUserInRoom(this.chatRoom);
-		this.getOutOfChatUsers();
+		if (this.chatService.isAdmin(this.id, this.user?.intraId))
+			this.getOutOfChatUsers();
 		this.done = true;
 		this.imprint();
 	}

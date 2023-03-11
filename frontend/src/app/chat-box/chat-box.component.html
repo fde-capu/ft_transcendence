@@ -93,7 +93,7 @@
 		</tr>
 	</table>
 
-	<h3 *ngIf="isAdmin()">Online Users</h3>
+	<h3 *ngIf="isAdmin()">Users not in Chat</h3>
 	<table *ngIf="isAdmin()" class="list-of-users">
 		<tr *ngFor="let user of usersOutOfChat">
 		<td>

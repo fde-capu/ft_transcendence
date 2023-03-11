@@ -100,7 +100,9 @@ export class ChatService {
 				isIn = true;
 		if (!isIn)
 		{
+			console.log("Putting user in the room!");
 			room.user.push(this.user.intraId);
+			this.roomChanged(room);
 			return room;
 		}
 		return room;
