@@ -8,32 +8,43 @@ import { UserService } from '../user.service';
   styleUrls: ['./create-match.component.css'],
 })
 export class CreateMatchComponent implements OnInit {
-  constructor(private userService: UserService) {}
   enhancedMode = false;
+
   randomOpponent = false;
+
   waitingForMatch = false;
+
+  constructor(private userService: UserService) {}
+
   switchGameMode() {
     this.enhancedMode = !this.enhancedMode;
   }
+
   setRandomOpponent() {
     this.randomOpponent = true;
   }
+
   unsetRandomOpponent() {
     this.randomOpponent = false;
   }
+
   availableUsers: User[] = [];
+
   ngOnInit() {
     this.getAvailableUsers();
   }
+
   getAvailableUsers() {
     this.userService
       .getAvailableUsers()
       .subscribe(users => (this.availableUsers = users));
   }
+
   submitMatch() {
     this.waitingForMatch = true;
     // TODO: Actually send request to the server.
   }
+
   cancelMatchWait() {
     this.waitingForMatch = false;
     // TODO: Actually cancel the call.

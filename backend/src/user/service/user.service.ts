@@ -28,23 +28,11 @@ export class UserService {
     private readonly historyRepository: Repository<GameHistory>,
   ) {}
 
-  // async register(codeFrom42: Users): Promise<Users> {
-  //   const existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
-  //   if (existUser === null){
-  //     const createdUser =  this.userRepository.create({ intraId: codeFrom42.login, email: codeFrom42.email });
-  //     return (await this.userRepository.save(createdUser));
-  //   }
-  //   await this.updateUser(codeFrom42.login, { mfa_enabled: true,  mfa_verified: false });
-  //   return ({ intraId: codeFrom42.login, mfa_enabled: true,  mfa_verified: false });
-  // }
-  // ^ I guess the code above is not necessary.
-
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
     let existUser = await this.userRepository.findOneBy({
       intraId: codeFrom42.login,
     });
     if (existUser === null) {
-      //console.log(codeFrom42); // The big reply from 42API.
       const createdUser = this.userRepository.create({
         intraId: codeFrom42.login,
         email: codeFrom42.email,
@@ -74,7 +62,6 @@ export class UserService {
   }
 
   async updateUser(intraId: string, user: Users) {
-    //console.log("updateUser user", user);
     const resp = await this.userRepository
       .createQueryBuilder()
       .update(Users)
@@ -82,29 +69,23 @@ export class UserService {
       .where('intraId = :intraId', { intraId: intraId })
       .execute();
     if (resp.affected === 0) {
-      //console.log("updateUser got exception.");
       throw new NotFoundException(); // SomethingWrongException() ..?
     }
-    //console.log("updateUser resp", resp);
     return resp;
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
-    //console.log("bus Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
 
     if (resp === null) {
-      //console.log("bus Could not find", u_intraId, ", throwing error.");
       throw new NotFoundException();
     }
     return this.singleUserDto(resp);
   }
 
   async getFullUser(u_intraId: string): Promise<Users> {
-    //console.log("bus getFull Will search:", u_intraId);
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
     if (resp === null) {
-      //console.log("bus getFull Could not find", u_intraId, ", throwing error.");
       throw new NotFoundException();
     }
     return resp;
@@ -122,18 +103,14 @@ export class UserService {
   async getFriends(intraId: string): Promise<UserDTO[]> {
     const out: UserDTO[] = [];
     const u = await this.getFullUser(intraId);
-    //console.log("Friends with:", u.intraId);
     if (!u || !u.friends) {
-      //console.log("...got no friends");
       return out;
     }
     for (const friend of u.friends) {
-      //console.log("...friend has", friend);
       const n = await this.getUserByIntraId(friend);
       if (!n) return;
       out.push(n);
     }
-    //console.log("getFriends returning", out);
     return out;
   }
 

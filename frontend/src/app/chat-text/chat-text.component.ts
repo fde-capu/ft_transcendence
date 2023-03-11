@@ -9,7 +9,9 @@ import { ChatService } from '../chat.service';
 })
 export class ChatTextComponent implements OnInit {
   chatMessage: ChatMessage[] = [];
+
   constructor(public chatService: ChatService) {}
+
   ngOnInit() {
     this.chatService.getChatText().subscribe(chatMessage => {
       // TODO: Show only last N messages? (Avoid long scrolls?)

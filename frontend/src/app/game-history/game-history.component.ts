@@ -9,16 +9,22 @@ import { GameHistory } from '../game-history';
   styleUrls: ['./game-history.component.css'],
 })
 export class GameHistoryComponent implements OnChanges {
-  constructor(private userService: UserService) {}
-  @Input() user: User | undefined;
+  @Input() user?: User;
+
   history: GameHistory[] = [];
+
+  constructor(private userService: UserService) {}
+
   ngOnChanges(): void {
     this.getGameHistory();
   }
+
   getGameHistory(): void {
     if (!this.user) return;
-    this.userService.getGameHistory(this.user.intraId).subscribe(_ => {
-      if (_) this.history = _;
+    this.userService.getGameHistory(this.user.intraId).subscribe({
+      next: history => {
+        if (history) this.history = history;
+      },
     });
   }
 }

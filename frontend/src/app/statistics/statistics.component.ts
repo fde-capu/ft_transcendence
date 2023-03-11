@@ -9,17 +9,20 @@ import { UserService } from '../user.service';
   styleUrls: ['./statistics.component.css'],
 })
 export class StatisticsComponent implements OnChanges {
-  constructor(private userService: UserService) {}
   @Input() user?: User;
+
   stat?: Statistics;
+
+  constructor(private userService: UserService) {}
+
   ngOnChanges() {
     this.getStats();
   }
+
   getStats() {
     if (!this.user) return;
-    this.userService.getStats(this.user.intraId).subscribe(_ => {
-      //console.log("Statistics got:", _);
-      this.stat = _;
+    this.userService.getStats(this.user.intraId).subscribe(statistics => {
+      this.stat = statistics;
     });
   }
 }

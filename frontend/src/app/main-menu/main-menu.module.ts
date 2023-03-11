@@ -3,20 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MainMenuRoutingModule } from './main-menu-routing.module';
 import { MainMenuComponent } from './main-menu.component';
 
-
 @NgModule({
-  declarations: [
-	MainMenuComponent,
-  ],
-  imports: [
-    CommonModule,
-	MainMenuRoutingModule,
-  ],
-  exports: [
-	MainMenuComponent,
-  ]
+  declarations: [MainMenuComponent],
+  imports: [CommonModule, MainMenuRoutingModule],
+  exports: [MainMenuComponent],
 })
-export class MainMenuModule { }
-
-
-
+export class MainMenuModule {}

@@ -9,10 +9,13 @@ import { User } from '../../../user';
 })
 export class RoomComponent implements OnInit {
   availableUsers: User[] = [];
+
   constructor(private userService: UserService) {}
+
   ngOnInit() {
     this.getAvailableUsers();
   }
+
   getAvailableUsers() {
     this.userService
       .getAvailableUsers()

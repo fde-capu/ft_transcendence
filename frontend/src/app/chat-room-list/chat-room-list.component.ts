@@ -12,33 +12,42 @@ import { HelperFunctionsService } from '../helper-functions.service';
 })
 export class ChatRoomListComponent implements OnInit {
   user?: User;
+
   visibleRooms: ChatRoom[] = [];
+
+  password = new Map<string, string>();
+
   constructor(
     private chatService: ChatService,
     private userService: UserService,
     public fun: HelperFunctionsService
   ) {}
-  password = new Map<string, string>();
+
   ngOnInit(): void {
     this.getChatRooms();
     this.getCurrentUser();
   }
+
   getChatRooms(): void {
     this.chatService
       .getVisibleChatRooms()
       .subscribe(rooms => (this.visibleRooms = rooms));
   }
+
   getCurrentUser(): void {
     this.userService.getLoggedUser().subscribe(user => (this.user = user));
   }
+
   loggedUserIsIn(room: ChatRoom): boolean {
     for (const user of room.user) if (user == this.user) return true;
     return false;
   }
+
   loggedUserIsBlocked(room: ChatRoom): boolean {
     for (const user of room.blocked) if (user == this.user) return true;
     return false;
   }
+
   submitEntrance(room: ChatRoom) {
     if (!this.password.get(room.id)) this.fun.focus('pass' + room.id);
     else

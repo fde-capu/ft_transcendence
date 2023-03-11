@@ -11,13 +11,20 @@ import { HelperFunctionsService } from '../helper-functions.service';
   styleUrls: ['./invitation-screen.component.css'],
 })
 export class InvitationScreenComponent implements OnInit {
-  public invite: Invitation[] = [];
+  invite: Invitation[] = [];
+
   lastInvite?: Invitation;
+
   user?: User;
+
   receiveScreen?: boolean;
+
   declineScreen?: boolean;
+
   acceptScreen?: boolean;
+
   sentScreen?: boolean;
+
   clickGo?: boolean;
 
   constructor(
@@ -27,7 +34,6 @@ export class InvitationScreenComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //console.log("invite init");
     this.getUser();
     this.socketSubscription();
   }

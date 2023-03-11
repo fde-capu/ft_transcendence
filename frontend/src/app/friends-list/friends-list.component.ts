@@ -15,9 +15,10 @@ export class FriendsListComponent implements OnChanges {
     this.getFriends();
   }
   getFriends(): void {
-    this.userService.getFriends(this.user).subscribe(_ => {
-      //console.log("FriendsListComponent got", _);
-      this.friends = _;
+    this.userService.getFriends(this.user).subscribe({
+      next: friends => {
+        this.friends = friends;
+      },
     });
   }
 }

@@ -21,11 +21,6 @@ export class RegisterController {
     private readonly gameService: GameService,
   ) {}
 
-  // @Post('register')
-  // async register(){
-  //   return this.userService.register({intraId: 'jestevam', email: "jjuu.com"});
-  // }
-
   @Put('update/:intraId')
   @UseGuards(AuthGuard)
   async updateUser(
@@ -34,9 +29,7 @@ export class RegisterController {
     @Body() user: Users,
   ) {
     try {
-      //console.log("Registred will call updateUser.");
       await this.userService.updateUser(intraId, user);
-      //console.log("Registred user saved:", user);
       return response.status(200).json({});
     } catch (e) {
       response.status(e.status).json(e.data);
@@ -51,15 +44,12 @@ export class RegisterController {
     @Res() response: Response = null,
   ): Promise<any> {
     if (!code) {
-      //console.log("RegContr cant search undefined");
       return response.status(400).json('Who should I search for?');
     }
     try {
-      //console.log("RegContr will search for", code);
       const resp = await this.userService.getUserByIntraId(code);
       return response.status(200).json(resp);
     } catch (e) {
-      //console.log("RegContr found exception", e);
       response.status(e.status).json(e.data);
     }
   }
@@ -68,11 +58,9 @@ export class RegisterController {
   @UseGuards(AuthGuard)
   async getOnlineUsers(@Res() response: Response = null): Promise<any> {
     try {
-      //console.log("reg online: fetching databaes.");
       const resp = await this.userService.getOnlineUsers();
       return response.status(200).json(resp);
     } catch (e) {
-      //console.log("reg: online got catch", e);
       response.status(e.status).json(e.data);
     }
   }
@@ -84,11 +72,9 @@ export class RegisterController {
     @Res() response: Response = null,
   ): Promise<any> {
     try {
-      //console.log("reg friends: fetching friends.");
       const resp = await this.userService.getFriends(intraId);
       return response.status(200).json(resp);
     } catch (e) {
-      //console.log("reg friends got catch", e);
       response.status(e.status).json(e.data);
     }
   }
@@ -100,11 +86,9 @@ export class RegisterController {
     @Res() response: Response = null,
   ): Promise<any> {
     try {
-      //console.log("reg stats: fetching.");
       const resp = await this.userService.getStats(intraId);
       return response.status(200).json(resp);
     } catch (e) {
-      //console.log("reg stats got catch", e);
       response.status(e.status).json(e.data);
     }
   }
@@ -116,11 +100,9 @@ export class RegisterController {
     @Res() response: Response = null,
   ): Promise<any> {
     try {
-      //console.log("reg history: fetching.");
       const resp = await this.gameService.getGameHistory(intraId);
       return response.status(200).json(resp);
     } catch (e) {
-      //console.log("reg history got catch", e);
       response.status(e.status).json(e.data);
     }
   }
