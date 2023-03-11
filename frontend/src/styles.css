@@ -189,7 +189,6 @@ input, textarea, select
 	font-family: inherit;
 	font-size: inherit;
 	cursor: inherit;
-	min-width: 9em;
 }
 select
 {
@@ -317,7 +316,6 @@ label
 	display: inline-block;
 	padding-right: 1ch;
 	cursor: inherit;
-	text-transform: lowercase;
 }
 label::after {
 	font-weight: normal;

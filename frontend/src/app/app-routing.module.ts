@@ -26,11 +26,6 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'game',
-    canActivate: [AuthGuard],
-    component: GameComponent,
-  },
-  {
     path: 'profile/:intraId',
     canActivate: [AuthGuard],
     component: ProfileComponent,
@@ -86,6 +81,8 @@ const routes: Routes = [
     loadChildren: () => import('./error/error.module').then(m => m.ErrorModule),
   },
 ];
+
+
 
 @NgModule({
   imports: [
