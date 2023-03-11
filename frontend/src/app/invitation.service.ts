@@ -38,6 +38,9 @@ export class InvitationService {
   }
 
   getInvitation() {
-    return this.socket.fromEvent<unknown>('invitation');
+    return this.socket.fromEvent<{
+      author: string;
+      payload: Invitation;
+    }>('invitation');
   }
 }

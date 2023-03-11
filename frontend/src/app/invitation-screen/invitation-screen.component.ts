@@ -39,34 +39,32 @@ export class InvitationScreenComponent implements OnInit {
   }
 
   socketSubscription() {
-    //console.log("Invitation subscribing.");
-    this.invitationService.getInvitation().subscribe(_ => {
-      //console.log("Invitation subscription got", _);
+    this.invitationService.getInvitation().subscribe(thing => {
       if (
-        _.payload.to == this.user?.intraId ||
-        _.payload.from == this.user?.intraId
+        thing.payload.to == this.user?.intraId ||
+        thing.payload.from == this.user?.intraId
       ) {
         this.sentScreen =
-          _.payload.from == this.user?.intraId && !_.payload.isReply;
+          thing.payload.from == this.user?.intraId && !thing.payload.isReply;
         this.receiveScreen =
-          _.payload.to == this.user?.intraId && !_.payload.isReply;
+          thing.payload.to == this.user?.intraId && !thing.payload.isReply;
         this.declineScreen =
-          _.payload.from == this.user?.intraId &&
-          _.payload.isReply &&
-          !_.payload.answer;
+          thing.payload.from == this.user?.intraId &&
+          thing.payload.isReply &&
+          !thing.payload.answer;
         this.acceptScreen =
-          _.payload.from == this.user?.intraId &&
-          _.payload.isReply &&
-          _.payload.answer &&
-          !_.payload.instantaneous;
+          thing.payload.from == this.user?.intraId &&
+          thing.payload.isReply &&
+          thing.payload.answer &&
+          !thing.payload.instantaneous;
         if (
-          _.payload.from == this.user?.intraId &&
-          _.payload.isReply &&
-          _.payload.answer &&
-          _.payload.instantaneous
+          thing.payload.from == this.user?.intraId &&
+          thing.payload.isReply &&
+          thing.payload.answer &&
+          thing.payload.instantaneous
         )
-          return this.invitationService.go(_.payload.route);
-        this.invite.push(_.payload);
+          return this.invitationService.go(thing.payload.route);
+        this.invite.push(thing.payload);
       }
     });
   }

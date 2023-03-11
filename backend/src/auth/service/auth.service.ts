@@ -95,7 +95,8 @@ export class AuthService {
     return { sub: payload.sub, exp: payload.exp, mfa: payload['mfa'] };
   }
 
-  private getUserChallengeSecret() {
+  private getUserChallengeSecret(subject: string) {
+    console.log(subject);
     return 'LMWVYBAAAVES2FKG'; // TODO: get the user secret from database
   }
 
