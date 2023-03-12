@@ -142,6 +142,8 @@ export class ChatBoxComponent {
 
 	doInvitationToThisRoom(toUser: User) {
 		if (!this.user) return;
+		if (this.iAmAdmin)
+			this.chatService.unTIG(toUser.intraId, this.chatRoom);
 		this.invitationService.invite({
 			from: this.user.intraId,
 			to: toUser.intraId,

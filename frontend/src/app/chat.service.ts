@@ -53,7 +53,7 @@ export class ChatService {
 
 	think(msg: any)
 	{
-		console.log("Thinking about: ", msg);
+		//console.log("Thinking about: ", msg);
 		this.gotNews = true;
 		if (msg.payload.roomId) // This checks if is a simple message.
 		{
@@ -318,8 +318,22 @@ export class ChatService {
 		return this.socket.fromEvent<any>('chat');
 	}
 
-	TIG(tigged: string, tigRoom: ChatRoom)
-	{
+	unTIG(tigged: string, tigRoom: ChatRoom, self: any = this) {
+		for (const room of ChatService.allRooms)
+			if (room.id == tigRoom.id)
+			{
+				let newBlocks: string[] = [];
+				if (!room.blocked || !room.blocked.length) return;
+				for (const user of room.blocked)
+					if (user != tigged)
+						newBlocks.push(user);
+				room.blocked = newBlocks;
+				self.roomChanged(room);
+			}
+	}
+
+	TIG(tigged: string, tigRoom: ChatRoom) {
+		const ONE_MINUTE: number = 60 * 1000;
 		for (const room of ChatService.allRooms)
 			if (room.id == tigRoom.id) {
 				if (!room.blocked)
@@ -328,18 +342,8 @@ export class ChatService {
 				this.roomChanged(room);
 				const self = this;
 				setTimeout(function(tigged: string, tigRoom: ChatRoom){
-					for (const room of ChatService.allRooms)
-						if (room.id == tigRoom.id)
-						{
-							let newBlocks: string[] = [];
-							if (!room.blocked || !room.blocked.length) return;
-							for (const user of room.blocked)
-								if (user != tigged)
-									newBlocks.push(user);
-							room.blocked = newBlocks;
-							self.roomChanged(room);
-						}
-				}, 30000, tigged, tigRoom);
+					self.unTIG(tigged, tigRoom, self);
+				}, ONE_MINUTE, tigged, tigRoom, this);
 			}
 	}
 
