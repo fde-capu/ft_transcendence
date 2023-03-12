@@ -54,6 +54,12 @@ Invitation to:<br>
 <button (click)='clickGo = true; finalOk();'>Go to Route</button>
 </div>
 
+<div class="overall" *ngIf='notificationScreen'>
+<span class='blinker'>{{ invite[0].note }}</span>
+<hr>
+<button (click)='clickGo = true; finalOk();'>{{ invite[0].button }}</button>
+</div>
+
 <!--
 Mocks:<br>
 <button (click)='mockInvite()'>Invite</button>

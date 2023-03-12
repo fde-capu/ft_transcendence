@@ -158,6 +158,22 @@ export class ChatBoxComponent {
 		return false;
 	}
 
+	kickThem(kicked: User) {
+		let innocents: string[] = [];
+		for (const suspect of this.chatRoom.user)
+			if (suspect != kicked.intraId)
+				innocents.push(suspect);
+		this.chatRoom.user = innocents;
+		this.invitationService.notify({
+			to: kicked.intraId,
+			note: "You have been kicked.",
+			route: "/rooms",
+			button: "Really?",
+			isReply: true,
+		});
+		this.chatService.roomChanged(this.chatRoom);
+	}
+
 	onClose() {
 		if (this.optionsOn)
 		{

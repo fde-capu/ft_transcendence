@@ -1,11 +1,13 @@
 export interface Invitation {
-	from: string;
+	from?: string;
 	to: string;
-	type: string;
+	type?: string;
 	buttonOk?: string;
 	buttonCancel?: string;
 	route: string;
 	answer?: boolean;
-	isReply: boolean;
+	isReply?: boolean;
 	instantaneous?: boolean;
+	note?: string;
+	button?: string;
 }

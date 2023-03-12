@@ -66,10 +66,10 @@ export class HelperFunctionsService {
 		let adjective: number = Math.random();
 		let directObject: number = Math.random();
 		
-		let nouns: string[] = ["House", "Lair", "Place", "Table", "Goal", "Tales", "Games", "Light", "Pixels", "Pong"];
-		let verbs: string[] = ["Of", "About", "In", "From", "Above", "Under", "Contrary to", "Demonstrating", "All Around", "Pong"];
-		let adjectives: string[] = ["the Red", "a Pongster", "an Incredible", "an Amazing", "Some Sort of", "an Ultra Fast", "the Chaos", "a Pong"];
-		let directObjects: string[] = ["Dragon", "Champion", "Rachet", "Ball", "Comet", "Star", "Speed", "Life", "Pong!"];
+		let nouns: string[] = ["House", "Lair", "Place", "Table", "Goal", "Tales", "Games", "Light", "Pixels", "Pong", "Static"];
+		let verbs: string[] = ["Of", "About", "In", "From", "Above", "Under", "Contrary To", "Demonstrating", "All Around", "Pong", "Spiraling"];
+		let adjectives: string[] = ["The Black", "The Pongster", "The Incredible", "The Amazing", "Some Sort of", "An Ultra Fast", "The Chaos", "A Pong", "The Dark", "Around"];
+		let directObjects: string[] = ["Dragon", "Champion", "Rachet", "Ball", "Comet", "Star", "Speed", "Life", "Pong!", "Void", "And Around"];
 
 		let selectedNoun = nouns[Math.floor(Math.random()*nouns.length)];
 		let selectedVerb = verbs[Math.floor(Math.random()*verbs.length)];

@@ -23,12 +23,16 @@ export class InvitationService {
 	invite(u_invite: Invitation) {
 		//console.log("Sendind invitation:", u_invite);
 		this.socket.emit('invitation', u_invite);
-		return true;
+	}
+
+	notify(u_notification: Invitation) {
+		this.invite(u_notification);
 	}
 
 	go(path: string) {
 		this.router.navigate([path]);
 	}
+
 
 	sendReply(invite: Invitation) {
 		invite.isReply = true;

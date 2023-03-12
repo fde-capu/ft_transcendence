@@ -121,11 +121,9 @@ export class ChatService {
 		let newUsers: string[] = [];
 		for (const user of room.user)
 		{
-			console.log("cheking", user, this.user.intraId);
 			if (user != this.user.intraId)
 				newUsers.push(user);
 		}
-		console.log("Removing user from room!");
 		room.user = newUsers;
 		if (flush)
 			this.roomChanged(room);
