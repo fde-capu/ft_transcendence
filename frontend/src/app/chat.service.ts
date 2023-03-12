@@ -152,11 +152,6 @@ export class ChatService {
 			put = false;
 			if (!room.isPrivate)
 				put = true;
-			for (const u of room.user)
-			{
-				if (u == intraId)
-					put = true;
-			}
 			for (const u in room.admin)
 				if (room.admin[u] == intraId)
 					put = true;

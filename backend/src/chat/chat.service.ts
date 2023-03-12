@@ -29,93 +29,95 @@ export class ChatService {
 	}
 
 	mockRooms() {
+		// These implementations are not complete by this commit.
+		// They are here as plan of execution.
 		ChatService.allRooms.push({
-					id: "chatRoomId_-1",
-					name: "room is empty",
+					id: "gfertfgger",
+					name: "Some user in public",
+					user: ['some-user'],
+					admin: ['some-user'],
+					blocked: [],
+					muted: [],
+					password: "",
+					isPrivate: false 
+		});
+		// ^ Rooms with only one user should always make them admin.
+		ChatService.allRooms.push({
+					id: "egregrt5egr5",
+					name: "fde-capu is admin (public)",
 					user: [],
-					admin: [],
+					admin: ['fde-capu'],
 					blocked: [],
 					muted: [],
 					password: "",
 					isPrivate: false 
 		});
+		// ^ Even if user left the room and is the admin, room is listed.
 		ChatService.allRooms.push({
-					id: "chatRoomId_0",
-					name: "fde-capu is user",
-					user: ['fde-capu'],
-					admin: [],
-					blocked: [],
-					muted: [],
-					password: "",
-					isPrivate: true 
-		});
-		ChatService.allRooms.push({
-					id: "chatRoomId_0B",
-					name: "fde-capu is user",
-					user: ['fde-capu'],
-					admin: [],
-					blocked: [],
-					muted: [],
-					password: "",
-					isPrivate: false 
-		});
-		ChatService.allRooms.push({
-					id: "chatRoomId_1",
-					name: "fde-capu user and admin",
-					user: ['fde-capu'],
+					id: "gwe4rtfwsedf",
+					name: "fde-capu is admin (private)",
+					user: [],
 					admin: ['fde-capu'],
 					blocked: [],
 					muted: [],
 					password: "",
 					isPrivate: true 
 		});
+		// ^ If the room is private, still listed but only to the admin.
 		ChatService.allRooms.push({
-					id: "chatRoomId_2",
-					name: "fde-capu is user but is password protected",
-					user: ['fde-capu'],
+					id: "er5ety5re5yg",
+					name: "auto generated name for one-on-one conversations",
+					user: ['someone-one-on-one', 'the-other-person'],
+					admin: ['someone-one-on-one', 'the-other-person'],
+					blocked: [],
+					muted: [],
+					password: "",
+					isPrivate: true 
+		});
+		// ^ This was, for example, initializated by sending a private
+		// message. So both users are admin.
+		ChatService.allRooms.push({
+					id: "chatRoomId_4",
+					name: "password protected",
+					user: ['tanana', 'findim'],
+					admin: ['tanana'],
+					blocked: [],
+					muted: [],
+					password: "user42",
+					isPrivate: false 
+		});
+		// ^ By logic, a password protected room is only usefull when
+		// its public. (Privates are only listed to admins.)
+		ChatService.allRooms.push({
+					id: "chatRoomId_5",
+					name: "fde-capu is blocked",
+					user: [],
 					admin: [],
 					blocked: [],
 					muted: [],
 					password: "user42",
 					isPrivate: true 
 		});
+		// ^ However, a protected private room can be accessed
+		// knowing the password. Because its not listed, there's
+		// a special field of submission.
 		ChatService.allRooms.push({
-					id: "chatRoomId_3",
-					name: "no one is user nor admin",
+					id: "fwefewe4fw",
+					name: "fde-capu is muted",
 					user: [],
-					admin: [],
-					blocked: [],
-					muted: [],
-					password: "user42",
-					isPrivate: false 
-		});
-		ChatService.allRooms.push({
-					id: "chatRoomId_4",
-					name: "some people are there but not you, w/o password",
-					user: ['tanana', 'findim'],
-					admin: ['tanana'],
-					blocked: [],
-					muted: [],
-					password: "",
-					isPrivate: false 
-		});
-		ChatService.allRooms.push({
-					id: "chatRoomId_5",
-					name: "fde-capu is blocked",
-					user: [],
-					admin: [],
-					blocked: ['fde-capu'],
-					muted: [],
-					password: "",
-					isPrivate: false 
-		});
-		ChatService.allRooms.push({
-					id: "chatRoomId_6",
-					name: "fde-capu is user but muted",
-					user: ['fde-capu'],
-					admin: [],
+					admin: ['someone-away'],
 					blocked: [],
 					muted: ['fde-capu'],
+					password: "",
+					isPrivate: false 
+		});
+		ChatService.allRooms.push({
+					id: "fqw3e4rfw",
+					name: "fde-capu is blocked",
+					user: [],
+					admin: ['someone-away'],
+					blocked: ['fde-capu'],
+					muted: [],
 					password: "",
 					isPrivate: false 
 		});
