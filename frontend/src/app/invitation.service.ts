@@ -16,8 +16,7 @@ export class InvitationService {
 		private readonly fun: HelperFunctionsService,
 		private readonly chatService: ChatService,
   ) {
-		console.log("Invite service constructor");
-
+		//console.log("Invite service constructor");
 	}
 
 	invite(u_invite: Invitation) {
