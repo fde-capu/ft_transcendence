@@ -24,6 +24,7 @@ export class ChatBoxComponent {
 	windowExtras = "";
 	optionsOn = false;
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
+	usersInChat: User[] = [];
 	done: Boolean = false;
 	user?: User;
 	id?: string|null;
@@ -35,7 +36,6 @@ export class ChatBoxComponent {
 		//		...when its done, redirect to "/chat/chatId?optionsOn=true".
 		// If there is a query, continue:
 		this.getUserAndStuff();
-		// ^ Not the best place, maybe everyone should subscribe once and get all messages.
 	}
 
 	getUserAndStuff(): void {
@@ -53,6 +53,9 @@ export class ChatBoxComponent {
 		await this.chatService.subscribeOnce();
 		this.chatRoom = this.chatService.getOrInitChatRoom(this.id);
 		this.chatRoom = this.chatService.putUserInRoom(this.chatRoom);
+		this.userService.intraIdsToUsers(this.chatRoom.user).subscribe(_=>{
+			this.usersInChat = _;
+		});
 		if (this.chatService.isAdmin(this.id, this.user?.intraId))
 			this.getOutOfChatUsers();
 		this.done = true;
@@ -65,6 +68,10 @@ export class ChatBoxComponent {
 				this.usersOutOfChat = outChat;
 			}
 		);
+	}
+
+	emit() {
+		this.chatService.roomChanged(this.chatRoom);
 	}
 
 	imprint() {
@@ -92,13 +99,13 @@ export class ChatBoxComponent {
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
-		this.chatService.roomChanged(this.chatRoom);
+		this.emit();
 		this.imprint();
 	}
 
 	cleanPassword() {
 		this.chatRoom.password = "";
-		console.log("cleanPassword");
+		this.emit();
 		this.imprint();
 	}
 
@@ -116,6 +123,3 @@ export class ChatBoxComponent {
 	}
 }
 // TODO Open user profile when clicking name.
-// TODO (BUG): When changing the Room name on one chatbox, the other reamins unchanged.
-// TODO (BUG): Subcomponents on chatbox are not getting right with multiple instances.
-

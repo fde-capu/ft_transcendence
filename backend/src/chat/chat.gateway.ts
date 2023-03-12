@@ -33,39 +33,38 @@ export class ChatGateway implements OnGatewayConnection {
   ) {
 	console.log("Chat got", payload);
 	let data: any;
-	data = payload;
+	data = payload; // Magicaly converts unreadable JSON data into readable. (Payload is kindda string|Object, JSON.parse fails (!) and this works (!).)
 
 	console.log("Chat data", data);
 	if (data.room_changed)
 	{
-		console.log("-> room_changed");
+		console.log("-> room_changed;");
 		this.chatService.roomChanged(data.room_changed);
-		this.server.emit('chat', {
-			author: client['subject'],
-			payload: {
-				update_rooms: this.chatService.allRooms()
-			}
-		}
-		);
+		this.broadcastChatRooms(client);
 		return ;
 	}
 	if (payload == "get_rooms")
 	{
-		console.log("-> allRooms");
-		this.server.emit('chat', {
-			author: client['subject'],
-			payload: {
-				update_rooms: this.chatService.allRooms()
-			}
-		}
-		);
+		this.broadcastChatRooms(client);
 		return ;
 	}
-	console.log("-> copy of payload");
+	// (else)
+	console.log("-> copy of payload == individual messages;");
 	this.server.emit('chat', {
 		author: client['subject'],
 		payload: payload,
 	});
 	return ;
+  }
+
+  broadcastChatRooms(client: Socket)
+  {
+	console.log("-> allRooms broadcast;");
+	this.server.emit('chat', {
+		author: client['subject'],
+		payload: {
+			update_rooms: this.chatService.allRooms()
+		}
+	});
   }
 }

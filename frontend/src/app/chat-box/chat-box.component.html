@@ -19,7 +19,7 @@
 				(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
-				(change)="imprint();"
+				(change)="emit(); imprint();"
 				/>
 			</td><td>
 				<button id="nameButton" type="button" (click)=
@@ -51,7 +51,7 @@
 				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton');"
-				(change)="imprint();"
+				(change)="emit(); imprint();"
 				/>
 			</td><td style="min-width:175px;">
 				<button id="passwordButton" type="button" (click)=
@@ -71,24 +71,21 @@
 
 	<h3>In-Chat</h3>
 	<table class="list-of-users">
-		<tr *ngFor="let user of chatRoom.user">
+		<tr *ngFor="let user of usersInChat">
 		<td>
 			<a routerLink="/profile/{{user}}">
-				<!--
 				{{ user.intraId }} | {{ user.name }}
-				-->
-				{{ user }}
 			</a>
 		</td>
 		<td>
-			<span *ngIf="isAdmin() && !isAdmin(user) && !isMe(user);">
+			<span *ngIf="isAdmin() && !isAdmin(user.intraId) && !isMe(user.intraId);">
 				<button style='margin-left:0;'>Kick</button>
 				<button>Ban</button>
 				<button>Mute</button>
 				<button>Promote</button>
 			</span>
-			<span *ngIf="isAdmin(user) && !isMe(user);"> <-[ Administrator ]</span>
-			<span *ngIf="isMe(user);"> <-[ Yourself ]</span>
+			<span *ngIf="isAdmin(user.intraId) && !isMe(user.intraId);"> <-[ Administrator ]</span>
+			<span *ngIf="isMe(user.intraId);"> <-[ Yourself ]</span>
 		</td>
 		</tr>
 	</table>
