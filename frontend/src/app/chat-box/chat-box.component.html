@@ -9,7 +9,7 @@
 ></app-window-title>
 	<div class="window-close" (click)="onClose()"></div>
 	<div class="window-menu-burger" (click)="onMenu()"></div>
-<div class="window-options" *ngIf="optionsOn" (click)="imprint();">
+<div class="window-options" *ngIf="optionsOn">
 	<table class="options" *ngIf="iAmAdmin">
 		<tr>
 			<td>
@@ -19,7 +19,7 @@
 				(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
-				(change)="emit(); imprint();"
+				(change)="emit();"
 				/>
 			</td><td>
 				<button id="nameButton" type="button" (click)=
@@ -51,7 +51,7 @@
 				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton');"
-				(change)="emitIfUnique(); imprint();"
+				(change)="emitIfUnique();"
 				/>
 			</td><td style="min-width:175px;">
 				<button id="passwordButton" type="button" (click)=

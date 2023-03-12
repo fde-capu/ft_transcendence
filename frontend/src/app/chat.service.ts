@@ -65,13 +65,14 @@ export class ChatService {
 	}
 
 	hasNews(): boolean {
-		if (this.gotNews) {
+		if (this.gotNews || Math.random() > .9) {
+			//              ^ ocasional refreshment to solve race condition,
+			//                thus saving cpu.
 			this.gotNews = false;
 			return true;
 		}
 		return false;
 	}
-
 
 	// Promise<void> is needed \/
 	async subscribeOnce(): Promise<void> {
@@ -168,8 +169,8 @@ export class ChatService {
 	async getVisibleChatRooms(intraId: string|undefined): Promise<ChatRoom[]> {
 		if (!ChatService.isConnected)
 		{
-			await new Promise(resolve => setTimeout(resolve, 1000));
-			return await this.getVisibleChatRooms(intraId);
+			await new Promise(resolve => setTimeout(resolve, 250));
+			return this.getVisibleChatRooms(intraId);
 		}
 		let out: ChatRoom[] = [];
 		let put: boolean = false;
@@ -208,9 +209,9 @@ export class ChatService {
 		return of(out);
 	}
 
-	testPrivatePasswordGenLink(myPassword: string): string|null {
+	testPasswordLink(myPassword: string): string|null {
 		for (const room of ChatService.allRooms)
-			if (room.isPrivate && room.password == myPassword)
+			if (room.password == myPassword)
 				return room.id;
 		return null;
 	}

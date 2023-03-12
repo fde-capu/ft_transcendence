@@ -29,7 +29,7 @@ export class ChatRoomListComponent {
 
 	async getChatRooms() {
 		this.visibleRooms = await this.chatService.getVisibleChatRooms(this.user?.intraId);
-		await new Promise(resolve => setTimeout(resolve, 3000)); // Is 3 seconds too lazy?
+		await new Promise(resolve => setTimeout(resolve, 200));
 		await this.getChatRooms();
 	}
 
@@ -70,15 +70,14 @@ export class ChatRoomListComponent {
 		}
 	}
 
-
-	async submitEntranceInPrivateProtected() {
+	async submitEntranceByAnyPassword() {
 		let privatePassword = this.password.get('private');
 		if (!privatePassword)
 			this.fun.focus('passprivate');
 		else
 		{
-			let privateProtectedLink: string|null = this.chatService.testPrivatePasswordGenLink(privatePassword);
-			if (!privateProtectedLink)
+			let passwordLink: string|null = this.chatService.testPasswordLink(privatePassword);
+			if (!passwordLink)
 			{
 				this.password.set('private', "  [ !!! WRONG !!! ]");
 				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
@@ -91,7 +90,7 @@ export class ChatRoomListComponent {
 				this.fun.focus('passprivate');
 				return ;
 			}
-			this.router.navigate(['/chat/' + privateProtectedLink]);
+			this.router.navigate(['/chat/' + passwordLink]);
 		}
 	}
 

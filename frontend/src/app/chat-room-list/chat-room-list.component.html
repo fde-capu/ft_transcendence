@@ -30,9 +30,9 @@
 </table>
 
 <div style='width:100%;text-align:center;margin-top:2em;'>
-	<button id="btnprivate" (click)='submitEntranceInPrivateProtected()'>ENTER</button>
+	<button id="btnprivate" (click)='submitEntranceByAnyPassword()'>ENTER</button>
 	<input class='big-input' id="passprivate" [ngModel]="password.get('private')" (ngModelChange)="password.set('private', $event)"
-		(keydown.enter)="fun.blur('passprivate'); fun.blink('btnprivate'); submitEntranceInPrivateProtected();"
+		(keydown.enter)="fun.blur('passprivate'); fun.blink('btnprivate'); submitEntranceByAnyPassword();"
 		placeholder="<- Type a PRIVATE PROTECTED password."
 	/>
 </div>

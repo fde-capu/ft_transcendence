@@ -30,6 +30,7 @@ export class ChatBoxComponent {
 	id?: string|null;
 	outOfChatSubscribed: boolean = false;
 	iAmAdmin: boolean = false;
+	firstTime: boolean = true;
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -61,8 +62,8 @@ export class ChatBoxComponent {
 		// ^ Some time to circulate the information.
 		this.updateRoomRecursive();
 		this.checkAdminRecursive()
+		this.imprintRecursive();
 		this.done = true;
-		this.imprint();
 	}
 
 	async updateRoomRecursive() {
@@ -74,11 +75,11 @@ export class ChatBoxComponent {
 		} else {
 			this.chatRoom = this.chatService.roomById(this.id);
 			//console.log("A3");
-			if (this.chatService.hasNews())
+			if (this.chatService.hasNews() || this.firstTime)
 				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
-			this.imprint();
+			this.firstTime = false;
 			//console.log("A4");
-			await new Promise(resolve => setTimeout(resolve, 100));
+			await new Promise(resolve => setTimeout(resolve, 870));
 			this.updateRoomRecursive();
 		}
 	}
@@ -93,7 +94,6 @@ export class ChatBoxComponent {
 			if (this.iAmAdmin)
 				this.getOutOfChatUsersRecursiveOnce();
 		}
-		this.imprint();
 		//console.log("A6");
 		await new Promise(resolve => setTimeout(resolve, 5000));
 		//console.log("A7");
@@ -138,12 +138,14 @@ export class ChatBoxComponent {
 		this.emit();
 	}
 
-	imprint() {
+	async imprintRecursive() {
 		this.windowName = this.windowTitle + ": " + this.chatRoom.name;
 		this.windowExtras = ""
 		+ (this.chatRoom.isPrivate ? "PRIVATE" : "PUBLIC")
 		+ " "
 		+ (this.chatRoom.password ? "PROTECTED" : "")
+		await new Promise(resolve => setTimeout(resolve, 1300));
+		this.imprintRecursive();
 	}
 
 	onClose() {
@@ -164,13 +166,11 @@ export class ChatBoxComponent {
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
 		this.emit();
-		this.imprint();
 	}
 
 	cleanPassword() {
 		this.chatRoom.password = "";
 		this.emit();
-		this.imprint();
 	}
 
 	isAdmin(intraId?: string): boolean {
