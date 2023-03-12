@@ -73,7 +73,7 @@
 	<table class="list-of-users">
 		<tr *ngFor="let user of usersInChat">
 		<td>
-			<a routerLink="/profile/{{user}}">
+			<a routerLink="/profile/{{user.intraId}}">
 				{{ user.intraId }} | {{ user.name }}
 			</a>
 		</td>

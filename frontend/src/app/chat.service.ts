@@ -219,6 +219,7 @@ export class ChatService {
 	{
 		if (!roomId || !intraId) return false;
 		const room = this.roomById(roomId);
+		if (!room || !room.admin || !room.admin.length) return false;
 		for (const roomIntraId of room.admin)
 			if (intraId == roomIntraId)
 				return true;

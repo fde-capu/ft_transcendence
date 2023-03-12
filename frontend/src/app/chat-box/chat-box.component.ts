@@ -57,21 +57,28 @@ export class ChatBoxComponent {
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
 		this.chatRoom = this.chatService.putUserInRoom(this.chatRoom);
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		// ^ Some time to circulate the information.
 		this.updateRoomRecursive();
-		this.checkAdminRecursive();
+		this.checkAdminRecursive()
 		this.done = true;
 		this.imprint();
 	}
 
 	async updateRoomRecursive() {
 		if (!this.id) {
+			//console.log("A1");
 			await new Promise(resolve => setTimeout(resolve, 500));
+			//console.log("A2");
 			await this.updateRoomRecursive();
 		} else {
 			this.chatRoom = this.chatService.roomById(this.id);
+			//console.log("A3");
 			this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
-			await new Promise(resolve => setTimeout(resolve, 5000));
-			await this.updateRoomRecursive();
+			this.imprint();
+			//console.log("A4");
+			await new Promise(resolve => setTimeout(resolve, 15000));
+			this.updateRoomRecursive();
 		}
 	}
 
@@ -81,11 +88,14 @@ export class ChatBoxComponent {
 		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
 		if (iWasAdmin != this.iAmAdmin)
 		{
-			console.log("Admin changed status to", this.iAmAdmin);
+			//console.log("Admin changed status to", this.iAmAdmin);
 			if (this.iAmAdmin)
 				this.getOutOfChatUsersRecursiveOnce();
 		}
+		this.imprint();
+		//console.log("A6");
 		await new Promise(resolve => setTimeout(resolve, 5000));
+		//console.log("A7");
 		await this.checkAdminRecursive();
 	}
 
@@ -97,12 +107,14 @@ export class ChatBoxComponent {
 				this.outOfChatSubscribed = true;
 			}
 		);
+		//console.log("A8");
 		await new Promise(resolve => setTimeout(resolve, 5000));
+		//console.log("A9");
 		await this.getOutOfChatUsersRecursiveOnce();
 	}
 
 	emit() {
-		console.log("Noticed room changed.");
+		//console.log("Noticed room changed.");
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
@@ -111,12 +123,12 @@ export class ChatBoxComponent {
 		&& !this.chatService.testPasswordUnique(this.chatRoom))
 		{
 			let saveTypedPassword = this.chatRoom.password;
-			this.chatRoom.password = "INVALID, try again!"; // If its invalid because is repeated, then user knows some room has to have this password!...
-			this.fun.blink('password'); this.fun.blink('passwordButton');
+			this.chatRoom.password = "INVALID! Try another!"; // If its invalid because is repeated, then user knows some room has to have this password!...
+			this.fun.blink('password');
 			await new Promise(resolve => setTimeout(resolve, 500));
-			this.fun.blink('password'); this.fun.blink('passwordButton');
+			this.fun.blink('password');
 			await new Promise(resolve => setTimeout(resolve, 500));
-			this.fun.blink('password'); this.fun.blink('passwordButton');
+			this.fun.blink('password');
 			await new Promise(resolve => setTimeout(resolve, 500));
 			this.chatRoom.password = saveTypedPassword;
 			this.fun.focus('password');

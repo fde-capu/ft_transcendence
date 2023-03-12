@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, from } from 'rxjs';
 import { User } from './user';
 import { GameHistory } from './game-history';
 import { USERS } from './mocks';
@@ -153,7 +153,12 @@ export class UserService {
 			);
 	}
 
+	intraIdsToUsersObservable(ulist: string[]): Observable<User[]> {
+		return from(this.intraIdsToUsers(ulist));
+	}
+
 	async intraIdsToUsers(ulist: string[]): Promise<User[]> {
+		if (!ulist || !ulist.length) return [];
 		let out: User[] = [];
 		for (const one of ulist)
 		{
