@@ -1,11 +1,11 @@
 <div class="overall" *ngIf='invite.length && receiveScreen'>
 	<h2>New Invitation</h2>
 	<hr>
-	{{ invite[0].from }}
+	<b>{{ invite[0].from }}</b>
 	<hr>
-	<br>invites you to<br>
+	invites you to
 	<hr>
-	{{ invite[0].type }}
+	<b>{{ invite[0].type }}</b>
 	<hr>
 	<br>
 	<button (click)='accept()'>

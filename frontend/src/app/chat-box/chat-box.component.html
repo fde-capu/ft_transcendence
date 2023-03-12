@@ -21,7 +21,7 @@
 				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
 				(change)="emit();"
-				/> + this.fun.randomWord(128)
+				/>
 			</td><td>
 				<button id="nameButton" type="button" (click)=
 					"fun.focusIf('nameButton', 'Change', 'name');"

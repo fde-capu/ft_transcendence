@@ -33,6 +33,6 @@
 	<button id="btnprivate" (click)='submitEntranceByAnyPassword()'>ENTER</button>
 	<input class='big-input' id="passprivate" [ngModel]="password.get('private')" (ngModelChange)="password.set('private', $event)"
 		(keydown.enter)="fun.blur('passprivate'); fun.blink('btnprivate'); submitEntranceByAnyPassword();"
-		placeholder="<- Type a PRIVATE PROTECTED password."
+		placeholder="<- Type ANY password."
 	/>
 </div>

@@ -60,4 +60,22 @@ export class HelperFunctionsService {
 			Math.floor(Math.random() * letters.length)
 		] + this.randomWord(--amount);
 	}
+	funnyName(): string {
+		let noun: number = Math.random();
+		let verb: number = Math.random();
+		let adjective: number = Math.random();
+		let directObject: number = Math.random();
+		
+		let nouns: string[] = ["House", "Lair", "Place", "Table", "Goal", "Tales", "Games"];
+		let verbs: string[] = ["of", "about", "in", "from", "above", "under", "from"];
+		let adjectives: string[] = ["the Red", "a Pongster", "an Incredible", "an Amazing", "some sort of"];
+		let directObjects: string[] = ["Dragon", "Champion", "Rachet", "Ball", "Comet", "Star"];
+
+		let selectedNoun = nouns[Math.floor(Math.random()*nouns.length)];
+		let selectedVerb = verbs[Math.floor(Math.random()*verbs.length)];
+		let selectedAdjective = adjectives[Math.floor(Math.random()*adjectives.length)];
+		let selectedObject = directObjects[Math.floor(Math.random()*directObjects.length)];
+
+		return selectedNoun + " " + selectedVerb + " " + selectedAdjective + " " + selectedObject
+	}
 }

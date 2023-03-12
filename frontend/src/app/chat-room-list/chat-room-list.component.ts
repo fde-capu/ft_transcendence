@@ -30,7 +30,7 @@ export class ChatRoomListComponent {
 	async getChatRooms() {
 		this.visibleRooms = await this.chatService.getVisibleChatRooms(this.user?.intraId);
 		for (const room of this.visibleRooms)
-			if (this.chatService.isAdmin(room.id, this.user?.intraId))
+			if (this.chatService.isAdmin(room.id, this.user?.intraId) && room.password)
 				this.password.set(room.id, room.password);
 		await new Promise(resolve => setTimeout(resolve, 200));
 		await this.getChatRooms();
@@ -45,6 +45,7 @@ export class ChatRoomListComponent {
 	}
 
 	loggedUserIsBlocked(room: ChatRoom): Boolean {
+		if (!room.blocked) return false;
 		for (const user of room.blocked)
 			if (user == this.user?.intraId)
 				return true;

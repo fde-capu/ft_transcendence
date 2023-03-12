@@ -19,7 +19,9 @@ export class U2uActionsComponent {
 	){}
 
 	inviteToChat() {
-		this.invitationService.inviteToPrivateChat(this.userService.getQuickIntraId(), this.user?.intraId);
+		let myId = this.userService.getQuickIntraId();
+		if (!myId || !this.user) return;
+		this.invitationService.invitePrivate(myId, this.user.intraId);
 	}
 
 	makeFriend(){

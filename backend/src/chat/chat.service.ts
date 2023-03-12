@@ -24,8 +24,11 @@ export class ChatService {
 	roomChanged(u_room: ChatRoomDTO)
 	{
 		for (const i in ChatService.allRooms)
-			if (ChatService.allRooms[i].id == u_room.id)
+			if (ChatService.allRooms[i].id == u_room.id) {
 				ChatService.allRooms[i] = u_room;
+				return ;
+			}
+		ChatService.allRooms.push(u_room);
 	}
 
 	mockRooms() {

@@ -68,7 +68,6 @@ export const CHAT_ROOM: ChatRoom[] = [
 		admin: [ USERS[7].intraId, "fde-capu" ],
 		blocked: [ USERS[0].intraId, USERS[1].intraId, USERS[2].intraId ],
 		muted: [],
-		history: CHATS,
 		password: ":(){ :|:& };:",
 		isPrivate: false
 	},
@@ -79,7 +78,6 @@ export const CHAT_ROOM: ChatRoom[] = [
 		admin: [ USERS[1].intraId ],
 		blocked: [ USERS[0].intraId, USERS[3].intraId, USERS[4].intraId,USERS[5].intraId,USERS[6].intraId,USERS[7].intraId ],
 		muted: [],
-		history: CHATS,
 		password: "",
 		isPrivate: true
 	},
@@ -90,7 +88,6 @@ export const CHAT_ROOM: ChatRoom[] = [
 		admin: [ USERS[8].intraId,USERS[10].intraId ],
 		blocked: [ USERS[0].intraId, USERS[7].intraId ],
 		muted: [],
-		history: CHATS,
 		password: "\\\\sudo rm -rf /",
 		isPrivate: true
 	},
@@ -101,7 +98,6 @@ export const CHAT_ROOM: ChatRoom[] = [
 		admin: [ USERS[3].intraId ],
 		blocked: [ USERS[0].intraId, USERS[7].intraId,USERS[8].intraId,USERS[9].intraId,USERS[10].intraId ],
 		muted: [],
-		history: CHATS,
 		password: "",
 		isPrivate: false
 	},
@@ -112,7 +108,6 @@ export const CHAT_ROOM: ChatRoom[] = [
 		admin: [ USERS[0].intraId, USERS[10].intraId ],
 		blocked: [],
 		muted: [],
-		history: CHATS,
 		password: "",
 		isPrivate: false
 	},

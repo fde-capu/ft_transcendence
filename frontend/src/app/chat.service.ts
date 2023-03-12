@@ -9,7 +9,6 @@ import { UserService } from './user.service';
 import { User } from './user';
 import { ChatRoom } from './chat-room';
 import { USERS, CHATS, CHAT_ROOM } from './mocks';
-import { HelperFunctionsService } from './helper-functions.service';
 
 // TODO: all is mocked. Unmock them!
 
@@ -28,7 +27,6 @@ export class ChatService {
 		private readonly socket: ChatSocket,
 		public route: ActivatedRoute,
 		private readonly router: Router,
-		private fun: HelperFunctionsService,
 		private http: HttpClient,
 		public userService: UserService,
 	) {
@@ -56,7 +54,6 @@ export class ChatService {
 		{
 			ChatService.allRooms = msg.payload.update_rooms;
 		}
-		// Maybe add() to some history,
 		// maybe create new chat room
 		// maybe change users status
 		// basically all allRooms updates
@@ -74,7 +71,7 @@ export class ChatService {
 		return false;
 	}
 
-	// Promise<void> is needed \/
+	// Promise<void> is needed \/ in this case, even being void.
 	async subscribeOnce(): Promise<void> {
 			await new Promise(resolve => setTimeout(resolve, 500));
 		//console.log("static!", ChatService.isConnected);
@@ -95,12 +92,20 @@ export class ChatService {
 
 	requestUpdate() {
 		//console.log("Requesting get_rooms");
-
 		this.socket.emit('chat', "get_rooms");
 	}
 
-	removeUserFromRoom(room: ChatRoom, flush: boolean = true)
-	{
+	newRoom(room: ChatRoom) {
+		this.roomChanged(room);
+	}
+
+	roomChanged(room: ChatRoom)	{
+		this.socket.emit('chat', {
+			'room_changed': room
+		});
+	}
+
+	removeUserFromRoom(room: ChatRoom, flush: boolean = true) {
 		if (!this.user || !room || !room.user) return room;
 		let newUsers: string[] = [];
 		for (const user of room.user)
@@ -118,8 +123,7 @@ export class ChatService {
 		// (Even without the router.navigate above).
 	}
 
-	putUserInRoom(room: ChatRoom, flush: boolean = true): ChatRoom
-	{
+	putUserInRoom(room: ChatRoom, flush: boolean = true): ChatRoom {
 		if (!this.user || !room || !room.user) return room;
 		let isIn: boolean = false;
 		for (const user of room.user)
@@ -136,13 +140,6 @@ export class ChatService {
 		return room;
 	}
 
-	roomChanged(room: ChatRoom)
-	{
-		this.socket.emit('chat', {
-			'room_changed': room
-		});
-	}
-
 	sendMessage(chatMessage: ChatMessage) {
 		//console.log("Chat emitting.");
 		this.socket.emit('chat', chatMessage);
@@ -157,12 +154,7 @@ export class ChatService {
 	}
 
 	getOrInitChatRoom(roomId: string|null): ChatRoom {
-		if (!roomId)
-		{
-			// Create new chatRoom, UNMOCK TODO
-			return CHAT_ROOM[0];
-			// then redirect to /chat/new-room-hash
-		}
+		if (!roomId) return {} as ChatRoom;
 		return this.roomById(roomId);
 	}
 
@@ -263,14 +255,6 @@ export class ChatService {
 			if (intraId == this.user.intraId)
 				return true;
 		return false;
-	}
-
-	getChatHistory(roomId?: string): ChatMessage[] {
-		return this.roomById(roomId).history;
-	}
-
-	clearHistory(roomId?: string) {
-		this.roomById(roomId).history = [];
 	}
 
 	getMessages() {

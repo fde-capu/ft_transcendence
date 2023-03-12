@@ -56,9 +56,6 @@ export class ChatInputComponent {
 		this.message = "";
 		this.textArea && this.textArea.focus();
 	}
-	clearChat(event: Event) {
-		this.chatService.clearHistory(this.room?.id);
-	}
 	blink(el: string)
 	{
 		const exist = document.getElementById(el);

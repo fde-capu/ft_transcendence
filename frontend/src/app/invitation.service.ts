@@ -3,6 +3,7 @@ import { InviteSocket } from './invite.socket';
 import { Invitation } from './invitation';
 import { Router } from '@angular/router';
 import { HelperFunctionsService } from './helper-functions.service';
+import { ChatService } from './chat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class InvitationService {
 		private readonly router: Router,
 		private readonly socket: InviteSocket,
 		private readonly fun: HelperFunctionsService,
+		private readonly chatService: ChatService,
   ) {
 		//console.log("Invite service constructor");
 
@@ -51,13 +53,22 @@ export class InvitationService {
 		return this.socket.fromEvent<any>('invitation');
 	}
 
-	inviteToPrivateChat(from: string = "", to: string = "") {
+	invitePrivate(from: string, to: string) {
+		let newRoomId = this.fun.randomWord(3);
+		let newRoomName = this.fun.funnyName();
+		this.chatService.newRoom({
+			id: newRoomId,
+			name: newRoomName,
+			user: [from, to],
+			admin: [from, to],
+			isPrivate: true
+		});
 		console.log("Inviting", from, to);
 		this.invite({
 			from: from,
 			to: to,
-			type: "PRIVATE CHAT: " + from + " | " + to,
-			route: "/chat",
+			type: "PRIVATE CHAT: " + newRoomName,
+			route: "/chat/" + newRoomId,
 			instantaneous: true,
 			isReply: false
 		});
