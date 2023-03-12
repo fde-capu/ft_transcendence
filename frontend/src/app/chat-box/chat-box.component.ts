@@ -74,10 +74,11 @@ export class ChatBoxComponent {
 		} else {
 			this.chatRoom = this.chatService.roomById(this.id);
 			//console.log("A3");
-			this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
+			if (this.chatService.hasNews())
+				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
 			this.imprint();
 			//console.log("A4");
-			await new Promise(resolve => setTimeout(resolve, 15000));
+			await new Promise(resolve => setTimeout(resolve, 100));
 			this.updateRoomRecursive();
 		}
 	}

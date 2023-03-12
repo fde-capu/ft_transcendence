@@ -20,9 +20,9 @@ export class ChatService {
 	private roomsUrl = 'http://localhost:3000/chatrooms/';
 	user: User | undefined = undefined;
 	static isConnected: boolean = false;
-
 	static allRooms: ChatRoom[] = [];
 	public readonly messageList = new BehaviorSubject<ChatMessage>({} as ChatMessage);
+	gotNews: boolean = false;
 
 	constructor(
 		private readonly socket: ChatSocket,
@@ -42,6 +42,7 @@ export class ChatService {
 	think(msg: any)
 	{
 		console.log("Thinking about: ", msg);
+		this.gotNews = true;
 		if (msg.payload.roomId) // This checks if is a simple message.
 		{
 			for (const room of ChatService.allRooms)
@@ -62,6 +63,15 @@ export class ChatService {
 		// and messages.
 				// for (const room of ChatService.allRooms)
 	}
+
+	hasNews(): boolean {
+		if (this.gotNews) {
+			this.gotNews = false;
+			return true;
+		}
+		return false;
+	}
+
 
 	// Promise<void> is needed \/
 	async subscribeOnce(): Promise<void> {
@@ -93,8 +103,11 @@ export class ChatService {
 		if (!this.user || !room || !room.user) return room;
 		let newUsers: string[] = [];
 		for (const user of room.user)
+		{
+			console.log("cheking", user, this.user.intraId);
 			if (user != this.user.intraId)
 				newUsers.push(user);
+		}
 		console.log("Removing user from room!");
 		room.user = newUsers;
 		if (flush)
