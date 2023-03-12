@@ -153,21 +153,23 @@ export class UserService {
 			);
 	}
 
-	intraIdsToUsers(ulist: string[]): Observable<User[]> {
+	async intraIdsToUsers(ulist: string[]): Promise<User[]> {
 		let out: User[] = [];
 		for (const one of ulist)
 		{
 			this.getUserById(one).subscribe(_=>{
 				if (_)
 				{
-					console.log("intraIdsToUsers:", _);
+					//console.log("intraIdsToUsers:", _);
 					out.push(_)
 				}
 			}, error => {
-				console.log("intraIdsToUsers Error");
+				//console.log("intraIdsToUsers Error");
 			});
 		}
-		return of(out);
+		// Gives time to return all at once, solving a render problem of slow one-by-one updates:
+		await new Promise(resolve => setTimeout(resolve, 3000));
+		return out;
 	}
 
 	getAvailableUsers(): Observable<User[]> {

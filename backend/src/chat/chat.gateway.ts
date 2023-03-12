@@ -48,7 +48,7 @@ export class ChatGateway implements OnGatewayConnection {
 		this.broadcastChatRooms(client);
 		return ;
 	}
-	// (else)
+	// (else) // Watta terrible switch case!
 	console.log("-> copy of payload == individual messages;");
 	this.server.emit('chat', {
 		author: client['subject'],

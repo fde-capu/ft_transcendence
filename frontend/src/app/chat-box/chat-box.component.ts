@@ -28,6 +28,9 @@ export class ChatBoxComponent {
 	done: Boolean = false;
 	user?: User;
 	id?: string|null;
+	outOfChatSubscribed: boolean = false;
+	iAmAdmin: boolean = false;
+	changeThisVarToRefreshObject: number = 1;
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -50,24 +53,54 @@ export class ChatBoxComponent {
 	async initChatRoom() {
 		//console.log("ChatBox Init");
 		this.id = this.route.snapshot.paramMap.get('roomId');
-		await this.chatService.subscribeOnce();
 		this.chatRoom = this.chatService.getOrInitChatRoom(this.id);
+		// ^ If it is a new room (roomId is null), the route will actualy
+		// be deceipt by the ChatService, by consequence the component will
+		// reload, and the param roomId will be present.
 		this.chatRoom = this.chatService.putUserInRoom(this.chatRoom);
-		this.userService.intraIdsToUsers(this.chatRoom.user).subscribe(_=>{
-			this.usersInChat = _;
-		});
-		if (this.chatService.isAdmin(this.id, this.user?.intraId))
-			this.getOutOfChatUsers();
+		this.updateRoomRecursive();
+		this.checkAdminRecursive();
 		this.done = true;
 		this.imprint();
 	}
 
-	getOutOfChatUsers(): void {
+	async updateRoomRecursive() {
+		if (!this.id) {
+			await new Promise(resolve => setTimeout(resolve, 500));
+			await this.updateRoomRecursive();
+		} else {
+			this.chatRoom = this.chatService.roomById(this.id);
+			this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
+			await new Promise(resolve => setTimeout(resolve, 5000));
+			await this.updateRoomRecursive();
+		}
+	}
+
+	async checkAdminRecursive() {
+		if (!this.user) return;
+		const iWasAdmin = this.iAmAdmin;
+		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
+		if (iWasAdmin != this.iAmAdmin)
+		{
+			console.log("Admin changed status to", this.iAmAdmin);
+			this.changeThisVarToRefreshObject++;
+			if (this.iAmAdmin)
+				this.getOutOfChatUsersRecursiveOnce();
+		}
+		await new Promise(resolve => setTimeout(resolve, 5000));
+		await this.checkAdminRecursive();
+	}
+
+	async getOutOfChatUsersRecursiveOnce() {
+		if (this.outOfChatSubscribed) return;
 		this.chatService.getOutOfChatUsers().subscribe(
 			outChat => {
 				this.usersOutOfChat = outChat;
+				this.outOfChatSubscribed = true;
 			}
 		);
+		await new Promise(resolve => setTimeout(resolve, 5000));
+		await this.getOutOfChatUsersRecursiveOnce();
 	}
 
 	emit() {
@@ -110,12 +143,12 @@ export class ChatBoxComponent {
 	}
 
 	isAdmin(intraId?: string): boolean {
-		if (!this.user) return false;
-		if (!intraId) intraId = this.user.intraId;
-		for (const admin of this.chatRoom.admin)
-			if (admin == intraId)
-				return true;
-		return false;
+		return this.chatService.isAdmin(this.id, intraId);
+	}
+
+	revokeAdmin() {
+		if (!this.user) return;
+		this.chatService.revokeAdmin(this.id, this.user?.intraId);
 	}
 
 	isMe(intraId: string): boolean {

@@ -91,7 +91,7 @@ export class ChatService {
 		this.socket.emit('chat', "get_rooms");
 	}
 
-	putUserInRoom(room: ChatRoom): ChatRoom
+	putUserInRoom(room: ChatRoom, flush: boolean = true): ChatRoom
 	{
 		if (!this.user || !room || !room.user) return room;
 		let isIn: boolean = false;
@@ -102,7 +102,8 @@ export class ChatService {
 		{
 			console.log("Putting user in the room!");
 			room.user.push(this.user.intraId);
-			this.roomChanged(room);
+			if (flush)
+				this.roomChanged(room);
 			return room;
 		}
 		return room;
@@ -133,6 +134,7 @@ export class ChatService {
 		{
 			// Create new chatRoom, UNMOCK TODO
 			return CHAT_ROOM[0];
+			// then redirect to /chat/new-room-hash
 		}
 		return this.roomById(roomId);
 	}
@@ -177,6 +179,19 @@ export class ChatService {
 			if (intraId == roomIntraId)
 				return true;
 		return false;
+	}
+
+	revokeAdmin(roomId: string|null|undefined, intraId: string) {
+		if (!roomId) return;
+		let theRoom = this.roomById(roomId);
+		let newAdmin: string[] = [];
+		for (const adminId of theRoom.admin)
+			if (adminId != intraId)
+				newAdmin.push(adminId);
+		if (!newAdmin.length)
+			newAdmin = theRoom.user;
+		theRoom.admin = newAdmin;
+		this.roomChanged(theRoom);
 	}
 
 	isAdmin(roomId?: string|null, intraId?: string): boolean

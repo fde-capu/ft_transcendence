@@ -1,5 +1,6 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
+<div *ngIf='changeThisVarToRefreshObject'>
 <div *ngIf="!done">Please hold on...</div>
 <div *ngIf="done" class="window-full">
 <app-window-title
@@ -10,7 +11,7 @@
 	<div class="window-close" (click)="onClose()"></div>
 	<div class="window-menu-burger" (click)="onMenu()"></div>
 <div class="window-options" *ngIf="optionsOn" (click)="imprint();">
-	<table class="options" *ngIf="isAdmin()">
+	<table class="options" *ngIf="iAmAdmin">
 		<tr>
 			<td>
 				<label>Room Name</label>
@@ -78,20 +79,21 @@
 			</a>
 		</td>
 		<td>
-			<span *ngIf="isAdmin() && !isAdmin(user.intraId) && !isMe(user.intraId);">
+			<span *ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId);">
 				<button style='margin-left:0;'>Kick</button>
 				<button>Ban</button>
 				<button>Mute</button>
 				<button>Promote</button>
 			</span>
 			<span *ngIf="isAdmin(user.intraId) && !isMe(user.intraId);"> <-[ Administrator ]</span>
+			<button *ngIf='iAmAdmin && isMe(user.intraId)' type="button" (click)="revokeAdmin()" style='margin-left:0;'>Revoke</button>
 			<span *ngIf="isMe(user.intraId);"> <-[ Yourself ]</span>
 		</td>
 		</tr>
 	</table>
 
-	<h3 *ngIf="isAdmin()">Users not in Chat</h3>
-	<table *ngIf="isAdmin()" class="list-of-users">
+	<h3 *ngIf="iAmAdmin">Users not in Chat</h3>
+	<table *ngIf="iAmAdmin" class="list-of-users">
 		<tr *ngFor="let user of usersOutOfChat">
 		<td>
 			<a routerLink="/profile/{{user.intraId}}">
@@ -107,4 +109,5 @@
 </div>
 <app-chat-text [room]='chatRoom'></app-chat-text>
 <app-chat-input [room]='chatRoom'></app-chat-input>
+</div>
 </div>

@@ -58,6 +58,7 @@ export class ChatRoomListComponent {
 				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
 				await new Promise(resolve => setTimeout(resolve, 342));
 				this.password.set(room.id, "");
+				this.fun.focus('pass' + room.id);
 				return ;
 			}
 			this.router.navigate(['/chat/' + room.id]);
