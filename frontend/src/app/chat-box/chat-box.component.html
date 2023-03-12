@@ -100,7 +100,8 @@
 			</a>
 		</td>
 		<td>
-			<button style="margin-left:0;" (click)='doInvitationToThisRoom(user)'>Invite</button>
+			<button *ngIf='!isBlocked(user) || iAmAdmin' style="margin-left:0;" (click)='doInvitationToThisRoom(user)'>Invite</button>
+			<span *ngIf='isBlocked(user)'><- Blocked</span>
 		</td>
 		</tr>
 	</table>

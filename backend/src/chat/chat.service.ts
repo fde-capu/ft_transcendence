@@ -127,7 +127,7 @@ static allRooms: ChatRoomDTO[] = [];
 					id: "fqw3e4rfw",
 					name: "fde-capu is blocked",
 					user: [],
-					admin: ['someone-away'],
+					admin: ['someone-away', 'tanana'],
 					blocked: ['fde-capu'],
 					muted: [],
 					password: "",

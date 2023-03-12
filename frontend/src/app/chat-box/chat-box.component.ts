@@ -150,6 +150,14 @@ export class ChatBoxComponent {
 		});
 	}
 
+	isBlocked(victim: User): boolean {
+		if (!this.chatRoom?.blocked?.length) return false;
+		for (const intraId of this.chatRoom.blocked)
+			if (intraId == victim.intraId)
+				return true;
+		return false;
+	}
+
 	onClose() {
 		if (this.optionsOn)
 		{
