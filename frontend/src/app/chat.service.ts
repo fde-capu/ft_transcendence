@@ -318,6 +318,31 @@ export class ChatService {
 		return this.socket.fromEvent<any>('chat');
 	}
 
+	TIG(tigged: string, tigRoom: ChatRoom)
+	{
+		for (const room of ChatService.allRooms)
+			if (room.id == tigRoom.id) {
+				if (!room.blocked)
+					room.blocked = [];
+				room.blocked.push(tigged);
+				this.roomChanged(room);
+				const self = this;
+				setTimeout(function(tigged: string, tigRoom: ChatRoom){
+					for (const room of ChatService.allRooms)
+						if (room.id == tigRoom.id)
+						{
+							let newBlocks: string[] = [];
+							if (!room.blocked || !room.blocked.length) return;
+							for (const user of room.blocked)
+								if (user != tigged)
+									newBlocks.push(user);
+							room.blocked = newBlocks;
+							self.roomChanged(room);
+						}
+				}, 30000, tigged, tigRoom);
+			}
+	}
+
 	mockChat(): void {
 		const self = this;
 		let n: ReturnType<typeof setTimeout>;

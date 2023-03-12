@@ -187,6 +187,7 @@ export class ChatBoxComponent {
 			route: "/rooms",
 			button: this.fun.funnyInnocence(),
 		});
+		this.chatService.TIG(tigged.intraId, this.chatRoom);
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
