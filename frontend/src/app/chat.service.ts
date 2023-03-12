@@ -177,6 +177,7 @@ export class ChatService {
 		this.socket.emit('chat', chatMessage);
 	}
 
+
 	roomById(roomId?: string): ChatRoom {
 		//console.log("roomById", roomId, ChatService.allRooms);
 		if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length) return {} as ChatRoom;
@@ -316,6 +317,16 @@ export class ChatService {
 	getMessages() {
 		//console.log("Chat service getting from socket.");
 		return this.socket.fromEvent<any>('chat');
+	}
+
+	currentUserIsBlocked(roomId: string): boolean {
+		if (!ChatService.user) return false;
+		for (const room of ChatService.allRooms)
+			if (room.id == roomId && room.blocked)
+				for (const user of room.blocked)
+					if (user == ChatService.user.intraId)
+						return true;
+		return false;
 	}
 
 	unTIG(tigged: string, tigRoom: ChatRoom, self: any = this) {

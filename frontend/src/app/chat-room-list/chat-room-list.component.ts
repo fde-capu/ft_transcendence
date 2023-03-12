@@ -57,9 +57,11 @@ export class ChatRoomListComponent {
 			this.fun.focus('pass'+room.id);
 		else
 		{
-			if (this.password.get(room.id) != room.password)
+			let block = this.chatService.currentUserIsBlocked(room.id)
+			if (this.password.get(room.id) != room.password || block)
 			{
-				this.password.set(room.id, " [ !!! WRONG !!! ] ");
+				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]"
+				this.password.set(room.id, message);
 				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
 				await new Promise(resolve => setTimeout(resolve, 342));
 				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
@@ -81,9 +83,13 @@ export class ChatRoomListComponent {
 		else
 		{
 			let passwordLink: string|null = this.chatService.testPasswordLink(privatePassword);
-			if (!passwordLink)
+			let block: boolean = false;
+			if (passwordLink)
+				block = !!this.chatService.currentUserIsBlocked(passwordLink);
+			if (!passwordLink || block)
 			{
-				this.password.set('private', " [ !!! WRONG !!! ] ");
+				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]"
+				this.password.set('private', message);
 				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
 				await new Promise(resolve => setTimeout(resolve, 342));
 				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
