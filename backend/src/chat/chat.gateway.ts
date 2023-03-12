@@ -31,11 +31,11 @@ export class ChatGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
-	console.log("Chat got", payload);
+	//console.log("Chat got", payload);
 	let data: any;
 	data = payload; // Magicaly converts unreadable JSON data into readable. (Payload is kindda string|Object, JSON.parse fails (!) and this works (!).)
+	//console.log("Chat data", data);
 
-	console.log("Chat data", data);
 	if (data.room_changed)
 	{
 		console.log("-> room_changed;");
@@ -49,7 +49,7 @@ export class ChatGateway implements OnGatewayConnection {
 		return ;
 	}
 	// (else) // Watta terrible switch case!
-	console.log("-> copy of payload == individual messages;");
+	console.log("-> copy of payload (individual messages);");
 	this.server.emit('chat', {
 		author: client['subject'],
 		payload: payload,

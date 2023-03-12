@@ -153,10 +153,6 @@ export class UserService {
 			);
 	}
 
-	intraIdsToUsersObservable(ulist: string[]): Observable<User[]> {
-		return from(this.intraIdsToUsers(ulist));
-	}
-
 	async intraIdsToUsers(ulist: string[]): Promise<User[]> {
 		if (!ulist || !ulist.length) return [];
 		let out: User[] = [];

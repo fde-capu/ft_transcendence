@@ -14,10 +14,13 @@ export class ChatTextComponent {
 	constructor (
 		public chatService: ChatService
 	) {}
-	ngOnChanges() {
+	ngOnInit() {
 		this.chatService.messageList.subscribe(_=>{
 			if (_ && _.roomId == this.room.id)
+			{
+				//console.log("chat-text in action");
 				this.chatMessage.push(_);
+			}
 		});
 	}
 }

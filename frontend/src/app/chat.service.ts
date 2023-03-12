@@ -19,8 +19,7 @@ import { HelperFunctionsService } from './helper-functions.service';
 export class ChatService {
 	private roomsUrl = 'http://localhost:3000/chatrooms/';
 	user: User | undefined = undefined;
-	static doneOnce: boolean = false;
-	static firstUpdate: boolean = false;
+	static isConnected: boolean = false;
 
 	static allRooms: ChatRoom[] = [];
 	public readonly messageList = new BehaviorSubject<ChatMessage>({} as ChatMessage);
@@ -55,7 +54,6 @@ export class ChatService {
 		if (msg.payload.update_rooms)
 		{
 			ChatService.allRooms = msg.payload.update_rooms;
-			ChatService.firstUpdate = true;
 		}
 		// Maybe add() to some history,
 		// maybe create new chat room
@@ -67,11 +65,10 @@ export class ChatService {
 
 	// Promise<void> is needed \/
 	async subscribeOnce(): Promise<void> {
-		if (!ChatService.doneOnce)
+			await new Promise(resolve => setTimeout(resolve, 500));
+		//console.log("static!", ChatService.isConnected);
+		if (!ChatService.isConnected)
 			this.socketSubscription();
-		if (ChatService.firstUpdate) return;
-		await new Promise(resolve => setTimeout(resolve, 1000));
-		if (!ChatService.firstUpdate) return await this.subscribeOnce();
 	}
 
 	socketSubscription() {
@@ -81,7 +78,7 @@ export class ChatService {
 					this.think(_);
 			},
 		);
-		ChatService.doneOnce = true;
+		ChatService.isConnected = true;
 		this.requestUpdate();
 	}
 
@@ -140,7 +137,7 @@ export class ChatService {
 	}
 
 	async getVisibleChatRooms(intraId: string|undefined): Promise<ChatRoom[]> {
-		if (!ChatService.firstUpdate)
+		if (!ChatService.isConnected)
 		{
 			await new Promise(resolve => setTimeout(resolve, 1000));
 			return await this.getVisibleChatRooms(intraId);
@@ -192,12 +189,8 @@ export class ChatService {
 	testPasswordUnique(myRoom: ChatRoom): boolean {
 		for (const room of ChatService.allRooms)
 		{
-			console.log("Comparing", room.password, myRoom.password);
 			if (room.id != myRoom.id && room.password == myRoom.password)
-			{
-				console.log("Returning false");
 				return false;
-			}
 		}
 		return true;
 	}
