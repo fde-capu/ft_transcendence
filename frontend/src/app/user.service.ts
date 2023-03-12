@@ -61,8 +61,16 @@ export class UserService {
 	}
 
 	getLoggedUser(): Observable<User> {
+		if (this.currentUser) {
+			//console.log("You know better, but I know", this.currentUser.name);
+			return of(this.currentUser);
+		}
+		//console.log("fUS getting logged user");
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
-			.pipe(catchError(err => of({} as User)));
+			.pipe(map(_=>{
+				return _;
+			}),
+			catchError(err => of({} as User)));
 	}
 
 	getUser(id: string): Observable<User | undefined> {

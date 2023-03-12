@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { ChatService } from './chat.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +9,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'PONG!'; // TODO: Take this away.
+  constructor(
+	public router: Router,
+	public chatService: ChatService,
+  ){};
   ngOnInit() {
 		setInterval(function(){
 			const skrollers = Array.from(document.getElementsByClassName('scroller'));
@@ -16,5 +22,15 @@ export class AppComponent {
 				k.scrollTo(0, 999999);
 			}
 		}, 1000);
+		this.router.events.subscribe(event=>{
+			if (event instanceof NavigationEnd)
+			{
+				//console.log("Router got change");
+				if (this.router.url.indexOf('/chat') != 0) {
+					//console.log("Getting out of all chats.");
+					this.chatService.getOutOfAnyChat();
+				}
+			}
+		});
   }
 }

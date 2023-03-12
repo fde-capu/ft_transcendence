@@ -17,7 +17,7 @@ import { USERS, CHATS, CHAT_ROOM } from './mocks';
 })
 export class ChatService {
 	private roomsUrl = 'http://localhost:3000/chatrooms/';
-	user: User | undefined = undefined;
+	static user?: User;
 	static isConnected: boolean = false;
 	static allRooms: ChatRoom[] = [];
 	public readonly messageList = new BehaviorSubject<ChatMessage>({} as ChatMessage);
@@ -31,10 +31,24 @@ export class ChatService {
 		public userService: UserService,
 	) {
 //		this.mockChat(); // Mock MUST be on backend
-		this.userService.getLoggedUser().subscribe(_=>{
-			this.user = _;
-		});
+		this.getUser();
 		this.subscribeOnce();
+	}
+
+	async getUser(): Promise<User> {
+		if (ChatService.user) return ChatService.user;
+		this.userService.getLoggedUser().subscribe(
+			backUser => { 
+				//console.log("ChatService got current user subscrition", backUser);
+				if (backUser)
+				{
+					//console.log("Defining ChatSerice.user", backUser);
+					ChatService.user = backUser;
+				}
+			}
+		)
+		await new Promise(resolve => setTimeout(resolve, 431));
+		return this.getUser();
 	}
 
 	think(msg: any)
@@ -52,6 +66,7 @@ export class ChatService {
 		}
 		if (msg.payload.update_rooms)
 		{
+			//console.log("Setting allRooms from to", ChatService.allRooms, msg.payload.update_rooms);
 			ChatService.allRooms = msg.payload.update_rooms;
 		}
 		// maybe create new chat room
@@ -103,6 +118,7 @@ export class ChatService {
 		this.socket.emit('chat', {
 			'room_changed': room
 		});
+		this.requestUpdate();
 	}
 
 	removeRoom(roomId: string) {
@@ -110,38 +126,45 @@ export class ChatService {
 		for (const room of ChatService.allRooms)
 			if (room.id != roomId)
 				out.push(room);
+		//console.log("Removind allRooms from to", ChatService.allRooms, out);
 		ChatService.allRooms = out;
 		this.socket.emit('chat', {
 			'room_gone': roomId
 		});
 	}
 
-	removeUserFromRoom(room: ChatRoom, flush: boolean = true) {
-		if (!this.user || !room || !room.user) return room;
-		let newUsers: string[] = [];
-		for (const user of room.user)
-		{
-			if (user != this.user.intraId)
-				newUsers.push(user);
+	logOutAllRooms(intraId: string) {
+		for (const i in ChatService.allRooms) {
+			let newRoom: ChatRoom = ChatService.allRooms[i];
+			let newUsers: string[] = [];
+			for (const user of newRoom.user)
+				if (user != intraId)
+					newUsers.push(user);
+			if (newUsers.length != newRoom.user.length) {
+				newRoom.user = newUsers;
+				this.roomChanged(newRoom);
+			}
 		}
-		room.user = newUsers;
-		if (flush)
-			this.roomChanged(room);
-		this.router.navigate(['/rooms']);
-		return ; // If not, TS7030, but what the heck!
-		// (Even without the router.navigate above).
 	}
 
-	putUserInRoom(room: ChatRoom, flush: boolean = true): ChatRoom {
-		if (!this.user || !room || !room.user) return room;
+	getOutOfAnyChat() {
+		//console.log("getting out of any chat");
+		this.userService.getLoggedUser().subscribe(_=>{
+			this.logOutAllRooms(_.intraId)
+		});
+	}
+
+	async putUserInRoom(room: ChatRoom, flush: boolean = true): Promise<ChatRoom> {
 		let isIn: boolean = false;
-		for (const user of room.user)
-			if (user == this.user.intraId)
+		for (const user of room?.user)
+			if (user == ChatService.user?.intraId)
 				isIn = true;
 		if (!isIn)
 		{
-			console.log("Putting user in the room!");
-			room.user.push(this.user.intraId);
+			if (ChatService.user) {
+				//console.log("Putting user in the room!");
+				room.user.push(ChatService.user.intraId);
+			}
 			if (flush)
 				this.roomChanged(room);
 			return room;
@@ -155,6 +178,7 @@ export class ChatService {
 	}
 
 	roomById(roomId?: string): ChatRoom {
+		//console.log("roomById", roomId, ChatService.allRooms);
 		if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length) return {} as ChatRoom;
 		for (const room of ChatService.allRooms)
 			if (room.id == roomId)
@@ -162,9 +186,18 @@ export class ChatService {
 		return {} as ChatRoom;
 	}
 
-	getOrInitChatRoom(roomId: string|null): ChatRoom {
-		if (!roomId) return {} as ChatRoom;
-		return this.roomById(roomId);
+	async getOrInitChatRoom(roomId: string|null): Promise<ChatRoom> {
+		if (!ChatService.allRooms.length) {
+			await new Promise(resolve => setTimeout(resolve, 1111));
+			return this.getOrInitChatRoom(roomId);
+		}
+		//console.log("Will init id", roomId);
+		if (!roomId) {
+			//console.log("getOrInit returning empty");
+			return {} as ChatRoom;
+		}
+		let theRoom = this.roomById(roomId);
+		return theRoom;
 	}
 
 	async getVisibleChatRooms(intraId: string|undefined): Promise<ChatRoom[]> {
@@ -193,6 +226,8 @@ export class ChatService {
 	{
 		if (!roomId || !intraId) return false;
 		const room = this.roomById(roomId);
+		if (!room.user.length)
+			return false;
 		for (const roomIntraId of room.user)
 			if (intraId == roomIntraId)
 				return true;
@@ -269,11 +304,11 @@ export class ChatService {
 	}
 
 	loggedUserIsMuted(roomId?: string): boolean {
-		if (!this.user || !roomId) return false;
+		if (!ChatService.user || !roomId) return false;
 		const room = this.roomById(roomId);
 		if (!room || !room.muted || !room.muted.length) return false;
 		for (const intraId of room.muted)
-			if (intraId == this.user.intraId)
+			if (intraId == ChatService.user.intraId)
 				return true;
 		return false;
 	}

@@ -4,7 +4,7 @@ import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
-import { ActivatedRoute, ParamMap, RoutesRecognized } from '@angular/router';
+import { ActivatedRoute, ParamMap, RoutesRecognized, Router } from '@angular/router';
 import { InvitationService } from '../invitation.service';
 
 @Component({
@@ -19,6 +19,7 @@ export class ChatBoxComponent {
 		public fun: HelperFunctionsService,
 		public route: ActivatedRoute,
 		public invitationService: InvitationService,
+		private readonly router: Router,
 	) {}
 	chatRoom: ChatRoom = {} as ChatRoom;
 	windowTitle = "CHAT";
@@ -54,12 +55,11 @@ export class ChatBoxComponent {
 	async initChatRoom() {
 		//console.log("ChatBox Init");
 		this.id = this.route.snapshot.paramMap.get('roomId');
-		this.chatRoom = this.chatService.getOrInitChatRoom(this.id);
+		this.chatRoom = await this.chatService.getOrInitChatRoom(this.id);
 		// ^ If it is a new room (roomId is null), the route will actualy
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
-		this.chatRoom = this.chatService.putUserInRoom(this.chatRoom);
-		await new Promise(resolve => setTimeout(resolve, 1000));
+		this.chatRoom = await this.chatService.putUserInRoom(this.chatRoom);
 		// ^ Some time to circulate the information.
 		this.updateRoomRecursive();
 		this.checkAdminRecursive()
@@ -197,7 +197,7 @@ export class ChatBoxComponent {
 		}
 		else
 		{
-			this.chatService.removeUserFromRoom(this.chatRoom);
+			this.router.navigate(['/rooms']);
 		}
 	}
 
