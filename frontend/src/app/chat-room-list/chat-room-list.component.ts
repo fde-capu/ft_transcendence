@@ -58,7 +58,7 @@ export class ChatRoomListComponent {
 		{
 			if (this.password.get(room.id) != room.password)
 			{
-				this.password.set(room.id, "  [ !!! WRONG !!! ]");
+				this.password.set(room.id, " [ !!! WRONG !!! ] ");
 				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
 				await new Promise(resolve => setTimeout(resolve, 342));
 				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
@@ -82,7 +82,7 @@ export class ChatRoomListComponent {
 			let passwordLink: string|null = this.chatService.testPasswordLink(privatePassword);
 			if (!passwordLink)
 			{
-				this.password.set('private', "  [ !!! WRONG !!! ]");
+				this.password.set('private', " [ !!! WRONG !!! ] ");
 				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
 				await new Promise(resolve => setTimeout(resolve, 342));
 				this.fun.blink('passprivate'); this.fun.blink('btnprivate');

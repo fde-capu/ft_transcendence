@@ -5,6 +5,7 @@ import { UserService } from '../user.service';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
 import { ActivatedRoute, ParamMap, RoutesRecognized } from '@angular/router';
+import { InvitationService } from '../invitation.service';
 
 @Component({
   selector: 'app-chat-box',
@@ -17,6 +18,7 @@ export class ChatBoxComponent {
 		public userService: UserService,
 		public fun: HelperFunctionsService,
 		public route: ActivatedRoute,
+		public invitationService: InvitationService,
 	) {}
 	chatRoom: ChatRoom = {} as ChatRoom;
 	windowTitle = "CHAT";
@@ -101,8 +103,6 @@ export class ChatBoxComponent {
 				this.usersOutOfChat = outChat;
 			}
 		);
-//		await new Promise(resolve => setTimeout(resolve, 4567));
-//		await this.getOutOfChatUsersRecursiveOnce();
 	}
 
 	emit() {
@@ -137,6 +137,17 @@ export class ChatBoxComponent {
 		+ (this.chatRoom.password ? "PROTECTED" : "")
 		await new Promise(resolve => setTimeout(resolve, 1300));
 		this.imprintRecursive();
+	}
+
+	doInvitationToThisRoom(toUser: User) {
+		if (!this.user) return;
+		this.invitationService.invite({
+			from: this.user.intraId,
+			to: toUser.intraId,
+			type: this.windowName,
+			route: '/chat/' + this.chatRoom.id,
+			isReply: false
+		});
 	}
 
 	onClose() {
