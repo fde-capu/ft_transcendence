@@ -102,16 +102,18 @@ export class ChatBoxComponent {
 
 	async getOutOfChatUsersRecursiveOnce() {
 		if (this.outOfChatSubscribed) return;
-		this.chatService.getOutOfChatUsers().subscribe(
+		this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(
 			outChat => {
+				console.log("Got out-of-chat users.", outChat);
 				this.usersOutOfChat = outChat;
-				this.outOfChatSubscribed = true;
+				this.outOfChatSubscribed = false;
 			}
 		);
+		this.outOfChatSubscribed = true;
 		//console.log("A8");
-		await new Promise(resolve => setTimeout(resolve, 5000));
+		await new Promise(resolve => setTimeout(resolve, 123));
 		//console.log("A9");
-		await this.getOutOfChatUsersRecursiveOnce();
+		this.getOutOfChatUsersRecursiveOnce();
 	}
 
 	emit() {

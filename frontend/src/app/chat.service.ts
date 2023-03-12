@@ -202,6 +202,7 @@ export class ChatService {
 		if (!roomId) return of([]);
 		let out: User[] = [];
 		this.userService.getOnlineUsers().subscribe(_=>{
+			console.log("got OnlineUsers", _);
 			for (const user of _)
 				if (!this.userIsInChat(roomId, user.intraId))
 					out.push(user);
