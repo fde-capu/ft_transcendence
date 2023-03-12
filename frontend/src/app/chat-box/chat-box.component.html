@@ -91,8 +91,8 @@
 		</tr>
 	</table>
 
-	<h3 *ngIf="iAmAdmin">Users not in Chat</h3>
-	<table *ngIf="iAmAdmin" class="list-of-users">
+	<h3 *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)">Users not in Chat</h3>
+	<table *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)" class="list-of-users">
 		<tr *ngFor="let user of usersOutOfChat">
 		<td>
 			<a routerLink="/profile/{{user.intraId}}">

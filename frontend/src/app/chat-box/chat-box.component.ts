@@ -88,14 +88,10 @@ export class ChatBoxComponent {
 		if (!this.user) return;
 		const iWasAdmin = this.iAmAdmin;
 		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
-		if (iWasAdmin != this.iAmAdmin)
-		{
-			//console.log("Admin changed status to", this.iAmAdmin);
-			if (this.iAmAdmin)
-				this.getOutOfChatUsersRecursiveOnce();
-		}
+		if (this.iAmAdmin || (!this.chatRoom.isPrivate && !this.chatRoom.password))
+			this.getOutOfChatUsersRecursiveOnce();
 		//console.log("A6");
-		await new Promise(resolve => setTimeout(resolve, 5000));
+		await new Promise(resolve => setTimeout(resolve, 4208));
 		//console.log("A7");
 		await this.checkAdminRecursive();
 	}
