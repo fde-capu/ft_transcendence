@@ -105,6 +105,17 @@ export class ChatService {
 		});
 	}
 
+	removeRoom(roomId: string) {
+		let out: ChatRoom[] = [];
+		for (const room of ChatService.allRooms)
+			if (room.id != roomId)
+				out.push(room);
+		ChatService.allRooms = out;
+		this.socket.emit('chat', {
+			'room_gone': roomId
+		});
+	}
+
 	removeUserFromRoom(room: ChatRoom, flush: boolean = true) {
 		if (!this.user || !room || !room.user) return room;
 		let newUsers: string[] = [];
@@ -230,8 +241,20 @@ export class ChatService {
 		for (const adminId of theRoom.admin)
 			if (adminId != intraId)
 				newAdmin.push(adminId);
-		if (!newAdmin.length)
-			newAdmin = theRoom.user;
+		if (!newAdmin.length) {
+			if (theRoom.user && theRoom.user.length <= 1) {
+				this.removeRoom(roomId);
+				this.router.navigate(['/rooms']);
+				return ;
+			}
+			// ^ If there is no one left to be administrator,
+			//   the room is destroyed.
+			for (const user of theRoom.user)
+				if (user != intraId)
+					newAdmin.push(user);
+			// ^ If the only admin revokes, everyone in the room
+			//   becomes admin!
+		}
 		theRoom.admin = newAdmin;
 		this.roomChanged(theRoom);
 	}

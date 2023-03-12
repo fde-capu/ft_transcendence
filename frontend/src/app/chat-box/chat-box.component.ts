@@ -181,11 +181,12 @@ export class ChatBoxComponent {
 
 	revokeAdmin() {
 		if (!this.user) return;
+		this.iAmAdmin = false; // Faster rendering.
 		this.chatService.revokeAdmin(this.id, this.user?.intraId);
 	}
 
 	isMe(intraId: string): boolean {
-		return this.user?.intraId === this.user;
+		return this.user?.intraId === intraId;
 	}
 }
 // TODO Open user profile when clicking name.

@@ -54,7 +54,7 @@ export class InvitationService {
 	}
 
 	invitePrivate(from: string, to: string) {
-		let newRoomId = this.fun.randomWord(3);
+		let newRoomId = this.fun.randomWord(128);
 		let newRoomName = this.fun.funnyName();
 		this.chatService.newRoom({
 			id: newRoomId,

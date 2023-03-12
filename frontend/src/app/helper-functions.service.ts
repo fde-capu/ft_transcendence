@@ -66,10 +66,10 @@ export class HelperFunctionsService {
 		let adjective: number = Math.random();
 		let directObject: number = Math.random();
 		
-		let nouns: string[] = ["House", "Lair", "Place", "Table", "Goal", "Tales", "Games"];
-		let verbs: string[] = ["of", "about", "in", "from", "above", "under", "from"];
-		let adjectives: string[] = ["the Red", "a Pongster", "an Incredible", "an Amazing", "some sort of"];
-		let directObjects: string[] = ["Dragon", "Champion", "Rachet", "Ball", "Comet", "Star"];
+		let nouns: string[] = ["House", "Lair", "Place", "Table", "Goal", "Tales", "Games", "Light", "Pixels", "Pong"];
+		let verbs: string[] = ["Of", "About", "In", "From", "Above", "Under", "Contrary to", "Demonstrating", "All Around", "Pong"];
+		let adjectives: string[] = ["the Red", "a Pongster", "an Incredible", "an Amazing", "Some Sort of", "an Ultra Fast", "the Chaos", "a Pong"];
+		let directObjects: string[] = ["Dragon", "Champion", "Rachet", "Ball", "Comet", "Star", "Speed", "Life", "Pong!"];
 
 		let selectedNoun = nouns[Math.floor(Math.random()*nouns.length)];
 		let selectedVerb = verbs[Math.floor(Math.random()*verbs.length)];

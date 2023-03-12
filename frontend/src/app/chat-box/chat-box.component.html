@@ -85,9 +85,8 @@
 				<button>Mute</button>
 				<button>Promote</button>
 			</span>
-			<span *ngIf="isAdmin(user.intraId) && !isMe(user.intraId);"> <-[ Administrator ]</span>
+			<span *ngIf="isAdmin(user.intraId)"> <-[ Administrator ]</span>
 			<button *ngIf='iAmAdmin && isMe(user.intraId)' type="button" (click)="revokeAdmin()" style='margin-left:0;'>Revoke</button>
-			<span *ngIf="isMe(user.intraId);"> <-[ Yourself ]</span>
 		</td>
 		</tr>
 	</table>

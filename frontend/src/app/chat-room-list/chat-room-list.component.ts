@@ -32,7 +32,7 @@ export class ChatRoomListComponent {
 		for (const room of this.visibleRooms)
 			if (this.chatService.isAdmin(room.id, this.user?.intraId) && room.password)
 				this.password.set(room.id, room.password);
-		await new Promise(resolve => setTimeout(resolve, 200));
+		await new Promise(resolve => setTimeout(resolve, 1241));
 		await this.getChatRooms();
 	}
 

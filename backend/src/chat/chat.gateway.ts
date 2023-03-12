@@ -36,9 +36,16 @@ export class ChatGateway implements OnGatewayConnection {
 	data = payload; // Magicaly converts unreadable JSON data into readable. (Payload is kindda string|Object, JSON.parse fails (!) and this works (!).)
 	//console.log("Chat data", data);
 
+	if (data.room_gone)
+	{
+		console.log("-> room_gone;", data.room_gone);
+		this.chatService.roomGone(data.room_gone);
+		this.broadcastChatRooms(client);
+		return ;
+	}
 	if (data.room_changed)
 	{
-		console.log("-> room_changed;");
+		console.log("-> room_changed;", data.room_changed.id);
 		this.chatService.roomChanged(data.room_changed);
 		this.broadcastChatRooms(client);
 		return ;

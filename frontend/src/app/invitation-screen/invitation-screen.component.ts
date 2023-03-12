@@ -134,6 +134,7 @@ export class InvitationScreenComponent {
 		);
 	 }
 
+
 	 mockAcceptInstantaneous() {
 		this.invitationService.invite(
 			{
