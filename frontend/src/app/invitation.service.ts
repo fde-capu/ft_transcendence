@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { InviteSocket } from './invite.socket';
 import { Invitation } from './invitation';
 import { Router } from '@angular/router';
+import { HelperFunctionsService } from './helper-functions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,10 @@ export class InvitationService {
   constructor(
 		private readonly router: Router,
 		private readonly socket: InviteSocket,
+		private readonly fun: HelperFunctionsService,
   ) {
 		//console.log("Invite service constructor");
+
 	}
 
 	invite(u_invite: Invitation) {
@@ -48,12 +51,13 @@ export class InvitationService {
 		return this.socket.fromEvent<any>('invitation');
 	}
 
-	inviteToChat(from: string = "", to: string = "") {
+	inviteToPrivateChat(from: string = "", to: string = "") {
+		console.log("Inviting", from, to);
 		this.invite({
 			from: from,
 			to: to,
 			type: "PRIVATE CHAT: " + from + " | " + to,
-			route: "/home",
+			route: "/chat",
 			instantaneous: true,
 			isReply: false
 		});

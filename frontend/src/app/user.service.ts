@@ -36,18 +36,22 @@ export class UserService {
 		private http: HttpClient,
 		private router: Router,
 	) {
-		this.getCurrentIntraId();
+		this.setCurrentIntraId();
 		this.router.routeReuseStrategy.shouldReuseRoute = () => {
 			return false;
 		};
 	}
 
-	getCurrentIntraId() {
+	setCurrentIntraId() {
 		this.authService.getAuthContext().subscribe(_=>{
 			this.currentIntraId=_?.sub;
 			if (this.currentIntraId)
 				this.getLoggedUser().subscribe(_=>{this.currentUser=_});
 		});
+	}
+
+	getQuickIntraId() {
+		return this.currentIntraId;
 	}
 
 	getUserById(intraId: string): Observable<User | undefined> {

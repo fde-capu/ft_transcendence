@@ -1,9 +1,13 @@
 <div class="overall" *ngIf='invite.length && receiveScreen'>
 	<h2>New Invitation</h2>
-	{{ invite[0].from }} wants you to join
+	<hr>
+	{{ invite[0].from }}
+	<hr>
+	<br>invites you to<br>
+	<hr>
+	{{ invite[0].type }}
+	<hr>
 	<br>
-	a {{ invite[0].type }}.
-	<br><br>
 	<button (click)='accept()'>
 		<span *ngIf='invite[0].buttonOk'> {{ invite[0].buttonOk }} </span>
 		<span *ngIf='!invite[0].buttonOk'>Accept</span>

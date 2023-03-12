@@ -1,7 +1,8 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<div *ngIf="!done">Please hold on...</div>
-<div *ngIf="done" class="window-full">
+<div *ngIf="!done && !this.chatRoom.id">Please hold on...</div>
+<div *ngIf="done && !this.chatRoom.id">Unexistent room!</div>
+<div *ngIf="done && this.chatRoom.id" class="window-full">
 <app-window-title
 	[windowName]="windowName"
 	[windowExtras]="windowExtras"
@@ -20,7 +21,7 @@
 				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
 				(change)="emit();"
-				/>
+				/> + this.fun.randomWord(128)
 			</td><td>
 				<button id="nameButton" type="button" (click)=
 					"fun.focusIf('nameButton', 'Change', 'name');"

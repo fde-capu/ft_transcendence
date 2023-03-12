@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
-import { InvitationService } from '../invitation.service';
 
 @Component({
 selector: 'app-avatar',
@@ -18,7 +17,6 @@ export class AvatarComponent {
 
 	constructor(
 		private userService: UserService,
-		private readonly invitationService: InvitationService,
 	){}
 
 	ngOnChanges() {
@@ -50,10 +48,6 @@ export class AvatarComponent {
 			this.loggedUser = _;
 			this.isMe = _.intraId == this.user?.intraId;
 		});
-	}
-
-	inviteToChat() {
-		this.invitationService.inviteToChat(this.loggedUser?.intraId, this.user?.intraId);
 	}
 
 	checkFriendship() {
