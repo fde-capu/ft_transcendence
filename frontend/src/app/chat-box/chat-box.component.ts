@@ -28,7 +28,6 @@ export class ChatBoxComponent {
 	done: Boolean = false;
 	user?: User;
 	id?: string|null;
-	outOfChatSubscribed: boolean = false;
 	iAmAdmin: boolean = false;
 	firstTime: boolean = true;
 
@@ -86,30 +85,24 @@ export class ChatBoxComponent {
 
 	async checkAdminRecursive() {
 		if (!this.user) return;
-		const iWasAdmin = this.iAmAdmin;
 		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
 		if (this.iAmAdmin || (!this.chatRoom.isPrivate && !this.chatRoom.password))
 			this.getOutOfChatUsersRecursiveOnce();
 		//console.log("A6");
-		await new Promise(resolve => setTimeout(resolve, 4208));
+		await new Promise(resolve => setTimeout(resolve, 9876));
 		//console.log("A7");
 		await this.checkAdminRecursive();
 	}
 
 	async getOutOfChatUsersRecursiveOnce() {
-		if (this.outOfChatSubscribed) return;
 		this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(
 			outChat => {
 				console.log("Got out-of-chat users.", outChat);
 				this.usersOutOfChat = outChat;
-				this.outOfChatSubscribed = false;
 			}
 		);
-		this.outOfChatSubscribed = true;
-		//console.log("A8");
-		await new Promise(resolve => setTimeout(resolve, 123));
-		//console.log("A9");
-		this.getOutOfChatUsersRecursiveOnce();
+//		await new Promise(resolve => setTimeout(resolve, 4567));
+//		await this.getOutOfChatUsersRecursiveOnce();
 	}
 
 	emit() {

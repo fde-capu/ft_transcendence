@@ -200,14 +200,19 @@ export class ChatService {
 
 	getOutOfChatUsers(roomId?: string): Observable<User[]> {
 		if (!roomId) return of([]);
-		let out: User[] = [];
-		this.userService.getOnlineUsers().subscribe(_=>{
-			console.log("got OnlineUsers", _);
-			for (const user of _)
-				if (!this.userIsInChat(roomId, user.intraId))
-					out.push(user);
-		});
-		return of(out);
+		let response =
+		this.userService.getOnlineUsers()
+		.pipe(map(
+			result => {
+				let out: User[] = [];
+				for (const user of result)
+					if (!this.userIsInChat(roomId, user.intraId))
+						out.push(user);
+				result = out;
+				return result;
+			}
+		))
+		return response;
 	}
 
 	testPasswordLink(myPassword: string): string|null {
