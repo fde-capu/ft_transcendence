@@ -429,13 +429,9 @@ td:nth-child(1) {
 /* blinker is kindda crappy */
 .blinker {
 	animation: text-blinker 0.618s step-end infinite;
-	height: 24px;
-	position: relative;
 }
 .slow-blinker {
 	animation: text-blinker 6.18s step-end infinite;
-	height: 24px;
-	position: relative;
 }
 .font-distorter {
 	animation: text-sizer 9.18s step-end infinite;

@@ -4,8 +4,7 @@
 	[(ngModel)]="message"
 	autofocus
   ></textarea>
-  <textarea *ngIf='muted' disabled class="chat-input-text" placeholder=" --- You have been MUTED! --- "
-  ></textarea>
+  <div *ngIf='muted' class="blinker" style='width:100%;text-align:center;'>[ YOU ARE MUTED! ]</div>
   <button
 	id="clear-button" 
 	type="button" (click)="clearChat($event);"
