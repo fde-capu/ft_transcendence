@@ -30,7 +30,6 @@ export class ChatBoxComponent {
 	id?: string|null;
 	outOfChatSubscribed: boolean = false;
 	iAmAdmin: boolean = false;
-	changeThisVarToRefreshObject: number = 1;
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -83,7 +82,6 @@ export class ChatBoxComponent {
 		if (iWasAdmin != this.iAmAdmin)
 		{
 			console.log("Admin changed status to", this.iAmAdmin);
-			this.changeThisVarToRefreshObject++;
 			if (this.iAmAdmin)
 				this.getOutOfChatUsersRecursiveOnce();
 		}
@@ -104,7 +102,27 @@ export class ChatBoxComponent {
 	}
 
 	emit() {
+		console.log("Noticed room changed.");
 		this.chatService.roomChanged(this.chatRoom);
+	}
+
+	async emitIfUnique() {
+		if (this.chatRoom.password
+		&& !this.chatService.testPasswordUnique(this.chatRoom))
+		{
+			let saveTypedPassword = this.chatRoom.password;
+			this.chatRoom.password = "INVALID, try again!"; // If its invalid because is repeated, then user knows some room has to have this password!...
+			this.fun.blink('password'); this.fun.blink('passwordButton');
+			await new Promise(resolve => setTimeout(resolve, 500));
+			this.fun.blink('password'); this.fun.blink('passwordButton');
+			await new Promise(resolve => setTimeout(resolve, 500));
+			this.fun.blink('password'); this.fun.blink('passwordButton');
+			await new Promise(resolve => setTimeout(resolve, 500));
+			this.chatRoom.password = saveTypedPassword;
+			this.fun.focus('password');
+			return ;
+		}
+		this.emit();
 	}
 
 	imprint() {

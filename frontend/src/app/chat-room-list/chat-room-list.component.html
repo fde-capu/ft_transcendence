@@ -24,7 +24,14 @@
 				/>
 			</span>
 		</span>
-		<span *ngIf="loggedUserIsBlocked(room)">&nbsp;<- YOU ARE BLOCKED!</span>
+		<span *ngIf="loggedUserIsBlocked(room)">&nbsp;<b><- YOU ARE BLOCKED!</b></span>
 	</td>
 </tr>
 </table>
+
+	<button id="btnprivate" (click)='submitEntranceInPrivateProtected()'>ENTER</button>
+	<input class='big-input' id="passprivate" [ngModel]="password.get('private')" (ngModelChange)="password.set('private', $event)"
+		(keydown.enter)="fun.blur('passprivate'); fun.blink('btnprivate'); submitEntranceInPrivateProtected();"
+		placeholder="<- Type a PRIVATE PROTECTED password."
+	/>
+

@@ -29,8 +29,6 @@ export class ChatService {
 	}
 
 	mockRooms() {
-		// These implementations are not complete by this commit.
-		// They are here as plan of execution.
 		ChatService.allRooms.push({
 					id: "gfertfgger",
 					name: "Some user in public",
@@ -83,19 +81,19 @@ export class ChatService {
 					admin: ['tanana'],
 					blocked: [],
 					muted: [],
-					password: "user42",
+					password: "user421",
 					isPrivate: false 
 		});
 		// ^ By logic, a password protected room is only usefull when
 		// its public. (Privates are only listed to admins.)
 		ChatService.allRooms.push({
 					id: "chatRoomId_5",
-					name: "fde-capu is blocked",
+					name: "private room with password",
 					user: [],
-					admin: [],
+					admin: ['someone'],
 					blocked: [],
 					muted: [],
-					password: "user42",
+					password: "user420",
 					isPrivate: true 
 		});
 		// ^ However, a protected private room can be accessed

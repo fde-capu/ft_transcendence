@@ -14,35 +14,40 @@ import { HelperFunctionsService } from '../helper-functions.service';
 export class ChatRoomListComponent {
 	user?: User;
 	visibleRooms: ChatRoom[] = [];
+	password = new Map<string, string>;
+
 	constructor(
 		private chatService: ChatService,
 		private userService: UserService,
 		public fun: HelperFunctionsService,
 		private router: Router,
 	) {};
-	password = new Map<string, string>;
+
 	ngOnInit(): void {
 		this.getCurrentUser();
 	}
+
 	async getChatRooms() {
 		this.visibleRooms = await this.chatService.getVisibleChatRooms(this.user?.intraId);
 		await new Promise(resolve => setTimeout(resolve, 3000)); // Is 3 seconds too lazy?
 		await this.getChatRooms();
 	}
+
 	getCurrentUser(): void {
 		this.userService.getLoggedUser()
 			.subscribe(user => {
 				this.user = user;
 				this.getChatRooms();
-			}
-			);
+			});
 	}
+
 	loggedUserIsBlocked(room: ChatRoom): Boolean {
 		for (const user of room.blocked)
 			if (user == this.user?.intraId)
 				return true;
 		return false;
 	}
+
 	async submitEntrance(room: ChatRoom) {
 		if (!this.password.get(room.id))
 			this.fun.focus('pass'+room.id);
@@ -64,4 +69,30 @@ export class ChatRoomListComponent {
 			this.router.navigate(['/chat/' + room.id]);
 		}
 	}
+
+
+	async submitEntranceInPrivateProtected() {
+		let privatePassword = this.password.get('private');
+		if (!privatePassword)
+			this.fun.focus('passprivate');
+		else
+		{
+			let privateProtectedLink: string|null = this.chatService.testPrivatePasswordGenLink(privatePassword);
+			if (!privateProtectedLink)
+			{
+				this.password.set('private', "  [ !!! WRONG !!! ]");
+				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.password.set('private', "");
+				this.fun.focus('passprivate');
+				return ;
+			}
+			this.router.navigate(['/chat/' + privateProtectedLink]);
+		}
+	}
+
 }

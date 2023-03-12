@@ -161,11 +161,6 @@ export class ChatService {
 		return out;
 	}
 
-	getInChatUsers(roomId?: string): string[] {
-		if (!roomId) return [];
-		return this.roomById(roomId).user;
-	}
-
 	userIsInChat(roomId?: string, intraId?: string): boolean
 	{
 		if (!roomId || !intraId) return false;
@@ -174,6 +169,37 @@ export class ChatService {
 			if (intraId == roomIntraId)
 				return true;
 		return false;
+	}
+
+	getOutOfChatUsers(roomId?: string): Observable<User[]> {
+		if (!roomId) return of([]);
+		let out: User[] = [];
+		this.userService.getOnlineUsers().subscribe(_=>{
+			for (const user of _)
+				if (!this.userIsInChat(roomId, user.intraId))
+					out.push(user);
+		});
+		return of(out);
+	}
+
+	testPrivatePasswordGenLink(myPassword: string): string|null {
+		for (const room of ChatService.allRooms)
+			if (room.isPrivate && room.password == myPassword)
+				return room.id;
+		return null;
+	}
+
+	testPasswordUnique(myRoom: ChatRoom): boolean {
+		for (const room of ChatService.allRooms)
+		{
+			console.log("Comparing", room.password, myRoom.password);
+			if (room.id != myRoom.id && room.password == myRoom.password)
+			{
+				console.log("Returning false");
+				return false;
+			}
+		}
+		return true;
 	}
 
 	revokeAdmin(roomId: string|null|undefined, intraId: string) {
@@ -197,17 +223,6 @@ export class ChatService {
 			if (intraId == roomIntraId)
 				return true;
 		return false;
-	}
-
-	getOutOfChatUsers(roomId?: string): Observable<User[]> {
-		if (!roomId) return of([]);
-		let out: User[] = [];
-		this.userService.getOnlineUsers().subscribe(_=>{
-			for (const user of _)
-				if (!this.userIsInChat(roomId, user.intraId))
-					out.push(user);
-		});
-		return of(out);
 	}
 
 	loggedUserIsMuted(roomId?: string): boolean {
