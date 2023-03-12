@@ -81,7 +81,7 @@
 		<td>
 			<span *ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId);">
 				<button style='margin-left:0;' (click)='kickThem(user)'>Kick</button>
-				<button>Tig</button>
+				<button (click)='tigThem(user)'>Tig</button>
 				<button>Mute</button>
 				<button>Promote</button>
 			</span>

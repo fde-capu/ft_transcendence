@@ -169,8 +169,23 @@ export class ChatBoxComponent {
 			to: kicked.intraId,
 			note: "You have been kicked.",
 			route: "/rooms",
-			button: "Really?",
-			isReply: true,
+			button: this.fun.funnyInnocence(),
+		});
+		this.chatService.roomChanged(this.chatRoom);
+	}
+
+	tigThem(tigged: User) {
+		let innocents: string[] = [];
+		for (const suspect of this.chatRoom.user)
+			if (suspect != tigged.intraId)
+				innocents.push(suspect);
+		this.chatRoom.user = innocents;
+		this.invitationService.notify({
+			to: tigged.intraId,
+			note: "TIG!",
+			type: "One minute banned!",
+			route: "/rooms",
+			button: this.fun.funnyInnocence(),
 		});
 		this.chatService.roomChanged(this.chatRoom);
 	}

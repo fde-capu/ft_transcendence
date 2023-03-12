@@ -57,6 +57,8 @@ Invitation to:<br>
 <div class="overall" *ngIf='notificationScreen'>
 <span class='blinker'>{{ invite[0].note }}</span>
 <hr>
+<span *ngIf='invite[0].type'>{{ invite[0].type }}</span>
+<hr *ngIf='invite[0].type'>
 <button (click)='clickGo = true; finalOk();'>{{ invite[0].button }}</button>
 </div>
 

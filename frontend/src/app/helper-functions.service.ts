@@ -78,4 +78,8 @@ export class HelperFunctionsService {
 
 		return selectedNoun + " " + selectedVerb + " " + selectedAdjective + " " + selectedObject
 	}
+	funnyInnocence(): string {
+		let phrases: string[] = [ "Who? Me?", "What'd I do?", "Really?", "I <i>didn't</i>!", "Seriously?", "Eita!"];
+		return phrases[Math.floor(Math.random()*phrases.length)];
+	}
 }
