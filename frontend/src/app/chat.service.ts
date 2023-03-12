@@ -88,6 +88,22 @@ export class ChatService {
 		this.socket.emit('chat', "get_rooms");
 	}
 
+	removeUserFromRoom(room: ChatRoom, flush: boolean = true)
+	{
+		if (!this.user || !room || !room.user) return room;
+		let newUsers: string[] = [];
+		for (const user of room.user)
+			if (user != this.user.intraId)
+				newUsers.push(user);
+		console.log("Removing user from room!");
+		room.user = newUsers;
+		if (flush)
+			this.roomChanged(room);
+		this.router.navigate(['/rooms']);
+		return ; // If not, TS7030, but what the heck!
+		// (Even without the router.navigate above).
+	}
+
 	putUserInRoom(room: ChatRoom, flush: boolean = true): ChatRoom
 	{
 		if (!this.user || !room || !room.user) return room;

@@ -150,10 +150,10 @@ export class ChatBoxComponent {
 		{
 			return this.onMenu();
 		}
-		alert (`
-			// TODO: User exits Chat Room, the window closes.
-			// If they are the only admin, who takes administration?
-		`);
+		else
+		{
+			this.chatService.removeUserFromRoom(this.chatRoom);
+		}
 	}
 
 	onMenu() {
