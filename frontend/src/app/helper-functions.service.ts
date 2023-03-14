@@ -8,6 +8,14 @@ export class HelperFunctionsService {
 
   constructor() { }
 
+	isStringInArray(str: string, array string[] = []): boolean {
+		if (!array) return false;
+		for (const user of array)
+			if (user == str)
+				return true;
+		return false;
+	}
+
 	switchIf(el: string, a: string, b: string) {
 		const exist = document.getElementById(el);
 		if (!exist) return ;
@@ -66,10 +74,22 @@ export class HelperFunctionsService {
 		let adjective: number = Math.random();
 		let directObject: number = Math.random();
 		
-		let nouns: string[] = ["House", "Lair", "Place", "Table", "The Goal", "Tales", "Games", "Light", "Pixels", "Pong", "Static"];
-		let verbs: string[] = ["Of", "About", "In", "From", "Above", "Under", "Contrary To", "Demonstrating", "All Around", "Pongs", "Spiraling"];
-		let adjectives: string[] = ["The Black", "The Pongster", "The Incredible", "The Amazing", "Some Sort of", "Ultra Fast", "Chaos", "A Pong", "The Dark", "Around"];
-		let directObjects: string[] = ["Dragon", "Champion", "Rachet", "Ball", "Comet", "Star", "Speed", "Life", "Pong!", "Void", "And Around"];
+		let nouns: string[] = ["House", "Lair", "Universe", "Table", "The Goal",
+			"Tales", "Games", "Light", "Pixels", "Pong", "Static", "Congrats",
+			"Talk"
+			];
+		let verbs: string[] = ["Of", "About", "In", "From", "Above", "Under",
+			"Contrary To", "Demonstrating", "All Around", "Pongs", "Spiraling",
+			"Striking", "On",
+			];
+		let adjectives: string[] = ["The Black", "The Pongster",
+			"The Incredible", "The Amazing", "Some Sort Of", "Ultra Fast",
+			"Chaos", "Pong", "Wholesome", "Around", "Enlightened", "Alien", "Master",
+			];
+		let directObjects: string[] = ["Dragon", "Champion", "Ratchet", "Ball",
+			"Comet", "Star", "Speed", "Life", "Pong!", "Void", "- And Around",
+			"AIs", "Energy",
+			];
 
 		let selectedNoun = nouns[Math.floor(Math.random()*nouns.length)];
 		let selectedVerb = verbs[Math.floor(Math.random()*verbs.length)];

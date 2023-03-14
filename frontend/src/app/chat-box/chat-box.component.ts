@@ -154,11 +154,11 @@ export class ChatBoxComponent {
 	}
 
 	isBlocked(victim: User): boolean {
-		if (!this.chatRoom?.blocked?.length) return false;
-		for (const intraId of this.chatRoom.blocked)
-			if (intraId == victim.intraId)
-				return true;
-		return false;
+		return this.chatService.isUserBlocked(victim.intraId, this.chatRoom);
+	}
+
+	isMuted(victim: User): boolean {
+		return this.chatService.isUserMuted(victim.intraId, this.chatRoom);
 	}
 
 	kickThem(kicked: User) {
@@ -233,3 +233,4 @@ export class ChatBoxComponent {
 	}
 }
 // TODO Open user profile when clicking name.
+

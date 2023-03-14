@@ -44,15 +44,14 @@ export class ChatRoomListComponent {
 			});
 	}
 
-	loggedUserIsBlocked(room: ChatRoom): Boolean {
-		if (!room.blocked) return false;
-		for (const user of room.blocked)
-			if (user == this.user?.intraId)
-				return true;
-		return false;
+	isLoggedUserBlocked(room: ChatRoom): boolean {
+		return this.chatService.isLoggedUserBlocked(room);
 	}
 
-	async submitEntrance(room: ChatRoom) {
+	loggedUserIsMuted(room: ChatRoom): boolean {
+		return fun.isStringInArray(room);
+
+	async submitEntrance(room: ChatRoom): Promise<void> {
 		if (!this.password.get(room.id))
 			this.fun.focus('pass'+room.id);
 		else
@@ -60,13 +59,16 @@ export class ChatRoomListComponent {
 			let block = this.chatService.currentUserIsBlocked(room.id)
 			if (this.password.get(room.id) != room.password || block)
 			{
-				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]"
+				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]";
 				this.password.set(room.id, message);
-				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
+				this.fun.blink('pass' + room.id);
+				this.fun.blink('btn' + room.id);
 				await new Promise(resolve => setTimeout(resolve, 342));
-				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
+				this.fun.blink('pass' + room.id);
+				this.fun.blink('btn' + room.id);
 				await new Promise(resolve => setTimeout(resolve, 342));
-				this.fun.blink('pass' + room.id); this.fun.blink('btn' + room.id);
+				this.fun.blink('pass' + room.id);
+				this.fun.blink('btn' + room.id);
 				await new Promise(resolve => setTimeout(resolve, 342));
 				this.password.set(room.id, "");
 				this.fun.focus('pass' + room.id);
@@ -88,13 +90,16 @@ export class ChatRoomListComponent {
 				block = !!this.chatService.currentUserIsBlocked(passwordLink);
 			if (!passwordLink || block)
 			{
-				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]"
+				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]";
 				this.password.set('private', message);
-				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
+				this.fun.blink('passprivate');
+				this.fun.blink('btnprivate');
 				await new Promise(resolve => setTimeout(resolve, 342));
-				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
+				this.fun.blink('passprivate');
+				this.fun.blink('btnprivate');
 				await new Promise(resolve => setTimeout(resolve, 342));
-				this.fun.blink('passprivate'); this.fun.blink('btnprivate');
+				this.fun.blink('passprivate');
+				this.fun.blink('btnprivate');
 				await new Promise(resolve => setTimeout(resolve, 342));
 				this.password.set('private', "");
 				this.fun.focus('passprivate');
@@ -103,5 +108,4 @@ export class ChatRoomListComponent {
 			this.router.navigate(['/chat/' + passwordLink]);
 		}
 	}
-
 }

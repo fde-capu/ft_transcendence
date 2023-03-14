@@ -28,7 +28,8 @@ export class ChatInputComponent {
 	}
 	ngOnChanges() {
 		this.getUser();
-		this.muted = this.chatService.loggedUserIsMuted(this.room?.id);
+		if (this.room)
+			this.muted = this.chatService.isLoggedUserMuted(this.room);
 	}
 	getUser(): void {
 		this.userService.getLoggedUser()
@@ -66,5 +67,4 @@ export class ChatInputComponent {
 				exist.classList.remove('inverted');
 				}, 200);
 	}
-
 }
