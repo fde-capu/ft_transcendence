@@ -60,7 +60,7 @@ export class ChatService {
 					// information (irrelevant to user, even). This way,
 					// they would not actually known by ChatService.allRooms.
 					// However, this does not mean that the information
-					// has not arrived here.
+					// has not arrived here at frontend.
 					if (msg.payload.to == ChatService.user || msg.payload.from == ChatService.user)
 						this.messageList.next(msg.payload);
 				}
@@ -94,7 +94,7 @@ export class ChatService {
 		//console.log("ChatService subscribing to socket.");
 		this.getMessages().subscribe(
 			_ => {
-					this.think(_);
+				this.think(_);
 			},
 		);
 		ChatService.isConnected = true;
@@ -151,7 +151,7 @@ export class ChatService {
 	}
 
 	async putUserInRoom(room: ChatRoom, flush: boolean = true): Promise<ChatRoom> {
-		if (!room || !room.user || !room.user.length) return {} as ChatRoom;
+		if (!room) return {} as ChatRoom;
 		let isIn: boolean = false;
 		for (const user of room?.user)
 			if (user == ChatService.user?.intraId)
@@ -159,7 +159,7 @@ export class ChatService {
 		if (!isIn)
 		{
 			if (ChatService.user) {
-				//console.log("Putting user in the room!");
+				//console.log("Putting user in the room!", ChatService.user.intraId);
 				room.user.push(ChatService.user.intraId);
 			}
 			if (flush)
@@ -184,24 +184,10 @@ export class ChatService {
 		return {} as ChatRoom;
 	}
 
-	async getOrInitChatRoom(roomId: string|null): Promise<ChatRoom> {
-		if (!ChatService.allRooms.length) {
-			await new Promise(resolve => setTimeout(resolve, 1111));
-			return this.getOrInitChatRoom(roomId);
-		}
-		//console.log("Will init id", roomId);
-		if (!roomId) {
-			//console.log("getOrInit returning empty");
-			return {} as ChatRoom;
-		}
-		let theRoom = this.roomById(roomId);
-		return theRoom;
-	}
-
 	async getVisibleChatRooms(intraId: string|undefined): Promise<ChatRoom[]> {
 		if (!ChatService.isConnected)
 		{
-			await new Promise(resolve => setTimeout(resolve, 250));
+			await new Promise(resolve => setTimeout(resolve, 253));
 			return this.getVisibleChatRooms(intraId);
 		}
 		let out: ChatRoom[] = [];

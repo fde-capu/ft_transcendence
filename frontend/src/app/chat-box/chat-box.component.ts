@@ -55,7 +55,11 @@ export class ChatBoxComponent {
 	async initChatRoom() {
 		//console.log("ChatBox Init");
 		this.id = this.route.snapshot.paramMap.get('roomId');
-		this.chatRoom = await this.chatService.getOrInitChatRoom(this.id);
+		if (this.id) {
+			this.chatRoom = this.chatService.roomById(this.id);
+			if (!this.chatRoom.id)
+				this.router.navigate(['/rooms']);
+		}
 		// ^ If it is a new room (roomId is null), the route will actualy
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
