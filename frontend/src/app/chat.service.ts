@@ -61,7 +61,9 @@ export class ChatService {
 					// they would not actually known by ChatService.allRooms.
 					// However, this does not mean that the information
 					// has not arrived here at frontend.
-					if (msg.payload.to == ChatService.user || msg.payload.from == ChatService.user)
+					if (this.userIsInChat(room.id, ChatService.user?.intraId)
+					||  msg.payload.to == ChatService.user
+					||  msg.payload.from == ChatService.user)
 						this.messageList.next(msg.payload);
 				}
 		}

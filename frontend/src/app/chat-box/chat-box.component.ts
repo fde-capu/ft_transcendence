@@ -66,7 +66,6 @@ export class ChatBoxComponent {
 			if (chatRoomTest)
 				this.chatRoom = chatRoomTest;
 		}
-
 		// ^ If it is a new room (roomId is null), the route will actualy
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
