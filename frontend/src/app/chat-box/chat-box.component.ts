@@ -153,7 +153,6 @@ export class ChatBoxComponent {
 		});
 	}
 
-
 	isBlocked(victim: User): boolean {
 		if (!this.chatRoom.blocked) return false;
 		for (const user of this.chatRoom.blocked)
@@ -168,6 +167,11 @@ export class ChatBoxComponent {
 			if (user == victim.intraId)
 				return true;
 		return false;
+	}
+
+	promoteThem(promoted: User) {
+		this.chatRoom.admin.push(promoted.intraId);
+		this.chatService.roomChanged(this.chatRoom);
 	}
 
 	kickThem(kicked: User) {

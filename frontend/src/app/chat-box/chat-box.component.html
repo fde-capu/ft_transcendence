@@ -88,7 +88,7 @@
 				<button *ngIf="isBlocked(user)" disabled>BLOCKED</button>
 				<button *ngIf='!isMuted(user)' (click)='muteThem(user)'>Mute</button>
 				<button *ngIf='isMuted(user)' disabled>MUTED</button>
-				<button>Promote</button>
+				<button (click)='promoteThem(user)'>Promote</button>
 			</span>
 			<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
 			<button *ngIf='iAmAdmin && isMe(user.intraId)' type="button" (click)="revokeAdmin()" style='margin-left:0;'>Revoke</button>
