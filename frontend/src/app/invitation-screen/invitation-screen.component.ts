@@ -25,13 +25,11 @@ export class InvitationScreenComponent {
 	){}
 
 	ngOnInit() {
-		//console.log("invite init");
 		this.myState = InvitationScreenComponent.state[0];
 		if (InvitationScreenComponent.connected) return;
 		InvitationScreenComponent.connected = true;
 		this.invitationService.inviteState.subscribe(_=>{
 			if (_) {
-				console.log("Inv component got news!", InvitationScreenComponent.state.length, _);
 				if(	_.receiveScreen
 				||	_.declineScreen
 				||	_.acceptScreen
@@ -45,9 +43,7 @@ export class InvitationScreenComponent {
 						notificationScreen : _.notificationScreen,
 						invitation : _.invitation,
 					});
-				console.log("This is all:", InvitationScreenComponent.state.length, InvitationScreenComponent.state);
 				this.myState = InvitationScreenComponent.state[0];
-				console.log("My state A", this.myState);
 				this.router.navigate([this.router.url]);
 			}
 		});
@@ -56,20 +52,16 @@ export class InvitationScreenComponent {
 	flip(): InviteState|undefined {
 		let old = InvitationScreenComponent.state.shift();
 		this.myState = InvitationScreenComponent.state[0];
-		console.log("My state B", this.myState);
-		console.log("flip returning", old);
 		return old;
 	}
 
 	accept() {
-//		console.log("Accept");
 		let old = this.flip();
 		if (old && old.invitation)
 			this.invitationService.replyTrue(old.invitation);
 	}
 
 	decline() {
-		console.log("Decline");
 		let old = this.flip();
 		if (old && old.invitation)
 			this.invitationService.replyFalse(old.invitation);

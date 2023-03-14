@@ -27,7 +27,6 @@ export class InvitationService {
 		private readonly chatService: ChatService,
 		private readonly userService: UserService,
   ) {
-		console.log("Invite service constructor");
 		this.getUser();
 		this.doSubscription();
 	}
@@ -37,10 +36,8 @@ export class InvitationService {
 	}
 
 	doSubscription() {
-		console.log("Invitation subscribing.");
 		this.getInvitation().subscribe(
 			_ => {
-				//console.log("Invitation subscription got", _);
 				if (_.payload.to == this.user?.intraId || _.payload.from == this.user?.intraId) 
 				{
 					this.sentScreen =
@@ -91,7 +88,6 @@ export class InvitationService {
 	}
 
 	invite(u_invite: Invitation) {
-		console.log("Sendind invitation:", u_invite);
 		this.socket.emit('invitation', u_invite);
 	}
 
@@ -105,7 +101,6 @@ export class InvitationService {
 
 	sendReply(invite: Invitation) {
 		invite.isReply = true;
-		console.log("Sendind reply:", invite);
 		this.socket.emit('invitation', invite);
 		if (invite.route && invite.answer)
 			this.go(invite.route);
@@ -124,7 +119,6 @@ export class InvitationService {
 	}
 
 	getInvitation() {
-		console.log("Invite service getting from socket.");
 		return this.socket.fromEvent<any>('invitation');
 	}
 
@@ -138,7 +132,6 @@ export class InvitationService {
 			admin: [from, to],
 			isPrivate: true
 		});
-		console.log("Inviting", from, to);
 		this.invite({
 			from: from,
 			to: to,
