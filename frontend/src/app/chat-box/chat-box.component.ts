@@ -71,6 +71,10 @@ export class ChatBoxComponent {
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
 		this.chatRoom = await this.chatService.putUserInRoom(this.chatRoom);
+		if (this.chatRoom.user && this.chatRoom.user.length == 1
+			&& this.chatRoom.admin && this.chatRoom.admin.length == 1
+			&& this.chatRoom.user[0] == this.chatRoom.admin[0])
+			this.optionsOn = true;
 		this.updateRoomRecursive();
 		this.checkAdminRecursive()
 		this.getOutOfChatUsersRecursiveOnce();
