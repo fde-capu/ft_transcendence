@@ -14,7 +14,7 @@
 		</b>
 	</td>
 	<td>
-		<span *ngIf="!isLoggedUserBlocked(room)">
+		<span *ngIf="!isCurrentUserBlocked(room)">
 			<button *ngIf="!room.password" routerLink="/chat/{{room.id}}">ENTER</button>
 			<span *ngIf="room.password">
 				<button id="btn{{room.id}}" (click)='submitEntrance(room)'>ENTER</button>
@@ -24,8 +24,8 @@
 				/>
 			</span>
 		</span>
-		<span *ngIf="isLoggedUserBlocked(room)">&nbsp;<b><- YOU ARE BLOCKED!</b></span>
-		<span *ngIf="isLoggedUserMuted(room)">&nbsp;<b><- YOU ARE MUTED!</b></span>
+		<span *ngIf="isCurrentUserBlocked(room)">&nbsp;<b><- YOU ARE BLOCKED!</b></span>
+		<span *ngIf="isCurrentUserMuted(room)">&nbsp;<b><- YOU ARE MUTED!</b></span>
 	</td>
 </tr>
 </table>

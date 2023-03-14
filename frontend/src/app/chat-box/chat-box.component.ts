@@ -193,6 +193,17 @@ export class ChatBoxComponent {
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
+	muteThem(muted: User) {
+		this.invitationService.notify({
+			to: muted.intraId,
+			note: "SHUT!",
+			type: "One minute muted!",
+			button: this.fun.funnyInnocence(),
+		});
+		this.chatService.muteUser(muted.intraId, this.chatRoom);
+		this.chatService.roomChanged(this.chatRoom);
+	}
+
 	onClose() {
 		if (this.optionsOn)
 		{

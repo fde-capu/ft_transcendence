@@ -8,8 +8,8 @@ export class HelperFunctionsService {
 
   constructor() { }
 
-	isStringInArray(str: string, array string[] = []): boolean {
-		if (!array) return false;
+	isStringInArray(str: string, array: string[] = []): boolean {
+		if (!array || !array.length) return false;
 		for (const user of array)
 			if (user == str)
 				return true;

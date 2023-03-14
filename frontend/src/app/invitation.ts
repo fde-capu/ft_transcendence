@@ -4,7 +4,7 @@ export interface Invitation {
 	type?: string;
 	buttonOk?: string;
 	buttonCancel?: string;
-	route: string;
+	route?: string;
 	answer?: boolean;
 	isReply?: boolean;
 	instantaneous?: boolean;

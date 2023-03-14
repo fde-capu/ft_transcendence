@@ -32,12 +32,11 @@ export class InvitationService {
 		this.router.navigate([path]);
 	}
 
-
 	sendReply(invite: Invitation) {
 		invite.isReply = true;
 		//console.log("Sendind reply:", invite);
 		this.socket.emit('invitation', invite);
-		if (invite.answer)
+		if (invite.route && invite.answer)
 			this.go(invite.route);
 	}
 

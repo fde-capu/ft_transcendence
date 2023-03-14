@@ -44,19 +44,20 @@ export class ChatRoomListComponent {
 			});
 	}
 
-	isLoggedUserBlocked(room: ChatRoom): boolean {
-		return this.chatService.isLoggedUserBlocked(room);
+	isCurrentUserBlocked(room: ChatRoom): boolean {
+		return this.chatService.isCurrentUserBlocked(room);
 	}
 
-	loggedUserIsMuted(room: ChatRoom): boolean {
-		return fun.isStringInArray(room);
+	isCurrentUserMuted(room: ChatRoom): boolean {
+		return this.chatService.isCurrentUserMuted(room);
+	}
 
 	async submitEntrance(room: ChatRoom): Promise<void> {
 		if (!this.password.get(room.id))
 			this.fun.focus('pass'+room.id);
 		else
 		{
-			let block = this.chatService.currentUserIsBlocked(room.id)
+			let block = this.chatService.isCurrentUserBlocked(room)
 			if (this.password.get(room.id) != room.password || block)
 			{
 				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]";
@@ -87,7 +88,7 @@ export class ChatRoomListComponent {
 			let passwordLink: string|null = this.chatService.testPasswordLink(privatePassword);
 			let block: boolean = false;
 			if (passwordLink)
-				block = !!this.chatService.currentUserIsBlocked(passwordLink);
+				block = !!this.chatService.isCurrentUserBlockedByRoomId(passwordLink);
 			if (!passwordLink || block)
 			{
 				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]";

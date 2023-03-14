@@ -84,7 +84,7 @@ export class UserService {
 
     if (resp === null)
 	{
-		console.log("bus Could not find", u_intraId, ", throwing error.");
+		//console.log("bus Could not find", u_intraId, ", throwing error.");
 		return ;
 	}
 	return this.singleUserDto(resp);
@@ -174,3 +174,4 @@ export class UserService {
 		return out;
 	}
 }
+

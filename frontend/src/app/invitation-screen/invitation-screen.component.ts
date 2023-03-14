@@ -109,7 +109,7 @@ export class InvitationScreenComponent {
 		this.acceptScreen = false;
 		this.sentScreen = false;
 		this.notificationScreen = false;
-		if (go)
+		if (go && this.lastInvite.route)
 			this.invitationService.go(this.lastInvite.route);
 	}
 

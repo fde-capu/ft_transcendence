@@ -29,7 +29,7 @@ export class ChatInputComponent {
 	ngOnChanges() {
 		this.getUser();
 		if (this.room)
-			this.muted = this.chatService.isLoggedUserMuted(this.room);
+			this.muted = this.chatService.isCurrentUserMuted(this.room);
 	}
 	getUser(): void {
 		this.userService.getLoggedUser()
