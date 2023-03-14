@@ -104,7 +104,7 @@ export class ChatBoxComponent {
 		if (!this.user) return;
 		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
 		//console.log("A6");
-		await new Promise(resolve => setTimeout(resolve, 9876));
+		await new Promise(resolve => setTimeout(resolve, 1075));
 		//console.log("A7");
 		this.checkAdminRecursive();
 	}
@@ -150,7 +150,7 @@ export class ChatBoxComponent {
 		+ (this.chatRoom.isPrivate ? "PRIVATE" : "PUBLIC")
 		+ " "
 		+ (this.chatRoom.password ? "PROTECTED" : "")
-		await new Promise(resolve => setTimeout(resolve, 1300));
+		await new Promise(resolve => setTimeout(resolve, 1313));
 		this.imprintRecursive();
 	}
 
@@ -270,5 +270,3 @@ export class ChatBoxComponent {
 		return this.user?.intraId === intraId;
 	}
 }
-// TODO Open user profile when clicking name.
-

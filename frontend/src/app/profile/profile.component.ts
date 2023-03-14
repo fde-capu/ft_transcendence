@@ -65,7 +65,7 @@ export class ProfileComponent {
 				this.setOwnership();
 			}
 		)
-		await new Promise(resolve => setTimeout(resolve, 5000));
+		await new Promise(resolve => setTimeout(resolve, 3007));
 		await this.getDisplayUser();
 	}
 	async setOwnership() {

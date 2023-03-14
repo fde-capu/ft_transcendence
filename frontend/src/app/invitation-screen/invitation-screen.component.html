@@ -67,12 +67,3 @@ Invitation to:<br>
 <hr *ngIf='myState.invitation.type'>
 <button (click)='clickGo = true; finalOk();'>{{ myState.invitation.button }}</button>
 </div>
-
-<!--
-Mocks:<br>
-<button (click)='mockInvite()'>Invite</button>
-<button (click)='mockDecline()'>Got declined</button>
-<button (click)='mockAccept()'>Got accepted</button>
-<button (click)='mockAcceptInstantaneous()'>Got accept instantaneous</button>
-<button (click)='mockReceive()'>Receive</button>
--->

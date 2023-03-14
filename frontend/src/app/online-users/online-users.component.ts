@@ -16,7 +16,7 @@ export class OnlineUsersComponent {
 	async getOnlineUsers() {
 		this.userService.getOnlineUsers()
 			.subscribe(users => this.users = users);
-		await new Promise(resolve => setTimeout(resolve, 5000));
+		await new Promise(resolve => setTimeout(resolve, 3399));
 		await this.getOnlineUsers();
 	}
 }
