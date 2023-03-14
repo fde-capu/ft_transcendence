@@ -12,11 +12,17 @@ export class U2uActionsComponent {
 	@Input() isFriend?: boolean;
 	@Input() user?: User;
 	@Input() caption?: boolean;
+	@Input() singleline?: boolean;
+	isMe: boolean = false;
 
 	constructor(
 		private userService: UserService,
 		private readonly invitationService: InvitationService,
 	){}
+
+	ngOnChanges() {
+		this.checkMe();
+	}
 
 	inviteToChat() {
 		let myId = this.userService.getQuickIntraId();
@@ -30,5 +36,11 @@ export class U2uActionsComponent {
 
 	unFriend(){
 		this.userService.unFriend(this.user).subscribe();
+	}
+
+	checkMe() {
+		this.userService.getLoggedUser().subscribe(_=>{
+			this.isMe = _.intraId == this.user?.intraId;
+		});
 	}
 }

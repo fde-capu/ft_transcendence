@@ -180,8 +180,6 @@ export class UserService {
 				//console.log("intraIdsToUsers Error");
 			});
 		}
-		// Gives time to return all at once, solving a render problem of slow one-by-one updates:
-		await new Promise(resolve => setTimeout(resolve, 3000));
 		return out;
 	}
 

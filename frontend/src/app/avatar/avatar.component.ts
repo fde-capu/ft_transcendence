@@ -28,17 +28,18 @@ export class AvatarComponent {
 	async updateMe() {
 		if (!this.user)
 		{
-			await new Promise(resolve => setTimeout(resolve, 1000));
+			await new Promise(resolve => setTimeout(resolve, 647));
 			await this.updateMe();
 		}
 		else // Because no `return` above, so have to trick TS.
 		{
 			this.userService.getUser(this.user.intraId).subscribe(_=>{
-				this.displayUser = _;
+				if (this.displayUser?.name != _?.name)
+					this.displayUser = _;
 			});
 			// Lazy update, because there are many instances of avatars.
 			// Note: chat messages do not update retroactively, but take changes from point on.
-			await new Promise(resolve => setTimeout(resolve, 8000 + (Math.random() * 7000)));
+			await new Promise(resolve => setTimeout(resolve, 7985 + (Math.random() * 6981)));
 			await this.updateMe();
 		}
 	}
