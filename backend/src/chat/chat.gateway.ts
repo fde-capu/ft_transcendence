@@ -38,7 +38,7 @@ export class ChatGateway implements OnGatewayConnection {
 
 	if (data.room_gone)
 	{
-		console.log("-> room_gone;", data.room_gone);
+		console.log("-> room_gone;");
 		this.chatService.roomGone(data.room_gone);
 		this.broadcastChatRooms(client);
 		return ;

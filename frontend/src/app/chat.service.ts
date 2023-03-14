@@ -11,8 +11,6 @@ import { ChatRoom } from './chat-room';
 import { USERS, CHATS, CHAT_ROOM } from './mocks';
 import { HelperFunctionsService } from './helper-functions.service';
 
-// TODO: all is mocked. Unmock them!
-
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +30,6 @@ export class ChatService {
 		public userService: UserService,
 		private readonly fun: HelperFunctionsService,
 	) {
-//		this.mockChat(); // Mock MUST be on backend
 		this.getUser();
 		this.subscribeOnce();
 	}
@@ -41,12 +38,8 @@ export class ChatService {
 		if (ChatService.user) return ChatService.user;
 		this.userService.getLoggedUser().subscribe(
 			backUser => { 
-				//console.log("ChatService got current user subscrition", backUser);
 				if (backUser)
-				{
-					//console.log("Defining ChatSerice.user", backUser);
 					ChatService.user = backUser;
-				}
 			}
 		)
 		await new Promise(resolve => setTimeout(resolve, 431));
@@ -66,9 +59,10 @@ export class ChatService {
 					// etc., a good place to displace the sensible
 					// information (irrelevant to user, even). This way,
 					// they would not actually known by ChatService.allRooms.
-					// However, this would not mean that the information
+					// However, this does not mean that the information
 					// has not arrived here.
-					this.messageList.next(msg.payload);
+					if (msg.payload.to == ChatService.user || msg.payload.from == ChatService.user)
+						this.messageList.next(msg.payload);
 				}
 		}
 		if (msg.payload.update_rooms)
@@ -157,6 +151,7 @@ export class ChatService {
 	}
 
 	async putUserInRoom(room: ChatRoom, flush: boolean = true): Promise<ChatRoom> {
+		if (!room || !room.user || !room.user.length) return {} as ChatRoom;
 		let isIn: boolean = false;
 		for (const user of room?.user)
 			if (user == ChatService.user?.intraId)
