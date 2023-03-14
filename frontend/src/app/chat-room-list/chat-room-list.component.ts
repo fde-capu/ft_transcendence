@@ -109,4 +109,8 @@ export class ChatRoomListComponent {
 			this.router.navigate(['/chat/' + passwordLink]);
 		}
 	}
+
+	isAdmin(intraId?: string, roomId?: string): boolean {
+		return this.chatService.isAdmin(roomId, intraId);
+	}
 }

@@ -23,6 +23,7 @@
 					placeholder="<- Type password."
 				/>
 			</span>
+			<span *ngIf="isAdmin(user?.intraId, room.id)"><-[ Administrator ]</span>
 		</span>
 		<span *ngIf="isCurrentUserBlocked(room)">&nbsp;<b><- YOU ARE BLOCKED!</b></span>
 		<span *ngIf="isCurrentUserMuted(room)">&nbsp;<b><- YOU ARE MUTED!</b></span>

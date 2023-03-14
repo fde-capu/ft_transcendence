@@ -55,16 +55,22 @@ export class ChatBoxComponent {
 	async initChatRoom() {
 		//console.log("ChatBox Init");
 		this.id = this.route.snapshot.paramMap.get('roomId');
-		if (this.id) {
-			this.chatRoom = this.chatService.roomById(this.id);
-			if (!this.chatRoom.id)
-				this.router.navigate(['/rooms']);
+		if (!this.id && this.user)
+		{
+			let [ newRoomId, newRoomName ] = await this.chatService.newRoom([this.user.intraId]);
+			this.router.navigate(['/chat/' + newRoomId]);
+			return ;
 		}
+		if (this.id) {
+			const chatRoomTest = this.chatService.roomById(this.id);
+			if (chatRoomTest)
+				this.chatRoom = chatRoomTest;
+		}
+
 		// ^ If it is a new room (roomId is null), the route will actualy
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
 		this.chatRoom = await this.chatService.putUserInRoom(this.chatRoom);
-		// ^ Some time to circulate the information.
 		this.updateRoomRecursive();
 		this.checkAdminRecursive()
 		this.getOutOfChatUsersRecursiveOnce();
@@ -79,7 +85,8 @@ export class ChatBoxComponent {
 			//console.log("A2");
 			await this.updateRoomRecursive();
 		} else {
-			this.chatRoom = this.chatService.roomById(this.id);
+			let chatRoomTest = this.chatService.roomById(this.id);
+			if (chatRoomTest) this.chatRoom = chatRoomTest;
 			//console.log("A3");
 			if (this.chatService.hasNews() || this.firstTime)
 				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);

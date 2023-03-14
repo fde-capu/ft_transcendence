@@ -106,8 +106,19 @@ export class ChatService {
 		this.socket.emit('chat', "get_rooms");
 	}
 
-	newRoom(room: ChatRoom) {
+	async newRoom(users: string[]): Promise<[string, string]> {
+		let newRoomId = this.fun.randomWord(128);
+		let newRoomName = this.fun.funnyName();
+		let room = {
+			id: newRoomId,
+			name: newRoomName,
+			user: users,
+			admin: users,
+			isPrivate: true
+		};
 		this.roomChanged(room);
+		await new Promise(resolve => setTimeout(resolve, 1007));
+		return [ newRoomId, newRoomName ];
 	}
 
 	roomChanged(room: ChatRoom)	{
@@ -151,20 +162,14 @@ export class ChatService {
 	}
 
 	async putUserInRoom(room: ChatRoom, flush: boolean = true): Promise<ChatRoom> {
-		if (!room) return {} as ChatRoom;
-		let isIn: boolean = false;
-		for (const user of room?.user)
-			if (user == ChatService.user?.intraId)
-				isIn = true;
-		if (!isIn)
+		if (!room || !ChatService.user) return {} as ChatRoom;
+		if (!this.fun.isStringInArray(ChatService.user.intraId, room.user))
 		{
-			if (ChatService.user) {
-				//console.log("Putting user in the room!", ChatService.user.intraId);
-				room.user.push(ChatService.user.intraId);
-			}
+			//console.log("Putting user in the room!", ChatService.user.intraId);
+			if (!room.user) room.user = [];
+			room.user.push(ChatService.user.intraId);
 			if (flush)
 				this.roomChanged(room);
-			return room;
 		}
 		return room;
 	}
@@ -175,13 +180,13 @@ export class ChatService {
 	}
 
 
-	roomById(roomId?: string): ChatRoom {
+	roomById(roomId?: string): ChatRoom|undefined {
 		//console.log("roomById", roomId, ChatService.allRooms);
-		if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length) return {} as ChatRoom;
+		if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length) undefined;
 		for (const room of ChatService.allRooms)
 			if (room.id == roomId)
 				return room;
-		return {} as ChatRoom;
+		return undefined;
 	}
 
 	async getVisibleChatRooms(intraId: string|undefined): Promise<ChatRoom[]> {
@@ -210,7 +215,7 @@ export class ChatService {
 	{
 		if (!roomId || !intraId) return false;
 		const room = this.roomById(roomId);
-		return this.fun.isStringInArray(intraId, room.user);
+		return this.fun.isStringInArray(intraId, room?.user);
 	}
 
 	getOutOfChatUsers(roomId?: string): Observable<User[]> {
@@ -249,6 +254,7 @@ export class ChatService {
 	revokeAdmin(roomId: string|null|undefined, intraId: string) {
 		if (!roomId) return;
 		let theRoom = this.roomById(roomId);
+		if (!theRoom) return;
 		let newAdmin: string[] = [];
 		for (const adminId of theRoom.admin)
 			if (adminId != intraId)
@@ -297,7 +303,10 @@ export class ChatService {
 
 	isCurrentUserBlockedByRoomId(roomId: string): boolean {
 		if (!ChatService.user) return false;
-		return this.isUserBlocked(ChatService.user.intraId, this.roomById(roomId));
+		let chatRoomTest = this.roomById(roomId);
+		if (chatRoomTest)
+			return this.isUserBlocked(ChatService.user.intraId, chatRoomTest);
+		return false;
 	}
 
 	isCurrentUserBlocked(room: ChatRoom): boolean {

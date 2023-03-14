@@ -122,16 +122,8 @@ export class InvitationService {
 		return this.socket.fromEvent<any>('invitation');
 	}
 
-	invitePrivate(from: string, to: string) {
-		let newRoomId = this.fun.randomWord(128);
-		let newRoomName = this.fun.funnyName();
-		this.chatService.newRoom({
-			id: newRoomId,
-			name: newRoomName,
-			user: [from, to],
-			admin: [from, to],
-			isPrivate: true
-		});
+	async invitePrivate(from: string, to: string) {
+		let [ newRoomId, newRoomName ] = await this.chatService.newRoom([from, to]);
 		this.invite({
 			from: from,
 			to: to,
