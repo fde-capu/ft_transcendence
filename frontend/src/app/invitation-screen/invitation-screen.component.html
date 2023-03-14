@@ -1,20 +1,20 @@
-<div class="overall" *ngIf='invite.length && receiveScreen'>
+<div class="overall" *ngIf='invitation && receiveScreen'>
 	<h2>New Invitation</h2>
 	<hr>
-	<b>{{ invite[0].from }}</b>
+	<b>{{ invitation.from }}</b>
 	<hr>
 	invites you to
 	<hr>
-	<b>{{ invite[0].type }}</b>
+	<b>{{ invitation.type }}</b>
 	<hr>
 	<br>
 	<button (click)='accept()'>
-		<span *ngIf='invite[0].buttonOk'> {{ invite[0].buttonOk }} </span>
-		<span *ngIf='!invite[0].buttonOk'>Accept</span>
+		<span *ngIf='invitation.buttonOk'> {{ invitation.buttonOk }} </span>
+		<span *ngIf='!invitation.buttonOk'>Accept</span>
 	</button>
 	<button (click)='decline()'>
-		<span *ngIf='invite[0].buttonCancel'> {{ invite[0].buttonCancel }}</span>
-		<span *ngIf='!invite[0].buttonCancel'>Decline</span>
+		<span *ngIf='invitation.buttonCancel'> {{ invitation.buttonCancel }}</span>
+		<span *ngIf='!invitation.buttonCancel'>Decline</span>
 	</button>
 </div>
 
@@ -26,9 +26,9 @@ Invitation sent.<br><br>
 
 <div class="overall" *ngIf='declineScreen'>
 From:<br>
-{{ invite[0].to }}<br><br>
+{{ invitation.to }}<br><br>
 Invitation to:<br>
-{{ invite[0].type }}<br>
+{{ invitation.type }}<br>
 <br>
 <hr>
 <br>
@@ -40,9 +40,9 @@ Invitation to:<br>
 
 <div class="overall" *ngIf='acceptScreen'>
 From:<br>
-{{ invite[0].to }}<br><br>
+{{ invitation.to }}<br><br>
 Invitation to:<br>
-{{ invite[0].type }}<br>
+{{ invitation.type }}<br>
 <br>
 <hr>
 <br>
@@ -55,11 +55,11 @@ Invitation to:<br>
 </div>
 
 <div class="overall" *ngIf='notificationScreen'>
-<span class='blinker'>{{ invite[0].note }}</span>
+<span class='blinker'>{{ invitation.note }}</span>
 <hr>
-<span *ngIf='invite[0].type'>{{ invite[0].type }}</span>
-<hr *ngIf='invite[0].type'>
-<button (click)='clickGo = true; finalOk();'>{{ invite[0].button }}</button>
+<span *ngIf='invitation.type'>{{ invitation.type }}</span>
+<hr *ngIf='invitation.type'>
+<button (click)='clickGo = true; finalOk();'>{{ invitation.button }}</button>
 </div>
 
 <!--

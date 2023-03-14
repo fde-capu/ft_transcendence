@@ -11,3 +11,13 @@ export interface Invitation {
 	note?: string;
 	button?: string;
 }
+
+export interface InviteState {
+	receiveScreen: boolean,
+	declineScreen: boolean,
+	acceptScreen: boolean,
+	sentScreen: boolean,
+	notificationScreen: boolean,
+	invitation: Invitation,
+}
+

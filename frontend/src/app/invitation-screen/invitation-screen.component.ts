@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { InvitationService } from '../invitation.service';
-import { Invitation } from '../invitation';
-import { UserService } from '../user.service';
+import { Invitation, InviteState } from '../invitation';
 import { ChatService } from '../chat.service';
-import { User } from '../user';
 import { HelperFunctionsService } from '../helper-functions.service';
 
 
@@ -14,18 +12,16 @@ import { HelperFunctionsService } from '../helper-functions.service';
   styleUrls: ['./invitation-screen.component.css']
 })
 export class InvitationScreenComponent {
-	invite: Invitation[] = [];
-	lastInvite?: Invitation;
-	user?: User;
-	receiveScreen?: boolean;
-	declineScreen?: boolean;
-	acceptScreen?: boolean;
-	sentScreen?: boolean;
-	notificationScreen?: boolean;
+	receiveScreen: boolean = false;
+	declineScreen: boolean = false;
+	acceptScreen: boolean = false;
+	sentScreen: boolean = false;
+	notificationScreen: boolean = false;
+	invitation: Invitation = {} as Invitation;
+
 	clickGo?: boolean;
 
 	constructor (
-		private readonly userService: UserService,
 		private readonly chatService: ChatService,
 		private readonly invitationService: InvitationService,
 		private readonly fun: HelperFunctionsService,
@@ -33,86 +29,39 @@ export class InvitationScreenComponent {
 
 	ngOnInit() {
 		//console.log("invite init");
-		this.getUser();
-		this.socketSubscription();
-	}
-
-	getUser(): void {
-		this.userService.getLoggedUser().subscribe(
-			backUser => { this.user = backUser; }
-		)
-	}
-
-	socketSubscription() {
-		//console.log("Invitation subscribing.");
-		this.invitationService.getInvitation().subscribe(
-			_ => {
-				//console.log("Invitation subscription got", _);
-				if (_.payload.to == this.user?.intraId || _.payload.from == this.user?.intraId) 
-				{
-					this.sentScreen = _.payload.from == this.user?.intraId
-						&& !_.payload.isReply
-					this.receiveScreen = _.payload.to == this.user?.intraId
-						&& !_.payload.isReply
-						&& !_.payload.note
-					this.declineScreen = _.payload.from == this.user?.intraId
-						&& _.payload.isReply
-						&& !_.payload.answer
-						&& !_.payload.note
-					this.acceptScreen = _.payload.from == this.user?.intraId
-						&& _.payload.isReply
-						&& _.payload.answer
-						&& !_.payload.instantaneous
-						&& !_.payload.note
-					if (_.payload.from == this.user?.intraId
-						&& _.payload.isReply
-						&& _.payload.answer
-						&& _.payload.instantaneous
-						&& !_.payload.note
-						) return this.invitationService.go(_.payload.route);
-					this.notificationScreen = _.payload.to == this.user?.intraId
-						&& !!_.payload.note;
-					//console.log("Pushing notification", _.payload);
-					this.invite.push(_.payload)
-					// ^ This flips the screen so any code below is not run.
-				}
-			},
-		);
+		this.invitationService.inviteState.subscribe(_=>{
+			if (_) {
+				console.log("Inv component got news!", _);
+				this.receiveScreen = _.receiveScreen;
+				this.declineScreen = _.declineScreen;
+				this.acceptScreen = _.acceptScreen;
+				this.sentScreen = _.sentScreen;
+				this.notificationScreen = _.notificationScreen;
+				this.invitation = _.invitation;
+				console.log("This is invite:", this.invitation);
+			}
+		});
 	}
 
 	accept() {
-		this.finish();
-		if (!this.lastInvite) return;
-		this.invitationService.replyTrue(this.lastInvite);
+		this.invitationService.replyTrue(this.invitation);
+		this.invitationService.finish();
 	}
 
 	decline() {
-		this.finish();
-		if (!this.lastInvite) return;
-		this.invitationService.replyFalse(this.lastInvite);
-		this.receiveScreen = false;
-	}
-
-	finish() {
-		//console.log("Shifting");
-		this.lastInvite = this.invite.shift();
+		this.invitationService.replyFalse(this.invitation);
+		this.invitationService.finish();
 	}
 
 	finalOk() {
-		//console.log("Turning off screen.");
-		this.finish();
-		if (!this.lastInvite) return;
 		const go = (this.acceptScreen || this.notificationScreen) && this.clickGo;
-		this.clickGo = false;
-		this.receiveScreen = false;
-		this.declineScreen = false;
-		this.acceptScreen = false;
-		this.sentScreen = false;
-		this.notificationScreen = false;
-		if (go && this.lastInvite.route)
-			this.invitationService.go(this.lastInvite.route);
+		let route = go ? this.invitation.route : null;
+		this.invitationService.finish();
+		if (go && route)
+			this.invitationService.go(route);
 	}
 
+	// Only mocks from here.
 	 mockInvite() {
 		this.invitationService.invite(
 			{
@@ -151,7 +100,6 @@ export class InvitationScreenComponent {
 		);
 	 }
 
-
 	 mockAcceptInstantaneous() {
 		this.invitationService.invite(
 			{
@@ -178,3 +126,4 @@ export class InvitationScreenComponent {
 		);
 	 }
 }
+

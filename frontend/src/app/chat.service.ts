@@ -55,7 +55,7 @@ export class ChatService {
 
 	think(msg: any)
 	{
-		console.log("Thinking about: ", msg);
+		//console.log("Thinking about: ", msg);
 		this.gotNews = true;
 		if (msg.payload.roomId) // This checks if is a simple message.
 		{
@@ -351,7 +351,7 @@ export class ChatService {
 
 	// Don't mess with this function!
 	TIG(tigged: string, tigRoom: ChatRoom) {
-		const ONE_MINUTE: number = 20 * 1000;
+		const ONE_MINUTE: number = 60 * 1000;
 		for (const room of ChatService.allRooms)
 			if (room.id == tigRoom.id) {
 				if (!room.blocked)
@@ -382,7 +382,7 @@ export class ChatService {
 
 	// Don't mess with this function!
 	muteUser(muted: string, muteRoom: ChatRoom) {
-		const ONE_MINUTE: number = 20 * 1000;
+		const ONE_MINUTE: number = 60 * 1000;
 		for (const room of ChatService.allRooms)
 			if (room.id == muteRoom.id) {
 				if (!room.muted)
