@@ -55,7 +55,7 @@ export class ChatService {
 
 	think(msg: any)
 	{
-		//console.log("Thinking about: ", msg);
+		console.log("Thinking about: ", msg);
 		this.gotNews = true;
 		if (msg.payload.roomId) // This checks if is a simple message.
 		{
@@ -335,55 +335,55 @@ export class ChatService {
 	}
 
 	// Just don't refactor this function:
-	TIG(victim: string, room: ChatRoom) {
+	TIG(victim: string, u_room: ChatRoom) {
 		let ONE_MINUTE = 60 * 1000;
 		for (const room of ChatService.allRooms)
-		if (room.id == room.id) {
-			if (!room.blocked)
-				room.blocked = [];
-			room.blocked.push(victim);
-			this.roomChanged(room);
-			const self = this;
-			setTimeout(function(victim: string, room: ChatRoom) {
-				for (const room of ChatService.allRooms)
-					if (room.id == room.id)
-					{
-						let newBlocks: string[] = [];
-						if (!room.blocked || !room.blocked.length) return;
-						for (const user of room.blocked)
-								if (user != victim)
-										newBlocks.push(user);
-						room.blocked = newBlocks;
-						self.roomChanged(room);
-					}
-			}, ONE_MINUTE, victim, room);
-		}
+			if (room.id == u_room.id) {
+				if (!room.blocked)
+					room.blocked = [];
+				room.blocked.push(victim);
+				this.roomChanged(room);
+				const self = this;
+				setTimeout(function(victim: string, room: ChatRoom) {
+					for (const room of ChatService.allRooms)
+						if (room.id == room.id)
+						{
+							let newBlocks: string[] = [];
+							if (!room.blocked || !room.blocked.length) return;
+							for (const user of room.blocked)
+									if (user != victim)
+											newBlocks.push(user);
+							room.blocked = newBlocks;
+							self.roomChanged(room);
+						}
+				}, ONE_MINUTE, victim, room);
+			}
 	}
 
 	// Just don't refactor this function:
-	muteUser(victim: string, room: ChatRoom) {
+	muteUser(victim: string, u_room: ChatRoom) {
 		let ONE_MINUTE = 60 * 1000;
 		for (const room of ChatService.allRooms)
-		if (room.id == room.id) {
-			if (!room.muted)
-				room.muted = [];
-			room.muted.push(victim);
-			this.roomChanged(room);
-			const self = this;
-			setTimeout(function(victim: string, room: ChatRoom) {
-				for (const room of ChatService.allRooms)
-					if (room.id == room.id)
-					{
-						let newMutes: string[] = [];
-						if (!room.muted || !room.muted.length) return;
-						for (const user of room.muted)
-								if (user != victim)
-										newMutes.push(user);
-						room.muted = newMutes;
-						self.roomChanged(room);
-					}
-			}, ONE_MINUTE, victim, room);
-		}
+			if (room.id == u_room.id) {
+				if (!room.muted)
+					room.muted = [];
+				room.muted.push(victim);
+				this.roomChanged(room);
+				const self = this;
+				setTimeout(function(victim: string, room: ChatRoom) {
+					for (const room of ChatService.allRooms)
+						if (room.id == room.id)
+						{
+							let newMutes: string[] = [];
+							if (!room.muted || !room.muted.length) return;
+							for (const user of room.muted)
+									if (user != victim)
+											newMutes.push(user);
+							room.muted = newMutes;
+							self.roomChanged(room);
+						}
+				}, ONE_MINUTE, victim, room);
+			}
 	}
 
 	unTIG(acquitted: string, room: ChatRoom, self: any = this) {
