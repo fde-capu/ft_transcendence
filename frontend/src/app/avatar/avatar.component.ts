@@ -36,9 +36,9 @@ export class AvatarComponent {
 			this.userService.getUser(this.user.intraId).subscribe(_=>{
 				this.displayUser = _;
 			});
-			// Lazy update every 15 seconds, because there are many instances of avatars.
+			// Lazy update, because there are many instances of avatars.
 			// Note: chat messages do not update retroactively, but take changes from point on.
-			await new Promise(resolve => setTimeout(resolve, 15000));
+			await new Promise(resolve => setTimeout(resolve, 8000 + (Math.random() * 7000)));
 			await this.updateMe();
 		}
 	}
@@ -55,17 +55,11 @@ export class AvatarComponent {
 	}
 
 	onClick(): void {
-		this.popUpOn = this.popUpOn ? false : true;
+		this.popUpOn = !this.popUpOn;
 	}
 
-	onHover(): void {
-		const self = this;
+	async onHover() {
 		this.popUpOn = true;
-		function repeat(){
-			setTimeout(function() {
-				return self.popUpOn ? repeat() : false;
-			}, 300);
-		}; repeat();
 	}
 
 	onHoverOut(): void {
