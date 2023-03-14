@@ -229,12 +229,7 @@ export class ChatService {
 	{
 		if (!roomId || !intraId) return false;
 		const room = this.roomById(roomId);
-		if (!room.user.length)
-			return false;
-		for (const roomIntraId of room.user)
-			if (intraId == roomIntraId)
-				return true;
-		return false;
+		return this.fun.isStringInArray(intraId, room.user);
 	}
 
 	getOutOfChatUsers(roomId?: string): Observable<User[]> {

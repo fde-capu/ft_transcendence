@@ -18,8 +18,15 @@
 	</button>
 </div>
 
-<div class="overall" *ngIf='myState && myState.sentScreen'>
-Invitation sent.<br><br>
+<div class="overall" *ngIf='myState && myState.sentScreen && myState.invitation'>
+<h2>Invitation sent</h2>
+<hr>
+	To: <b>{{ myState.invitation.to }}</b>
+	<hr>
+	Room name: <b>{{ myState.invitation.type }}</b>
+	<br>
+	<hr>
+	<br>
 <button (click)='finalOk();'>Ok</button>
 </div>
 

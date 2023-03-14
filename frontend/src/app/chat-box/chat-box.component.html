@@ -109,6 +109,7 @@
 			</a>
 		</td>
 		<td>
+			<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
 			<button *ngIf='!isBlocked(user)' style="margin-left:0;" (click)='doInvitationToThisRoom(user)'>Invite</button>
 			<span *ngIf='isMuted(user)'><- Muted&nbsp;</span>
 			<span *ngIf='isBlocked(user)'><- Blocked&nbsp;</span>
