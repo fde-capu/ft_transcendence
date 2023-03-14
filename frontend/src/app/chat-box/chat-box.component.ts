@@ -153,12 +153,21 @@ export class ChatBoxComponent {
 		});
 	}
 
+
 	isBlocked(victim: User): boolean {
-		return this.chatService.isUserBlocked(victim.intraId, this.chatRoom);
+		if (!this.chatRoom.blocked) return false;
+		for (const user of this.chatRoom.blocked)
+			if (user == victim.intraId)
+				return true;
+		return false;
 	}
 
 	isMuted(victim: User): boolean {
-		return this.chatService.isUserMuted(victim.intraId, this.chatRoom);
+		if (!this.chatRoom.muted) return false;
+		for (const user of this.chatRoom.muted)
+			if (user == victim.intraId)
+				return true;
+		return false;
 	}
 
 	kickThem(kicked: User) {
@@ -196,7 +205,7 @@ export class ChatBoxComponent {
 	muteThem(muted: User) {
 		this.invitationService.notify({
 			to: muted.intraId,
-			note: "SHUT!",
+			note: "SHHHH!",
 			type: "One minute muted!",
 			button: this.fun.funnyInnocence(),
 		});

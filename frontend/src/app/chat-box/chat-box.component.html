@@ -70,9 +70,12 @@
 
 	<hr>
 
-	<h3>In-Chat</h3>
+	<h3>
+		In-Chat
+	</h3>
 	<table class="list-of-users">
-		<tr *ngFor="let user of usersInChat">
+		<tr *ngFor="let user of usersInChat" [ngClass]="{'yourself':isMe(user.intraId)}">
+		<td *ngIf='!isMe(user.intraId)'>&nbsp;</td> <!-- Interesting, element yourself::before takes a place in the first column. -->
 		<td>
 			<a routerLink="/profile/{{user.intraId}}">
 				{{ user.intraId }} | {{ user.name }}
@@ -81,28 +84,34 @@
 		<td>
 			<span *ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId);">
 				<button style='margin-left:0;' (click)='kickThem(user)'>Kick</button>
-				<button (click)='tigThem(user)'>Tig</button>
-				<button (click)='muteThem(user)'>Mute</button>
+				<button *ngIf="!isBlocked(user)" (click)='tigThem(user)'>Tig</button>
+				<button *ngIf="isBlocked(user)" disabled>BLOCKED</button>
+				<button *ngIf='!isMuted(user)' (click)='muteThem(user)'>Mute</button>
+				<button *ngIf='isMuted(user)' disabled>MUTED</button>
 				<button>Promote</button>
 			</span>
-			<span *ngIf="isAdmin(user.intraId)"> <-[ Administrator ]</span>
+			<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
 			<button *ngIf='iAmAdmin && isMe(user.intraId)' type="button" (click)="revokeAdmin()" style='margin-left:0;'>Revoke</button>
+			<span *ngIf='!iAmAdmin && isMuted(user)'><- Muted&nbsp;</span>
+			<span *ngIf='!iAmAdmin && isBlocked(user)'><- Blocked&nbsp;</span>
 		</td>
 		</tr>
 	</table>
 
-	<h3 *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)">Users not in Chat</h3>
+	<h3 *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)">
+		Users not in Chat
+	</h3>
 	<table *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)" class="list-of-users">
-		<tr *ngFor="let user of usersOutOfChat">
+		<tr *ngFor="let user of usersOutOfChat" [ngClass]="{'yourself':isMe(user.intraId)}">
 		<td>
 			<a routerLink="/profile/{{user.intraId}}">
 				{{ user.intraId }} | {{ user.name }}
 			</a>
 		</td>
 		<td>
-			<button *ngIf='!isBlocked(user) || iAmAdmin' style="margin-left:0;" (click)='doInvitationToThisRoom(user)'>Invite</button>
-			<span *ngIf='isBlocked(user)'><- Blocked</span>
-			<span *ngIf='isMuted(user)'><- Blocked</span>
+			<button *ngIf='!isBlocked(user)' style="margin-left:0;" (click)='doInvitationToThisRoom(user)'>Invite</button>
+			<span *ngIf='isMuted(user)'><- Muted&nbsp;</span>
+			<span *ngIf='isBlocked(user)'><- Blocked&nbsp;</span>
 		</td>
 		</tr>
 	</table>

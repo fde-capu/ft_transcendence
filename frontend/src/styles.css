@@ -253,6 +253,10 @@ button:hover {
 	background: var(--color-high);
 	color: var(--color-low);
 }
+button:disabled:hover {
+	background: inherit;
+	color: var(--color-supmed);
+}
 button:active {
 	-webkit-filter: invert(100%);
 }

@@ -311,11 +311,11 @@ export class ChatService {
 		return this.socket.fromEvent<any>('chat');
 	}
 
-	isUserBlocked(intraId: string, room: ChatRoom) {
+	isUserBlocked(intraId: string, room: ChatRoom): boolean {
 		return this.fun.isStringInArray(intraId, room.blocked);
 	}
 
-	isUserMuted(intraId: string, room: ChatRoom) {
+	isUserMuted(intraId: string, room: ChatRoom): boolean {
 		return this.fun.isStringInArray(intraId, room.muted);
 	}
 
@@ -334,83 +334,67 @@ export class ChatService {
 		return this.isUserMuted(ChatService.user.intraId, room);
 	}
 
-	// Just don't refactor this function:
-	TIG(victim: string, u_room: ChatRoom) {
-		let ONE_MINUTE = 60 * 1000;
+	// Don't mess with this function!
+	unTIG(tigged: string, tigRoom: ChatRoom, self: any = this) {
 		for (const room of ChatService.allRooms)
-			if (room.id == u_room.id) {
+			if (room.id == tigRoom.id)
+			{
+				let newBlocks: string[] = [];
+				if (!room.blocked || !room.blocked.length) return;
+				for (const user of room.blocked)
+					if (user != tigged)
+						newBlocks.push(user);
+				room.blocked = newBlocks;
+				self.roomChanged(room);
+			}
+	}
+
+	// Don't mess with this function!
+	TIG(tigged: string, tigRoom: ChatRoom) {
+		const ONE_MINUTE: number = 20 * 1000;
+		for (const room of ChatService.allRooms)
+			if (room.id == tigRoom.id) {
 				if (!room.blocked)
 					room.blocked = [];
-				room.blocked.push(victim);
+				room.blocked.push(tigged);
 				this.roomChanged(room);
 				const self = this;
-				setTimeout(function(victim: string, room: ChatRoom) {
-					for (const room of ChatService.allRooms)
-						if (room.id == room.id)
-						{
-							let newBlocks: string[] = [];
-							if (!room.blocked || !room.blocked.length) return;
-							for (const user of room.blocked)
-									if (user != victim)
-											newBlocks.push(user);
-							room.blocked = newBlocks;
-							self.roomChanged(room);
-						}
-				}, ONE_MINUTE, victim, room);
+				setTimeout(function(tigged: string, tigRoom: ChatRoom){
+					self.unTIG(tigged, tigRoom, self);
+				}, ONE_MINUTE, tigged, tigRoom, this);
 			}
 	}
 
-	// Just don't refactor this function:
-	muteUser(victim: string, u_room: ChatRoom) {
-		let ONE_MINUTE = 60 * 1000;
+	// Don't mess with this function!
+	unMute(muted: string, muteRoom: ChatRoom, self: any = this) {
 		for (const room of ChatService.allRooms)
-			if (room.id == u_room.id) {
+			if (room.id == muteRoom.id)
+			{
+				let newMutes: string[] = [];
+				if (!room.muted || !room.muted.length) return;
+				for (const user of room.muted)
+					if (user != muted)
+						newMutes.push(user);
+				room.muted = newMutes;
+				self.roomChanged(room);
+			}
+	}
+
+	// Don't mess with this function!
+	muteUser(muted: string, muteRoom: ChatRoom) {
+		const ONE_MINUTE: number = 20 * 1000;
+		for (const room of ChatService.allRooms)
+			if (room.id == muteRoom.id) {
 				if (!room.muted)
 					room.muted = [];
-				room.muted.push(victim);
+				room.muted.push(muted);
 				this.roomChanged(room);
 				const self = this;
-				setTimeout(function(victim: string, room: ChatRoom) {
-					for (const room of ChatService.allRooms)
-						if (room.id == room.id)
-						{
-							let newMutes: string[] = [];
-							if (!room.muted || !room.muted.length) return;
-							for (const user of room.muted)
-									if (user != victim)
-											newMutes.push(user);
-							room.muted = newMutes;
-							self.roomChanged(room);
-						}
-				}, ONE_MINUTE, victim, room);
+				setTimeout(function(muted: string, muteRoom: ChatRoom){
+					self.unMute(muted, muteRoom, self);
+				}, ONE_MINUTE, muted, muteRoom, this);
 			}
 	}
-
-	unTIG(acquitted: string, room: ChatRoom, self: any = this) {
-                if (room.id == room.id)
-                {
-                        let newBlocks: string[] = [];
-                        if (!room.blocked || !room.blocked.length) return;
-                        for (const user of room.blocked)
-                                        if (user != acquitted)
-                                                        newBlocks.push(user);
-                        room.blocked = newBlocks;
-                        self.roomChanged(room);
-                }
-	}
-	unMute(acquitted: string, room: ChatRoom, self: any = this) {
-			for (const room of ChatService.allRooms)
-					if (room.id == room.id)
-					{
-							let newMutes: string[] = [];
-							if (!room.muted || !room.muted.length) return;
-							for (const user of room.muted)
-											if (user != acquitted)
-															newMutes.push(user);
-							room.muted = newMutes;
-							self.roomChanged(room);
-                    }
-    }
 
 	mockChat(): void {
 		const self = this;

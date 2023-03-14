@@ -85,10 +85,10 @@ export class HelperFunctionsService {
 		let adjectives: string[] = ["The Black", "The Pongster",
 			"The Incredible", "The Amazing", "Some Sort Of", "Ultra Fast",
 			"Chaos", "Pong", "Wholesome", "Around", "Enlightened", "Alien", "Master",
-			];
+			"Artificial"];
 		let directObjects: string[] = ["Dragon", "Champion", "Ratchet", "Ball",
 			"Comet", "Star", "Speed", "Life", "Pong!", "Void", "- And Around",
-			"AIs", "Energy",
+			"Inteligence", "Energy",
 			];
 
 		let selectedNoun = nouns[Math.floor(Math.random()*nouns.length)];
@@ -99,7 +99,7 @@ export class HelperFunctionsService {
 		return selectedNoun + " " + selectedVerb + " " + selectedAdjective + " " + selectedObject
 	}
 	funnyInnocence(): string {
-		let phrases: string[] = [ "Who? Me?", "What'd I do?", "Really?", "I <i>didn't</i>!", "Seriously?", "Eita!"];
+		let phrases: string[] = [ "Who? Me?", "What'd I do?", "Really?", "What?", "Seriously?", "Eita!"];
 		return phrases[Math.floor(Math.random()*phrases.length)];
 	}
 }

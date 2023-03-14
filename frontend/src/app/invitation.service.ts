@@ -16,11 +16,11 @@ export class InvitationService {
 		private readonly fun: HelperFunctionsService,
 		private readonly chatService: ChatService,
   ) {
-		//console.log("Invite service constructor");
+		console.log("Invite service constructor");
 	}
 
 	invite(u_invite: Invitation) {
-		//console.log("Sendind invitation:", u_invite);
+		console.log("Sendind invitation:", u_invite);
 		this.socket.emit('invitation', u_invite);
 	}
 
@@ -34,7 +34,7 @@ export class InvitationService {
 
 	sendReply(invite: Invitation) {
 		invite.isReply = true;
-		//console.log("Sendind reply:", invite);
+		console.log("Sendind reply:", invite);
 		this.socket.emit('invitation', invite);
 		if (invite.route && invite.answer)
 			this.go(invite.route);
@@ -51,7 +51,7 @@ export class InvitationService {
 	}
 
 	getInvitation() {
-		//console.log("Invite service getting from socket.");
+		console.log("Invite service getting from socket.");
 		return this.socket.fromEvent<any>('invitation');
 	}
 
