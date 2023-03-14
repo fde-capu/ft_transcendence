@@ -126,7 +126,8 @@ body
 	min-width: 511px;
 	font-size: var(--font-medium);
 	height: var(--inner-below-menu-height);
-	width: var(--inner-width);
+	width: calc(2em + var(--inner-width));
+	margin-left: -1em;
 }
 .outter-box
 {
@@ -485,7 +486,7 @@ td:nth-child(1) {
 }
 .chat-input-box {
 	height: 3em;
-	width: calc(var(--inner-width) - 2em);
+	width: calc(var(--inner-width));
     position: fixed;
 	top: calc(var(--inner-below-menu-height) - 2em);
 	filter: drop-shadow(0px 16px 128px #aaaaaaff);
@@ -546,7 +547,7 @@ td:nth-child(1) {
 	float: right;
 	position: relative;
 	bottom: 2em;
-	margin: 0.25em 0 0 0;
+	margin: 0.25em 1em 0 0;
 }
 .window-menu-burger {
 	width: 16px;
