@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 
@@ -7,29 +7,27 @@ import { UserService } from '../user.service';
   templateUrl: './menu-bar.component.html',
   styleUrls: ['./menu-bar.component.css'],
 })
-export class MenuBarComponent {
-  constructor(
-    private userService: UserService,
-  ) {}
-
+export class MenuBarComponent implements OnInit {
   user?: User;
+
   menuOpen = false;
 
+  constructor(private userService: UserService) {}
+
   ngOnInit(): void {
-	this.getUser();
+    this.getUser();
   }
+
   getUser(): void {
-	this.userService.getLoggedUser().subscribe(
-		backUser => { 
-			//console.log("menu-bar got subscrition", backUser);
-			this.user = backUser;
-		}
-	)
+    this.userService.getLoggedUser().subscribe(backUser => {
+      this.user = backUser;
+    });
   }
 
   onClickBurger(): void {
     this.menuOpen = !this.menuOpen;
   }
+
   menuOff(): void {
     this.menuOpen = false;
   }

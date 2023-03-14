@@ -1,8 +1,5 @@
 import {
-  SubscribeMessage,
   WebSocketGateway,
-  MessageBody,
-  ConnectedSocket,
   OnGatewayConnection,
   WebSocketServer,
   OnGatewayDisconnect,
@@ -42,45 +39,9 @@ export class GameGateway
     this.gameService.disconnect(client);
   }
 
-  @SubscribeMessage('game:room:list')
-  public roomList(@ConnectedSocket() client: Socket): void {
-    throw new Error('Not implemented!');
-  }
-
-  @SubscribeMessage('game:room:create')
-  public roomCreate(@ConnectedSocket() client: Socket): void {
-    throw new Error('Not implemented!');
-  }
-
-  @SubscribeMessage('game:room:info')
-  public roomInfo(@ConnectedSocket() client: Socket): void {
-    throw new Error('Not implemented!');
-  }
-
-  @SubscribeMessage('game:room:join')
-  public roomJoin(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() payload: string,
-  ): void {
-    throw new Error('Not implemented!');
-  }
-
-  @SubscribeMessage('game:room:leave')
-  public roomLeave(@ConnectedSocket() client: Socket): void {
-    throw new Error('Not implemented!');
-  }
-
-  @SubscribeMessage('game:player:ready')
-  public playerReady(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() payload: string,
-  ): void {
-    throw new Error('Not implemented!');
-  }
-
   private async authorize(client: Socket): Promise<void> {
     try {
-		console.log("game handleConnection");
+      console.log('game handleConnection');
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;

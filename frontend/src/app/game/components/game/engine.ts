@@ -108,6 +108,7 @@ class Rectangle {
     this.vy = this.sy * dt;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public move(elements: Rectangle[]) {
     this.x += this.vx;
     this.y += this.vy;
@@ -135,6 +136,7 @@ class Ball extends Rectangle {
   }
 
   public override move(elements: Rectangle[]) {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const result = elements
         .map(element => ({
@@ -204,6 +206,7 @@ class VerticalPaddle extends Paddle {
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public override move(elements: Rectangle[]) {
     if (this.y + this.vy < 0) {
       this.y = 0;

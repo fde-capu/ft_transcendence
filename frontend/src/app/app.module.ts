@@ -21,13 +21,10 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
-
-import { U2uActionsModule } from './u2u-actions/u2u-actions.module';
 import { MenuBarModule } from './menu-bar/menu-bar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
 import { InviteModule } from './invitation.module';
-
 
 @NgModule({
   declarations: [
@@ -42,13 +39,13 @@ import { InviteModule } from './invitation.module';
     ChatInputComponent,
     ChatBoxComponent,
     WindowTitleComponent,
-	ChatRoomListComponent,
-	CreateMatchComponent,
- LogOutComponent,
- FriendsListComponent,
- UserBarComponent,
- StatisticsComponent,
- GameHistoryComponent,
+    ChatRoomListComponent,
+    CreateMatchComponent,
+    LogOutComponent,
+    FriendsListComponent,
+    UserBarComponent,
+    StatisticsComponent,
+    GameHistoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,14 +53,13 @@ import { InviteModule } from './invitation.module';
     HttpClientModule,
     AuthModule,
     FormsModule,
-	MenuBarModule,
-	AvatarModule,
-	MainMenuModule,
-	InviteModule,
+    MenuBarModule,
+    AvatarModule,
+    MainMenuModule,
+    InviteModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [
-	],
+  exports: [],
 })
 export class AppModule {}

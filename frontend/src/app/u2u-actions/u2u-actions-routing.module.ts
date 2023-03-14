@@ -16,4 +16,3 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class U2uActionsRoutingModule {}
-
