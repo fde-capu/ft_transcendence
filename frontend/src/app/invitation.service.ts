@@ -20,7 +20,6 @@ export class InvitationService {
 	notificationScreen: boolean = false;
 	inviteState: BehaviorSubject<InviteState|undefined> = new BehaviorSubject<InviteState|undefined>(undefined);
 
-
   constructor(
 		private readonly router: Router,
 		private readonly socket: InviteSocket,
@@ -44,29 +43,40 @@ export class InvitationService {
 				//console.log("Invitation subscription got", _);
 				if (_.payload.to == this.user?.intraId || _.payload.from == this.user?.intraId) 
 				{
-					this.sentScreen = _.payload.from == this.user?.intraId
+					this.sentScreen =
+						   _.payload.from == this.user?.intraId
 						&& !_.payload.isReply
-					this.receiveScreen = _.payload.to == this.user?.intraId
+
+					this.receiveScreen =
+						   _.payload.to == this.user?.intraId
 						&& !_.payload.isReply
 						&& !_.payload.note
-					this.declineScreen = _.payload.from == this.user?.intraId
+
+					this.declineScreen =
+						   _.payload.from == this.user?.intraId
 						&& _.payload.isReply
 						&& !_.payload.answer
 						&& !_.payload.note
-					this.acceptScreen = _.payload.from == this.user?.intraId
+
+					this.acceptScreen =
+						   _.payload.from == this.user?.intraId
 						&& _.payload.isReply
 						&& _.payload.answer
 						&& !_.payload.instantaneous
 						&& !_.payload.note
-					if (_.payload.from == this.user?.intraId
+
+					if (
+						   _.payload.from == this.user?.intraId
 						&& _.payload.isReply
 						&& _.payload.answer
 						&& _.payload.instantaneous
 						&& !_.payload.note
-						) return this.go(_.payload.route);
-					this.notificationScreen = _.payload.to == this.user?.intraId
+					) return this.go(_.payload.route);
+
+					this.notificationScreen =
+						   _.payload.to == this.user?.intraId
 						&& !!_.payload.note;
-					console.log("Changing notification", _.payload);
+
 					this.inviteState.next({
 						receiveScreen: this.receiveScreen,
 						declineScreen: this.declineScreen,
@@ -78,17 +88,6 @@ export class InvitationService {
 				}
 			},
 		);
-	}
-
-	finish() {
-		this.inviteState.next({
-			receiveScreen: false,
-			declineScreen: false,
-			acceptScreen: false,
-			sentScreen: false,
-			notificationScreen: false,
-			invitation: {} as Invitation,
-		});
 	}
 
 	invite(u_invite: Invitation) {
@@ -112,12 +111,14 @@ export class InvitationService {
 			this.go(invite.route);
 	}
 
-	replyTrue(invite: Invitation) {
+	replyTrue(invite: Invitation|undefined) {
+		if (!invite) return;
 		invite.answer = true;
 		this.sendReply(invite);
 	}
 
-	replyFalse(invite: Invitation) {
+	replyFalse(invite: Invitation|undefined) {
+		if (!invite) return;
 		invite.answer = false;
 		this.sendReply(invite);
 	}

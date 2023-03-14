@@ -4,7 +4,7 @@ import { InvitationService } from '../invitation.service';
 import { Invitation, InviteState } from '../invitation';
 import { ChatService } from '../chat.service';
 import { HelperFunctionsService } from '../helper-functions.service';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invitation-screen',
@@ -12,51 +12,74 @@ import { HelperFunctionsService } from '../helper-functions.service';
   styleUrls: ['./invitation-screen.component.css']
 })
 export class InvitationScreenComponent {
-	receiveScreen: boolean = false;
-	declineScreen: boolean = false;
-	acceptScreen: boolean = false;
-	sentScreen: boolean = false;
-	notificationScreen: boolean = false;
-	invitation: Invitation = {} as Invitation;
-
+	static state: InviteState[] = [];
+	static connected: boolean = false;
+	myState: InviteState|undefined = undefined
 	clickGo?: boolean;
 
 	constructor (
 		private readonly chatService: ChatService,
 		private readonly invitationService: InvitationService,
 		private readonly fun: HelperFunctionsService,
+		private readonly router: Router,
 	){}
 
 	ngOnInit() {
 		//console.log("invite init");
+		this.myState = InvitationScreenComponent.state[0];
+		if (InvitationScreenComponent.connected) return;
+		InvitationScreenComponent.connected = true;
 		this.invitationService.inviteState.subscribe(_=>{
 			if (_) {
-				console.log("Inv component got news!", _);
-				this.receiveScreen = _.receiveScreen;
-				this.declineScreen = _.declineScreen;
-				this.acceptScreen = _.acceptScreen;
-				this.sentScreen = _.sentScreen;
-				this.notificationScreen = _.notificationScreen;
-				this.invitation = _.invitation;
-				console.log("This is invite:", this.invitation);
+				console.log("Inv component got news!", InvitationScreenComponent.state.length, _);
+				if(	_.receiveScreen
+				||	_.declineScreen
+				||	_.acceptScreen
+				||	_.sentScreen
+				||	_.notificationScreen
+				)	InvitationScreenComponent.state.push({
+						receiveScreen : _.receiveScreen,
+						declineScreen : _.declineScreen,
+						acceptScreen : _.acceptScreen,
+						sentScreen : _.sentScreen,
+						notificationScreen : _.notificationScreen,
+						invitation : _.invitation,
+					});
+				console.log("This is all:", InvitationScreenComponent.state.length, InvitationScreenComponent.state);
+				this.myState = InvitationScreenComponent.state[0];
+				console.log("My state A", this.myState);
+				this.router.navigate([this.router.url]);
 			}
 		});
 	}
 
+	flip(): InviteState|undefined {
+		let old = InvitationScreenComponent.state.shift();
+		this.myState = InvitationScreenComponent.state[0];
+		console.log("My state B", this.myState);
+		console.log("flip returning", old);
+		return old;
+	}
+
 	accept() {
-		this.invitationService.replyTrue(this.invitation);
-		this.invitationService.finish();
+//		console.log("Accept");
+		let old = this.flip();
+		if (old && old.invitation)
+			this.invitationService.replyTrue(old.invitation);
 	}
 
 	decline() {
-		this.invitationService.replyFalse(this.invitation);
-		this.invitationService.finish();
+		console.log("Decline");
+		let old = this.flip();
+		if (old && old.invitation)
+			this.invitationService.replyFalse(old.invitation);
 	}
 
 	finalOk() {
-		const go = (this.acceptScreen || this.notificationScreen) && this.clickGo;
-		let route = go ? this.invitation.route : null;
-		this.invitationService.finish();
+		let old = this.flip();
+		if (!old) return;
+		const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
+		let route = go ? old.invitation?.route : null;
 		if (go && route)
 			this.invitationService.go(route);
 	}

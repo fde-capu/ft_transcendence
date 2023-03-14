@@ -1,34 +1,33 @@
-<div class="overall" *ngIf='invitation && receiveScreen'>
+<div class="overall" *ngIf='myState && myState.invitation && myState.receiveScreen'>
 	<h2>New Invitation</h2>
 	<hr>
-	<b>{{ invitation.from }}</b>
+	<b>{{ myState.invitation.from }}</b>
 	<hr>
 	invites you to
 	<hr>
-	<b>{{ invitation.type }}</b>
+	<b>{{ myState.invitation.type }}</b>
 	<hr>
 	<br>
 	<button (click)='accept()'>
-		<span *ngIf='invitation.buttonOk'> {{ invitation.buttonOk }} </span>
-		<span *ngIf='!invitation.buttonOk'>Accept</span>
+		<span *ngIf='myState.invitation.buttonOk'> {{ myState.invitation.buttonOk }} </span>
+		<span *ngIf='!myState.invitation.buttonOk'>Accept</span>
 	</button>
 	<button (click)='decline()'>
-		<span *ngIf='invitation.buttonCancel'> {{ invitation.buttonCancel }}</span>
-		<span *ngIf='!invitation.buttonCancel'>Decline</span>
+		<span *ngIf='myState.invitation.buttonCancel'> {{ myState.invitation.buttonCancel }}</span>
+		<span *ngIf='!myState.invitation.buttonCancel'>Decline</span>
 	</button>
 </div>
 
-<div class="overall" *ngIf='sentScreen'>
+<div class="overall" *ngIf='myState && myState.sentScreen'>
 Invitation sent.<br><br>
 <button (click)='finalOk();'>Ok</button>
 </div>
 
-
-<div class="overall" *ngIf='declineScreen'>
+<div class="overall" *ngIf='myState && myState.invitation && myState.declineScreen'>
 From:<br>
-{{ invitation.to }}<br><br>
+{{ myState.invitation.to }}<br><br>
 Invitation to:<br>
-{{ invitation.type }}<br>
+{{ myState.invitation.type }}<br>
 <br>
 <hr>
 <br>
@@ -38,11 +37,11 @@ Invitation to:<br>
 <button (click)='finalOk();'>Ok</button>
 </div>
 
-<div class="overall" *ngIf='acceptScreen'>
+<div class="overall" *ngIf='myState && myState.invitation && myState.acceptScreen'>
 From:<br>
-{{ invitation.to }}<br><br>
+{{ myState.invitation.to }}<br><br>
 Invitation to:<br>
-{{ invitation.type }}<br>
+{{ myState.invitation.type }}<br>
 <br>
 <hr>
 <br>
@@ -54,12 +53,12 @@ Invitation to:<br>
 <button (click)='clickGo = true; finalOk();'>Go to Route</button>
 </div>
 
-<div class="overall" *ngIf='notificationScreen'>
-<span class='blinker'>{{ invitation.note }}</span>
+<div class="overall" *ngIf='myState && myState.invitation && myState.notificationScreen'>
+<span class='blinker'>{{ myState.invitation.note }}</span>
 <hr>
-<span *ngIf='invitation.type'>{{ invitation.type }}</span>
-<hr *ngIf='invitation.type'>
-<button (click)='clickGo = true; finalOk();'>{{ invitation.button }}</button>
+<span *ngIf='myState.invitation.type'>{{ myState.invitation.type }}</span>
+<hr *ngIf='myState.invitation.type'>
+<button (click)='clickGo = true; finalOk();'>{{ myState.invitation.button }}</button>
 </div>
 
 <!--

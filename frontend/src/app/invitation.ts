@@ -18,6 +18,6 @@ export interface InviteState {
 	acceptScreen: boolean,
 	sentScreen: boolean,
 	notificationScreen: boolean,
-	invitation: Invitation,
+	invitation?: Invitation,
 }
 
