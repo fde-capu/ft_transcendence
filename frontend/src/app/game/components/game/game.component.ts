@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  ViewChild,
+} from '@angular/core';
 import { Single } from './engine';
 
 @Component({
@@ -11,6 +17,8 @@ export class GameComponent implements AfterViewInit {
   canvas!: ElementRef<HTMLCanvasElement>;
 
   running = false;
+
+  value = 0;
 
   ngAfterViewInit(): void {
     const game = new Single(this.canvas.nativeElement);
@@ -26,5 +34,17 @@ export class GameComponent implements AfterViewInit {
       }, frameRate);
     }
     window.requestAnimationFrame(render);
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  increment(event: KeyboardEvent): void {
+    console.dir(event);
+    this.value++;
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  tanana(event: Event): void {
+    console.log(document.hidden);
+    this.value++;
   }
 }

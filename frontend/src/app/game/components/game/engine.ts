@@ -310,7 +310,7 @@ export abstract class Game {
   }
 
   update(t = 1) {
-    const elements = Object.entries(this.elements).map(e => e[1]);
+    const elements = Object.values(this.elements);
 
     elements.forEach(e => e.setVelocity(t));
 
@@ -330,11 +330,11 @@ export class Pong extends Game {
 
   public override reset(): void {
     this.elements = {
-      a: new Ball(Pong.w, Pong.h, 300, -200),
-      b: new Wall(-5, -5, Pong.w + 10, 5),
-      c: new Wall(-5, Pong.h, Pong.w + 10, 5),
-      d: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
-      e: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
+      ball: new Ball(Pong.w, Pong.h, 300, -200),
+      leftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
+      rightPaddle: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
+      topWall: new Wall(-5, -5, Pong.w + 10, 5),
+      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
     };
   }
 }
@@ -346,13 +346,13 @@ export class PongDouble extends Game {
 
   public override reset(): void {
     this.elements = {
-      a: new Ball(Pong.w, Pong.h, 300, -200),
-      b: new Wall(-5, -5, Pong.w + 10, 5),
-      c: new Wall(-5, Pong.h, Pong.w + 10, 5),
-      d: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
-      e: new LeftPaddle(3 * VerticalPaddle.w, Pong.h),
-      f: new RightPaddle(Pong.w - 4 * VerticalPaddle.w, Pong.h),
-      g: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
+      ball: new Ball(Pong.w, Pong.h, 300, -200),
+      LeftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
+      LeftPaddle2: new LeftPaddle(3 * VerticalPaddle.w, Pong.h),
+      RightPaddle: new RightPaddle(Pong.w - 4 * VerticalPaddle.w, Pong.h),
+      RightPaddle2: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
+      topWall: new Wall(-5, -5, Pong.w + 10, 5),
+      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
     };
   }
 }
@@ -364,11 +364,15 @@ export class Quadrapong extends Game {
 
   public override reset(): void {
     this.elements = {
-      a: new Ball(Pong.w, Pong.h, 300, -200),
-      b: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
-      c: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
-      d: new TopPaddle(HorizontalPaddle.h, Pong.w),
-      e: new BottomPaddle(Pong.h - 2 * HorizontalPaddle.h, Pong.w),
+      ball: new Ball(Pong.w, Pong.h, 300, -200),
+      leftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
+      rightPaddle: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
+      topPaddle: new TopPaddle(HorizontalPaddle.h, Pong.w),
+      bottomPaddle: new BottomPaddle(Pong.h - 2 * HorizontalPaddle.h, Pong.w),
+      leftWall: new Wall(-5, -5, 5, Pong.h + 10),
+      rightWall: new Wall(Pong.w, -1, 5, Pong.h + 10),
+      topWall: new Wall(-5, -5, Pong.w + 10, 5),
+      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
     };
   }
 }
@@ -380,11 +384,12 @@ export class Single extends Game {
 
   public override reset(): void {
     this.elements = {
-      a: new Ball(Pong.w, Pong.h, 300, -200),
-      b: new Wall(-5, -5, 5, Pong.h + 10),
-      c: new Wall(Pong.w, -1, 5, Pong.h + 10),
-      d: new Wall(-5, -5, Pong.w + 10, 5),
-      e: new Wall(-5, Pong.h, Pong.w + 10, 5),
+      ball: new Ball(Pong.w, Pong.h, 300, -200),
+      leftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
+      leftWall: new Wall(-5, -5, 5, Pong.h + 10),
+      rightWall: new Wall(Pong.w, -1, 5, Pong.h + 10),
+      topWall: new Wall(-5, -5, Pong.w + 10, 5),
+      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
     };
   }
 }

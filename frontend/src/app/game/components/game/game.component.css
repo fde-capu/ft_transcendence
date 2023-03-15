@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+main, #teams, .team {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+}
+
+#teams {
+  justify-content: space-around;
+  flex-direction: row;
+  background-color: #373737;
+
+  width: 70vmin;
+  height: 10vmin;
+}
+
+.team {
+  width: 100%;
+  border: solid 1px #adadad;
+  border-width: 0px 1px;
+  border-collapse: collapse;
+}
+
+.team:first-child {
+  border-left: 0;
+}
+
+.team:last-child {
+  border-right: 0;
+}
+
+.players > li{
+  width: 100%;
+  text-align: center;
+}
+
+#game {
+  width: 70vmin;
+  height: 70vmin;
+  background-color: #000;
+}

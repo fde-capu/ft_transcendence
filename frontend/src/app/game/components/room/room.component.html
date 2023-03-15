@@ -1,6 +1,6 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<main>
+<main *ngIf="!inGame">
   <header>
     <h2>Room 12345</h2>
   </header>
@@ -30,7 +30,7 @@
           Player:
           <select name="playerToInvite">
             <option value="" disabled selected hidden>Please Choose...</option>
-            <option *ngFor="let user of availableUsers">
+            <option *ngFor="let user of availableUsers$ | async">
               {{ user.intraId }} | {{ user.name }}
             </option>
           </select>
@@ -82,4 +82,4 @@
     </div>
   </section>
 </main>
-<app-game></app-game>
+<app-game *ngIf="inGame"></app-game>

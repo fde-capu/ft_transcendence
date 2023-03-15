@@ -10,12 +10,18 @@ import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { LogOutComponent } from './log-out/log-out.component';
+import { GameComponent } from './game/components/game/game.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',
+  },
+  {
+    path: 'gg',
+    canActivate: [AuthGuard],
+    component: GameComponent,
   },
   {
     path: 'home',

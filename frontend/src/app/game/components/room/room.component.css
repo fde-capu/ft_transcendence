@@ -1,6 +1,7 @@
 label::after {
 	content: initial;
 }
+
 fieldset {
 	margin-bottom: 1em;
 	width: fit-content;
