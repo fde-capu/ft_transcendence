@@ -6,7 +6,7 @@ No more C! No more C++!
 This project is about doing something you’ve never done before.
 Remind yourself the beginning of your journey in computer science.
 Look at you now. Time to shine!
-Version: 12
+Version: 12.1
 Contents
 I Preamble 2
 II Mandatory part 3
@@ -15,7 +15,7 @@ II.2 Security concerns . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 II.3 User Account . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
 II.4 Chat . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
 II.5 Game . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
-III Submission and peer-evaluation 7
+III Submission and peer-evaluation 6
 1
 Chapter I
 Preamble
@@ -99,8 +99,7 @@ limited time) other users, but not the channel owners.
 interface.
 • The user should be able to access other players profiles through the chat interface.
 II.5 Game
-The main purpose of this website is to play Pong versus other players and show everyone
-how good you are!
+The main purpose of this website is to play Pong versus other players.
 • Therefore, users should be able to play a live Pong game versus another player
 directly on the website.
 • There must be a matchmaking system: the user can join a queue until they get
@@ -111,18 +110,12 @@ but in any case, it must be faithful to the original Pong (1972).
 maps). However, the user should be able to select a default version of the game
 without any extra features if they want to.
 • The game must be responsive!
-• The user should be able to watch a live play between other users without interfering
-with it.
-5
-ft_transcendence
-Soon, you will realize that you already know things
-that you thought you didn’t
 Think about network issues, like unexpected disconnection or lag.
 You have to offer the best user experience possible.
-6
+5
 Chapter III
 Submission and peer-evaluation
 Turn in your assignment in your Git repository as usual. Only the work inside your
 repository will be evaluated during the defense. Don’t hesitate to double check the
 names of your files to ensure they are correct.
-7
+6
