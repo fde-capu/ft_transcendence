@@ -82,7 +82,7 @@ export class HelperFunctionsService {
 			"Contrary To", "Demonstrating", "All Around", "Pongs", "Spiraling",
 			"Striking", "On",
 			];
-		let adjectives: string[] = ["The Black", "The Pongster",
+		let adjectives: string[] = ["A Fantastic", "The Pongster",
 			"The Incredible", "The Amazing", "Some Sort Of", "Ultra Fast",
 			"Chaos", "Pong", "Wholesome", "Around", "Enlightened", "Alien", "Master",
 			"Artificial"];
