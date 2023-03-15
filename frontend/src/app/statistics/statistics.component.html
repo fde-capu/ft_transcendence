@@ -1,58 +1,67 @@
-<h2 *ngIf='stat'>Statistics</h2>
-<table *ngIf='stat'>
-<tr>
-	<td width="16%">
-		<label>Score</label>
-	</td><td width="16%">
-			<div>{{ stat.score | number:'6.0-0' }}</div>
-	</td>
-	<td width="16%">
-		<label>Matches</label>
-	</td><td width="16%">
-			<div>{{ stat.matches }}</div>
-	</td>
-	<td width="16%">
-		<label>Mean score/matches</label>
-	</td><td width="16%">
-			<div>{{ stat.scorePerMatches | number:'0.0-0' }}</div>
-	</td>
-</tr>
+<h2 *ngIf="stat">Statistics</h2>
+<table *ngIf="stat">
+  <tr>
+    <td width="16%">
+      <label>Score</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.score | number : '6.0-0' }}</div>
+    </td>
+    <td width="16%">
+      <label>Matches</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.matches }}</div>
+    </td>
+    <td width="16%">
+      <label>Mean score/matches</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.scorePerMatches | number : '0.0-0' }}</div>
+    </td>
+  </tr>
 
-<tr>
-	<td width="16%">
-		<label>Wins</label>
-	</td><td width="16%">
-			<div>{{ stat.wins }}</div>
-	</td>
-	<td width="16%">
-		<label>Looses</label>
-	</td><td width="16%">
-			<div>{{ stat.looses }}</div>
-	</td>
-	<td width="16%">
-		<label>Wins/Looses</label>
-	</td><td width="16%">
-			<div>{{ stat.winsPerLooses | number:'1.2-2' }}</div>
-	</td>
-</tr>
+  <tr>
+    <td width="16%">
+      <label>Wins</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.wins }}</div>
+    </td>
+    <td width="16%">
+      <label>Looses</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.looses }}</div>
+    </td>
+    <td width="16%">
+      <label>Wins/Looses</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.winsPerLooses | number : '1.2-2' }}</div>
+    </td>
+  </tr>
 
-<tr>
-	<td width="16%">
-		<label>Goals made</label>
-	</td><td width="16%">
-			<div>{{ stat.goalsMade }}</div>
-	</td>
-	<td width="16%">
-		<label>Goals taken</label>
-	</td><td width="16%">
-			<div>{{ stat.goalsTaken }}</div>
-	</td>
-	<td width="16%">
-		<label>Goals made/taken</label>
-	</td><td width="16%">
-			<div>{{ stat.goalsMadePerTaken | number:'1.2-2' }}</div>
-	</td>
-</tr>
+  <tr>
+    <td width="16%">
+      <label>Goals made</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.goalsMade }}</div>
+    </td>
+    <td width="16%">
+      <label>Goals taken</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.goalsTaken }}</div>
+    </td>
+    <td width="16%">
+      <label>Goals made/taken</label>
+    </td>
+    <td width="16%">
+      <div>{{ stat.goalsMadePerTaken | number : '1.2-2' }}</div>
+    </td>
+  </tr>
 </table>
 
 <!-- TODO

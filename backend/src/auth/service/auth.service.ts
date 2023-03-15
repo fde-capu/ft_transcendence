@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
 import { catchError, firstValueFrom, map, switchMap, tap } from 'rxjs';
-import { ErrorFortyTwoApi } from 'src/forty-two/service/error';
 import { FortyTwoService } from 'src/forty-two/service/forty-two.service';
 import { TokenFortyTwoApi } from 'src/forty-two/service/token';
 import { OtpService } from './otp.service';
@@ -14,7 +13,7 @@ import { encode } from 'querystring';
 import { JWTPayload } from 'jose';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/service/user.service';
-import { UserFortyTwoApi, Versions } from 'src/forty-two/service/user';
+import { UserFortyTwoApi } from 'src/forty-two/service/user';
 
 @Injectable()
 export class AuthService {
@@ -76,8 +75,7 @@ export class AuthService {
             fortyTwo,
           }),
         ),
-        catchError((error: ErrorFortyTwoApi) => {
-          //console.log("createSessionToken got error:", error);
+        catchError(() => {
           throw new UnauthorizedException();
         }),
       ),
@@ -98,6 +96,7 @@ export class AuthService {
   }
 
   private getUserChallengeSecret(subject: string) {
+    console.log(subject);
     return 'LMWVYBAAAVES2FKG'; // TODO: get the user secret from database
   }
 

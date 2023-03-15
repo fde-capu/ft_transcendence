@@ -4,47 +4,43 @@ import { Invitation } from './invitation';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InvitationService {
-
   constructor(
-		private readonly router: Router,
-		private readonly socket: InviteSocket,
-  ) {
-		//console.log("Invite service constructor");
-	}
+    private readonly router: Router,
+    private readonly socket: InviteSocket
+  ) {}
 
-	invite(u_invite: Invitation): boolean {
-		//console.log("Sendind invitation:", u_invite);
-		this.socket.emit('invitation', u_invite);
-		return true;
-	}
+  invite(u_invite: Invitation): boolean {
+    this.socket.emit('invitation', u_invite);
+    return true;
+  }
 
-	go(path: string) {
-		this.router.navigate([path]);
-	}
+  go(path: string) {
+    this.router.navigate([path]);
+  }
 
-	sendReply(invite: Invitation) {
-		invite.isReply = true;
-		//console.log("Sendind reply:", invite);
-		this.socket.emit('invitation', invite);
-		if (invite.answer)
-			this.go(invite.route);
-	}
+  sendReply(invite: Invitation) {
+    invite.isReply = true;
+    this.socket.emit('invitation', invite);
+    if (invite.answer) this.go(invite.route);
+  }
 
-	replyTrue(invite: Invitation) {
-		invite.answer = true;
-		this.sendReply(invite);
-	}
+  replyTrue(invite: Invitation) {
+    invite.answer = true;
+    this.sendReply(invite);
+  }
 
-	replyFalse(invite: Invitation) {
-		invite.answer = false;
-		this.sendReply(invite);
-	}
+  replyFalse(invite: Invitation) {
+    invite.answer = false;
+    this.sendReply(invite);
+  }
 
-	getInvitation() {
-		//console.log("Invite service getting from socket.");
-		return this.socket.fromEvent<any>('invitation');
-	}
+  getInvitation() {
+    return this.socket.fromEvent<{
+      author: string;
+      payload: Invitation;
+    }>('invitation');
+  }
 }

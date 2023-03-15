@@ -1,11 +1,15 @@
 <div class="chat-input-box" id="chatBox">
-  <textarea class="chat-input-text" placeholder=" <- Type here."
-	(keydown.enter)="send($event)"
-	[(ngModel)]="message"
-	autofocus
-  ></textarea>
-  <button id="send-button" 
-	type="button" (click)="send($event);"
-	style="position: absolute; right: 0; bottom: 0"
-  >Enter</button>
+  <textarea
+    class="chat-input-text"
+    placeholder=" <- Type here."
+    (keydown.enter)="send($event)"
+    [(ngModel)]="message"
+    autofocus></textarea>
+  <button
+    id="send-button"
+    type="button"
+    (click)="send($event)"
+    style="position: absolute; right: 0; bottom: 0">
+    Enter
+  </button>
 </div>

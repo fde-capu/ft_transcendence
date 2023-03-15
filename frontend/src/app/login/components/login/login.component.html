@@ -2,10 +2,16 @@
   <button (click)="signIn()">Sign In</button>
 </section>
 <section *ngIf="step_two">
-  <p *ngIf="message">{{message}}</p>
+  <p *ngIf="message">{{ message }}</p>
   <form #challenge="ngForm" (ngSubmit)="solveChallenge(challenge)">
-	<qrcode [qrdata]="challengeUri" [width]="256"></qrcode>
-    <input type="text" name="code" placeholder="<- MFA" autofocus required ngModel/>
+    <qrcode [qrdata]="challengeUri" [width]="256"></qrcode>
+    <input
+      type="text"
+      name="code"
+      placeholder="<- MFA"
+      autofocus
+      required
+      ngModel />
     <button type="submit">Send</button>
   </form>
   <button (click)="signOut()">Sign Out</button>

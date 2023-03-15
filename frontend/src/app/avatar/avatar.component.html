@@ -1,18 +1,35 @@
 <!-- TODO get image dinamicaly -->
-<div *ngIf="user; else plain" class='avatar' (click)='onClick()' (mouseleave)='onHoverOut()'>
-	<div class='avatar-image hover_invert'
-		style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
-		></div>
-	<div class='avatar-menu' *ngIf="popUpOn" (mouseenter)='onHover()' (mouseleave)='onHoverOut()'>
-		<div style="margin-bottom: 4px;">{{user.intraId}} | {{user.name}}</div>
-		<button class="oneliner" routerLink="/profile/{{user.intraId}}">Profile</button>
-		<span *ngIf='!isMe'>
-			<app-u2u-actions [isFriend]='isFriend' [user]='user' [caption]='false'></app-u2u-actions>
-		</span>
-	</div>
+<div
+  *ngIf="user; else plain"
+  class="avatar"
+  (click)="onClick()"
+  (mouseleave)="onHoverOut()">
+  <div
+    class="avatar-image hover_invert"
+    style="
+      background-image: url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');
+    "></div>
+  <div
+    class="avatar-menu"
+    *ngIf="popUpOn"
+    (mouseenter)="onHover()"
+    (mouseleave)="onHoverOut()">
+    <div style="margin-bottom: 4px">{{ user.intraId }} | {{ user.name }}</div>
+    <button class="oneliner" routerLink="/profile/{{ user.intraId }}">
+      Profile
+    </button>
+    <span *ngIf="!isMe">
+      <app-u2u-actions
+        [isFriend]="isFriend"
+        [user]="user"
+        [caption]="false"></app-u2u-actions>
+    </span>
+  </div>
 </div>
 <ng-template #plain>
-	<div class='avatar-image no-border-margin-padding hover_invert'
-		style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
-	></div>
+  <div
+    class="avatar-image no-border-margin-padding hover_invert"
+    style="
+      background-image: url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');
+    "></div>
 </ng-template>

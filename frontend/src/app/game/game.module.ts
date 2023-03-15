@@ -10,17 +10,8 @@ import { MenuBarModule } from '../menu-bar/menu-bar.module';
 import { InviteModule } from '../invitation.module';
 
 @NgModule({
-  declarations: [
-	GameComponent,
-	LobbyComponent,
-	RoomComponent,
-  ],
-  imports: [
-	CommonModule,
-	GameRoutingModule,
-	MenuBarModule,
-	InviteModule,
-  ],
+  declarations: [GameComponent, LobbyComponent, RoomComponent],
+  imports: [CommonModule, GameRoutingModule, MenuBarModule, InviteModule],
   providers: [GameSocket],
 })
 export class GameModule {}
