@@ -1,11 +1,11 @@
 <div class="overall" *ngIf='myState && myState.invitation && myState.receiveScreen'>
 	<h2>New Invitation</h2>
 	<hr>
-	<b>{{ myState.invitation.from }}</b>
+	{{ myState.invitation.from }}
 	<hr>
-	invites you to
+	<b>invites you to</b>
 	<hr>
-	<b>{{ myState.invitation.type }}</b>
+	{{ myState.invitation.type }}
 	<hr>
 	<br>
 	<button (click)='accept()'>
@@ -21,9 +21,10 @@
 <div class="overall" *ngIf='myState && myState.sentScreen && myState.invitation'>
 <h2>Invitation sent</h2>
 <hr>
-	To: <b>{{ myState.invitation.to }}</b>
+	<b>To</b>: {{ myState.invitation.to }}
 	<hr>
-	Room name: <b>{{ myState.invitation.type }}</b>
+	<b>Room name</b>:
+	<br>{{ myState.invitation.type }}
 	<br>
 	<hr>
 	<br>
@@ -31,28 +32,31 @@
 </div>
 
 <div class="overall" *ngIf='myState && myState.invitation && myState.declineScreen'>
-From:<br>
+<b>From</b>:<br>
 {{ myState.invitation.to }}<br><br>
-Invitation to:<br>
+<b>Invitation to</b>:<br>
 {{ myState.invitation.type }}<br>
 <br>
 <hr>
 <br>
 <b>DECLINED</b>
 <br>
+<br>
 <hr>
+<br>
 <button (click)='finalOk();'>Ok</button>
 </div>
 
 <div class="overall" *ngIf='myState && myState.invitation && myState.acceptScreen'>
-From:<br>
+<b>From</b>:<br>
 {{ myState.invitation.to }}<br><br>
-Invitation to:<br>
+<b>Invitation to</b>:<br>
 {{ myState.invitation.type }}<br>
 <br>
 <hr>
 <br>
 <b>ACCEPTED</b>
+<br>
 <br>
 <hr>
 <br>
