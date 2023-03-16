@@ -254,15 +254,6 @@ export class ChatService {
 		return null;
 	}
 
-	testPasswordUnique(myRoom: ChatRoom): boolean {
-		for (const room of ChatService.allRooms)
-		{
-			if (room.id != myRoom.id && room.password == myRoom.password)
-				return false;
-		}
-		return true;
-	}
-
 	revokeAdmin(roomId: string|null|undefined, intraId: string) {
 		if (!roomId) return;
 		let theRoom = this.roomById(roomId);

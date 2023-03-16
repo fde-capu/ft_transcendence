@@ -160,12 +160,10 @@ export class ChatBoxComponent {
 
 	async validatePassword(): Promise<boolean> {
 		//console.log("testing pass", this.chatRoom.password);
-		if (this.chatRoom.password &&
-				(
-				!this.fun.validateString(this.chatRoom.password)
-				||
-				!this.chatService.testPasswordUnique(this.chatRoom)
-				))
+		if (
+			this.chatRoom.password &&
+			!this.fun.validateString(this.chatRoom.password)
+		)
 		{
 			this.invalidPasswordNotice = true;
 			this.fun.blink('invalidPasswordNotice');
