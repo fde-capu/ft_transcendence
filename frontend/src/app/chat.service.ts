@@ -232,8 +232,7 @@ export class ChatService {
 
 	getOutOfChatUsers(roomId?: string): Observable<User[]> {
 		if (!roomId) return of([]);
-		let response =
-		this.userService.getOnlineUsers()
+		let response = this.userService.getOnlineUsers()
 		.pipe(map(
 			result => {
 				let out: User[] = [];
