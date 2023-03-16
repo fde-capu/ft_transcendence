@@ -45,7 +45,7 @@
 				<button type="button" (click)="switchPrivacy();">Change</button>
 			</td>
 		</tr>
-		<tr>
+		<tr *ngIf='!chatRoom.isPrivate'>
 			<td>
 				<label>Password</label>
 			</td><td>

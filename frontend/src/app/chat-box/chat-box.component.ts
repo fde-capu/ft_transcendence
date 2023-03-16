@@ -290,6 +290,7 @@ export class ChatBoxComponent {
 
 	cleanPassword() {
 		this.chatRoom.password = "";
+		this.validateAndEmit();
 	}
 
 	isAdmin(intraId?: string): boolean {
