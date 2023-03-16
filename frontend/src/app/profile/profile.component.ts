@@ -25,6 +25,7 @@ export class ProfileComponent {
 	isFriend: boolean = false;
 	isBlock: boolean = false;
 	amIBlocked?: boolean;
+	invalidNameNotice: boolean = false;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -47,7 +48,8 @@ export class ProfileComponent {
 		});
 	}
 	async getDisplayUser() {
-		//console.log("idRequest", this.idRequest);
+		//console.log("getDisplayUser", this.idRequest);
+		if (this.owner) return;
 		if (!this.idRequest)
 		{
 			this.displayUser = this.user;
@@ -81,6 +83,23 @@ export class ProfileComponent {
 		this.profileType = this.isBlock ? "BLOCKED " : "";
 		this.profileType += this.owner ? "YOUR" : this.isFriend ? "FRIEND" : "USER";
 		this.profileType += this.amIBlocked ? " BLOCKED YOU" : "";
+	}
+
+	async validateAndSaveUser() {
+		if (!this.displayUser) return ;
+		if (this.fun.validateString(this.displayUser.name))
+			this.saveUser();
+		else {
+			this.invalidNameNotice = true;
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.invalidNameNotice = false;
+			this.fun.focus('invalidNameNotice');
+		}
 	}
 
 	saveUser() {

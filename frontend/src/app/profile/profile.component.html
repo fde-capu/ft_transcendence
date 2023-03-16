@@ -10,14 +10,15 @@
 		<td>
 			<input id="name" [(ngModel)]="displayUser.name"
 			(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
-			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); saveUser();"
+			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
 			(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
 			/>
 		</td>
 		<td>
-			<button id="nameButton" type="button" (click)=
+			<button *ngIf='!invalidNameNotice' id="nameButton" type="button" (click)=
 				"fun.focusIf('nameButton', 'Change', 'name');"
 				>Change</button>
+			<span *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b> (too big).</span>
 		</td>
 	</tr>
 	<ng-template #name_simple>

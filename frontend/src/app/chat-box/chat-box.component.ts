@@ -33,6 +33,7 @@ export class ChatBoxComponent {
 	id?: string|null;
 	iAmAdmin: boolean = false;
 	firstTime: boolean = true;
+	invalidNameNotice: boolean = false;
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -120,14 +121,31 @@ export class ChatBoxComponent {
 		this.getOutOfChatUsersRecursiveOnce();
 	}
 
+	async validateAndEmit() {
+		if (this.fun.validateString(this.chatRoom.name))
+			this.emit();
+		else {
+			this.invalidNameNotice = true;
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.invalidNameNotice = false;
+			this.fun.focus('invalidNameNotice');
+		}
+	}
+
 	emit() {
 		//console.log("Noticed room changed.");
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
 	async emitIfUnique() {
-		if (this.chatRoom.password
-		&& !this.chatService.testPasswordUnique(this.chatRoom))
+		if (this.chatRoom.password &&
+				(!this.chatService.testPasswordUnique(this.chatRoom)
+				|| !this.fun.validateString(this.chatRoom.password)))
 		{
 			let saveTypedPassword = this.chatRoom.password;
 			this.chatRoom.password = "INVALID! Try another!"; // If its invalid because is repeated, then user knows some room has to have this password!...

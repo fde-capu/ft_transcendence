@@ -48,7 +48,7 @@ export class ChatService {
 
 	think(msg: any)
 	{
-		console.log("Thinking about: ", msg);
+		//console.log("Thinking about: ", msg);
 		this.gotNews = true;
 		if (msg.payload.roomId) // This checks if is a simple message.
 		{
