@@ -79,7 +79,7 @@ export class ChatService {
 	}
 
 	haveIBlocked(intraId:string):boolean{
-		console.log("Have I blocked", intraId);
+		//console.log("Have I blocked", intraId);
 		if (!ChatService.user) return false;
 		return this.fun.isStringInArray(intraId, ChatService.user.blocks);
 	}
@@ -408,6 +408,7 @@ export class ChatService {
 
 			// TODO: send the error to remote logging infrastructure
 			console.error("handleError<T>:", error); // log to console instead
+			// ^ Yikes! Don't show if any bug! TODO (comment line above?)
 
 			// Let the app keep running by returning an empty result.
 			return of(result as T);

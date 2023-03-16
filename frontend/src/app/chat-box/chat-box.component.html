@@ -26,7 +26,7 @@
 				<button *ngIf='!invalidNameNotice' id="nameButton" type="button" (click)=
 					"fun.focusIf('nameButton', 'Change', 'name');"
 					>Change</button>
-			<span *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b> (too big).</span>
+			<span *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;</span>
 			</td>
 		</tr>
 		<tr>
@@ -53,13 +53,14 @@
 				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton');"
-				(change)="emitIfUnique();"
+				(change)="validateAndEmit();"
 				/>
 			</td><td style="min-width:175px;">
-				<button id="passwordButton" type="button" (click)=
+				<button *ngIf='!invalidPasswordNotice' id="passwordButton" type="button" (click)=
 					"fun.focusIf('passwordButton', 'Change', 'password');"
 					>Change</button>
 				<button type="button" (click)="cleanPassword();">Clean</button>
+			<span *ngIf='invalidPasswordNotice' id='invalidPasswordNotice'><- <b>Invalid</b>&nbsp;</span>
 			</td>
 		</tr>
 		<tr>

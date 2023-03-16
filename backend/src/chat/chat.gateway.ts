@@ -52,7 +52,7 @@ export class ChatGateway implements OnGatewayConnection {
 	}
 	if (payload == "get_rooms")
 	{
-		this.broadcastChatRooms(client);
+		this.sendChatRoomsToSingleClient(client);
 		return ;
 	}
 	// (else) // Watta terrible switch case!
@@ -68,6 +68,17 @@ export class ChatGateway implements OnGatewayConnection {
   {
 	console.log("-> allRooms broadcast;");
 	this.server.emit('chat', {
+		author: client['subject'],
+		payload: {
+			update_rooms: this.chatService.allRooms()
+		}
+	});
+  }
+
+  sendChatRoomsToSingleClient(client: Socket)
+  {
+	console.log("-> allRooms sendChatRoomsToSingleClient;");
+	client.emit('chat', {
 		author: client['subject'],
 		payload: {
 			update_rooms: this.chatService.allRooms()
