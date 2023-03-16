@@ -122,8 +122,13 @@ export class ChatBoxComponent {
 	}
 
 	async validateAndEmit() {
+		let validName = await this.validateName();
+		if (validName) this.emit();
+	}
+
+	async validateName(): Promise<boolean> {
 		if (this.fun.validateString(this.chatRoom.name))
-			this.emit();
+			return true;
 		else {
 			this.invalidNameNotice = true;
 			this.fun.blink('invalidNameNotice');
@@ -134,6 +139,7 @@ export class ChatBoxComponent {
 			await new Promise(resolve => setTimeout(resolve, 342));
 			this.invalidNameNotice = false;
 			this.fun.focus('invalidNameNotice');
+			return false;
 		}
 	}
 
@@ -143,9 +149,18 @@ export class ChatBoxComponent {
 	}
 
 	async emitIfUnique() {
+		let validPassword = await this.validatePassword();
+		if (validPassword) this.emit();
+	}
+
+	async validatePassword(): Promise<boolean> {
+		console.log("testing pass", this.chatRoom.password);
 		if (this.chatRoom.password &&
-				(!this.chatService.testPasswordUnique(this.chatRoom)
-				|| !this.fun.validateString(this.chatRoom.password)))
+				(
+				!this.fun.validateString(this.chatRoom.password)
+				||
+				!this.chatService.testPasswordUnique(this.chatRoom)
+				))
 		{
 			let saveTypedPassword = this.chatRoom.password;
 			this.chatRoom.password = "INVALID! Try another!"; // If its invalid because is repeated, then user knows some room has to have this password!...
@@ -157,9 +172,9 @@ export class ChatBoxComponent {
 			await new Promise(resolve => setTimeout(resolve, 500));
 			this.chatRoom.password = saveTypedPassword;
 			this.fun.focus('password');
-			return ;
+			return false;
 		}
-		this.emit();
+		return true;
 	}
 
 	async imprintRecursive() {
@@ -249,10 +264,11 @@ export class ChatBoxComponent {
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
-	onClose() {
+	async onClose() {
 		if (this.optionsOn)
 		{
-			return this.onMenu();
+			if (await this.validateName() && await this.validatePassword())
+				return this.onMenu();
 		}
 		else
 		{
@@ -260,8 +276,11 @@ export class ChatBoxComponent {
 		}
 	}
 
-	onMenu() {
-		this.optionsOn = !this.optionsOn;
+	async onMenu() {
+		if (!this.optionsOn ||
+			(await this.validateName() && await this.validatePassword())
+			)
+			this.optionsOn = !this.optionsOn;
 	}
 
 	switchPrivacy() {
