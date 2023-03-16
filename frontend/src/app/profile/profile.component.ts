@@ -23,6 +23,7 @@ export class ProfileComponent {
 	owner: Boolean = false;
 	profileType: string = "USER";
 	isFriend: boolean = false;
+	isBlock: boolean = false;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -72,8 +73,9 @@ export class ProfileComponent {
 		if (!this.user)
 			return ;
 		this.isFriend = this.userService.isFriend(this.displayUser);
+		this.isBlock = this.userService.isBlock(this.displayUser);
 		this.owner = this.user.intraId == this.displayUser?.intraId;
-		this.profileType = this.owner ? "YOUR" : this.isFriend ? "FRIEND" : "USER";
+		this.profileType = this.owner ? "YOUR" : this.isFriend ? "FRIEND" : this.isBlock ? "BLOCKED USER" : "USER";
 	}
 
 	saveUser() {

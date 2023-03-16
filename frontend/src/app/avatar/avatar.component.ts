@@ -12,6 +12,7 @@ export class AvatarComponent {
 	displayUser?: User;
 	popUpOn = false;
 	isFriend: boolean = false;
+	isBlock: boolean = false;
 	isMe: boolean = false;
 	loggedUser?: User;
 
@@ -21,6 +22,7 @@ export class AvatarComponent {
 
 	ngOnChanges() {
 		this.checkFriendship();
+		this.checkBlock();
 		this.checkMe();
 		this.updateMe();
 	}
@@ -53,6 +55,10 @@ export class AvatarComponent {
 
 	checkFriendship() {
 		this.isFriend=this.userService.isFriend(this.user)
+	}
+
+	checkBlock() {
+		this.isBlock=this.userService.isBlock(this.user)
 	}
 
 	onClick(): void {

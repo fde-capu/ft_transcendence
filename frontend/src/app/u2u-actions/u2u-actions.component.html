@@ -3,7 +3,9 @@
 <div class='message-centered' [ngClass]="{'singleline':singleline}">
 	<button [ngClass]="{'oneliner':!caption}" (click)='inviteToChat()'>Private Message</button>
 	<button [ngClass]="{'oneliner':!caption}" *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
-	<button [ngClass]="{'oneliner':!caption}" *ngIf="isFriend" (click)='unFriend()'>Unfriend :(</button>
+	<button [ngClass]="{'oneliner':!caption}" *ngIf="isFriend" (click)='unFriend()'>Unfriend</button>
+	<button [ngClass]="{'oneliner':!caption}" *ngIf="!isBlock" (click)='makeBlock()'>Block</button>
+	<button [ngClass]="{'oneliner':!caption}" *ngIf="isBlock" (click)='unBlock()'>Unblock</button>
 	<button [ngClass]="{'oneliner':!caption}">INVITE TO GAME</button>
 </div>
 </div>

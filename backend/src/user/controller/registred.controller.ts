@@ -90,10 +90,20 @@ export class RegisterController {
 		//console.log("reg friends: fetching friends.");
 		const resp = await this.userService.getFriends(intraId);
 		return response.status(200).json(resp);
-	} catch (e) {
-		//console.log("reg friends got catch", e);
-		response.status(e.status).json(e.data);
-	}
+	} catch (e) {response.status(e.status).json(e.data);}
+  }
+
+  @Get('blocks')
+  @UseGuards(AuthGuard)
+  async getBlocks(
+    @Query('them') intraId: string,
+	@Res() response:Response=null
+  ):Promise<any>
+  {
+	try {
+		const resp = await this.userService.getBlocks(intraId);
+		return response.status(200).json(resp);
+	} catch (e) {response.status(e.status).json(e.data);}
   }
 
   @Get('stats')

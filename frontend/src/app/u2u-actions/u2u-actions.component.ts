@@ -10,6 +10,7 @@ import { InvitationService } from '../invitation.service';
 })
 export class U2uActionsComponent {
 	@Input() isFriend?: boolean;
+	@Input() isBlock?: boolean;
 	@Input() user?: User;
 	@Input() caption?: boolean;
 	@Input() singleline?: boolean;
@@ -36,6 +37,14 @@ export class U2uActionsComponent {
 
 	unFriend(){
 		this.userService.unFriend(this.user).subscribe();
+	}
+
+	makeBlock(){
+		this.userService.makeBlock(this.user).subscribe();
+	}
+
+	unBlock(){
+		this.userService.unBlock(this.user).subscribe();
 	}
 
 	checkMe() {
