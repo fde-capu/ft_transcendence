@@ -14,6 +14,7 @@ export class U2uActionsComponent {
 	@Input() user?: User;
 	@Input() caption?: boolean;
 	@Input() singleline?: boolean;
+	@Input() amIBlocked?: boolean;
 	isMe: boolean = false;
 
 	constructor(

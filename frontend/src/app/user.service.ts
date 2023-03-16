@@ -144,6 +144,13 @@ export class UserService {
 			.pipe(catchError(this.handleError<User[]>('getBlocks', [])));
 	}
 
+	amIBlocked(user_b: User|undefined): boolean {
+		console.log("Am I", this.currentUser?.intraId, "blocked by?", user_b?.intraId);
+		if (!this.currentUser||!user_b||(user_b.intraId==this.currentUser.intraId)) return false;
+		console.log(user_b);
+		return this.fun.isStringInArray(this.currentUser.intraId, user_b.blocks);
+	}
+
 	isBlock(user_b: User | undefined): boolean {
 		if (!this.currentUser||!this.currentUser.blocks||!user_b) return false;
 		return this.fun.isStringInArray(user_b.intraId, this.currentUser.blocks);

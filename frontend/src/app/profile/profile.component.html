@@ -1,6 +1,7 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<h2>{{ profileType }} Profile</h2>
+<h2>{{ profileType }}<span *ngIf='!amIBlocked'> Profile</span></h2>
+<div *ngIf='!amIBlocked; else spying'>
 <table *ngIf="displayUser; else user_unknown">
 	<tr *ngIf="owner; else name_simple">
 		<td>
@@ -73,14 +74,24 @@
 
 </table>
 
-<app-u2u-actions *ngIf='!owner' [isFriend]='isFriend' [isBlock]='isBlock' [user]='displayUser' [caption]='true'></app-u2u-actions>
-<app-friends-list [user]="displayUser"></app-friends-list> 
+<app-u2u-actions *ngIf='!owner && !amIBlocked' [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser' [caption]='true'></app-u2u-actions>
+<app-friends-list *ngIf='!amIBlocked' [user]="displayUser"></app-friends-list> 
 
 <app-blocks-list *ngIf='owner' [user]="displayUser"></app-blocks-list> 
 
-<app-statistics [user]="displayUser"></app-statistics>
-<app-game-history [user]="displayUser"></app-game-history>
+<app-statistics *ngIf='!amIBlocked' [user]="displayUser"></app-statistics>
+<app-game-history *ngIf='!amIBlocked' [user]="displayUser"></app-game-history>
+</div>
 
 <ng-template #user_unknown>
 User: unknown.
+</ng-template>
+
+<ng-template #spying>
+<div *ngIf='displayUser'>
+<div class="profile-image hover_invert"
+style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+></div><br>	
+{{displayUser.intraId}}
+</div>
 </ng-template>

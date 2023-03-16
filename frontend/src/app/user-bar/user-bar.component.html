@@ -3,7 +3,7 @@
 	<a class="user-name-medium" routerLink="/profile/{{user.intraId}}">
 		{{user.intraId}} | {{user.name}}
 	</a>
-	<app-u2u-actions [isFriend]='isFriend' [isBlock]='isBlock' [user]='user' [singleline]='true'></app-u2u-actions>
+	<app-u2u-actions [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='user' [singleline]='true'></app-u2u-actions>
 	<div>{{ user.score | number:'6.0-0' }}</div>
 </div>
 <!-- TODO show user status (online|offline; in a game|avalilable etc) -->

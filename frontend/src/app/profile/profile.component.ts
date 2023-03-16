@@ -24,6 +24,7 @@ export class ProfileComponent {
 	profileType: string = "USER";
 	isFriend: boolean = false;
 	isBlock: boolean = false;
+	amIBlocked?: boolean;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -64,18 +65,22 @@ export class ProfileComponent {
 				// ^ Above seems redundant but condition is needed.
 				//console.log("new displayUser:", this.displayUser);
 				this.setOwnership();
+				this.amIBlocked=this.userService.amIBlocked(this.displayUser);
 			}
 		)
 		await new Promise(resolve => setTimeout(resolve, 3007));
 		await this.getDisplayUser();
 	}
+
 	async setOwnership() {
 		if (!this.user)
 			return ;
 		this.isFriend = this.userService.isFriend(this.displayUser);
 		this.isBlock = this.userService.isBlock(this.displayUser);
 		this.owner = this.user.intraId == this.displayUser?.intraId;
-		this.profileType = this.owner ? "YOUR" : this.isFriend ? "FRIEND" : this.isBlock ? "BLOCKED USER" : "USER";
+		this.profileType = this.isBlock ? "BLOCKED " : "";
+		this.profileType += this.owner ? "YOUR" : this.isFriend ? "FRIEND" : "USER";
+		this.profileType += this.amIBlocked ? " BLOCKED YOU" : "";
 	}
 
 	saveUser() {

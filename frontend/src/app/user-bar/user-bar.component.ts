@@ -11,6 +11,7 @@ export class UserBarComponent {
 	@Input() user?: User;
 	isFriend: boolean = false;
 	isBlock: boolean = false;
+	amIBlocked: boolean = false;
 	constructor(
 		private userService: UserService,
 	){}
@@ -22,6 +23,7 @@ export class UserBarComponent {
 		this.isFriend=this.userService.isFriend(this.user)
 	}
 	checkBlocks() {
-		this.isBlock=this.userService.isBlock(this.user)
+		this.isBlock=this.userService.isBlock(this.user);
+		this.amIBlocked=this.userService.amIBlocked(this.user);
 	}
 }

@@ -185,6 +185,7 @@ export class UserService {
 				score: u.score,
 				mfa_enabled: u.mfa_enabled,
 				friends: u.friends,
+				blocks: u.blocks,
 			};
 			out.push(dto);
 		});

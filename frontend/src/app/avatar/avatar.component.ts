@@ -15,6 +15,7 @@ export class AvatarComponent {
 	isBlock: boolean = false;
 	isMe: boolean = false;
 	loggedUser?: User;
+	amIBlocked?: boolean;
 
 	constructor(
 		private userService: UserService,
@@ -59,6 +60,7 @@ export class AvatarComponent {
 
 	checkBlock() {
 		this.isBlock=this.userService.isBlock(this.user)
+		this.amIBlocked=this.userService.amIBlocked(this.user);
 	}
 
 	onClick(): void {
