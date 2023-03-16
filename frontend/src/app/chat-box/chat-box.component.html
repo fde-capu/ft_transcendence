@@ -19,7 +19,7 @@
 				<input id="name" [(ngModel)]="chatRoom.name"
 				(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
-				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
+				(keydown.enter)="fun.blur('name'); fun.blink('nameButton'); validateAndEmit();"
 				(change)="validateAndEmit();"
 				/>
 			</td><td>
@@ -52,7 +52,7 @@
 				<input id="password" [(ngModel)]="chatRoom.password"
 				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
-				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton');"
+				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton'); validateAndEmit();"
 				(change)="validateAndEmit();"
 				/>
 			</td><td style="min-width:175px;">
