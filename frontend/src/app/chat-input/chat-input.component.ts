@@ -17,6 +17,7 @@ export class ChatInputComponent {
 	textArea: HTMLElement | null = null;
 	chatBox: HTMLElement | null = null;
 	muted: boolean = false;
+	messageTooBig: boolean = false;
 	constructor(
 		public chatService: ChatService,
 		public userService: UserService
@@ -25,6 +26,7 @@ export class ChatInputComponent {
 		this.textArea = document.getElementById('chat-input-text');
 		this.chatBox = document.getElementById('chatBox');
 		this.textArea && this.textArea.focus();
+		this.keepCheckingMessageSize();
 	}
 	ngOnChanges() {
 		this.getUser();
@@ -32,10 +34,7 @@ export class ChatInputComponent {
 			this.muted = this.chatService.isCurrentUserMuted(this.room);
 	}
 	getUser(): void {
-		this.userService.getLoggedUser()
-			.subscribe(user => {
-				this.user = user;
-			});
+		this.userService.getLoggedUser().subscribe(user => {this.user = user;});
 	}
 	send(event: Event)
 	{
@@ -44,6 +43,7 @@ export class ChatInputComponent {
 		if (
 			!this.message
 		||	!this.room
+		||	 this.messageTooBig
 		) return ;
 		let newMessage!: ChatMessage;
 
@@ -66,5 +66,10 @@ export class ChatInputComponent {
 		n = setTimeout(function() {
 				exist.classList.remove('inverted');
 				}, 200);
+	}
+	async keepCheckingMessageSize() {
+		this.messageTooBig = this.message.length > 512;
+		await new Promise(resolve => setTimeout(resolve, 719));
+		this.keepCheckingMessageSize();
 	}
 }
