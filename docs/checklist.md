@@ -15,3 +15,8 @@ Checklist based on sub. 12.1
 [ ] RESPONSIVO: The game must be responsive! (Não tenho certeza do que está implícito aqui, afinal...)
 [ ] GAMEPLAY
 [ ] DEPLOY: docker-compose up --build
+
+Bug notes:
+[ ] WARN[0000] The "FTT_MODE" variable is not set. Defaulting to a blank string. 
+[ ] Strange behavior when authentication expires. Make it renew automatically if user is still logged.
+[ ] When user is kicked from the room, they are only REALLY KICKED after clicking "OK". There is an semi-transparent screen, and they can still read the messages.
