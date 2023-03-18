@@ -48,10 +48,6 @@ export class UserService {
 		friends: [],
 		blocks: [],
 		score: 0,
-		matches : 0,
-		wins : 0,
-		goalsMade : 0,
-		goalsTaken : 0,
 	  });
       existUser = await this.userRepository.save(createdUser);
     }
@@ -155,14 +151,14 @@ export class UserService {
 		const u = await this.getFullUser(intraId);
 		if(!u) return out;
 		out.score = u.score;
-		out.matches = u.matches;
-		out.wins = u.wins;
-		out.goalsMade = u.goalsMade;
-		out.goalsTaken = u.goalsTaken;
-		out.scorePerMatches = out.score/out.matches;
-		out.looses = out.matches - out.wins;
-		out.winsPerLooses = out.wins/out.looses;
-		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
+//		out.matches = u.matches;
+//		out.wins = u.wins;
+//		out.goalsMade = u.goalsMade;
+//		out.goalsTaken = u.goalsTaken;
+//		out.scorePerMatches = out.score/out.matches;
+//		out.looses = out.matches - out.wins;
+//		out.winsPerLooses = out.wins/out.looses;
+//		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
 		// out.ranking = 0; // TODO if so
 		return out;
 	}
