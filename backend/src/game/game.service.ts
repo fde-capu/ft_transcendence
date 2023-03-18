@@ -19,7 +19,7 @@ export class GameService {
 	
 	async getGameHistory(intraId:string):Promise<GameHistory[]>
 	{
-		console.log("getGameHistory for", intraId);
+		//console.log("getGameHistory for", intraId);
 		let out: GameHistory[] = [];
 
 		if (!await this.historyRepository.count())	// TODO:
@@ -31,7 +31,7 @@ export class GameService {
 			.orWhere("match.p3_intraId = :p3_intraId", { p3_intraId: intraId })
 			.orWhere("match.p4_intraId = :p4_intraId", { p4_intraId: intraId })
 			.getMany();
-		console.log("getGameHistory got", resp);
+		//console.log("getGameHistory got", resp);
 
 		if (resp === null)
 			return [];

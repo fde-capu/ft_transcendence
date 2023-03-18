@@ -1,5 +1,5 @@
 <h2>Match History</h2>
-<table *ngIf='user && histRender.length else no_matches'>
+<table *ngIf='user && histRender.length else no_matches' class='mainTable'>
   <tr *ngFor='let match of histRender' class='match'>
 	<td> {{ match.pongMode }} </td>
 	<td>
@@ -42,21 +42,6 @@
 		{{ match.duration * 1000 | date:'mm:ss' }} min.
 	</td>
   </tr>
-
-<!--
-	<td>
-		<span *ngIf='match.idA == user.intraId'>
-			<span *ngIf='match.winA'><b>&#10004;</b><br><span style='color:#555555;'>&#x2717;</span></span>
-			<span *ngIf='!match.winA'>&#x2717;<br><span style='color:#555555;'>&#10004;</span></span>
-		</span>
-
-		<span *ngIf='match.idB == user.intraId'>
-			<span *ngIf='match.winB'><span style='color:#555555;'>&#x2717;</span><br><b>&#10004;</b></span>
-			<span *ngIf='!match.winB'><span style='color:#555555;'>&#10004;</span><br>&#x2717;</span>
-		</span>
-	</td>
-  </tr>
-  -->
 </table>
 
 <ng-template #no_matches>

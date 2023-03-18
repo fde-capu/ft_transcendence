@@ -139,14 +139,12 @@ export class GameHistoryComponent {
 				})
 			}
 
-
 			this.histRender.push({
 				pongMode: match.mode,
 				teams: teams,
 				date: match.date,
 				duration: match.duration,
 			});
-			console.log("Pushed", this.histRender);
 		  }
 		}
 	});
