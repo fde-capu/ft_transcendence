@@ -41,7 +41,6 @@ export class GameService {
 	async getStats(intraId:string):Promise<StatisticsDTO>
 	{
 		let games = await this.getGameHistory(intraId);
-		console.log("getting", games);
 		let out: StatisticsDTO = {} as StatisticsDTO;
 		out.score =  0;
 		out.matches = 0;
@@ -53,11 +52,6 @@ export class GameService {
 		out.winsPerLooses = 0;
 		out.goalsMadePerTaken = 0;
 		for (const game of games) {
-			console.log("thinking", game);
-			console.log(this.userScore(intraId, game));
-			console.log(this.didUserWin(intraId, game));
-			console.log(this.userGoalsMade(intraId, game));
-			console.log(this.userGoalsTaken(intraId, game));
 
 			out.score += this.userScore(intraId, game);
 			out.matches++;
@@ -69,13 +63,11 @@ export class GameService {
 		out.looses = out.matches - out.wins;
 		out.winsPerLooses = out.wins/out.looses;
 		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
-		console.log("Returning", out);
 		return out;
 	}
 
 	userScore(id: string, game: any): number {
-		return
-		  game.p1_intraId == id ? game.p1_scoreMade
+		return game.p1_intraId == id ? game.p1_scoreMade
 		: game.p2_intraId == id ? game.p2_scoreMade
 		: game.p3_intraId == id ? game.p3_scoreMade
 		: game.p4_intraId == id ? game.p4_scoreMade
@@ -83,8 +75,7 @@ export class GameService {
 	}
 
 	didUserWin(id: string, game: any): number {
-		return
-		(
+		return (
 			game.mode == 'PONG' && (
 				(game.p1_intraId == id
 				&& game.p1_scoreMade > game.p2_scoreMade)
@@ -118,8 +109,7 @@ export class GameService {
 	}
 
 	userGoalsMade(id: string, game: any): number {
-		return
-			game.p1_intraId == id ? game.p1_goalsMade
+		return game.p1_intraId == id ? game.p1_goalsMade
 		:	game.p2_intraId == id ? game.p2_goalsMade
 		:	game.p3_intraId == id ? game.p3_goalsMade
 		:	game.p4_intraId == id ? game.p4_goalsMade
@@ -127,8 +117,7 @@ export class GameService {
 	}
 
 	userGoalsTaken(id: string, game: any): number {
-		return
-			game.p1_intraId == id ? game.p1_goalsTaken
+		return game.p1_intraId == id ? game.p1_goalsTaken
 		:	game.p2_intraId == id ? game.p2_goalsTaken
 		:	game.p3_intraId == id ? game.p3_goalsTaken
 		:	game.p4_intraId == id ? game.p4_goalsTaken
