@@ -3,11 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users, UserDTO, StatisticsDTO } from '../user/entity/user.entity';
 import { GameHistory } from './game-record';
+import { UserService } from '../user/service/user.service';
 
 @Injectable()
 export class GameService {
   constructor(
 	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
+	private readonly userService: UserService,
   ) {}
 
 	// TODO At the end of each match, backend must call this:
@@ -52,8 +54,7 @@ export class GameService {
 		out.winsPerLooses = 0;
 		out.goalsMadePerTaken = 0;
 		for (const game of games) {
-
-			out.score += this.userScore(intraId, game);
+//			out.score += this.userScore(intraId, game);
 			out.matches++;
 			out.wins += this.didUserWin(intraId, game);
 			out.goalsMade += this.userGoalsMade(intraId, game);
@@ -66,12 +67,8 @@ export class GameService {
 		return out;
 	}
 
-	userScore(id: string, game: any): number {
-		return game.p1_intraId == id ? game.p1_scoreMade
-		: game.p2_intraId == id ? game.p2_scoreMade
-		: game.p3_intraId == id ? game.p3_scoreMade
-		: game.p4_intraId == id ? game.p4_scoreMade
-		: 0;
+	async userScore(id: string, game: any): Promise<number> {
+		return (await this.userService.getUserByIntraId(id)).score;
 	}
 
 	didUserWin(id: string, game: any): number {
