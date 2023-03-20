@@ -17,7 +17,7 @@
 				<label>Room Name</label>
 			</td><td>
 				<input id="name" [(ngModel)]="chatRoom.name"
-				(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
+				(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastRoomName();"
 				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
 				(keydown.enter)="fun.blur('name'); fun.blink('nameButton'); validateAndEmit();"
 				(change)="validateAndEmit();"
