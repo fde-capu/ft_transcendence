@@ -13,7 +13,7 @@ import { Single } from './engine';
   styleUrls: ['./game.component.css'],
 })
 export class GameComponent implements AfterViewInit {
-  @ViewChild('game')
+  @ViewChild('stage')
   canvas!: ElementRef<HTMLCanvasElement>;
 
   running = false;
