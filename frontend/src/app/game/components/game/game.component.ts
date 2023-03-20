@@ -5,7 +5,7 @@ import {
   HostListener,
   ViewChild,
 } from '@angular/core';
-import { Single } from './engine';
+import { PongDouble } from './engine';
 
 @Component({
   selector: 'app-game',
@@ -21,7 +21,7 @@ export class GameComponent implements AfterViewInit {
   value = 0;
 
   ngAfterViewInit(): void {
-    const game = new Single(this.canvas.nativeElement);
+    const game = new PongDouble(this.canvas.nativeElement);
     game.reset();
     const frameRate = 1000 / 60;
     let lastUpdate = Date.now();

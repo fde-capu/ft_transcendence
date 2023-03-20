@@ -1,3 +1,6 @@
+interface Dictionary<T> {
+  [index: string]: T;
+}
 interface Collision {
   entryTime: number;
   xnormal: number;
@@ -243,17 +246,33 @@ class BottomPaddle extends HorizontalPaddle {
   }
 }
 
+class Team {
+  public score = 0;
+
+  public from(r: Team) {
+    Object.assign(this, r);
+  }
+}
+
+interface GameData {
+  teams: Dictionary<Team>;
+  balls: Dictionary<Rectangle>;
+  paddles: Dictionary<Rectangle>;
+  walls: Dictionary<Rectangle>;
+}
+
 export abstract class Game {
   static w = 500;
   static h = 500;
 
   protected context: CanvasRenderingContext2D;
 
-  protected elements: {
-    balls: Array<Rectangle>;
-    paddles: Array<Rectangle>;
-    walls: Array<Rectangle>;
-  } = { balls: [], paddles: [], walls: [] };
+  protected elements: GameData = {
+    teams: {},
+    balls: {},
+    paddles: {},
+    walls: {},
+  };
 
   constructor(canvas: HTMLCanvasElement) {
     canvas.width = Game.w;
@@ -266,24 +285,30 @@ export abstract class Game {
   }
 
   update(t = 1) {
-    this.elements.balls.forEach(b => b.setVelocity(t));
-    this.elements.paddles.forEach(p => p.setVelocity(t));
+    const balls = Object.values(this.elements.balls);
+    const paddles = Object.values(this.elements.paddles);
+    const walls = Object.values(this.elements.walls);
 
-    const collisionables: Array<Rectangle> = [
-      ...this.elements.paddles,
-      ...this.elements.walls,
-    ];
+    balls.forEach(b => b.setVelocity(t));
+    paddles.forEach(p => p.setVelocity(t));
+
+    const collisionables: Array<Rectangle> = [...paddles, ...walls];
 
     let data;
 
-    while ((data = this.nextCollision(this.elements.balls, collisionables))) {
+    while (
+      (data = this.nextCollision(
+        Object.values(this.elements.balls),
+        collisionables
+      ))
+    ) {
       const { collision, subject, target } = data;
 
       subject.sx += target.vx / 2;
       subject.sy += target.vy / 2;
 
-      this.elements.balls.forEach(b => b.move(collision.entryTime));
-      this.elements.paddles.forEach(p => p.move(collision.entryTime));
+      balls.forEach(b => b.move(collision.entryTime));
+      paddles.forEach(p => p.move(collision.entryTime));
 
       if (collision.xnormal != 0) {
         subject.vx *= -1;
@@ -294,15 +319,17 @@ export abstract class Game {
         subject.vy *= -1;
         subject.sy *= -1;
       }
-
     }
 
-    this.elements.balls.forEach(b => b.move());
-    this.elements.paddles.forEach(p => p.move());
-
     this.clear();
-    this.elements.balls.forEach(b => this.draw(b));
-    this.elements.paddles.forEach(p => this.draw(p));
+    balls.forEach(b => {
+      b.move();
+      this.draw(b);
+    });
+    paddles.forEach(p => {
+      p.move();
+      this.draw(p);
+    });
   }
 
   private nextCollision(subjects: Array<Ball>, targets: Array<Rectangle>) {
@@ -339,17 +366,40 @@ export class Pong extends Game {
     super(canvas);
   }
 
+  public override update(t?: number): void {
+    super.update(t);
+    this.elements.balls = Object.keys(this.elements.balls).reduce(
+      (balls: Dictionary<Ball>, ball) => {
+        const b = this.elements.balls[ball];
+        if (b.x < 0) {
+          this.elements.teams['right'].score++;
+          return balls;
+        }
+
+        if (b.x + b.w > Game.w) {
+          this.elements.teams['left'].score++;
+          return balls;
+        }
+
+        balls[ball] = b;
+        return balls;
+      },
+      {}
+    );
+  }
+
   public override reset(): void {
     this.elements = {
-      balls: [new Ball()],
-      paddles: [
-        new LeftPaddle(1 * VerticalPaddle.w),
-        new RightPaddle(Game.w - 2 * VerticalPaddle.w),
-      ],
-      walls: [
-        new Wall(-5, -5, Game.w + 10, 5),
-        new Wall(-5, Game.h, Game.w + 10, 5),
-      ],
+      teams: { left: new Team(), right: new Team() },
+      balls: { a: new Ball() },
+      paddles: {
+        left: new LeftPaddle(1 * VerticalPaddle.w),
+        right: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+      },
+      walls: {
+        top: new Wall(-5, -5, Game.w + 10, 5),
+        bottom: new Wall(-5, Game.h, Game.w + 10, 5),
+      },
     };
   }
 }
@@ -359,20 +409,45 @@ export class PongDouble extends Game {
     super(canvas);
   }
 
+  public override update(t?: number): void {
+    super.update(t);
+    this.elements.balls = Object.keys(this.elements.balls).reduce(
+      (balls: Dictionary<Ball>, ball) => {
+        const b = this.elements.balls[ball];
+        if (b.x < 0) {
+          this.elements.teams['right'].score++;
+          return balls;
+        }
+
+        if (b.x + b.w > Game.w) {
+          this.elements.teams['left'].score++;
+          return balls;
+        }
+
+        balls[ball] = b;
+        return balls;
+      },
+      {}
+    );
+  }
+
   public override reset(): void {
     this.elements = {
-      balls: [new Ball()],
-      paddles: [
-        new LeftPaddle(1 * VerticalPaddle.w),
-        new LeftPaddle(3 * VerticalPaddle.w),
-        new RightPaddle(Game.w - 4 * VerticalPaddle.w),
-        new RightPaddle(Game.w - 2 * VerticalPaddle.w),
-      ],
-      walls: [
-        new Wall(-5, -5, Game.w + 10, 5),
-        new Wall(-5, Game.h, Game.w + 10, 5),
-      ],
+      teams: { left: new Team(), right: new Team() },
+      balls: { a: new Ball() },
+      paddles: {
+        left1: new LeftPaddle(1 * VerticalPaddle.w),
+        left2: new LeftPaddle(3 * VerticalPaddle.w),
+        right1: new RightPaddle(Game.w - 4 * VerticalPaddle.w),
+        right2: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+      },
+      walls: {
+        top: new Wall(-5, -5, Game.w + 10, 5),
+        bottom: new Wall(-5, Game.h, Game.w + 10, 5),
+      },
     };
+    this.elements.balls['a'].sx = 300;
+    this.elements.balls['a'].sy = -240;
   }
 }
 
@@ -381,43 +456,59 @@ export class Quadrapong extends Game {
     super(canvas);
   }
 
+  public override update(t?: number): void {
+    super.update(t);
+    this.elements.balls = Object.keys(this.elements.balls).reduce(
+      (balls: Dictionary<Ball>, ball) => {
+        const b = this.elements.balls[ball];
+        if (b.x < 0) {
+          this.elements.teams['left'].score++;
+          return balls;
+        }
+
+        if (b.x + b.w > Game.w) {
+          this.elements.teams['right'].score++;
+          return balls;
+        }
+
+        if (b.x + b.w > Game.w) {
+          this.elements.teams['top'].score++;
+          return balls;
+        }
+
+        if (b.x + b.w > Game.w) {
+          this.elements.teams['bottom'].score++;
+          return balls;
+        }
+
+        balls[ball] = b;
+        return balls;
+      },
+      {}
+    );
+  }
+
   public override reset(): void {
     this.elements = {
-      balls: [new Ball()],
-      paddles: [
-        new LeftPaddle(1 * VerticalPaddle.w),
-        new RightPaddle(Game.w - 2 * VerticalPaddle.w),
-        new TopPaddle(HorizontalPaddle.h),
-        new BottomPaddle(Game.h - 2 * HorizontalPaddle.h),
-      ],
-      walls: [
-        new Wall(-5, -5, 5, Game.h + 10),
-        new Wall(Game.w, -1, 5, Game.h + 10),
-        new Wall(-5, -5, Game.w + 10, 5),
-        new Wall(-5, Game.h, Game.w + 10, 5),
-      ],
+      teams: {
+        left: new Team(),
+        right: new Team(),
+        top: new Team(),
+        bottom: new Team(),
+      },
+      balls: { a: new Ball() },
+      paddles: {
+        left: new LeftPaddle(1 * VerticalPaddle.w),
+        right: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+        top: new TopPaddle(HorizontalPaddle.h),
+        bottom: new BottomPaddle(Game.h - 2 * HorizontalPaddle.h),
+      },
+      walls: {
+        left: new Wall(-5, -5, 5, Game.h + 10),
+        right: new Wall(Game.w, -1, 5, Game.h + 10),
+        top: new Wall(-5, -5, Game.w + 10, 5),
+        bottom: new Wall(-5, Game.h, Game.w + 10, 5),
+      },
     };
-  }
-}
-
-export class Single extends Game {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
-  public override reset(): void {
-    this.elements = {
-      balls: [new Ball()],
-      paddles: [new LeftPaddle(1 * VerticalPaddle.w)],
-      walls: [
-        new Wall(-5, -5, 5, Game.h + 10),
-        new Wall(Game.w, -1, 5, Game.h + 10),
-        new Wall(-5, -5, Game.w + 10, 5),
-        new Wall(-5, Game.h, Game.w + 10, 5),
-      ],
-    };
-    this.elements.balls[0].x = 100;
-    this.elements.balls[0].sx = -100;
-    this.elements.balls[0].sy = -200;
   }
 }
