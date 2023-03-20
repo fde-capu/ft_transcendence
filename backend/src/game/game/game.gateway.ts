@@ -8,7 +8,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
-import { Client, GameService } from './game.service';
 
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
@@ -21,23 +20,13 @@ export class GameGateway
   @WebSocketServer()
   server: Server;
 
-  public constructor(
-    private readonly tokenService: TokenService,
-    private readonly gameService: GameService,
-  ) {}
+  public constructor(private readonly tokenService: TokenService) {}
 
-  public afterInit(server: Server): void {
-    this.gameService.setServer(server);
-  }
+  public afterInit(server: Server): void {}
 
-  public async handleConnection(client: Client): Promise<void> {
-    await this.authorize(client);
-    this.gameService.connect(client);
-  }
+  public async handleConnection(client: Socket): Promise<void> {}
 
-  public handleDisconnect(client: Client): void {
-    this.gameService.disconnect(client);
-  }
+  public handleDisconnect(client: Socket): void {}
 
   private async authorize(client: Socket): Promise<void> {
     try {

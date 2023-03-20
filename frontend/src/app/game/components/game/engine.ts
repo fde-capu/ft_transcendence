@@ -1,3 +1,9 @@
+interface Collision {
+  entryTime: number;
+  xnormal: number;
+  ynormal: number;
+}
+
 class Rectangle {
   public constructor(
     public x = 0,
@@ -108,14 +114,12 @@ class Rectangle {
     this.vy = this.sy * dt;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public move(elements: Rectangle[]) {
-    this.x += this.vx;
-    this.y += this.vy;
-  }
+  public move(dt = 1) {
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
 
-  public draw(context: CanvasRenderingContext2D) {
-    context.fillRect(this.x, this.y, this.w, this.h);
+    this.vx *= 1 - dt;
+    this.vy *= 1 - dt;
   }
 }
 
@@ -123,104 +127,56 @@ class Wall extends Rectangle {
   public constructor(x = 0, y = 0, w = 0, h = 0) {
     super(x, y, w, h);
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public override draw() {}
 }
 
 class Ball extends Rectangle {
   static s = 10;
 
-  public constructor(w = 0, h = 0, sx = 0, sy = 0) {
-    super(w / 2 - Ball.s / 2, h / 2 - Ball.s / 2, Ball.s, Ball.s, 0, 0, sx, sy);
-  }
-
-  public override move(elements: Rectangle[]) {
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const result = elements
-        .map(element => ({
-          element,
-          collision: element.collision(this),
-        }))
-        .filter(r => !!r.collision)
-        .sort((a, b) =>
-          (a.collision?.entryTime || 0) < (b.collision?.entryTime || 0) ? -1 : 1
-        )[0];
-
-      if (!result) break;
-
-      const { element, collision } = result;
-
-      if (!element || !collision) break;
-
-      this.sx += element.vx / 2;
-      this.sy += element.vy / 2;
-
-      this.x += this.vx * collision.entryTime;
-      this.y += this.vy * collision.entryTime;
-
-      const remainingtime = 1 - collision.entryTime;
-      this.vx *= remainingtime;
-      this.vy *= remainingtime;
-
-      if (collision.xnormal != 0) {
-        this.vx *= -1;
-        this.sx *= -1;
-      }
-
-      if (collision.ynormal != 0) {
-        this.vy *= -1;
-        this.sy *= -1;
-      }
-    }
-
-    this.x += this.vx;
-    this.y += this.vy;
+  public constructor() {
+    super(
+      Game.w / 2 - Ball.s / 2,
+      Game.h / 2 - Ball.s / 2,
+      Ball.s,
+      Ball.s,
+      0,
+      0
+    );
   }
 }
 
-class Paddle extends Rectangle {
+abstract class Paddle extends Rectangle {
   static shortSide = 15;
   static longSide = 50;
 
-  protected l: number;
-
-  public constructor(x = 0, y = 0, w = 0, h = 0, l = 0) {
+  public constructor(x = 0, y = 0, w = 0, h = 0) {
     super(x, y, w, h);
-    this.l = l;
   }
 }
 
-class VerticalPaddle extends Paddle {
+abstract class VerticalPaddle extends Paddle {
   static w = Paddle.shortSide;
   static h = Paddle.longSide;
 
-  public constructor(x = 0, h = 0) {
+  public constructor(x = 0) {
     super(
       x,
-      h / 2 - VerticalPaddle.h / 2,
-      VerticalPaddle.w,
-      VerticalPaddle.h,
-      h
+      Game.h / 2 - Paddle.longSide / 2,
+      Paddle.shortSide,
+      Paddle.longSide
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public override move(elements: Rectangle[]) {
-    if (this.y + this.vy < 0) {
-      this.y = 0;
-    } else if (this.y + this.h + this.vy > this.l) {
-      this.y = this.l - this.h;
-    } else {
-      this.y += this.vy;
-    }
+  public override setVelocity(dt: number): void {
+    super.setVelocity(dt);
+    if (this.vy < -this.y) this.vy = -this.y;
+    const d = Game.h - this.y - this.h;
+    if (this.vy > d) this.vy = d;
   }
 }
 
 class LeftPaddle extends VerticalPaddle {
-  public constructor(x = 0, h = 0) {
-    super(x, h);
+  public constructor(x = 0) {
+    super(x);
   }
 
   public override collision(b: Rectangle) {
@@ -231,8 +187,8 @@ class LeftPaddle extends VerticalPaddle {
 }
 
 class RightPaddle extends VerticalPaddle {
-  public constructor(x = 0, h = 0) {
-    super(x, h);
+  public constructor(x = 0) {
+    super(x);
   }
 
   public override collision(b: Rectangle) {
@@ -242,34 +198,30 @@ class RightPaddle extends VerticalPaddle {
   }
 }
 
-class HorizontalPaddle extends Paddle {
+abstract class HorizontalPaddle extends Paddle {
   static w = Paddle.longSide;
   static h = Paddle.shortSide;
 
-  public constructor(y = 0, w = 0) {
+  public constructor(y = 0) {
     super(
-      w / 2 - HorizontalPaddle.w / 2,
+      Game.w / 2 - Paddle.longSide / 2,
       y,
-      HorizontalPaddle.w,
-      HorizontalPaddle.h,
-      w
+      Paddle.longSide,
+      Paddle.shortSide
     );
   }
 
-  public override move() {
-    if (this.x + this.vx < 0) {
-      this.x = 0;
-    } else if (this.x + this.w + this.vx > this.l) {
-      this.x = this.l - this.w;
-    } else {
-      this.x += this.vx;
-    }
+  public override setVelocity(dt: number): void {
+    super.setVelocity(dt);
+    if (this.vx < -this.x) this.vx = -this.x;
+    const d = Game.w - this.x - this.w;
+    if (this.vx > d) this.vx = d;
   }
 }
 
 class TopPaddle extends HorizontalPaddle {
-  public constructor(y = 0, w = 0) {
-    super(y, w);
+  public constructor(y = 0) {
+    super(y);
   }
 
   public override collision(b: Rectangle) {
@@ -280,8 +232,8 @@ class TopPaddle extends HorizontalPaddle {
 }
 
 class BottomPaddle extends HorizontalPaddle {
-  public constructor(y = 0, w = 0) {
-    super(y, w);
+  public constructor(y = 0) {
+    super(y);
   }
 
   public override collision(b: Rectangle) {
@@ -297,7 +249,11 @@ export abstract class Game {
 
   protected context: CanvasRenderingContext2D;
 
-  protected elements: { [element: string]: Rectangle } = {};
+  protected elements: {
+    balls: Array<Rectangle>;
+    paddles: Array<Rectangle>;
+    walls: Array<Rectangle>;
+  } = { balls: [], paddles: [], walls: [] };
 
   constructor(canvas: HTMLCanvasElement) {
     canvas.width = Game.w;
@@ -310,14 +266,69 @@ export abstract class Game {
   }
 
   update(t = 1) {
-    const elements = Object.values(this.elements);
+    this.elements.balls.forEach(b => b.setVelocity(t));
+    this.elements.paddles.forEach(p => p.setVelocity(t));
 
-    elements.forEach(e => e.setVelocity(t));
+    const collisionables: Array<Rectangle> = [
+      ...this.elements.paddles,
+      ...this.elements.walls,
+    ];
 
-    elements.forEach(e => e.move(elements));
+    let data;
 
-    this.context.clearRect(0, 0, Pong.w, Pong.h);
-    elements.forEach(e => e.draw(this.context));
+    while ((data = this.nextCollision(this.elements.balls, collisionables))) {
+      const { collision, subject, target } = data;
+
+      subject.sx += target.vx / 2;
+      subject.sy += target.vy / 2;
+
+      this.elements.balls.forEach(b => b.move(collision.entryTime));
+      this.elements.paddles.forEach(p => p.move(collision.entryTime));
+
+      if (collision.xnormal != 0) {
+        subject.vx *= -1;
+        subject.sx *= -1;
+      }
+
+      if (collision.ynormal != 0) {
+        subject.vy *= -1;
+        subject.sy *= -1;
+      }
+
+    }
+
+    this.elements.balls.forEach(b => b.move());
+    this.elements.paddles.forEach(p => p.move());
+
+    this.clear();
+    this.elements.balls.forEach(b => this.draw(b));
+    this.elements.paddles.forEach(p => this.draw(p));
+  }
+
+  private nextCollision(subjects: Array<Ball>, targets: Array<Rectangle>) {
+    let data:
+      | { collision: Collision; subject: Ball; target: Rectangle }
+      | undefined;
+
+    for (const s of subjects) {
+      for (const t of targets) {
+        const c = t.collision(s);
+
+        if (!c) continue;
+        if (data && c.entryTime >= data.collision.entryTime) continue;
+
+        data = { collision: c, subject: s, target: t };
+      }
+    }
+    return data;
+  }
+
+  private draw(r: Rectangle) {
+    this.context.fillRect(r.x, r.y, r.w, r.h);
+  }
+
+  private clear() {
+    this.context.clearRect(0, 0, Game.w, Game.h);
   }
 
   public abstract reset(): void;
@@ -330,11 +341,15 @@ export class Pong extends Game {
 
   public override reset(): void {
     this.elements = {
-      ball: new Ball(Pong.w, Pong.h, 300, -200),
-      leftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
-      rightPaddle: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
-      topWall: new Wall(-5, -5, Pong.w + 10, 5),
-      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
+      balls: [new Ball()],
+      paddles: [
+        new LeftPaddle(1 * VerticalPaddle.w),
+        new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+      ],
+      walls: [
+        new Wall(-5, -5, Game.w + 10, 5),
+        new Wall(-5, Game.h, Game.w + 10, 5),
+      ],
     };
   }
 }
@@ -346,13 +361,17 @@ export class PongDouble extends Game {
 
   public override reset(): void {
     this.elements = {
-      ball: new Ball(Pong.w, Pong.h, 300, -200),
-      LeftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
-      LeftPaddle2: new LeftPaddle(3 * VerticalPaddle.w, Pong.h),
-      RightPaddle: new RightPaddle(Pong.w - 4 * VerticalPaddle.w, Pong.h),
-      RightPaddle2: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
-      topWall: new Wall(-5, -5, Pong.w + 10, 5),
-      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
+      balls: [new Ball()],
+      paddles: [
+        new LeftPaddle(1 * VerticalPaddle.w),
+        new LeftPaddle(3 * VerticalPaddle.w),
+        new RightPaddle(Game.w - 4 * VerticalPaddle.w),
+        new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+      ],
+      walls: [
+        new Wall(-5, -5, Game.w + 10, 5),
+        new Wall(-5, Game.h, Game.w + 10, 5),
+      ],
     };
   }
 }
@@ -364,15 +383,19 @@ export class Quadrapong extends Game {
 
   public override reset(): void {
     this.elements = {
-      ball: new Ball(Pong.w, Pong.h, 300, -200),
-      leftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
-      rightPaddle: new RightPaddle(Pong.w - 2 * VerticalPaddle.w, Pong.h),
-      topPaddle: new TopPaddle(HorizontalPaddle.h, Pong.w),
-      bottomPaddle: new BottomPaddle(Pong.h - 2 * HorizontalPaddle.h, Pong.w),
-      leftWall: new Wall(-5, -5, 5, Pong.h + 10),
-      rightWall: new Wall(Pong.w, -1, 5, Pong.h + 10),
-      topWall: new Wall(-5, -5, Pong.w + 10, 5),
-      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
+      balls: [new Ball()],
+      paddles: [
+        new LeftPaddle(1 * VerticalPaddle.w),
+        new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+        new TopPaddle(HorizontalPaddle.h),
+        new BottomPaddle(Game.h - 2 * HorizontalPaddle.h),
+      ],
+      walls: [
+        new Wall(-5, -5, 5, Game.h + 10),
+        new Wall(Game.w, -1, 5, Game.h + 10),
+        new Wall(-5, -5, Game.w + 10, 5),
+        new Wall(-5, Game.h, Game.w + 10, 5),
+      ],
     };
   }
 }
@@ -384,12 +407,17 @@ export class Single extends Game {
 
   public override reset(): void {
     this.elements = {
-      ball: new Ball(Pong.w, Pong.h, 300, -200),
-      leftPaddle: new LeftPaddle(1 * VerticalPaddle.w, Pong.h),
-      leftWall: new Wall(-5, -5, 5, Pong.h + 10),
-      rightWall: new Wall(Pong.w, -1, 5, Pong.h + 10),
-      topWall: new Wall(-5, -5, Pong.w + 10, 5),
-      bottomWall: new Wall(-5, Pong.h, Pong.w + 10, 5),
+      balls: [new Ball()],
+      paddles: [new LeftPaddle(1 * VerticalPaddle.w)],
+      walls: [
+        new Wall(-5, -5, 5, Game.h + 10),
+        new Wall(Game.w, -1, 5, Game.h + 10),
+        new Wall(-5, -5, Game.w + 10, 5),
+        new Wall(-5, Game.h, Game.w + 10, 5),
+      ],
     };
+    this.elements.balls[0].x = 100;
+    this.elements.balls[0].sx = -100;
+    this.elements.balls[0].sy = -200;
   }
 }
