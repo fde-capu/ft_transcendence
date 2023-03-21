@@ -22,8 +22,7 @@ export class HomeComponent {
 		this.userService.getLoggedUser().subscribe
 			( user => {
 				this.user = user; 
-				console.log("Home got", this.user);
-				this.userService.setStatus(this.user, "ONLINY").subscribe();
+				this.userService.setStatus("ONLINE");
 			});
 	}
 }

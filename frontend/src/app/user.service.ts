@@ -82,20 +82,21 @@ export class UserService {
 	}
 
 	signOut() {
+		this.setStatus("OFFLINE");
 		this.authService.signOut();
 	}
 
-	setStatus(u_user: User, stat: string): Observable<any> {
-		console.log("fos setStatus:", u_user.intraId, stat);
-		return this.http.put(
-				this.updateUserStatus + u_user.intraId,
+	setStatus(stat: string) {
+		//console.log("fos setStatus:", u_user.intraId, stat);
+		this.http.put(
+				this.updateUserStatus + this.currentIntraId,
 				{ stat },
 				this.saveHttpOptions
 			)
 			.pipe
 			(
 				catchError(this.handleError<any>('setStatus'))
-			);
+			).subscribe();
 	}
 
 	saveUser(u_user: User): Observable<any> {

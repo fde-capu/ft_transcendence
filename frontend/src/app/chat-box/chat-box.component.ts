@@ -50,6 +50,7 @@ export class ChatBoxComponent {
 		this.userService.getLoggedUser().subscribe(
 			backUser => {
 				this.user = backUser;
+				this.userService.setStatus("INCHAT");
 				this.initChatRoom();
 			}
 		)

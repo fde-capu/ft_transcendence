@@ -40,6 +40,7 @@ export class ChatRoomListComponent {
 		this.userService.getLoggedUser()
 			.subscribe(user => {
 				this.user = user;
+				this.userService.setStatus("ONLINE");
 				this.getChatRooms();
 			});
 	}

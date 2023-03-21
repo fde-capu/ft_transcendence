@@ -9,9 +9,19 @@ import { UserService } from '../user.service';
 })
 export class OnlineUsersComponent {
 	users: User[] = [];
+	user?: User;
 	constructor(private userService: UserService) {};
 	ngOnInit(): void {
+		this.getUser();
 		this.getOnlineUsers();
+	}
+	getUser(): void {
+		this.userService.getLoggedUser().subscribe(
+			backUser => { 
+				this.user = backUser;
+				this.userService.setStatus("ONLINE");
+			}
+		)
 	}
 	async getOnlineUsers() {
 		this.userService.getOnlineUsers()
