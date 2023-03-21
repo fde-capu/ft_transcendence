@@ -135,7 +135,7 @@ export class RegisterController {
 		const resp = await this.gameService.getGameHistory(intraId);
 		return response.status(200).json(resp);
 	} catch (e) {
-		//console.log("reg history got catch", e);
+		console.log("reg history got catch", e);
 		response.status(e.status).json(e.data);
 	}
   }
