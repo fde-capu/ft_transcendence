@@ -16,6 +16,7 @@ export class U2uActionsComponent {
 	@Input() singleline?: boolean;
 	@Input() amIBlocked?: boolean;
 	isMe: boolean = false;
+	availability?: boolean;
 
 	constructor(
 		private userService: UserService,
@@ -24,6 +25,8 @@ export class U2uActionsComponent {
 
 	ngOnChanges() {
 		this.checkMe();
+		console.log("u2u", this.user);
+		this.availability = this.user?.status != 'OFFLINE' && this.user?.status != 'INGAME';
 	}
 
 	inviteToChat() {
