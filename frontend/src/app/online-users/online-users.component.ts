@@ -24,6 +24,7 @@ export class OnlineUsersComponent {
 		)
 	}
 	async getOnlineUsers() {
+		if (!this.userService.authorized()) return;
 		this.userService.getOnlineUsers()
 			.subscribe(users => {
 				let out = [];

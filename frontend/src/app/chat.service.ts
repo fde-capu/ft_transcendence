@@ -169,9 +169,10 @@ export class ChatService {
 	}
 
 	getOutOfAnyChat() {
-		//console.log("getting out of any chat");
+		//console.log("getting out of any chat", this.userService.getQuickIntraId());
 		if (!this.userService.getQuickIntraId()) return;
 		this.userService.getLoggedUser().subscribe(_=>{
+			//console.log(_);
 			this.logOutAllRooms(_.intraId)
 		});
 	}

@@ -114,6 +114,7 @@ export class ChatBoxComponent {
 	}
 
 	async getOutOfChatUsersRecursiveOnce() {
+		if (!this.userService.authorized()) return ;
 		this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(
 			outChat => {
 				//console.log("Got out-of-chat users.", outChat);

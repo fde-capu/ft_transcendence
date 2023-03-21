@@ -51,9 +51,10 @@ export class UserService {
 	setCurrentIntraId() {
 		this.authService.getAuthContext().subscribe(_=>{
 			UserService.isAuthorized = true;
-			this.currentIntraId=_?.sub;
+			if (_?.sub)
+				this.currentIntraId=_?.sub;
 			if (this.currentIntraId)
-				this.getLoggedUser().subscribe(_=>{this.currentUser=_});
+				this.getLoggedUser().subscribe(_=>{this.currentUser=_;});
 		});
 	}
 
@@ -85,6 +86,7 @@ export class UserService {
 	}
 
 	signOut(afterRoute: string = '/logout') {
+		this.setStatus("OFFLINE");
 		UserService.isAuthorized = false;
 		this.authService.signOut(afterRoute);
 	}
@@ -206,7 +208,7 @@ export class UserService {
 	}
 
 	async intraIdsToUsers(ulist: string[]): Promise<User[]> {
-		if (!ulist || !ulist.length) return [];
+		if (!ulist || !ulist.length || !this.authorized()) return [];
 		let out: User[] = [];
 		for (const one of ulist)
 		{
@@ -234,9 +236,7 @@ export class UserService {
 				UserService.isAuthorized = false;
 				if (this.router.url.indexOf("/login") != 0
 				&& this.router.url.indexOf("/logout") != 0)
-				{
 					this.signOut();
-				}
 			}
 			//console.error("handleError<T>:", error.error);
 			return of(result as T);
