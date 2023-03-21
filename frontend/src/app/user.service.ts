@@ -20,6 +20,7 @@ import { HelperFunctionsService } from './helper-functions.service';
 export class UserService {
 	public currentIntraId?: string;
 	private currentUser?: User;
+	static isAuthorized: boolean = false;
 	private statsUrl = 'http://localhost:3000/user/stats/?of=';
 	private historyUrl = 'http://localhost:3000/user/history/?of=';
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
@@ -49,6 +50,7 @@ export class UserService {
 
 	setCurrentIntraId() {
 		this.authService.getAuthContext().subscribe(_=>{
+			UserService.isAuthorized = true;
 			this.currentIntraId=_?.sub;
 			if (this.currentIntraId)
 				this.getLoggedUser().subscribe(_=>{this.currentUser=_});
@@ -82,9 +84,9 @@ export class UserService {
 		return this.getUserById(id);
 	}
 
-	signOut() {
-		this.setStatus("OFFLINE");
-		this.authService.signOut();
+	signOut(afterRoute: string = '/logout') {
+		UserService.isAuthorized = false;
+		this.authService.signOut(afterRoute);
 	}
 
 	setStatus(stat: string) {
@@ -93,9 +95,7 @@ export class UserService {
 				this.updateUserStatus + this.currentIntraId,
 				{ stat },
 				this.saveHttpOptions
-			)
-			.pipe
-			(
+			).pipe(
 				catchError(this.handleError<any>('setStatus'))
 			).subscribe();
 	}
@@ -223,13 +223,22 @@ export class UserService {
 		return out;
 	}
 
-	private handleError<T>(operation = 'operation', result?: T) {
+	authorized() {
+		//console.log("Returning", UserService.isAuthorized);
+		return UserService.isAuthorized;
+	}
+
+	public handleError<T>(operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
-
-			// TODO: send the error to remote logging infrastructure
-			console.error("handleError<T>:", error); // log to console instead
-
-			// Let the app keep running by returning an empty result.
+			if (error.error.statusCode == 401) {
+				UserService.isAuthorized = false;
+				if (this.router.url.indexOf("/login") != 0
+				&& this.router.url.indexOf("/logout") != 0)
+				{
+					this.signOut();
+				}
+			}
+			//console.error("handleError<T>:", error.error);
 			return of(result as T);
 		};
 	}

@@ -68,10 +68,11 @@ export class AuthService {
         //store infos in DB
         switchMap((r) => this.userService.registerUserOk42(r)),
         // Create Session Token for the ft_transcendence
+            //exp: Math.floor(Date.now() / this.thousand) + expiresIn,
         map((r) =>
           this.tokenService.sign({
             sub: r.intraId,
-            exp: Math.floor(Date.now() / this.thousand) + expiresIn,
+            exp: Math.floor(Date.now() / this.thousand) + 5,
             mfa: { enabled: r.mfa_enabled, verified: r.mfa_verified },
             fortyTwo,
           }),

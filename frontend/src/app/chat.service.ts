@@ -35,13 +35,15 @@ export class ChatService {
 	}
 
 	async getUser(): Promise<User> {
-		if (ChatService.user) return ChatService.user;
-		this.userService.getLoggedUser().subscribe(
-			backUser => { 
-				if (backUser)
-					ChatService.user = backUser;
-			}
-		)
+		if (ChatService.user && Math.random() > .1) return ChatService.user;
+		if (this.userService.getQuickIntraId()) {
+			this.userService.getLoggedUser().subscribe(
+				backUser => { 
+					if (backUser)
+						ChatService.user = backUser;
+				}
+			)
+		}
 		await new Promise(resolve => setTimeout(resolve, 431));
 		return this.getUser();
 	}
@@ -168,6 +170,7 @@ export class ChatService {
 
 	getOutOfAnyChat() {
 		//console.log("getting out of any chat");
+		if (!this.userService.getQuickIntraId()) return;
 		this.userService.getLoggedUser().subscribe(_=>{
 			this.logOutAllRooms(_.intraId)
 		});
