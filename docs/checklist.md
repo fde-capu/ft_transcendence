@@ -22,4 +22,4 @@ Bug notes:
 [ ] Strange behavior when authentication expires. Make it renew automatically if user is still logged.
 [ ] When user is kicked from the room, they are only REALLY KICKED after clicking "OK". There is an semi-transparent screen, and they can still read the messages.
 [ ] By now, there is no visualization of off-line users, should there be one? See line on "HISTORIES" above, its interpretation.
-[ ] When logged off, the frontend page keeps making requests and getting 401 continuously.
+[X] (Solved) When logged off, the frontend page keeps making requests and getting 401 continuously.
