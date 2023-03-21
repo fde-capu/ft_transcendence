@@ -8,6 +8,7 @@ Checklist based on sub. 12.1
 [?] VALIDAÇÃO: Server-side validation for forms and any user input. (Feito apenas 4 <= string.length <= 42)
 [ ] IMAGEM: The user should be able to upload an avatar. If the user doesn’t upload an avatar, a default one must be set.
 [X] FINALIZAR ISSO: current status: (online, offline, in a game, and so forth).
+[X] LADDER
 [X] ESTATÍSTICAS, FALTAM ITENS: Stats (such as: wins and losses, ladder level, achievements, and so forth) have to be displayed on the user profile.
 [X] HISTORIES: Adaptar para PONG2 e PONG4. Each user should have a Match History including 1v1 games, ladder, and anything else useful. Anyone who is logged in should be able to consult it.
 [ ] DEIXAR MAIS EXPLÍCITO: (pois atualmente seria só pelo avatarzinho) The user should be able to invite other users to play a Pong game through the chat interface.
