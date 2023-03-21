@@ -33,6 +33,9 @@ export class ChatBoxComponent {
 	id?: string|null;
 	iAmAdmin: boolean = false;
 	firstTime: boolean = true;
+	invalidNameNotice: boolean = false;
+	invalidPasswordNotice: boolean = false;
+	lastRoomName: string = "";
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -84,7 +87,7 @@ export class ChatBoxComponent {
 	async updateRoomRecursive() {
 		if (!this.id) {
 			//console.log("A1");
-			await new Promise(resolve => setTimeout(resolve, 500));
+			await new Promise(resolve => setTimeout(resolve, 2209));
 			//console.log("A2");
 			await this.updateRoomRecursive();
 		} else {
@@ -120,28 +123,67 @@ export class ChatBoxComponent {
 		this.getOutOfChatUsersRecursiveOnce();
 	}
 
+	async allValid() {
+		let validName = await this.validateName();
+		let validPassword = await this.validatePassword();
+		return validName && validPassword;
+	}
+
+	async validateAndEmit(): Promise<boolean>{
+		if (await this.allValid()) {
+			this.emit();
+			return true;
+		}
+		return false;
+	}
+
+	saveLastRoomName() {
+		this.lastRoomName = this.chatRoom.name;
+	}
+
+	async validateName(): Promise<boolean> {
+		if (this.fun.validateString(this.chatRoom.name))
+			return true;
+		else {
+			this.invalidNameNotice = true;
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidNameNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.invalidNameNotice = false;
+			this.chatRoom.name = this.lastRoomName;
+			this.fun.focus('name');
+			return false;
+		}
+	}
+
 	emit() {
 		//console.log("Noticed room changed.");
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
-	async emitIfUnique() {
-		if (this.chatRoom.password
-		&& !this.chatService.testPasswordUnique(this.chatRoom))
+	async validatePassword(): Promise<boolean> {
+		//console.log("testing pass", this.chatRoom.password);
+		if (
+			this.chatRoom.password &&
+			!this.fun.validateString(this.chatRoom.password)
+		)
 		{
-			let saveTypedPassword = this.chatRoom.password;
-			this.chatRoom.password = "INVALID! Try another!"; // If its invalid because is repeated, then user knows some room has to have this password!...
-			this.fun.blink('password');
-			await new Promise(resolve => setTimeout(resolve, 500));
-			this.fun.blink('password');
-			await new Promise(resolve => setTimeout(resolve, 500));
-			this.fun.blink('password');
-			await new Promise(resolve => setTimeout(resolve, 500));
-			this.chatRoom.password = saveTypedPassword;
-			this.fun.focus('password');
-			return ;
+			this.invalidPasswordNotice = true;
+			this.fun.blink('invalidPasswordNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidPasswordNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.fun.blink('invalidPasswordNotice');
+			await new Promise(resolve => setTimeout(resolve, 342));
+			this.invalidPasswordNotice = false;
+			if (this.fun.validateString(this.chatRoom.name))
+				this.fun.focus('password');
+			return false;
 		}
-		this.emit();
+		return true;
 	}
 
 	async imprintRecursive() {
@@ -231,29 +273,30 @@ export class ChatBoxComponent {
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
-	onClose() {
+	async onClose() {
 		if (this.optionsOn)
-		{
-			return this.onMenu();
-		}
+			this.onMenu();
 		else
-		{
 			this.router.navigate(['/rooms']);
-		}
 	}
 
-	onMenu() {
-		this.optionsOn = !this.optionsOn;
+	async onMenu() {
+		if (!this.optionsOn) {
+			this.optionsOn = true;
+			return ;
+		}
+		if (await this.validateAndEmit())
+			this.optionsOn = false;
 	}
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
-		this.emit();
+		this.validateAndEmit();
 	}
 
 	cleanPassword() {
 		this.chatRoom.password = "";
-		this.emit();
+		this.validateAndEmit();
 	}
 
 	isAdmin(intraId?: string): boolean {

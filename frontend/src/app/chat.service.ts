@@ -48,7 +48,7 @@ export class ChatService {
 
 	think(msg: any)
 	{
-		console.log("Thinking about: ", msg);
+		//console.log("Thinking about: ", msg);
 		this.gotNews = true;
 		if (msg.payload.roomId) // This checks if is a simple message.
 		{
@@ -79,7 +79,7 @@ export class ChatService {
 	}
 
 	haveIBlocked(intraId:string):boolean{
-		console.log("Have I blocked", intraId);
+		//console.log("Have I blocked", intraId);
 		if (!ChatService.user) return false;
 		return this.fun.isStringInArray(intraId, ChatService.user.blocks);
 	}
@@ -232,8 +232,7 @@ export class ChatService {
 
 	getOutOfChatUsers(roomId?: string): Observable<User[]> {
 		if (!roomId) return of([]);
-		let response =
-		this.userService.getOnlineUsers()
+		let response = this.userService.getOnlineUsers()
 		.pipe(map(
 			result => {
 				let out: User[] = [];
@@ -252,15 +251,6 @@ export class ChatService {
 			if (room.password == myPassword)
 				return room.id;
 		return null;
-	}
-
-	testPasswordUnique(myRoom: ChatRoom): boolean {
-		for (const room of ChatService.allRooms)
-		{
-			if (room.id != myRoom.id && room.password == myRoom.password)
-				return false;
-		}
-		return true;
 	}
 
 	revokeAdmin(roomId: string|null|undefined, intraId: string) {
@@ -408,6 +398,7 @@ export class ChatService {
 
 			// TODO: send the error to remote logging infrastructure
 			console.error("handleError<T>:", error); // log to console instead
+			// ^ Yikes! Don't show if any bug! TODO (comment line above?)
 
 			// Let the app keep running by returning an empty result.
 			return of(result as T);
