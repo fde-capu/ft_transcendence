@@ -24,3 +24,4 @@ Bug notes:
 [X] By now, there is no visualization of off-line users, should there be one? See line on "HISTORIES" above, its interpretation. Solved: my interpretation, no need to show off-line users. Note: ladder currently only includes online users, and it's alright.
 [X] (Solved) When logged off, the frontend page keeps making requests and getting 401 continuously.
 [X] Users could invite to chat or game event if the other is offline (solved);
+[X] Game-history was auto-replicating and getting huge!!
