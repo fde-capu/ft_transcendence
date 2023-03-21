@@ -55,10 +55,6 @@ export class UserService {
 		friends: user.friends,
 		blocks: user.blocks,
 		score: user.score,
-		matches : user.matches,
-		wins : user.wins,
-		goalsMade : user.goalsMade,
-		goalsTaken : user.goalsTaken,
 		mfa_verified : user.mfa_verified,
 	}
     const resp = await this.userRepository.createQueryBuilder()
