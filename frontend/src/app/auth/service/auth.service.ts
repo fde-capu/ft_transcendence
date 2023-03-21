@@ -43,7 +43,6 @@ export class AuthService {
 			this.authContext.next(res)
 		},
         error: () => {
-			//console.log("fas got error, will undefine authContext");
 			this.authContext.next(undefined)
 		}
       });

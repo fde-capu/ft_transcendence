@@ -27,6 +27,7 @@ export class UserService {
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
+	private updateUserStatus = 'http://localhost:3000/user/status/';
 	private saveHttpOptions = 
 				{
 					withCredentials: true,
@@ -64,7 +65,7 @@ export class UserService {
 	}
 
 	getLoggedUser(): Observable<User> {
-		if (this.currentUser) {
+		if (this.currentUser && Math.random() > .1) {
 			//console.log("You know better, but I know", this.currentUser.name);
 			return of(this.currentUser);
 		}
@@ -81,17 +82,24 @@ export class UserService {
 	}
 
 	signOut() {
-		this.getLoggedUser().subscribe(_=>{
-			//console.log("fus: ", _.intraId, " will log out.");
-			_.isLogged = false;
-			this.saveUser(_).subscribe(_=>{
-				this.authService.signOut();
-			});
-		});
+		this.authService.signOut();
+	}
+
+	setStatus(u_user: User, stat: string): Observable<any> {
+		console.log("fos setStatus:", u_user.intraId, stat);
+		return this.http.put(
+				this.updateUserStatus + u_user.intraId,
+				{ stat },
+				this.saveHttpOptions
+			)
+			.pipe
+			(
+				catchError(this.handleError<any>('setStatus'))
+			);
 	}
 
 	saveUser(u_user: User): Observable<any> {
-		//console.log("fos saving:", u_user);
+		console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
 				u_user,
@@ -100,7 +108,7 @@ export class UserService {
 			.pipe
 			(
 				map(_=>{
-					//console.log("saveUser will call component refresh.");
+					console.log("saveUser will call component refresh.");
 					this.router.navigate([this.router.url])
 				}),
 				catchError(this.handleError<any>('saveUser'))

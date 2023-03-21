@@ -21,8 +21,9 @@ export class HomeComponent {
 		//console.log("Home will set current user async.");
 		this.userService.getLoggedUser().subscribe
 			( user => {
-				this.user = user 
-				//console.log("Home got", this.user);
+				this.user = user; 
+				console.log("Home got", this.user);
+				this.userService.setStatus(this.user, "ONLINY").subscribe();
 			});
 	}
 }

@@ -34,16 +34,31 @@ export class RegisterController {
     @Res() response: Response = null,
     @Body() user: Users,
   ) {
+	  //console.log("Registred will call updateUser.");
     try {
-		//console.log("Registred will call updateUser.");
       await this.userService.updateUser(intraId, user);
-      //console.log("Registred user saved:", user);
       return response.status(200).json({});
     } catch (e) {
       response.status(e.status).json(e.data);
     }
-    this.userService.updateUser(intraId, user);
   }
+
+  @Put('status/:intraId')
+  @UseGuards(AuthGuard)
+  async updateStatus(
+	@Param('intraId') intraId: string,
+    @Res() response: Response = null,
+    @Body() stat: any,
+  ) {
+	  //console.log("Registred setting status.", intraId, stat.stat);
+    try {
+      UserService.status.set(intraId, stat.stat);
+      return response.status(200).json(stat);
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+
 
   @Get('userByLogin')
   @UseGuards(AuthGuard)

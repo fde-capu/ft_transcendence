@@ -7,4 +7,5 @@ export interface User {
 	isLogged?: boolean;
 	friends?: string[];
 	blocks?: string[];
+	status?: string;
 }

@@ -22,21 +22,11 @@ export interface registerResp {
 
 @Injectable()
 export class UserService {
+  public static status: Map<string, string> = new Map<string, string>;
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
 	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
   ) {}
-
-  // async register(codeFrom42: Users): Promise<Users> {
-  //   const existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
-  //   if (existUser === null){
-  //     const createdUser =  this.userRepository.create({ intraId: codeFrom42.login, email: codeFrom42.email });
-  //     return (await this.userRepository.save(createdUser));
-  //   }
-  //   await this.updateUser(codeFrom42.login, { mfa_enabled: true,  mfa_verified: false });
-  //   return ({ intraId: codeFrom42.login, mfa_enabled: true,  mfa_verified: false });
-  // }
-  // ^ I guess the code above is not necessary.
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
     let existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
@@ -58,24 +48,34 @@ export class UserService {
       existUser = await this.userRepository.save(createdUser);
     }
 
-	await this.updateUser(existUser.intraId, { mfa_verified: false, isLogged: true });
+	await this.updateUser(existUser.intraId, { mfa_verified: false });
 	// Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
 	// Aliás pode desimplementar o registro do mfa_verified na db.
     return ({ intraId: existUser.intraId, mfa_enabled: existUser.mfa_enabled,  mfa_verified: false }); 
   }
   
   async updateUser(intraId: string, user: Users){
-	//console.log("updateUser user", user);
+	let filtered_user = {
+		name: user.name,
+		image: user.image,
+		friends: user.friends,
+		blocks: user.blocks,
+		score: user.score,
+		matches : user.matches,
+		wins : user.wins,
+		goalsMade : user.goalsMade,
+		goalsTaken : user.goalsTaken,
+		mfa_verified : user.mfa_verified,
+	}
     const resp = await this.userRepository.createQueryBuilder()
     .update(Users)
-    .set(user)
+    .set(filtered_user)
     .where("intraId = :intraId", { intraId: intraId })
     .execute();
     if (resp.affected === 0){
-		//console.log("updateUser got exception.");
+	  console.log("updateUser got exception.");
       throw new NotFoundException(); // SomethingWrongException() ..?
     }
-    //console.log("updateUser resp", resp);
     return resp;
   }
 
@@ -103,13 +103,13 @@ export class UserService {
   }
 
   async logOut(intraId: string) {
-    let user = await this.userRepository.findOneBy({ intraId: intraId });
+    //let user = await this.userRepository.findOneBy({ intraId: intraId });
 	//console.log("bus logOut called.");
   }
 
 	async getOnlineUsers():Promise<UserDTO[]>{
-		const resp = await this.userRepository.createQueryBuilder("onlineUsers")
-		.where("onlineUsers.isLogged = :isLogged", { isLogged: true })
+		const resp = await this.userRepository.createQueryBuilder("allUsers")
+		.select()
 		.getMany();
 		return this.makeUserDto(resp);
 		// TODO: remove main-user from this list.
@@ -186,6 +186,9 @@ export class UserService {
 				mfa_enabled: u.mfa_enabled,
 				friends: u.friends,
 				blocks: u.blocks,
+				status: 
+					UserService.status.get(u.intraId) ?
+					UserService.status.get(u.intraId) : "OFFLINE",
 			};
 			out.push(dto);
 		});
