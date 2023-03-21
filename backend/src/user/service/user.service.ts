@@ -111,7 +111,11 @@ export class UserService {
 		const resp = await this.userRepository.createQueryBuilder("allUsers")
 		.select()
 		.getMany();
-		return this.makeUserDto(resp);
+		let out = [];
+		for (const u of resp)
+			if (UserService.status.get(u.intraId) != "OFFLINE")
+				out.push(u);
+		return this.makeUserDto(out);
 		// TODO: remove main-user from this list.
 	}
 
