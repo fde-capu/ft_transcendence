@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { Users, UserDTO, StatisticsDTO } from '../entity/user.entity';
-import { GameHistory } from '../../game/game-record';
 
 export interface TokenDTO {
   access_token: string;
@@ -25,7 +24,6 @@ export class UserService {
   public static status: Map<string, string> = new Map<string, string>;
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
-	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
   ) {}
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {

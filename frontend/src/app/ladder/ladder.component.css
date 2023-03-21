@@ -1,0 +1,52 @@
+.podium {
+	position: relative;
+	width: var(--inner-width);
+	height: 400px;
+	display: flex;
+	overflow-x: auto;
+	padding-bottom: 0.5em;
+	flex-direction: row;
+	justify-content: flex-start;
+	border: var(--border-thin);
+	margin-left: -0.33em;
+	margin-bottom: 1em;
+	padding-bottom: 0;
+}
+
+.tower {
+	height: 100%;
+	width: 72px;
+	display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+	align-items: center;
+	margin: 0 0.125em;
+}
+
+.pit {
+	background: #666666;
+	background: #666666;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+	width: 100%;
+	overflow: hidden;
+}
+
+.score {
+	z-index: 100;
+	font-size: 66.666%;
+}
+
+.vertical {
+    transform: rotate(-90deg);
+    transform-origin: bottom left;
+    margin-left: 2em;
+    margin-bottom: 0.25em;
+}
+
+.yourself {
+	border-left: 4px solid gray;
+	border-left: 4px solid gray;
+	background: #222222;
+}
