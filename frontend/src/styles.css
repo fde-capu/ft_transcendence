@@ -620,5 +620,5 @@ td:nth-child(1) {
 	width: fit-content;
 	max-width: fit-content;
 	min-width: fit-content;
-	margin: 0 0.5em;
+	margin: 0 auto;
 }

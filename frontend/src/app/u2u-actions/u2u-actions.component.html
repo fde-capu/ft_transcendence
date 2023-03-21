@@ -2,6 +2,7 @@
 <h2 *ngIf='caption'>Actions</h2>
 <div class='message-centered' [ngClass]="{'singleline':singleline}">
 	<div *ngIf='amIBlocked'><b><- HAS BLOCKED YOU</b></div>
+	<div class='status' *ngIf='user?.status'>{{ user?.status }}</div>
 	<button [ngClass]="{'oneliner':!caption}" *ngIf='!amIBlocked' (click)='inviteToChat()'>Private Message</button>
 	<button [ngClass]="{'oneliner':!caption}" *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
 	<button [ngClass]="{'oneliner':!caption}" *ngIf="isFriend" (click)='unFriend()'>Unfriend</button>
