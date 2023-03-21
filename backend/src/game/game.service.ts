@@ -55,6 +55,7 @@ export class GameService {
 		out.goalsMadePerTaken = 0;
 		for (const game of games) {
 //			out.score += this.userScore(intraId, game);
+			console.log("getStats for game", game);
 			out.matches++;
 			out.wins += this.didUserWin(intraId, game);
 			out.goalsMade += this.userGoalsMade(intraId, game);
@@ -75,27 +76,27 @@ export class GameService {
 		return (
 			game.mode == 'PONG' && (
 				(game.p1_intraId == id
-				&& game.p1_scoreMade > game.p2_scoreMade)
+				&& game.p1_goalsMade > game.p2_goalsMade)
 			||	(game.p2_intraId == id
-				&& game.p2_scoreMade > game.p1_scoreMade)
+				&& game.p2_goalsMade > game.p1_goalsMade)
 			)
 		)
 		||
 		(
 			game.mode == 'PONG2' && (
 				((game.p1_intraId == id || game.p2_intraId == id)
-				&& game.p1_scoreMade + game.p2_scoreMade > game.p3_scoreMade + game.p4_scoreMade)
+				&& game.p1_goalsMade + game.p2_goalsMade > game.p3_goalsMade + game.p4_goalsMade)
 			||	((game.p3_intraId == id || game.p4_intraId == id)
-				&& game.p1_scoreMade + game.p2_scoreMade < game.p3_scoreMade + game.p4_scoreMade)
+				&& game.p1_goalsMade + game.p2_goalsMade < game.p3_goalsMade + game.p4_goalsMade)
 			)
 		)
 		||
 		(
 			game.mode == 'PONG4' && (
-				(game.p1_intraId == id && game.p1_scoreMade > game.p2_scoreMade && game.p1_scoreMade > game.p3_scoreMade && game.p1_scoreMade > game.p4_scoreMade)
-			||	(game.p2_intraId == id && game.p2_scoreMade > game.p1_scoreMade && game.p2_scoreMade > game.p3_scoreMade && game.p2_scoreMade > game.p4_scoreMade)
-			||	(game.p3_intraId == id && game.p3_scoreMade > game.p1_scoreMade && game.p3_scoreMade > game.p2_scoreMade && game.p3_scoreMade > game.p4_scoreMade)
-			||	(game.p4_intraId == id && game.p4_scoreMade > game.p1_scoreMade && game.p4_scoreMade > game.p2_scoreMade && game.p4_scoreMade > game.p3_scoreMade)
+				(game.p1_intraId == id && game.p1_goalsMade > game.p2_goalsMade && game.p1_goalsMade > game.p3_goalsMade && game.p1_goalsMade > game.p4_goalsMade)
+			||	(game.p2_intraId == id && game.p2_goalsMade > game.p1_goalsMade && game.p2_goalsMade > game.p3_goalsMade && game.p2_goalsMade > game.p4_goalsMade)
+			||	(game.p3_intraId == id && game.p3_goalsMade > game.p1_goalsMade && game.p3_goalsMade > game.p2_goalsMade && game.p3_goalsMade > game.p4_goalsMade)
+			||	(game.p4_intraId == id && game.p4_goalsMade > game.p1_goalsMade && game.p4_goalsMade > game.p2_goalsMade && game.p4_goalsMade > game.p3_goalsMade)
 			)
 		)
 		?
