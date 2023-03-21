@@ -48,7 +48,7 @@ export class ChatService {
 
 	think(msg: any)
 	{
-		//console.log("Thinking about: ", msg);
+		console.log("Thinking about: ", msg);
 		this.gotNews = true;
 		if (msg.payload.roomId) // This checks if is a simple message.
 		{
@@ -61,10 +61,14 @@ export class ChatService {
 					// they would not actually known by ChatService.allRooms.
 					// However, this does not mean that the information
 					// has not arrived here at frontend.
-					if (this.userIsInChat(room.id, ChatService.user?.intraId)
-					||  msg.payload.to == ChatService.user
-					||  msg.payload.from == ChatService.user)
-						this.messageList.next(msg.payload);
+					if
+					(
+						(
+								this.userIsInChat(room.id, ChatService.user?.intraId)
+							||  msg.payload.to == ChatService.user
+							||  msg.payload.from == ChatService.user
+						) && !this.haveIBlocked(msg.payload.user.intraId)
+					) this.messageList.next(msg.payload);
 				}
 		}
 		if (msg.payload.update_rooms)
@@ -72,6 +76,12 @@ export class ChatService {
 			//console.log("Setting allRooms from to", ChatService.allRooms, msg.payload.update_rooms);
 			ChatService.allRooms = msg.payload.update_rooms;
 		}
+	}
+
+	haveIBlocked(intraId:string):boolean{
+		console.log("Have I blocked", intraId);
+		if (!ChatService.user) return false;
+		return this.fun.isStringInArray(intraId, ChatService.user.blocks);
 	}
 
 	hasNews(): boolean {

@@ -10,6 +10,7 @@ import { TokenInfoResponse } from './token-info-response';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Statistics } from './statistics';
+import { HelperFunctionsService } from './helper-functions.service';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -22,6 +23,7 @@ export class UserService {
 	private statsUrl = 'http://localhost:3000/user/stats/?of=';
 	private historyUrl = 'http://localhost:3000/user/history/?of=';
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
+	private blocksUrl = 'http://localhost:3000/user/blocks/?them=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
@@ -35,6 +37,7 @@ export class UserService {
 		private readonly authService: AuthService,
 		private http: HttpClient,
 		private router: Router,
+		private fun: HelperFunctionsService,
 	) {
 		this.setCurrentIntraId();
 		this.router.routeReuseStrategy.shouldReuseRoute = () => {
@@ -106,32 +109,18 @@ export class UserService {
 
 	getOnlineUsers(): Observable<User[]> {
 		return this.http.get<User[]>(this.onlineUsersUrl,{withCredentials:true})
-			.pipe(
-				catchError(this.handleError<User[]>('getOnlineUsers', []))
-			);
+			.pipe(catchError(this.handleError<User[]>('getOnlineUsers', [])));
 	}
 
 	getFriends(u_user?: User): Observable<User[]> {
-		//console.log("getFriends will look for friends of", u_user?.intraId);
-		if (u_user)
-		{
-			//console.log("getFriends will call http.");
-			return this.http.get<User[]>(this.friendsUrl+u_user.intraId,{withCredentials:true})
-				.pipe(
-					catchError(this.handleError<User[]>('getFriends', []))
-				);
-		}
-		return of([]);
+		if (!u_user) return of([]);
+		return this.http.get<User[]>(this.friendsUrl+u_user.intraId,{withCredentials:true})
+			.pipe(catchError(this.handleError<User[]>('getFriends', [])));
 	}
 
 	isFriend(user_b: User | undefined): boolean {
-		if (!this.currentUser||!this.currentUser.friends) return false;
-		for (const friend of this.currentUser.friends)
-		{
-			if (friend == user_b?.intraId)
-				return true;
-		}
-		return false;
+		if (!this.currentUser||!this.currentUser.friends||!user_b) return false;
+		return this.fun.isStringInArray(user_b.intraId, this.currentUser.friends);
 	}
 
 	makeFriend(user_b: User|undefined): Observable<any> {
@@ -149,20 +138,49 @@ export class UserService {
 		return this.saveUser(this.currentUser);
 	}
 
+	getBlocks(u_user?: User): Observable<User[]> {
+		if (!u_user) return of([])
+		return this.http.get<User[]>(this.blocksUrl+u_user.intraId,{withCredentials:true})
+			.pipe(catchError(this.handleError<User[]>('getBlocks', [])));
+	}
+
+	amIBlocked(user_b: User|undefined): boolean {
+		//console.log("Am I", this.currentUser?.intraId, "blocked by?", user_b?.intraId);
+		if (!this.currentUser||!user_b||(user_b.intraId==this.currentUser.intraId)) return false;
+		//console.log(user_b);
+		return this.fun.isStringInArray(this.currentUser.intraId, user_b.blocks);
+	}
+
+	isBlock(user_b: User | undefined): boolean {
+		if (!this.currentUser||!this.currentUser.blocks||!user_b) return false;
+		return this.fun.isStringInArray(user_b.intraId, this.currentUser.blocks);
+	}
+
+	makeBlock(user_b: User|undefined): Observable<any> {
+		if (!this.currentUser||!user_b) return of(false);
+		if (!this.currentUser.blocks) this.currentUser.blocks = [];
+		this.currentUser.blocks.push(user_b.intraId);
+		return this.saveUser(this.currentUser);
+	}
+
+	unBlock(user_b: User|undefined): Observable<any> {
+		if (!this.currentUser||!user_b||!this.currentUser.blocks) return of(false);
+		for (var i = 0; i < this.currentUser.blocks.length; i++)
+			if (this.currentUser.blocks[i] == user_b.intraId)
+				this.currentUser.blocks.splice(i, 1);
+		return this.saveUser(this.currentUser);
+	}
+
 	getStats(u_intraId: string): Observable<Statistics> {
 		//console.log("getStats will look for stats of", u_intraId);
 		return this.http.get<Statistics>(this.statsUrl+u_intraId,{withCredentials:true})
-			.pipe(
-				catchError(this.handleError<Statistics>('getFriends'))
-			);
+			.pipe(catchError(this.handleError<Statistics>('getStats')));
 	}
 
 	getGameHistory(u_intraId: string): Observable<GameHistory[]> {
 		//console.log("getGameHistory will call http for ", u_intraId);
 		return this.http.get<GameHistory[]>(this.historyUrl+u_intraId,{withCredentials:true})
-			.pipe(
-				catchError(this.handleError<GameHistory[]>('getGameHistory'))
-			);
+			.pipe(catchError(this.handleError<GameHistory[]>('getGameHistory')));
 	}
 
 	async intraIdsToUsers(ulist: string[]): Promise<User[]> {

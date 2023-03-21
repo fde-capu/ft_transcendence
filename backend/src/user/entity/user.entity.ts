@@ -7,6 +7,7 @@ export interface UserDTO {
   score?: number;
   mfa_enabled: boolean;
   friends?: string[];
+  blocks?: string[];
 }
 
 export interface StatisticsDTO {
@@ -66,6 +67,9 @@ export class Users {
 
   @Column("simple-array")
   friends?: string[];
+
+  @Column("simple-array")
+  blocks?: string[];
 
 	@Column()
 	matches?: number;

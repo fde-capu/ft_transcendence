@@ -18,6 +18,7 @@ import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { LogOutComponent } from './log-out/log-out.component';
 import { FriendsListComponent } from './friends-list/friends-list.component';
+import { BlocksListComponent } from './blocks-list/blocks-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
@@ -46,6 +47,7 @@ import { InviteModule } from './invitation.module';
 	CreateMatchComponent,
  LogOutComponent,
  FriendsListComponent,
+ BlocksListComponent,
  UserBarComponent,
  StatisticsComponent,
  GameHistoryComponent,
@@ -67,3 +69,4 @@ import { InviteModule } from './invitation.module';
 	],
 })
 export class AppModule {}
+
