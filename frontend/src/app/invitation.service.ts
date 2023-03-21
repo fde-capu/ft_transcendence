@@ -129,7 +129,7 @@ export class InvitationService {
 			to: to,
 			type: "PRIVATE CHAT: " + newRoomName,
 			route: "/chat/" + newRoomId,
-			instantaneous: true,
+			instantaneous: false,
 			isReply: false
 		});
 	}

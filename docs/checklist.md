@@ -25,3 +25,4 @@ Bug notes:
 [X] (Solved) When logged off, the frontend page keeps making requests and getting 401 continuously.
 [X] Users could invite to chat or game event if the other is offline (solved);
 [X] Game-history was auto-replicating and getting huge!!
+[X] Private messaging was auto-redirecting inviter w/o asking first.
