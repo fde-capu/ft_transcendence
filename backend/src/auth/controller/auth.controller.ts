@@ -12,6 +12,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { JWTPayload } from 'jose';
+import { Subject } from 'rxjs';
 import { TokenPayload } from '../decorator/token-payload.decorator';
 import { AuthGuard } from '../guard/auth.guard';
 import { AuthService } from '../service/auth.service';
@@ -56,7 +57,7 @@ export class AuthController {
   }
 
   @Get('logout')
-  public logout(@Res() res: Response = null) {
+  public logout(@Res() res: Response= null) {
     res
       .clearCookie('authorization')
       .json({ message: 'Did you have a good trip?' });

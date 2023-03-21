@@ -1,7 +1,11 @@
+<div *ngIf='!isMe'>
 <h2 *ngIf='caption'>Actions</h2>
-<div class='message-centered'>
-<button [ngClass]="{'oneliner':!caption}">Private Message</button>
-<button [ngClass]="{'oneliner':!caption}" *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
-<button [ngClass]="{'oneliner':!caption}" *ngIf="isFriend" (click)='unFriend()'>Unfriend :(</button>
-<button [ngClass]="{'oneliner':!caption}">INVITE TO GAME</button>
+<div class='message-centered' [ngClass]="{'singleline':singleline}">
+	<button [ngClass]="{'oneliner':!caption}" (click)='inviteToChat()'>Private Message</button>
+	<button [ngClass]="{'oneliner':!caption}" *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
+	<button [ngClass]="{'oneliner':!caption}" *ngIf="isFriend" (click)='unFriend()'>Unfriend :(</button>
+	<button [ngClass]="{'oneliner':!caption}">INVITE TO GAME</button>
+</div>
+</div>
+<div *ngIf='isMe'>
 </div>

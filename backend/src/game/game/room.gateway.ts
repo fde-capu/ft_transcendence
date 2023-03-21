@@ -27,7 +27,7 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly roomService: RoomService,
   ) {}
 
-  async handleConnection(client: Socket) {
+  async handleConnection(client: Socket, ...args: any[]) {
     try {
       const { authorization } = parse(client.handshake.headers.cookie);
       const { sub: subject } = await this.tokenService.inspect(authorization);

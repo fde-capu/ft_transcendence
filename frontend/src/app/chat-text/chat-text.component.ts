@@ -1,21 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ChatMessage } from '../chat-message';
 import { ChatService } from '../chat.service';
+import { ChatRoom } from '../chat-room';
 
 @Component({
   selector: 'app-chat-text',
   templateUrl: './chat-text.component.html',
-  styleUrls: ['./chat-text.component.css'],
+  styleUrls: ['./chat-text.component.css']
 })
-export class ChatTextComponent implements OnInit {
-  chatMessage: ChatMessage[] = [];
-
-  constructor(public chatService: ChatService) {}
-
-  ngOnInit() {
-    this.chatService.getChatText().subscribe(chatMessage => {
-      // TODO: Show only last N messages? (Avoid long scrolls?)
-      this.chatMessage = chatMessage;
-    });
-  }
+export class ChatTextComponent {
+	chatMessage: ChatMessage[] = [];
+	@Input() room: ChatRoom = {} as ChatRoom;
+	constructor (
+		public chatService: ChatService
+	) {}
+	ngOnInit() {
+		this.chatService.messageList.subscribe(_=>{
+			if (_ && _.roomId == this.room.id)
+			{
+				//console.log("chat-text in action");
+				this.chatMessage.push(_);
+			}
+		});
+	}
 }
