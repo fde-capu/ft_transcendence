@@ -94,6 +94,21 @@ export class RegisterController {
 		}
 	}
 
+	@Get('available')
+	@UseGuards(AuthGuard)
+	async getAvailableUsers(@Res()response:Response=null):Promise<any>
+	{
+		try {
+			//console.log("reg online: fetching databaes.");
+			const resp = await this.userService.getAvailableUsers();
+			return response.status(200).json(resp);
+		} catch (e) {
+			//console.log("reg: online got catch", e);
+			response.status(e.status).json(e.data);
+		}
+	}
+
+
   @Get('friends')
   @UseGuards(AuthGuard)
   async getFriends(

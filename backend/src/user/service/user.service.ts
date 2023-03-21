@@ -119,6 +119,19 @@ export class UserService {
 		// TODO: remove main-user from this list.
 	}
 
+	async getAvailableUsers():Promise<UserDTO[]>{
+		const resp = await this.userRepository.createQueryBuilder("allUsers")
+		.select()
+		.getMany();
+		let out = [];
+		for (const u of resp)
+			if (UserService.status.get(u.intraId) != "OFFLINE"
+			&& UserService.status.get(u.intraId) != "INGAME")
+				out.push(u);
+		return this.makeUserDto(out);
+		// TODO: remove main-user from this list.
+	}
+
 	async getFriends(intraId:string):Promise<UserDTO[]>
 	{
 		let out: UserDTO[] = [];

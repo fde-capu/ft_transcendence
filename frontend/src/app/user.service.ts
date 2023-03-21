@@ -25,6 +25,7 @@ export class UserService {
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private blocksUrl = 'http://localhost:3000/user/blocks/?them=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
+	private availableUsersUrl = 'http://localhost:3000/user/available';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
 	private updateUserStatus = 'http://localhost:3000/user/status/';
@@ -121,6 +122,11 @@ export class UserService {
 			.pipe(catchError(this.handleError<User[]>('getOnlineUsers', [])));
 	}
 
+	getAvailableUsers(): Observable<User[]> {
+		return this.http.get<User[]>(this.availableUsersUrl,{withCredentials:true})
+			.pipe(catchError(this.handleError<User[]>('getOnlineUsers', [])));
+	}
+
 	getFriends(u_user?: User): Observable<User[]> {
 		if (!u_user) return of([]);
 		return this.http.get<User[]>(this.friendsUrl+u_user.intraId,{withCredentials:true})
@@ -208,12 +214,6 @@ export class UserService {
 			});
 		}
 		return out;
-	}
-
-	getAvailableUsers(): Observable<User[]> {
-		// Must return users online, not playing, and not logged user.
-		const users = USERS;
-		return of(users);
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {
