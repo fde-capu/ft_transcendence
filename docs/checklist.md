@@ -19,7 +19,7 @@ Checklist based on sub. 12.1
 
 Bug notes:
 [ ] WARN[0000] The "FTT_MODE" variable is not set. Defaulting to a blank string. 
-[ ] Strange behavior when authentication expires. Make it renew automatically if user is still logged.
-[ ] When user is kicked from the room, they are only REALLY KICKED after clicking "OK". There is an semi-transparent screen, and they can still read the messages.
+[X] Strange behavior when authentication expires. Make it renew automatically if user is still logged. (Solved, not with auto-renew, but user gets logged off without strange behaviors.)
+[X] When user is kicked from the room, they are only REALLY KICKED after clicking "OK". There is an semi-transparent screen, and they can still read the messages. (Solved: in fact, the user unsubscribes from the chat messages. It might take a few seconds, but new messages cannot be read.)
 [ ] By now, there is no visualization of off-line users, should there be one? See line on "HISTORIES" above, its interpretation.
 [X] (Solved) When logged off, the frontend page keeps making requests and getting 401 continuously.
