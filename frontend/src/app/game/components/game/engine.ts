@@ -1,6 +1,13 @@
+type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
+
 interface Dictionary<T> {
   [index: string]: T;
 }
+
 interface Collision {
   entryTime: number;
   xnormal: number;
@@ -135,6 +142,10 @@ class Wall extends Rectangle {
 class Ball extends Rectangle {
   static s = 10;
 
+  public team?: string;
+
+  public outside = false;
+
   public constructor() {
     super(
       Game.w / 2 - Ball.s / 2,
@@ -144,6 +155,39 @@ class Ball extends Rectangle {
       0,
       0
     );
+  }
+
+  public reset() {
+    const a000 = 0;
+    const a030 = (Math.PI * 1) / 6;
+
+    const a060 = (Math.PI * 1) / 3;
+    const a120 = (Math.PI * 2) / 3;
+
+    const a150 = (Math.PI * 5) / 6;
+    const a210 = (Math.PI * 7) / 6;
+
+    const a240 = (Math.PI * 4) / 3;
+    const a300 = (Math.PI * 5) / 3;
+
+    const a330 = (Math.PI * 11) / 6;
+    const a360 = Math.PI * 2;
+
+    let alpha: number;
+    do {
+      alpha = Math.PI * 2 * Math.random();
+    } while (
+      (a000 <= alpha && alpha <= a030) ||
+      (a060 <= alpha && alpha <= a120) ||
+      (a150 <= alpha && alpha <= a210) ||
+      (a240 <= alpha && alpha <= a300) ||
+      (a330 <= alpha && alpha <= a360)
+    );
+
+    this.sx = 300 * Math.cos(alpha);
+    this.sy = 300 * Math.sin(alpha);
+
+    console.log(alpha * (180 / Math.PI));
   }
 }
 
@@ -246,19 +290,11 @@ class BottomPaddle extends HorizontalPaddle {
   }
 }
 
-class Team {
-  public score = 0;
-
-  public from(r: Team) {
-    Object.assign(this, r);
-  }
-}
-
 interface GameData {
-  teams: Dictionary<Team>;
-  balls: Dictionary<Rectangle>;
-  paddles: Dictionary<Rectangle>;
-  walls: Dictionary<Rectangle>;
+  teams: Dictionary<number>;
+  balls: Dictionary<Ball>;
+  paddles: Dictionary<Paddle>;
+  walls: Dictionary<Wall>;
 }
 
 export abstract class Game {
@@ -330,6 +366,19 @@ export abstract class Game {
       p.move();
       this.draw(p);
     });
+
+    Object.values(this.elements.balls).forEach(b => {
+      if (
+        !b.outside &&
+        (b.x + b.w < 0 || b.x > Game.w || b.y + b.h < 0 || b.y > Game.h)
+      ) {
+        b.outside = true;
+        if (b.team) {
+          this.elements.teams[b.team]++;
+          b.team = undefined;
+        }
+      }
+    });
   }
 
   private nextCollision(subjects: Array<Ball>, targets: Array<Rectangle>) {
@@ -358,6 +407,32 @@ export abstract class Game {
     this.context.clearRect(0, 0, Game.w, Game.h);
   }
 
+  public from(gameData: DeepPartial<GameData>) {
+    this.mergeDeep(this.elements, gameData);
+  }
+
+  private mergeDeep(target: any, ...sources: Array<any>): any {
+    if (!sources.length) return target;
+    const source = sources.shift();
+
+    if (this.isObject(target) && this.isObject(source)) {
+      for (const key in source) {
+        if (this.isObject(source[key])) {
+          if (!target[key]) Object.assign(target, { [key]: {} });
+          this.mergeDeep(target[key], source[key]);
+        } else {
+          Object.assign(target, { [key]: source[key] });
+        }
+      }
+    }
+
+    return this.mergeDeep(target, ...sources);
+  }
+
+  private isObject(item: any) {
+    return item && typeof item === 'object' && !Array.isArray(item);
+  }
+
   public abstract reset(): void;
 }
 
@@ -366,31 +441,9 @@ export class Pong extends Game {
     super(canvas);
   }
 
-  public override update(t?: number): void {
-    super.update(t);
-    this.elements.balls = Object.keys(this.elements.balls).reduce(
-      (balls: Dictionary<Ball>, ball) => {
-        const b = this.elements.balls[ball];
-        if (b.x < 0) {
-          this.elements.teams['right'].score++;
-          return balls;
-        }
-
-        if (b.x + b.w > Game.w) {
-          this.elements.teams['left'].score++;
-          return balls;
-        }
-
-        balls[ball] = b;
-        return balls;
-      },
-      {}
-    );
-  }
-
   public override reset(): void {
     this.elements = {
-      teams: { left: new Team(), right: new Team() },
+      teams: { left: 0, right: 0 },
       balls: { a: new Ball() },
       paddles: {
         left: new LeftPaddle(1 * VerticalPaddle.w),
@@ -401,6 +454,7 @@ export class Pong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
     };
+    Object.values(this.elements.balls).forEach(b => b.reset());
   }
 }
 
@@ -409,31 +463,9 @@ export class PongDouble extends Game {
     super(canvas);
   }
 
-  public override update(t?: number): void {
-    super.update(t);
-    this.elements.balls = Object.keys(this.elements.balls).reduce(
-      (balls: Dictionary<Ball>, ball) => {
-        const b = this.elements.balls[ball];
-        if (b.x < 0) {
-          this.elements.teams['right'].score++;
-          return balls;
-        }
-
-        if (b.x + b.w > Game.w) {
-          this.elements.teams['left'].score++;
-          return balls;
-        }
-
-        balls[ball] = b;
-        return balls;
-      },
-      {}
-    );
-  }
-
   public override reset(): void {
     this.elements = {
-      teams: { left: new Team(), right: new Team() },
+      teams: { left: 0, right: 0 },
       balls: { a: new Ball() },
       paddles: {
         left1: new LeftPaddle(1 * VerticalPaddle.w),
@@ -446,8 +478,7 @@ export class PongDouble extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
     };
-    this.elements.balls['a'].sx = 300;
-    this.elements.balls['a'].sy = -240;
+    Object.values(this.elements.balls).forEach(b => b.reset());
   }
 }
 
@@ -456,45 +487,13 @@ export class Quadrapong extends Game {
     super(canvas);
   }
 
-  public override update(t?: number): void {
-    super.update(t);
-    this.elements.balls = Object.keys(this.elements.balls).reduce(
-      (balls: Dictionary<Ball>, ball) => {
-        const b = this.elements.balls[ball];
-        if (b.x < 0) {
-          this.elements.teams['left'].score++;
-          return balls;
-        }
-
-        if (b.x + b.w > Game.w) {
-          this.elements.teams['right'].score++;
-          return balls;
-        }
-
-        if (b.x + b.w > Game.w) {
-          this.elements.teams['top'].score++;
-          return balls;
-        }
-
-        if (b.x + b.w > Game.w) {
-          this.elements.teams['bottom'].score++;
-          return balls;
-        }
-
-        balls[ball] = b;
-        return balls;
-      },
-      {}
-    );
-  }
-
   public override reset(): void {
     this.elements = {
       teams: {
-        left: new Team(),
-        right: new Team(),
-        top: new Team(),
-        bottom: new Team(),
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
       },
       balls: { a: new Ball() },
       paddles: {
@@ -510,5 +509,6 @@ export class Quadrapong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
     };
+    Object.values(this.elements.balls).forEach(b => b.reset());
   }
 }
