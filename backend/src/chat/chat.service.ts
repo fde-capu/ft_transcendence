@@ -27,7 +27,7 @@ static allRooms: ChatRoomDTO[] = [];
 	{
 		for (const i in ChatService.allRooms)
 			if (ChatService.allRooms[i].id == u_room.id) {
-				if (!this.validStringLength(u_room.name, 8, 42))
+				if (!this.validStringLength(u_room.name, 4, 42))
 					u_room.name = ChatService.allRooms[i].name;
 				if (u_room.password && u_room.password.length && !this.validStringLength(u_room.password, 4, 42))
 					u_room.password = ChatService.allRooms[i].password;
