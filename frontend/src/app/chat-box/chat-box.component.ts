@@ -88,7 +88,7 @@ export class ChatBoxComponent {
 	async updateRoomRecursive() {
 		if (!this.id) {
 			//console.log("A1");
-			await new Promise(resolve => setTimeout(resolve, 2209));
+			await new Promise(resolve => setTimeout(resolve, 337));
 			//console.log("A2");
 			await this.updateRoomRecursive();
 		} else {
