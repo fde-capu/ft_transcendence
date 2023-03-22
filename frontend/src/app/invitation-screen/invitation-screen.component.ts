@@ -77,7 +77,7 @@ export class InvitationScreenComponent {
 		if (!old) return;
 		const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
 		let route = go ? old.invitation?.route : null;
-		if (go && route)
+		if (go && route && !this.alreadyInRoute())
 			this.invitationService.go(route);
 	}
 }
