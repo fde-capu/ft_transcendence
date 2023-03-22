@@ -54,7 +54,9 @@ export class UserService {
 			if (_?.sub)
 				this.currentIntraId=_?.sub;
 			if (this.currentIntraId)
-				this.getLoggedUser().subscribe(_=>{this.currentUser=_;});
+				this.getLoggedUser()
+				.pipe(catchError(this.handleError<any>()))
+				.subscribe(_=>{this.currentUser=_;});
 		});
 	}
 

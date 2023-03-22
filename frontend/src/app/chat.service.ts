@@ -170,11 +170,10 @@ export class ChatService {
 
 	getOutOfAnyChat() {
 		//console.log("getting out of any chat", this.userService.getQuickIntraId());
-		if (!this.userService.getQuickIntraId()) return;
-		this.userService.getLoggedUser().subscribe(_=>{
-			//console.log(_);
-			this.logOutAllRooms(_.intraId)
-		});
+		let u = this.userService.getQuickIntraId();
+		//console.log("Logging out of chat", u);
+		if (!u) return;
+		this.logOutAllRooms(u);
 	}
 
 	async putUserInRoom(room: ChatRoom, flush: boolean = true): Promise<ChatRoom> {
