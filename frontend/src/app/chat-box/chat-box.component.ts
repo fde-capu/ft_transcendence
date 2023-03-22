@@ -236,6 +236,7 @@ export class ChatBoxComponent {
 	}
 
 	async kickThem(kicked: User) {
+		this.chatRoom.user = this.fun.removeStringFromArray(kicked.intraId, this.chatRoom.user);
 		this.invitationService.notify({
 			to: kicked.intraId,
 			note: "You have been kicked.",
@@ -243,16 +244,11 @@ export class ChatBoxComponent {
 			button: this.fun.funnyInnocence(),
 			routeBefore: true,
 		});
-		this.chatRoom.user = this.fun.removeStringFromArray(kicked.intraId, this.chatRoom.user);
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
 	tigThem(tigged: User) {
-		let innocents: string[] = [];
-		for (const suspect of this.chatRoom.user)
-			if (suspect != tigged.intraId)
-				innocents.push(suspect);
-		this.chatRoom.user = innocents;
+		this.chatRoom.user = this.fun.removeStringFromArray(tigged.intraId, this.chatRoom.user);
 		this.invitationService.notify({
 			to: tigged.intraId,
 			note: "TIG!",

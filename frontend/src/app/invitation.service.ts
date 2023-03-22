@@ -83,8 +83,12 @@ export class InvitationService {
 						invitation: _.payload,
 					});
 
-					if (this.notificationScreen && _.payload.routeBefore)
-						return this.go(_.payload.route);
+					if (this.notificationScreen && _.payload.routeBefore) {
+						const self = this;
+						setTimeout(function(){
+							return self.go(_.payload.route);
+						}, 1000);
+					}
 
 				}
 			},
