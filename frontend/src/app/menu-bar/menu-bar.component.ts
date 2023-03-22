@@ -18,13 +18,15 @@ export class MenuBarComponent {
   ngOnInit(): void {
 	this.getUser();
   }
-  getUser(): void {
+  async getUser() {
 	this.userService.getLoggedUser().subscribe(
 		backUser => { 
 			//console.log("menu-bar got subscrition", backUser);
 			this.user = backUser;
 		}
 	)
+	await new Promise(resolve => setTimeout(resolve, 1007));
+	this.getUser();
   }
 
   onClickBurger(): void {
