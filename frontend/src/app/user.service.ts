@@ -69,10 +69,6 @@ export class UserService {
 	}
 
 	getLoggedUser(): Observable<User> {
-		if (this.currentUser && Math.random() > .1) {
-			//console.log("You know better, but I know", this.currentUser.name);
-			return of(this.currentUser);
-		}
 		//console.log("fUS getting logged user");
 		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
 			.pipe(map(_=>{
@@ -113,7 +109,7 @@ export class UserService {
 			(
 				map(_=>{
 					//console.log("saveUser will call component refresh.");
-					//this.router.navigate([this.router.url])
+					this.router.navigate([this.router.url])
 				}),
 				catchError(this.handleError<any>('saveUser'))
 			);
@@ -150,7 +146,8 @@ export class UserService {
 	makeFriend(user_b: User|undefined): Observable<any> {
 		if (!this.currentUser||!user_b) return of(false);
 		if (!this.currentUser.friends) this.currentUser.friends = [];
-		this.currentUser.friends.push(user_b.intraId);
+		if (!this.isFriend(user_b))
+			this.currentUser.friends.push(user_b.intraId);
 		return this.saveUser(this.currentUser);
 	}
 
