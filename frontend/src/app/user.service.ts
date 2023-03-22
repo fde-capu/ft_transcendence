@@ -237,7 +237,7 @@ export class UserService {
 				&& this.router.url.indexOf("/logout") != 0)
 					this.signOut();
 			}
-			//console.error("handleError<T>:", error.error);
+			console.error(">> ft_transcendence controlled error (user.service):", error); // log to console instead
 			return of(result as T);
 		};
 	}

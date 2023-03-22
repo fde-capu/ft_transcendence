@@ -85,9 +85,8 @@ export class ChatBoxComponent {
 	}
 
 	async keepTryingToIdentify(id: string) {
-		console.log("The id is", id);
+		//console.log("The id is", id);
 		const chatRoomTest = this.chatService.roomById(id);
-		console.log("ChatRoomTest", chatRoomTest);
 		if (chatRoomTest)
 			this.chatRoom = chatRoomTest;
 		else {

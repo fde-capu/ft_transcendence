@@ -427,7 +427,7 @@ export class ChatService {
 		return (error: any): Observable<T> => {
 
 			// TODO: send the error to remote logging infrastructure
-			console.error("handleError<T>:", error); // log to console instead
+			console.error(">> ft_transcendence controlled error (chat.service):", error); // log to console instead
 			// ^ Yikes! Don't show if any bug! TODO (comment line above?)
 
 			// Let the app keep running by returning an empty result.
