@@ -19,10 +19,11 @@ import { ConfigService } from '@nestjs/config';
     AuthService,
     UserService,
     ConfigService,
+	AuthController,
   ],
   imports: [FortyTwoModule, UserModule,
     TypeOrmModule.forFeature([Users, GameHistory])],
   controllers: [AuthController],
-  exports: [TokenService],
+  exports: [TokenService, AuthController],
 })
 export class AuthModule {}

@@ -16,7 +16,6 @@ import { Subject } from 'rxjs';
 import { TokenPayload } from '../decorator/token-payload.decorator';
 import { AuthGuard } from '../guard/auth.guard';
 import { AuthService } from '../service/auth.service';
-import { UserService } from '../../user/service/user.service';
 
 @Controller('auth')
 export class AuthController {

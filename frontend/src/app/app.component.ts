@@ -35,14 +35,5 @@ export class AppComponent {
 				}
 			}
 		});
-		window.addEventListener('beforeunload', () => {
-//	this.chatService.getOutOfAnyChat();
-//	this.userService.signOut();
-		});
-  }
-  ngOnDestroy() {
-//	alert('Destroy!');
-//	this.chatService.getOutOfAnyChat();
-//	this.userService.signOut();
   }
 }

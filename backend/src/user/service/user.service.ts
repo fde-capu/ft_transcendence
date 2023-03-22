@@ -98,6 +98,12 @@ export class UserService {
 	//console.log("bus logOut called.");
   }
 
+	markOnline(intraId: string) {
+	}
+
+	markOffline(intraId: string) {
+	}
+
 	async getOnlineUsers():Promise<UserDTO[]>{
 		const resp = await this.userRepository.createQueryBuilder("allUsers")
 		.select()

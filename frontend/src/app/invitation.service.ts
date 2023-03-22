@@ -27,12 +27,27 @@ export class InvitationService {
 		private readonly chatService: ChatService,
 		private readonly userService: UserService,
   ) {
+		console.log("InvitationService constructor");
 		this.getUser();
 		this.doSubscription();
 	}
 
 	getUser(): void {
-		this.userService.getLoggedUser().subscribe(backUser=>{this.user=backUser;})
+		this.userService.getLoggedUser().subscribe(backUser=>{
+			this.user = backUser;
+			this.anounceMe();
+		})
+	}
+
+	async anounceMe() {
+		await new Promise(resolve => setTimeout(resolve, 2391));
+		if (this.user && this.user.intraId)
+			this.socket.emit('present', { 'attendant': this.user.intraId });
+		this.anounceMe();
+	}
+
+	userStatus(data: any) {
+		console.log("userStatus", data);
 	}
 
 	doSubscription() {
@@ -93,6 +108,14 @@ export class InvitationService {
 				}
 			},
 		);
+
+		this.getStatusChanges().subscribe(
+			_ => {
+				console.log("status subscription", _);
+				console.log("change", _.user_status_update[0],
+					"to", _.user_status_update[1]);
+			}
+		);
 	}
 
 	invite(u_invite: Invitation) {
@@ -128,6 +151,10 @@ export class InvitationService {
 
 	getInvitation() {
 		return this.socket.fromEvent<any>('invitation');
+	}
+
+	getStatusChanges() {
+		return this.socket.fromEvent<any>('user_status_update');
 	}
 
 	async invitePrivate(from: string, to: string) {

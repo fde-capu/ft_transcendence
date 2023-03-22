@@ -32,3 +32,4 @@ Bug notes:
 [X] Must not be able to invite INGAME nor OFFLINE players.
 [X] Abrupt logout was leaving the user INCHAT forever.
 [ ] User must get offile if the browser closes.
+[ ] Better behavior on frontend while server is down.
