@@ -17,7 +17,7 @@ export class HelperFunctionsService {
 	}
 
 	validateString(str:string): boolean {
-		return str.length >= 8 && str.length <= 42;
+		return str.length >= 4 && str.length <= 42;
 	}
 
 	switchIf(el: string, a: string, b: string) {
