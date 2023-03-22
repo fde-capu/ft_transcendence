@@ -115,10 +115,12 @@ export class ProfileComponent {
 	}
 
 	saveUser() {
-		if (this.displayUser)
+		//console.log("Save user", this.displayUser);
+		if (this.displayUser) {
 			this.userService.saveUser(this.displayUser).subscribe(_=>{
-				console.log("Saved user", _)
+				//console.log("Saved user") // _ == undefined (no answer)
 			});
+		}
 	}
 
 	switchMfa() {

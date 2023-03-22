@@ -55,7 +55,7 @@ export class UserService {
 		friends: user.friends,
 		blocks: user.blocks,
 		score: user.score,
-		mfa_verified : user.mfa_verified,
+		mfa_enabled : user.mfa_enabled,
 	}
     const resp = await this.userRepository.createQueryBuilder()
     .update(Users)

@@ -103,7 +103,7 @@ export class UserService {
 	}
 
 	saveUser(u_user: User): Observable<any> {
-		console.log("fos saving:", u_user);
+		//console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
 				u_user,
@@ -112,8 +112,8 @@ export class UserService {
 			.pipe
 			(
 				map(_=>{
-					console.log("saveUser will call component refresh.");
-					this.router.navigate([this.router.url])
+					//console.log("saveUser will call component refresh.");
+					//this.router.navigate([this.router.url])
 				}),
 				catchError(this.handleError<any>('saveUser'))
 			);
