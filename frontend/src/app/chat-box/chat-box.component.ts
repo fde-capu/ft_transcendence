@@ -95,11 +95,14 @@ export class ChatBoxComponent {
 			let chatRoomTest = this.chatService.roomById(this.id);
 			if (chatRoomTest) this.chatRoom = chatRoomTest;
 			//console.log("A3");
-//			if (this.chatService.hasNews() || this.firstTime)
+			if (this.chatService.hasNews() || this.firstTime)
+			{
+				//console.log("Updating users in chat", this.chatRoom);
 				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
+			}
 			this.firstTime = false;
 			//console.log("A4");
-			await new Promise(resolve => setTimeout(resolve, 2373));
+			await new Promise(resolve => setTimeout(resolve, 1573));
 			this.updateRoomRecursive();
 		}
 	}
@@ -232,18 +235,14 @@ export class ChatBoxComponent {
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
-	kickThem(kicked: User) {
-		let innocents: string[] = [];
-		for (const suspect of this.chatRoom.user)
-			if (suspect != kicked.intraId)
-				innocents.push(suspect);
-		this.chatRoom.user = innocents;
+	async kickThem(kicked: User) {
 		this.invitationService.notify({
 			to: kicked.intraId,
 			note: "You have been kicked.",
 			route: "/rooms",
 			button: this.fun.funnyInnocence(),
 		});
+		this.chatRoom.user = this.fun.removeStringFromArray(kicked.intraId, this.chatRoom.user);
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
