@@ -102,7 +102,7 @@ export class ChatBoxComponent {
 			}
 			this.firstTime = false;
 			//console.log("A4");
-			await new Promise(resolve => setTimeout(resolve, 1573));
+			await new Promise(resolve => setTimeout(resolve, 573));
 			this.updateRoomRecursive();
 		}
 	}
@@ -241,6 +241,7 @@ export class ChatBoxComponent {
 			note: "You have been kicked.",
 			route: "/rooms",
 			button: this.fun.funnyInnocence(),
+			routeBefore: true,
 		});
 		this.chatRoom.user = this.fun.removeStringFromArray(kicked.intraId, this.chatRoom.user);
 		this.chatService.roomChanged(this.chatRoom);
@@ -258,6 +259,7 @@ export class ChatBoxComponent {
 			type: "One minute banned!",
 			route: "/rooms",
 			button: this.fun.funnyInnocence(),
+			routeBefore: true,
 		});
 		this.chatService.TIG(tigged.intraId, this.chatRoom);
 		this.chatService.roomChanged(this.chatRoom);

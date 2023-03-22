@@ -82,6 +82,10 @@ export class InvitationService {
 						notificationScreen: this.notificationScreen,
 						invitation: _.payload,
 					});
+
+					if (this.notificationScreen && _.payload.routeBefore)
+						return this.go(_.payload.route);
+
 				}
 			},
 		);
