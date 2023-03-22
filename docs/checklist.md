@@ -26,3 +26,9 @@ Bug notes:
 [X] Users could invite to chat or game event if the other is offline (solved);
 [X] Game-history was auto-replicating and getting huge!!
 [X] Private messaging was auto-redirecting inviter w/o asking first.
+[X] Redirect before notification.
+[X] Too much blinking on chat-options.
+[X] Double friends (somehow it was possible to add the same friend twice).
+[X] Must not be able to invite INGAME nor OFFLINE players.
+[X] Abrupt logout was leaving the user INCHAT forever.
+[ ] User must get offile if the browser closes.

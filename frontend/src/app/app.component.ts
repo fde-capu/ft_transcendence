@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { ChatService } from './chat.service';
+import { UserService } from './user.service';
+
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,7 @@ export class AppComponent {
   constructor(
 	public router: Router,
 	public chatService: ChatService,
+	public userService: UserService,
   ){};
   ngOnInit() {
 		setInterval(function(){
@@ -32,5 +35,14 @@ export class AppComponent {
 				}
 			}
 		});
+		window.addEventListener('beforeunload', () => {
+//	this.chatService.getOutOfAnyChat();
+//	this.userService.signOut();
+		});
+  }
+  ngOnDestroy() {
+//	alert('Destroy!');
+//	this.chatService.getOutOfAnyChat();
+//	this.userService.signOut();
   }
 }

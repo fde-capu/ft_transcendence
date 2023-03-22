@@ -66,11 +66,8 @@ export class ChatBoxComponent {
 			this.router.navigate(['/chat/' + newRoomId]);
 			return ;
 		}
-		if (this.id) {
-			const chatRoomTest = this.chatService.roomById(this.id);
-			if (chatRoomTest)
-				this.chatRoom = chatRoomTest;
-		}
+		if (this.id)
+			this.keepTryingToIdentify(this.id);
 		// ^ If it is a new room (roomId is null), the route will actualy
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
@@ -85,6 +82,18 @@ export class ChatBoxComponent {
 		this.getOutOfChatUsersRecursiveOnce();
 		this.imprintRecursive();
 		this.done = true;
+	}
+
+	async keepTryingToIdentify(id: string) {
+		console.log("The id is", id);
+		const chatRoomTest = this.chatService.roomById(id);
+		console.log("ChatRoomTest", chatRoomTest);
+		if (chatRoomTest)
+			this.chatRoom = chatRoomTest;
+		else {
+			await new Promise(resolve => setTimeout(resolve, 345));
+			this.keepTryingToIdentify(id);
+		}
 	}
 
 	async updateRoomRecursive(): Promise<void> {
