@@ -99,7 +99,7 @@ export class ChatBoxComponent {
 				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
 			this.firstTime = false;
 			//console.log("A4");
-			await new Promise(resolve => setTimeout(resolve, 870));
+			await new Promise(resolve => setTimeout(resolve, 1373));
 			this.updateRoomRecursive();
 		}
 	}
@@ -121,7 +121,7 @@ export class ChatBoxComponent {
 				this.usersOutOfChat = outChat;
 			}
 		);
-		await new Promise(resolve => setTimeout(resolve, 7447));
+		await new Promise(resolve => setTimeout(resolve, 1447));
 		this.getOutOfChatUsersRecursiveOnce();
 	}
 
