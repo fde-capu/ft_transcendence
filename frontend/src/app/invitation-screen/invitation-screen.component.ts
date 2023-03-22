@@ -67,6 +67,11 @@ export class InvitationScreenComponent {
 			this.invitationService.replyFalse(old.invitation);
 	}
 
+	alreadyInRoute(): boolean {
+		let route = this.myState?.invitation?.route;
+		return route == this.router.url;
+	}
+
 	finalOk() {
 		let old = this.flip();
 		if (!old) return;
