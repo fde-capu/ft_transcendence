@@ -152,6 +152,36 @@ export class ChatService {
 		});
 	}
 
+	equalArray(a: string[] | undefined, b: string[] | undefined)
+	{
+		if (!b && !a) return true;
+		if (!b || !a) return false;
+		for (const u of a)
+			if (!this.fun.isStringInArray(u, b))
+				return false;
+		for (const u of b)
+			if (!this.fun.isStringInArray(u, a))
+				return false;
+		return true;
+	}
+
+	equalRooms(a: ChatRoom|undefined, b: ChatRoom|undefined) {
+		if (!a && !b) return false;
+		if (!a || !b) return false;
+		if (!this.equalArray(a.user, b.user))
+			return false;
+		if (!this.equalArray(a.admin, b.admin))
+			return false;
+		if (!this.equalArray(a.blocked, b.blocked))
+			return false;
+		if (!this.equalArray(a.muted, b.muted))
+			return false;
+		return (a.id == b.id
+			&&	a.name == b.name
+			&&	a.password == b.password
+			&&	a.isPrivate == b.isPrivate)
+	}
+
 	logOutAllRooms(intraId: string) {
 		for (const i in ChatService.allRooms) {
 			let newRoom: ChatRoom = ChatService.allRooms[i];
@@ -191,7 +221,6 @@ export class ChatService {
 		//console.log("Chat emitting.");
 		this.socket.emit('chat', chatMessage);
 	}
-
 
 	roomById(roomId?: string): ChatRoom|undefined {
 		//console.log("roomById", roomId, ChatService.allRooms);

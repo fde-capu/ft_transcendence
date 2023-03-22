@@ -43,6 +43,10 @@ export class ChatBoxComponent {
 		this.getUserAndStuff();
 	}
 
+	ngOnDestroy() {
+		this.done = false;
+	}
+
 	getUserAndStuff(): void {
 		this.userService.getLoggedUser().subscribe(
 			backUser => {
@@ -102,12 +106,18 @@ export class ChatBoxComponent {
 				return ;
 
 			let chatRoomTest = this.chatService.roomById(this.id);
-			if (chatRoomTest) this.chatRoom = chatRoomTest;
-			//console.log("A3");
-			//console.log("Updating users in chat", this.chatRoom);
-			this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
-			//console.log("A4", this.uniqueId, this.chatRoom.name);
-			await new Promise(resolve => setTimeout(resolve, 3000));
+			if (!this.chatService.equalRooms(chatRoomTest, this.chatRoom) || !this.done) {
+				//console.log("update", chatRoomTest);
+				if (chatRoomTest)
+					this.chatRoom = chatRoomTest;
+				else
+					return;
+				//console.log("A3");
+				//console.log("Updating users in chat", this.chatRoom);
+				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
+				//console.log("A4", this.uniqueId, this.chatRoom.name);
+			}
+			await new Promise(resolve => setTimeout(resolve, 1357));
 			this.updateRoomRecursive();
 		}
 	}
