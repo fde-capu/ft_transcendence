@@ -28,9 +28,11 @@ export class InvitationScreenComponent {
 		this.myState = InvitationScreenComponent.state[0];
 		if (InvitationScreenComponent.connected) return;
 		InvitationScreenComponent.connected = true;
-		this.invitationService.inviteState.subscribe(_=>{
+		//console.log("Will subscribe.");
+		const subscription = InvitationService.inviteState.subscribe(_=>{
 			if (_) {
-				if(	_.receiveScreen
+				//console.log("Invitation subscription.", _);
+				if (_.receiveScreen
 				||	_.declineScreen
 				||	_.acceptScreen
 				||	_.sentScreen
@@ -43,7 +45,6 @@ export class InvitationScreenComponent {
 						notificationScreen : _.notificationScreen,
 						invitation : _.invitation,
 					});
-				this.myState = InvitationScreenComponent.state[0];
 				this.router.navigate([this.router.url]);
 			}
 		});

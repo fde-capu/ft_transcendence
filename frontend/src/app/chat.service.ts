@@ -87,9 +87,7 @@ export class ChatService {
 	}
 
 	hasNews(): boolean {
-		if (this.gotNews || Math.random() > .9) {
-			//              ^ ocasional refreshment to solve race condition,
-			//                thus saving cpu.
+		if (this.gotNews) {
 			this.gotNews = false;
 			return true;
 		}

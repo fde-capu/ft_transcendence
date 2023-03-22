@@ -18,7 +18,7 @@ export class InvitationService {
 	acceptScreen: boolean = false;
 	sentScreen: boolean = false;
 	notificationScreen: boolean = false;
-	inviteState: BehaviorSubject<InviteState|undefined> = new BehaviorSubject<InviteState|undefined>(undefined);
+	static inviteState: BehaviorSubject<InviteState|undefined> = new BehaviorSubject<InviteState|undefined>(undefined);
 
   constructor(
 		private readonly router: Router,
@@ -74,7 +74,7 @@ export class InvitationService {
 						   _.payload.to == this.user?.intraId
 						&& !!_.payload.note;
 
-					this.inviteState.next({
+					InvitationService.inviteState.next({
 						receiveScreen: this.receiveScreen,
 						declineScreen: this.declineScreen,
 						acceptScreen: this.acceptScreen,

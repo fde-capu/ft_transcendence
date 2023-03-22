@@ -32,17 +32,14 @@ export class ChatBoxComponent {
 	user?: User;
 	id?: string|null;
 	iAmAdmin: boolean = false;
-	firstTime: boolean = true;
 	invalidNameNotice: boolean = false;
 	invalidPasswordNotice: boolean = false;
 	lastRoomName: string = "";
+	static uid: number = 1;
+	uniqueId: number = 0;
+	static umap: Map<string, number> = new Map<string, number>;
 
 	ngOnInit() {
-		// TODO: Check for querystring empty: it means its a new creation.
-		// In this case (empty query):
-		//		Async await call to endpoint requiring new room.
-		//		...when its done, redirect to "/chat/chatId?optionsOn=true".
-		// If there is a query, continue:
 		this.getUserAndStuff();
 	}
 
@@ -78,6 +75,7 @@ export class ChatBoxComponent {
 			&& this.chatRoom.admin && this.chatRoom.admin.length == 1
 			&& this.chatRoom.user[0] == this.chatRoom.admin[0])
 			this.optionsOn = true;
+		this.uniqueId = ChatBoxComponent.uid++;
 		this.updateRoomRecursive();
 		this.checkAdminRecursive()
 		this.getOutOfChatUsersRecursiveOnce();
@@ -85,24 +83,31 @@ export class ChatBoxComponent {
 		this.done = true;
 	}
 
-	async updateRoomRecursive() {
+	async updateRoomRecursive(): Promise<void> {
+		if (this.user && this.chatRoom && !this.fun.isStringInArray(this.user.intraId, this.chatRoom.user))
+		{
+			//console.log("Returning", this.uniqueId);
+			return ;
+		}
 		if (!this.id) {
 			//console.log("A1");
 			await new Promise(resolve => setTimeout(resolve, 337));
 			//console.log("A2");
-			await this.updateRoomRecursive();
+			return await this.updateRoomRecursive();
 		} else {
+			let solo = ChatBoxComponent.umap.get(this.id);
+			if (!solo || solo < this.uniqueId)
+				ChatBoxComponent.umap.set(this.id, this.uniqueId);
+			if (solo && solo > this.uniqueId)
+				return ;
+
 			let chatRoomTest = this.chatService.roomById(this.id);
 			if (chatRoomTest) this.chatRoom = chatRoomTest;
 			//console.log("A3");
-			if (this.chatService.hasNews() || this.firstTime)
-			{
-				//console.log("Updating users in chat", this.chatRoom);
-				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
-			}
-			this.firstTime = false;
-			//console.log("A4");
-			await new Promise(resolve => setTimeout(resolve, 573));
+			//console.log("Updating users in chat", this.chatRoom);
+			this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
+			//console.log("A4", this.uniqueId, this.chatRoom.name);
+			await new Promise(resolve => setTimeout(resolve, 3000));
 			this.updateRoomRecursive();
 		}
 	}
