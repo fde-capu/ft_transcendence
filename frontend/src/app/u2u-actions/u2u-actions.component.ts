@@ -15,7 +15,7 @@ export class U2uActionsComponent {
 	@Input() caption?: boolean;
 	@Input() singleline?: boolean;
 	@Input() amIBlocked?: boolean;
-	isMe: boolean = false;
+	isMe?: boolean;
 	availability?: boolean;
 
 	constructor(
@@ -51,8 +51,6 @@ export class U2uActionsComponent {
 	}
 
 	checkMe() {
-		this.userService.getLoggedUser().subscribe(_=>{
-			this.isMe = _.intraId == this.user?.intraId;
-		});
+		this.isMe = UserService.currentIntraId == this.user?.intraId;
 	}
 }
