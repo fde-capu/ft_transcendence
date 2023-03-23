@@ -16,6 +16,7 @@ Checklist based on sub. 12.1
 [ ] RESPONSIVO: The game must be responsive! (Não tenho certeza do que está implícito aqui, afinal...)
 [ ] GAMEPLAY
 [ ] DEPLOY: docker-compose up --build
+... [ ] Cors?
 
 Bug notes:
 [ ] WARN[0000] The "FTT_MODE" variable is not set. Defaulting to a blank string. 
@@ -31,5 +32,6 @@ Bug notes:
 [X] Double friends (somehow it was possible to add the same friend twice).
 [X] Must not be able to invite INGAME nor OFFLINE players.
 [X] Abrupt logout was leaving the user INCHAT forever.
-[ ] User must get offile if the browser closes.
+[X] User must get offile if the browser closes.
 [ ] Better behavior on frontend while server is down.
+[ ] Check if behavior is of with 2FA from 42 API + PONG!

@@ -425,27 +425,8 @@ export class ChatService {
 
 	private handleError<T>(operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
-
-			// TODO: send the error to remote logging infrastructure
-			console.error(">> ft_transcendence controlled error (chat.service):", error); // log to console instead
-			// ^ Yikes! Don't show if any bug! TODO (comment line above?)
-
-			// Let the app keep running by returning an empty result.
+			//console.error(">> ft_transcendence controlled error (chat.service):", error); // log to console instead
 			return of(result as T);
 		};
 	}
 }
-
-// TODO:
-
-// - Implement direct-messaging.
-// - Chat creationg screen.
-// - "Block user" routine.
-
-// - The user should be able to invite other users to 
-//   play a Pong game through the chat interface.
-// - Should also be able to access user profiles.
-//  :: These two things will be done by the avatar element, however.
-
-// Matchmaking screen.
-

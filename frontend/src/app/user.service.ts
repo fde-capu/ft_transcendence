@@ -19,7 +19,7 @@ import { HelperFunctionsService } from './helper-functions.service';
 })
 export class UserService {
 	public currentIntraId?: string;
-	private currentUser?: User;
+	public currentUser?: User;
 	static isAuthorized: boolean = false;
 	private statsUrl = 'http://localhost:3000/user/stats/?of=';
 	private historyUrl = 'http://localhost:3000/user/history/?of=';
@@ -56,21 +56,24 @@ export class UserService {
 				this.currentIntraId=_?.sub;
 			if (this.currentIntraId)
 				this.getLoggedUser()
-				.pipe(catchError(this.handleError<any>()))
-				.subscribe(_=>{this.currentUser=_;
-					this.announceMe();});
+				.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
+				.subscribe(_=>{this.currentUser=_;});
 		});
+		this.announceMe();
 	}
 
 	async announceMe(): Promise<void> {
 		await new Promise(resolve => setTimeout(resolve, 2391));
-		if (!this.currentIntraId) return this.announceMe();
+		if (!this.currentIntraId) return this.setCurrentIntraId();
 		this.http.put(
 				this.attendanceUrl + this.currentIntraId,
 				{},
 				this.saveHttpOptions
 			).pipe(
-				catchError(this.handleError<any>('announceMe'))
+				catchError(err=>{
+					this.currentIntraId = undefined;
+					return of(this.handleError<any>('announceMe'));
+				})
 			).subscribe();
 		this.announceMe();
 	}
@@ -80,6 +83,7 @@ export class UserService {
 	}
 
 	getUserById(intraId: string): Observable<User | undefined> {
+		if (!this.currentIntraId) return of(undefined); // In case server disconnected.
 		return this.http
 			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
 			.pipe(catchError(this.handleError<any>('getUserById')))
@@ -252,7 +256,8 @@ export class UserService {
 				&& this.router.url.indexOf("/logout") != 0)
 					this.signOut();
 			}
-			console.error(">> ft_transcendence controlled error (user.service):", error); // log to console instead
+			//console.error(">> ft_transcendence controlled error (user.service):", error); // log to console instead
+			console.log("ERROR:::", error.error.statusCode, operation);
 			return of(result as T);
 		};
 	}
