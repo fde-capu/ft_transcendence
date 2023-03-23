@@ -24,7 +24,7 @@ export class OnlineUsersComponent {
 		)
 	}
 	async getOnlineUsers() {
-		if (!this.userService.authorized()) return;
+		if (!this.userService.authorized() || !this.userService.currentIntraId) return;
 		this.userService.getOnlineUsers()
 			.subscribe(users => {
 				let out = [];
