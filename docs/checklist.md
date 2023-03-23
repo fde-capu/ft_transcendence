@@ -37,3 +37,23 @@ Bug notes:
 [X] Better behavior on frontend while server is down. (Solution not perfect, still some ERR::CONNECTION CLOSED from browser, but there are not too many anymore);
 [X] Check if behavior is of with 2FA from 42 API + PONG!
 [X] Menu-bar blinking when updating.
+
+
+- When installing frontend packs
+npm WARN deprecated @npmcli/move-file@2.0.1: This functionality has been moved 
+to @npmcli/fs
+npm WARN deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-cod
+ec instead
+
+- On install backend pack
+npm WARN deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-cod
+ec instead
+
+- On frontend and backedn npm build:
+MANY TIMES REPEATED:
+npm WARN tar TAR_ENTRY_ERROR EINVAL: invalid argument, fchown
+
+- On finished Compilation of frontend:
+frontend                    | Warning: /app/node_modules/angularx-qrcode/fesm2020/angularx-qrcode.mjs depends on 'qrcode'. CommonJS 
+or AMD dependencies can cause optimization bailouts.
+frontend                    | For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
