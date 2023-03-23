@@ -30,6 +30,7 @@ export class UserService {
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
 	private updateUserStatus = 'http://localhost:3000/user/status/';
+	private attendanceUrl = 'http://localhost:3000/user/hi/';
 	private saveHttpOptions = 
 				{
 					withCredentials: true,
@@ -56,8 +57,22 @@ export class UserService {
 			if (this.currentIntraId)
 				this.getLoggedUser()
 				.pipe(catchError(this.handleError<any>()))
-				.subscribe(_=>{this.currentUser=_;});
+				.subscribe(_=>{this.currentUser=_;
+					this.announceMe();});
 		});
+	}
+
+	async announceMe(): Promise<void> {
+		await new Promise(resolve => setTimeout(resolve, 2391));
+		if (!this.currentIntraId) return this.announceMe();
+		this.http.put(
+				this.attendanceUrl + this.currentIntraId,
+				{},
+				this.saveHttpOptions
+			).pipe(
+				catchError(this.handleError<any>('announceMe'))
+			).subscribe();
+		this.announceMe();
 	}
 
 	getQuickIntraId() {
