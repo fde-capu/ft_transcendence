@@ -33,5 +33,6 @@ Bug notes:
 [X] Must not be able to invite INGAME nor OFFLINE players.
 [X] Abrupt logout was leaving the user INCHAT forever.
 [X] User must get offile if the browser closes.
-[ ] Better behavior on frontend while server is down.
-[ ] Check if behavior is of with 2FA from 42 API + PONG!
+[X] Better behavior on frontend while server is down. (Solution not perfect, still some ERR::CONNECTION CLOSED from browser, but there are not too many anymore);
+[X] Check if behavior is of with 2FA from 42 API + PONG!
+[ ] Menu-bar blinking when updating.
