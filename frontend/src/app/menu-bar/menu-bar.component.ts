@@ -20,10 +20,12 @@ export class MenuBarComponent {
 	this.getUser();
   }
   async getUser(): Promise<void> {
-	await new Promise(resolve => setTimeout(resolve, 1007));
-	if (!this.userService.authorized() || !UserService.currentUser)
+	if (!this.userService.authorized() || !UserService.currentUser) {
+		await new Promise(resolve => setTimeout(resolve, 1007));
 		return this.getUser();
+	}
 	this.user = UserService.currentUser;
+	await new Promise(resolve => setTimeout(resolve, 1007));
 	this.getUser();
   }
 

@@ -36,4 +36,4 @@ Bug notes:
 [X] User must get offile if the browser closes.
 [X] Better behavior on frontend while server is down. (Solution not perfect, still some ERR::CONNECTION CLOSED from browser, but there are not too many anymore);
 [X] Check if behavior is of with 2FA from 42 API + PONG!
-[ ] Menu-bar blinking when updating.
+[X] Menu-bar blinking when updating.
