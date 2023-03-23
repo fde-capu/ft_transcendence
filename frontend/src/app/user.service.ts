@@ -55,10 +55,6 @@ export class UserService {
 			UserService.isAuthorized = true;
 			if (_?.sub)
 				UserService.currentIntraId=_?.sub;
-			if (UserService.currentIntraId)
-				this.getLoggedUser()
-				.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
-				.subscribe(_=>{if(_){UserService.currentUser=_;}});
 		});
 		this.announceMe();
 	}
@@ -77,6 +73,7 @@ export class UserService {
 				})
 			).subscribe();
 		this.announceMe();
+		this.keepUpdating();
 	}
 
 	getQuickIntraId() {
@@ -88,6 +85,15 @@ export class UserService {
 		return this.http
 			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
 			.pipe(catchError(this.handleError<any>('getUserById')))
+	}
+
+	async keepUpdating() {
+		if (!UserService.currentIntraId) return this.setCurrentIntraId();
+		this.getLoggedUser()
+			.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
+			.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
+		await new Promise(resolve => setTimeout(resolve, 2239));
+		this.keepUpdating();
 	}
 
 	getLoggedUser(): Observable<User> {
