@@ -35,7 +35,7 @@ export class ChatService {
 	}
 
 	async getUser(): Promise<User> {
-		if (ChatService.user && Math.random() > .1) return ChatService.user;
+		if (ChatService.user && Math.random() > .04) return ChatService.user;
 		if (this.userService.getQuickIntraId()) {
 			this.userService.getLoggedUser().subscribe(
 				backUser => { 

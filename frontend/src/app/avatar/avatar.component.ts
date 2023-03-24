@@ -31,7 +31,7 @@ export class AvatarComponent {
 
 	async updateMe(): Promise<void> {
 		//console.log("avatar update");
-		await new Promise(resolve => setTimeout(resolve, 1985 + (Math.random() * 6981)));
+		await new Promise(resolve => setTimeout(resolve, 4985 + (Math.random() * 6981)));
 		if (!this.userService.authorized()) return;
 		if (this.user)
 		{

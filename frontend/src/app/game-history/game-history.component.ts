@@ -14,9 +14,12 @@ export class GameHistoryComponent {
   ) {}
 	@Input() user: User|undefined;
   histRender: any[] = [];
-  ngOnChanges(): void {this.getGameHistory();}
-  getGameHistory(): void {
-	if (!this.user) return ;
+  ngOnInit(): void {this.getGameHistory();}
+  async getGameHistory(): Promise<void> {
+	if (!this.user) {
+		await new Promise(resolve => setTimeout(resolve, 211));
+		return await this.getGameHistory();
+	}
 	//console.log("gGH for ", this.user.intraId);
 	this.userService.getGameHistory(this.user.intraId).subscribe(_=>{
 		//console.log("getGameHistory got", _);

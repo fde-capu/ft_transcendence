@@ -1,10 +1,14 @@
+.avatar
+{
+	display: inline-block;
+}
 .avatar-image
 {
 	filter: grayscale(100%);
 	border: none;
-	margin-right: 5px;
-	width: 64px;
-	height: 64px;
+	margin: 2px;
+	width: 2em;
+	height: 2em;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;

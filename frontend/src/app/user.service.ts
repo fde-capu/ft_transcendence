@@ -60,7 +60,7 @@ export class UserService {
 	}
 
 	async announceMe(): Promise<void> {
-		await new Promise(resolve => setTimeout(resolve, 2391));
+		await new Promise(resolve => setTimeout(resolve, 10391));
 		if (!UserService.currentIntraId) return this.setCurrentIntraId();
 		this.http.put(
 				this.attendanceUrl + UserService.currentIntraId,
@@ -73,7 +73,8 @@ export class UserService {
 				})
 			).subscribe();
 		this.announceMe();
-		this.keepUpdating();
+//		this.keepUpdating();
+//		^ Why? Current user will never change..?
 	}
 
 	getQuickIntraId() {
@@ -92,8 +93,6 @@ export class UserService {
 		this.getLoggedUser()
 			.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
 			.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
-		await new Promise(resolve => setTimeout(resolve, 2239));
-		this.keepUpdating();
 	}
 
 	getLoggedUser(): Observable<User> {

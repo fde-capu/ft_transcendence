@@ -6,7 +6,8 @@
 	<div class='avatar-menu' *ngIf="popUpOn" (mouseenter)='onHover()' (mouseleave)='onHoverOut()'>
 		<div style="margin-bottom: 4px;">{{displayUser.intraId}} | {{displayUser.name}}</div>
 		<button class="oneliner" routerLink="/profile/{{displayUser.intraId}}">Profile</button>
-		<app-u2u-actions [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser' [caption]='false'></app-u2u-actions>
+		<app-u2u-actions [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked'
+			[user]='displayUser' [caption]='false'></app-u2u-actions>
 	</div>
 </div>
 <ng-template #plain>
