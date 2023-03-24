@@ -43,8 +43,9 @@ export class UserService {
 		private router: Router,
 		private fun: HelperFunctionsService,
 	) {
-		//console.log("User Service constructor.");
-		this.setCurrentIntraId();
+		console.log("User Service constructor.");
+		if (!UserService.currentIntraId)
+			this.setCurrentIntraId();
 		this.router.routeReuseStrategy.shouldReuseRoute = () => {
 			return false;
 		};
@@ -55,13 +56,15 @@ export class UserService {
 			UserService.isAuthorized = true;
 			if (_?.sub)
 				UserService.currentIntraId=_?.sub;
+			console.log("> got intraId first:", UserService.currentIntraId);
+			this.announceMe();
+			this.keepUpdating();
 		});
-		this.announceMe();
 	}
 
 	async announceMe(): Promise<void> {
 		await new Promise(resolve => setTimeout(resolve, 10391));
-		if (!UserService.currentIntraId) return this.setCurrentIntraId();
+		if (!UserService.currentIntraId) return;
 		this.http.put(
 				this.attendanceUrl + UserService.currentIntraId,
 				{},
@@ -73,8 +76,16 @@ export class UserService {
 				})
 			).subscribe();
 		this.announceMe();
-//		this.keepUpdating();
-//		^ Why? Current user will never change..?
+	}
+
+	async keepUpdating() {
+		if (!UserService.currentIntraId) return;
+		await new Promise(resolve => setTimeout(resolve, 321)); // Useful for first run.
+		this.getLoggedUser()
+			.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
+			.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
+		await new Promise(resolve => setTimeout(resolve, 9369));
+		this.keepUpdating();
 	}
 
 	getQuickIntraId() {
@@ -86,13 +97,6 @@ export class UserService {
 		return this.http
 			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
 			.pipe(catchError(this.handleError<any>('getUserById')))
-	}
-
-	async keepUpdating() {
-		if (!UserService.currentIntraId) return this.setCurrentIntraId();
-		this.getLoggedUser()
-			.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
-			.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
 	}
 
 	getLoggedUser(): Observable<User> {

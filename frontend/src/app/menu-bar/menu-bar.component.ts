@@ -21,6 +21,7 @@ export class MenuBarComponent {
   }
   async getUser(): Promise<void> {
 	this.user = UserService.currentUser;
+	console.log("set", this.user?.intraId);
 	await new Promise(resolve => setTimeout(resolve, 1007));
 	this.getUser();
   }
