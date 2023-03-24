@@ -17,6 +17,7 @@ export class AvatarComponent {
 	isMe: boolean = false;
 	loggedUser?: User;
 	amIBlocked?: boolean;
+	@Input() positionbottom?: boolean;
 
 	constructor(
 		private userService: UserService,

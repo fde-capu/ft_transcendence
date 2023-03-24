@@ -3,8 +3,11 @@
 		style="background-image:url('{{ displayUser.image }}');"
 		>
 	</div>
-	<div class='avatar-menu' *ngIf="popUpOn" (mouseenter)='onHover()'
-		(mouseleave)='onHoverOut()'>
+	<div class='avatar-menu'
+		[ngClass]="{'positionbottom':positionbottom}"
+		*ngIf="popUpOn" (mouseenter)='onHover()'
+		(mouseleave)='onHoverOut()'
+	>
 		<div>
 			{{displayUser.intraId}}
 			<br>

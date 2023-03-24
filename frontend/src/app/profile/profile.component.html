@@ -3,7 +3,7 @@
 <h1>{{ profileType }}<span *ngIf='!amIBlocked'> Profile</span></h1>
 <div *ngIf='!amIBlocked; else spying'>
 
-<div *ngIf="displayUser; else user_unknown">
+<div *ngIf="displayUser; else user_unknown" style='margin-bottom: 4em;'>
 
 
 	<div class='opt-box' *ngIf="owner">
@@ -48,7 +48,6 @@
 	</div>
 
 
-
 		<div class='oneliner'>
 			<div class="profile-image hover_invert"
 				style="background-image:url('DEFAULT_IMAGE');">
@@ -58,7 +57,6 @@
 				<span class='big-user'>{{displayUser.name}}</span>
 			</div>
 		</div>
-
 
 
 </div>
@@ -74,8 +72,12 @@
 <app-blocks-list *ngIf='owner' [user]="displayUser"></app-blocks-list> 
 
 <app-statistics [user]="displayUser"></app-statistics>
-<app-game-history [user]="displayUser"></app-game-history>
+
 <app-ladder [user]='user' [them]='displayUser'></app-ladder>
+
+<app-game-history [user]="displayUser"></app-game-history>
+
+
 </div>
 
 <ng-template #user_unknown>

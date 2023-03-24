@@ -1,25 +1,25 @@
 .podium {
-	position: relative;
-	height: 400px;
 	display: flex;
 	overflow-x: auto;
-	padding-bottom: 0.5em;
 	flex-direction: row;
 	justify-content: flex-start;
-	border: var(--border-thin);
-	margin-left: -0.33em;
 	margin-bottom: 1em;
-	padding-bottom: 0;
+	align-items: flex-end;
+	background: rgb(73,73,73);
+	background: linear-gradient(0deg, rgba(73,73,73,1) 0%, rgba(65,65,65,0) 100%);
+	width: fit-content;
+	max-width: var(--base-normal-width);
+	padding: 1em 0;
+	border-radius: 0.25em;
 }
 
 .tower {
-	height: 100%;
 	width: 72px;
 	display: flex;
     flex-direction: column;
     justify-content: flex-end;
 	align-items: center;
-	margin: 0 0.125em;
+	margin: 0 0 0 .5em;
 }
 
 .pit {
