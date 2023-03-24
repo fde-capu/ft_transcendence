@@ -1,3 +1,6 @@
 .big-input {
 	min-width: 10em;
 }
+button {
+	display: inline-block;
+}

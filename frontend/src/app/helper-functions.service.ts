@@ -27,6 +27,32 @@ export class HelperFunctionsService {
 		return out;
 	}
 
+	equalArray(a: string[] | undefined, b: string[] | undefined)
+	{
+		if (!b && !a) return true;
+		if (!b || !a) return false;
+		for (const u of a)
+			if (!this.isStringInArray(u, b))
+				return false;
+		for (const u of b)
+			if (!this.isStringInArray(u, a))
+				return false;
+		return true;
+	}
+
+	equalUserArray(u_a: User[] | undefined, u_b: User[] | undefined)
+	{
+		if (!u_b && !u_a) return true;
+		if (!u_b || !u_a) return false;
+		let a: string[] = [];
+		let b: string[] = [];
+		for (const u of u_a)
+			a.push(u.intraId);
+		for (const u of u_b)
+			b.push(u.intraId);
+		return this.equalArray(a, b);
+	}
+
 	refreshScreen() {
 		this.router.navigate([this.router.url]);
 	}

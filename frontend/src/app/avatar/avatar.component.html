@@ -1,6 +1,6 @@
-<div *ngIf="displayUser; else plain" class='avatar' (click)='onClick()' (mouseleave)='onHoverOut()'>
+<div *ngIf="user; else plain" class='avatar' (click)='onClick()' (mouseleave)='onHoverOut()'>
 	<div class='avatar-image hover_invert'
-		style="background-image:url('{{ displayUser.image }}');"
+		style="background-image:url('{{ user.image }}');"
 		>
 	</div>
 	<div class='avatar-menu'
@@ -11,19 +11,19 @@
 		(mouseenter)='onHover()' (mouseleave)='onHoverOut()'
 	>
 		<div>
-			{{displayUser.intraId}}
+			{{user.intraId}}
 			<br>
 			<span style='font-size: 1.34em'>
-				{{displayUser.name}}
+				{{user.name}}
 			</span>
 		</div>
 		<app-u2u-actions [isFriend]='isFriend' [isBlock]='isBlock'
 			[amIBlocked]='amIBlocked'
-			[user]='displayUser' [caption]='false'></app-u2u-actions>
+			[user]='user' [caption]='false'></app-u2u-actions>
 	</div>
 </div>
 <ng-template #plain>
 	<div class='avatar-image hover_invert'
-		style="background-image:url('{{ displayUser?.image }}');"
+		style="background-image:url('{{ user?.image }}');"
 	></div>
 </ng-template>

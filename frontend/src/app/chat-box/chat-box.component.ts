@@ -28,7 +28,7 @@ export class ChatBoxComponent {
 	optionsOn = false;
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
 	usersInChat: User[] = [];
-	done: Boolean = false;
+	static ignited: Boolean = false;
 	user?: User;
 	id?: string|null;
 	iAmAdmin: boolean = false;
@@ -44,7 +44,7 @@ export class ChatBoxComponent {
 	}
 
 	ngOnDestroy() {
-		this.done = false;
+		ChatBoxComponent.ignited = false;
 	}
 
 	getUserAndStuff(): void {
@@ -59,6 +59,7 @@ export class ChatBoxComponent {
 
 	async initChatRoom() {
 		//console.log("ChatBox Init");
+		ChatBoxComponent.ignited = true;
 		this.id = this.route.snapshot.paramMap.get('roomId');
 		if (!this.id && this.user)
 		{
@@ -81,7 +82,6 @@ export class ChatBoxComponent {
 		this.checkAdminRecursive()
 		this.getOutOfChatUsersRecursiveOnce();
 		this.imprintRecursive();
-		this.done = true;
 	}
 
 	async keepTryingToIdentify(id: string) {
@@ -114,7 +114,7 @@ export class ChatBoxComponent {
 				return ;
 
 			let chatRoomTest = this.chatService.roomById(this.id);
-			if (!this.chatService.equalRooms(chatRoomTest, this.chatRoom) || !this.done) {
+			if (!this.chatService.equalRooms(chatRoomTest, this.chatRoom) || !ChatBoxComponent.ignited) {
 				//console.log("update", chatRoomTest);
 				if (chatRoomTest)
 					this.chatRoom = chatRoomTest;
@@ -140,14 +140,14 @@ export class ChatBoxComponent {
 	}
 
 	async getOutOfChatUsersRecursiveOnce() {
-		if (!this.userService.authorized()) return ;
+		if (!this.userService.authorized() || !ChatBoxComponent.ignited) return ;
 		this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(
 			outChat => {
-				//console.log("Got out-of-chat users.", outChat);
+				console.log(this.uniqueId, "Got out-of-chat users.", outChat);
 				this.usersOutOfChat = outChat;
 			}
 		);
-		await new Promise(resolve => setTimeout(resolve, 1447));
+		await new Promise(resolve => setTimeout(resolve, 6447));
 		this.getOutOfChatUsersRecursiveOnce();
 	}
 

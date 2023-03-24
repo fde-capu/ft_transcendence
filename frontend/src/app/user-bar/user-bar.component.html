@@ -1,7 +1,10 @@
 <div *ngIf="user">
-	<app-avatar [user]="user"></app-avatar>
+	<app-avatar [user]="user" class='user-bar-avatar'></app-avatar>
+	<div class="mini-id">
+		{{user.intraId}}
+	</div>
 	<a class="user-name-medium" routerLink="/profile/{{user.intraId}}">
-		{{user.intraId}} | {{user.name}}
+		{{user.name}}
 	</a>
 	<app-u2u-actions
 		[isFriend]='isFriend'

@@ -10,12 +10,10 @@ styleUrls: ['./avatar.component.css']
 })
 export class AvatarComponent {
 	@Input() user?: User;
-	displayUser?: User;
 	popUpOn = false;
 	isFriend: boolean = false;
 	isBlock: boolean = false;
 	isMe: boolean = false;
-	loggedUser?: User;
 	amIBlocked?: boolean;
 	@Input() positionbottom?: boolean;
 
@@ -26,32 +24,6 @@ export class AvatarComponent {
 	ngOnChanges() {
 		this.checkFriendship();
 		this.checkBlock();
-		this.checkMe();
-		this.getDisplayUserOnce();
-	}
-
-	async getDisplayUserOnce(): Promise<void> {
-		//console.log("avatar update");
-		if (!this.userService.authorized() || !this.user) {
-			await new Promise(resolve => setTimeout(resolve, 111 + (Math.random() * 981)));
-			return this.getDisplayUserOnce();
-		}
-		this.userService.getUser(this.user.intraId)
-			.pipe(catchError(err=>{
-				this.userService.handleError<any>('updateMe');
-				return of(err);
-			}))
-			.subscribe(_=>{
-				if (this.displayUser?.name != _?.name)
-					this.displayUser = _;
-			})
-	}
-
-	checkMe() {
-		this.userService.getLoggedUser().subscribe(_=>{
-			this.loggedUser = _;
-			this.isMe = _.intraId == this.user?.intraId;
-		});
 	}
 
 	checkFriendship() {

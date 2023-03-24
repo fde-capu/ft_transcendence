@@ -1,5 +1,9 @@
 :host div {
-    display: flex;
-    align-items: center;
-	justify-content: space-between;
+}
+.user-bar-avatar {
+	float: left;
+	margin: 8px;
+}
+.mini-id {
+	font-size: var(--font-small);
 }
