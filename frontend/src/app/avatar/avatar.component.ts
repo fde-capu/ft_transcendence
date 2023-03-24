@@ -26,26 +26,24 @@ export class AvatarComponent {
 		this.checkFriendship();
 		this.checkBlock();
 		this.checkMe();
-//		this.updateMe();
+		this.getDisplayUserOnce();
 	}
 
-	async updateMe(): Promise<void> {
+	async getDisplayUserOnce(): Promise<void> {
 		//console.log("avatar update");
-		await new Promise(resolve => setTimeout(resolve, 4985 + (Math.random() * 6981)));
-		if (!this.userService.authorized()) return;
-		if (this.user)
-		{
-			this.userService.getUser(this.user.intraId)
-				.pipe(catchError(err=>{
-					this.userService.handleError<any>('updateMe');
-					return of(err);
-				}))
-				.subscribe(_=>{
-					if (this.displayUser?.name != _?.name)
-						this.displayUser = _;
-					this.updateMe();
-				})
+		if (!this.userService.authorized() || !this.user) {
+			await new Promise(resolve => setTimeout(resolve, 111 + (Math.random() * 981)));
+			return this.getDisplayUserOnce();
 		}
+		this.userService.getUser(this.user.intraId)
+			.pipe(catchError(err=>{
+				this.userService.handleError<any>('updateMe');
+				return of(err);
+			}))
+			.subscribe(_=>{
+				if (this.displayUser?.name != _?.name)
+					this.displayUser = _;
+			})
 	}
 
 	checkMe() {

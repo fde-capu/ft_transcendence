@@ -12,16 +12,17 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
+	z-index: 99;
 }
 .avatar-menu
 {
-	min-width: max-content;
 	font-size: var(--font-small);
 	background: var(--color-popup-background);
 	position: absolute;
 	border: var(--border-thin);
 	padding: 10px;
-	margin-left: 60px;
-	margin-top: -5px;
+	margin-top: -3em;
+	margin-left: 48px;
+	line-height: 1em;
 	z-index: 100;
 }

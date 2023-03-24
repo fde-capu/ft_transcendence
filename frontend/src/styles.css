@@ -230,11 +230,6 @@ label::after {
 *::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-light);
 }
-.no-border-margin-padding {
-	margin: 0;
-	padding: 0;
-	border: 0;
-}
 .oneliner {
 	display: block;
 	white-space: nowrap;

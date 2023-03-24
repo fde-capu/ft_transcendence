@@ -1,17 +1,24 @@
-<!-- TODO get image dinamicaly -->
 <div *ngIf="displayUser; else plain" class='avatar' (click)='onClick()' (mouseleave)='onHoverOut()'>
 	<div class='avatar-image hover_invert'
 		style="background-image:url('{{ displayUser.image }}');"
-		></div>
-	<div class='avatar-menu' *ngIf="popUpOn" (mouseenter)='onHover()' (mouseleave)='onHoverOut()'>
-		<div style="margin-bottom: 4px;">{{displayUser.intraId}} | {{displayUser.name}}</div>
-		<button class="oneliner" routerLink="/profile/{{displayUser.intraId}}">Profile</button>
-		<app-u2u-actions [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked'
+		>
+	</div>
+	<div class='avatar-menu' *ngIf="popUpOn" (mouseenter)='onHover()'
+		(mouseleave)='onHoverOut()'>
+		<div>
+			{{displayUser.intraId}}
+			<br>
+			<span style='font-size: 1.34em'>
+				{{displayUser.name}}
+			</span>
+		</div>
+		<app-u2u-actions [isFriend]='isFriend' [isBlock]='isBlock'
+			[amIBlocked]='amIBlocked'
 			[user]='displayUser' [caption]='false'></app-u2u-actions>
 	</div>
 </div>
 <ng-template #plain>
-	<div class='avatar-image no-border-margin-padding hover_invert'
+	<div class='avatar-image hover_invert'
 		style="background-image:url('{{ displayUser?.image }}');"
 	></div>
 </ng-template>

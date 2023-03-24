@@ -56,7 +56,6 @@ export class UserService {
 			UserService.isAuthorized = true;
 			if (_?.sub)
 				UserService.currentIntraId=_?.sub;
-			console.log("> got intraId first:", UserService.currentIntraId);
 			this.announceMe();
 			this.keepUpdating();
 		});
