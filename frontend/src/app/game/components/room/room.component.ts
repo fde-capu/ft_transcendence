@@ -10,6 +10,7 @@ enum RoomStatus {
   LOADING = 'LOADING',
   WAITING = 'WAITING',
   RUNNING = 'RUNNING',
+  ERROR = 'ERROR',
 }
 
 @Component({
@@ -25,6 +26,8 @@ export class RoomComponent implements OnInit {
   roomSocket!: RoomSocket;
 
   room!: Room;
+
+  message?: string;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -44,6 +47,16 @@ export class RoomComponent implements OnInit {
         next: r => {
           this.room = r;
           this.status = r.inGame ? RoomStatus.RUNNING : RoomStatus.WAITING;
+        },
+      });
+
+    this.roomSocket
+      .fromEvent<string>('game:room:error')
+      .pipe(map(str => JSON.parse(str)))
+      .subscribe({
+        next: msg => {
+          this.message = msg.message;
+          this.status = RoomStatus.ERROR;
         },
       });
 

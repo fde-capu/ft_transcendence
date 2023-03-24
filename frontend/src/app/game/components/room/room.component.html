@@ -57,7 +57,7 @@
         </span>
       </li>
     </ul>
-    <div>
+    <div *ngIf="room.audience.length">
       <h3>Audience</h3>
       <ul>
         <li *ngFor="let user of room.audience">{{ user.name }}</li>
@@ -66,3 +66,4 @@
   </section>
 </main>
 <app-game *ngIf="status === 'RUNNING'"></app-game>
+<main *ngIf="status === 'ERROR'">{{ message || 'ERROR' }}</main>

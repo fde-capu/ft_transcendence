@@ -2,6 +2,12 @@ import { ClientSocket } from '../service/room.service';
 import { Server } from 'socket.io';
 import { hideServer } from '../helper/hide-server.replacer';
 
+enum GameMode {
+  PONG,
+  PONGDOUBLE,
+  QUADRAPONG,
+}
+
 export class User {
   public connected = true;
 
@@ -30,6 +36,10 @@ export class Team {
     public readonly id: string,
     public readonly capacity = 1,
   ) {}
+
+  public isFull(): boolean {
+    return this.players.length == this.capacity;
+  }
 }
 
 export class Room {
@@ -43,7 +53,11 @@ export class Room {
 
   public server: Server;
 
-  public constructor(public readonly id: string, public host: User) {}
+  public mode: GameMode = GameMode.PONG;
+
+  public constructor(public readonly id: string, public host: User) {
+    this.setMode(this.mode);
+  }
 
   public getPlayers(): Array<Player> {
     return this.teams.flatMap((t) => t.players);
@@ -72,6 +86,8 @@ export class Room {
 
     this.audience = [...this.audience, user];
 
+    this.rebalance();
+
     this.server.emit('game:room:status', JSON.stringify(this, hideServer));
   }
 
@@ -87,6 +103,8 @@ export class Room {
 
     if (!this.isEmpty() && this.host.id == user.id)
       this.host = this.getUsers()[0];
+
+    this.rebalance();
 
     this.server.emit('game:room:status', JSON.stringify(this, hideServer));
   }
@@ -108,6 +126,39 @@ export class Room {
     }, 5000);
 
     this.server.emit('game:room:status', JSON.stringify(this, hideServer));
+  }
+
+  private rebalance(): void {
+    let team: Team;
+    this.audience = [
+      ...this.audience.filter((u) => {
+        team = this.teams.find((t) => !t.isFull());
+        if (!team) return true;
+        team.players = [...team.players, Player.from(u)];
+        return false;
+      }),
+    ];
+  }
+
+  public setMode(mode: GameMode): void {
+    this.mode = mode;
+    this.audience = this.getUsers();
+    switch (mode) {
+      case GameMode.PONG:
+        this.teams = [new Team('LEFT', 1), new Team('RIGHT', 1)];
+        break;
+      case GameMode.PONGDOUBLE:
+        this.teams = [new Team('LEFT', 2), new Team('RIGHT', 2)];
+        break;
+      case GameMode.QUADRAPONG:
+        this.teams = [
+          new Team('LEFT', 1),
+          new Team('RIGHT', 1),
+          new Team('TOP', 1),
+          new Team('BOTTOM', 1),
+        ];
+        break;
+    }
   }
 
   public start(): void {

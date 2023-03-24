@@ -23,7 +23,7 @@ class Rectangle {
     public vx = 0,
     public vy = 0,
     public sx = 0,
-    public sy = 0
+    public sy = 0,
   ) {}
 
   public collision(b: Rectangle) {
@@ -37,7 +37,7 @@ class Rectangle {
       r.vx > 0 ? r.x : r.x + r.vx,
       r.vy > 0 ? r.y : r.y + r.vy,
       r.vx > 0 ? r.w + r.vx : r.w - r.vx,
-      r.vy > 0 ? r.h + r.vy : r.h - r.vy
+      r.vy > 0 ? r.h + r.vy : r.h - r.vy,
     );
 
     // Simple AABB Check
@@ -153,7 +153,7 @@ class Ball extends Rectangle {
       Ball.s,
       Ball.s,
       0,
-      0
+      0,
     );
   }
 
@@ -209,7 +209,7 @@ abstract class VerticalPaddle extends Paddle {
       x,
       Game.h / 2 - Paddle.longSide / 2,
       Paddle.shortSide,
-      Paddle.longSide
+      Paddle.longSide,
     );
   }
 
@@ -254,7 +254,7 @@ abstract class HorizontalPaddle extends Paddle {
       Game.w / 2 - Paddle.longSide / 2,
       y,
       Paddle.longSide,
-      Paddle.shortSide
+      Paddle.shortSide,
     );
   }
 
@@ -325,8 +325,8 @@ export abstract class Game {
     const paddles = Object.values(this.elements.paddles);
     const walls = Object.values(this.elements.walls);
 
-    balls.forEach(b => b.setVelocity(t));
-    paddles.forEach(p => p.setVelocity(t));
+    balls.forEach((b) => b.setVelocity(t));
+    paddles.forEach((p) => p.setVelocity(t));
 
     const collisionables: Array<Rectangle> = [...paddles, ...walls];
 
@@ -335,7 +335,7 @@ export abstract class Game {
     while (
       (data = this.nextCollision(
         Object.values(this.elements.balls),
-        collisionables
+        collisionables,
       ))
     ) {
       const { collision, subject, target } = data;
@@ -343,8 +343,8 @@ export abstract class Game {
       subject.sx += target.vx / 2;
       subject.sy += target.vy / 2;
 
-      balls.forEach(b => b.move(collision.entryTime));
-      paddles.forEach(p => p.move(collision.entryTime));
+      balls.forEach((b) => b.move(collision.entryTime));
+      paddles.forEach((p) => p.move(collision.entryTime));
 
       if (collision.xnormal != 0) {
         subject.vx *= -1;
@@ -358,16 +358,16 @@ export abstract class Game {
     }
 
     this.clear();
-    balls.forEach(b => {
+    balls.forEach((b) => {
       b.move();
       this.draw(b);
     });
-    paddles.forEach(p => {
+    paddles.forEach((p) => {
       p.move();
       this.draw(p);
     });
 
-    Object.values(this.elements.balls).forEach(b => {
+    Object.values(this.elements.balls).forEach((b) => {
       if (
         !b.outside &&
         (b.x + b.w < 0 || b.x > Game.w || b.y + b.h < 0 || b.y > Game.h)
@@ -454,7 +454,7 @@ export class Pong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
+    Object.values(this.elements.balls).forEach((b) => b.reset());
   }
 }
 
@@ -478,7 +478,7 @@ export class PongDouble extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
+    Object.values(this.elements.balls).forEach((b) => b.reset());
   }
 }
 
@@ -509,6 +509,6 @@ export class Quadrapong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
+    Object.values(this.elements.balls).forEach((b) => b.reset());
   }
 }

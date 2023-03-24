@@ -59,7 +59,12 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('game:room:status')
   roomCreate(@ConnectedSocket() client: Socket) {
-    client.emit('game:room:status', JSON.stringify(this.room, hideServer));
+    if (!this.room)
+      this.server.emit(
+        'game:room:error',
+        JSON.stringify({ message: 'The room is gone!' }, hideServer),
+      );
+    else client.emit('game:room:status', JSON.stringify(this.room, hideServer));
   }
 
   private async authorize(client: Socket): Promise<void> {
