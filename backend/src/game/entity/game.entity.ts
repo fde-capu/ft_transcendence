@@ -1,10 +1,10 @@
-type DeepPartial<T> = T extends object
+export type DeepPartial<T> = T extends object
   ? {
       [P in keyof T]?: DeepPartial<T[P]>;
     }
   : T;
 
-interface Dictionary<T> {
+export interface Dictionary<T> {
   [index: string]: T;
 }
 
@@ -290,7 +290,7 @@ class BottomPaddle extends HorizontalPaddle {
   }
 }
 
-interface GameData {
+export interface GameData {
   teams: Dictionary<number>;
   balls: Dictionary<Ball>;
   paddles: Dictionary<Paddle>;

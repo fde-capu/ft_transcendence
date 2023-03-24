@@ -7,7 +7,7 @@
   <aside>
     <div>
       <button>Quick match</button>
-      <button>Create new room</button>
+      <button (click)="createRoom()">Create new room</button>
     </div>
   </aside>
   <section>
@@ -24,11 +24,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th>xpto</th>
-          <th>PONG</th>
-          <th>Waiting</th>
-          <th><button routerLink="./xpto">Join</button></th>
+        <tr *ngFor="let room of rooms">
+          <th>{{ room.id }}</th>
+          <th>{{ room.host.id }}</th>
+          <th>{{ room.inGame ? 'In game' : 'Waiting' }}</th>
+          <th><button routerLink="./{{ room.id }}">Join</button></th>
         </tr>
       </tbody>
     </table>

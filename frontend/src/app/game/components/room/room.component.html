@@ -1,8 +1,8 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<main *ngIf="!inGame">
+<main *ngIf="status === 'WAITING'">
   <header>
-    <h2>Room 12345</h2>
+    <h2>Room {{ room.id }}</h2>
   </header>
   <aside>
     <form>
@@ -43,43 +43,26 @@
     <button disabled="true">Start</button>
   </aside>
   <section>
-    <table>
-      <caption>
-        Players
-      </caption>
-      <thead>
-        <tr>
-          <th>Team</th>
-          <th>Name</th>
-          <th>Ready</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Left</td>
-          <td>msales-a</td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>Left</td>
-          <td>msales-b</td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>Right</td>
-          <td>msales-c</td>
-          <td>Yes</td>
-        </tr>
-      </tbody>
-    </table>
+    <h3>Players</h3>
+    <ul>
+      <li *ngFor="let team of room.teams">
+        <p>{{ team.id }}</p>
+        <span>
+          <ul>
+            <li *ngFor="let player of team.players">
+              <p>{{ player.name }}</p>
+              <p>{{ player.ready }}</p>
+            </li>
+          </ul>
+        </span>
+      </li>
+    </ul>
     <div>
       <h3>Audience</h3>
       <ul>
-        <li>foo</li>
-        <li>bar</li>
-        <li>foobar</li>
+        <li *ngFor="let user of room.audience">{{ user.name }}</li>
       </ul>
     </div>
   </section>
 </main>
-<app-game *ngIf="inGame"></app-game>
+<app-game *ngIf="status === 'RUNNING'"></app-game>

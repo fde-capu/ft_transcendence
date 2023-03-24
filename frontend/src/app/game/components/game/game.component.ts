@@ -5,7 +5,7 @@ import {
   HostListener,
   ViewChild,
 } from '@angular/core';
-import { PongDouble } from './engine';
+import { PongDouble } from '../../entity/game.entity';
 
 @Component({
   selector: 'app-game',

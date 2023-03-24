@@ -16,5 +16,6 @@ import { GameService } from '../game/game.service';
   ],
   controllers: [RegisterController],
   providers: [UserService, GameService],
+  exports: [UserService],
 })
 export class UserModule {}
