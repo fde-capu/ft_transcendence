@@ -160,5 +160,8 @@ export class GameHistoryComponent {
 			return true;
 	return false;
   }
+  isLastTeam(m: any): boolean {
+	return false;
+  }
 }
 

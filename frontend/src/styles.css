@@ -2,6 +2,7 @@
 /* TODO: (BUG) check visuals deformed when using DarkReader Chrome extension. If we care. */
 :root {
 	cursor:url("assets/cursor.png") 8 8, cell;
+	--pad: 0.33em;
 	--base-normal-width: 1000px;
 	--color-high:#eee;
 	--color-subhigh:#aaa;

@@ -4,9 +4,11 @@
 		>
 	</div>
 	<div class='avatar-menu'
+
+		*ngIf="popUpOn"
+
 		[ngClass]="{'positionbottom':positionbottom}"
-		*ngIf="popUpOn" (mouseenter)='onHover()'
-		(mouseleave)='onHoverOut()'
+		(mouseenter)='onHover()' (mouseleave)='onHoverOut()'
 	>
 		<div>
 			{{displayUser.intraId}}

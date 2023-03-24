@@ -1,4 +1,4 @@
 <h2 *ngIf='blocks.length'>Blocks</h2>
-<div *ngIf='blocks.length' class='friends multi-pics'>
+<div *ngIf='blocks.length' class='multi-pics'>
 <app-avatar *ngFor='let block of blocks' [user]="block"></app-avatar>
 </div>

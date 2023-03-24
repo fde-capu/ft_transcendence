@@ -1,4 +1,4 @@
 <h2 *ngIf='friends.length'>Friends</h2>
-<div *ngIf='friends.length' class='friends multi-pics'>
+<div *ngIf='friends.length' class='multi-pics'>
 <app-avatar *ngFor='let friend of friends' [user]="friend"></app-avatar>
 </div>
