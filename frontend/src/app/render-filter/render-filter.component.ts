@@ -52,5 +52,6 @@ export class RenderFilterComponent {
 					},noise_step*i+20);
 			return true;
 		}
+
 	}
 }

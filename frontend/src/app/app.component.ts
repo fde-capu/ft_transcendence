@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 })
 export class AppComponent {
   title = 'PONG!'; // TODO: Take this away.
+  cleanChat: boolean = false;
   constructor(
 	public router: Router,
 	public chatService: ChatService,
@@ -31,8 +32,12 @@ export class AppComponent {
 				//console.log("Router got change");
 				if (this.router.url.indexOf('/chat') != 0) {
 					//console.log("Getting out of all chats.");
-					this.chatService.getOutOfAnyChat();
+					if (!this.cleanChat)
+						this.chatService.getOutOfAnyChat();
+					this.cleanChat = true;
 				}
+				else
+					this.cleanChat = false;
 			}
 		});
   }

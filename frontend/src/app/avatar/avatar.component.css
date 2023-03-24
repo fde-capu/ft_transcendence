@@ -1,0 +1,23 @@
+.avatar-image
+{
+	filter: grayscale(100%);
+	border: none;
+	margin-right: 5px;
+	width: 64px;
+	height: 64px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.avatar-menu
+{
+	min-width: max-content;
+	font-size: var(--font-small);
+	background: var(--color-popup-background);
+	position: absolute;
+	border: var(--border-thin);
+	padding: 10px;
+	margin-left: 60px;
+	margin-top: -5px;
+	z-index: 100;
+}

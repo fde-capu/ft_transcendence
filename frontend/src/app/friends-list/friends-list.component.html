@@ -1,9 +1,7 @@
 <h2>Friends</h2>
-<ul *ngIf='friends.length else no_friends'>
-  <li *ngFor='let friend of friends'>
-	<app-user-bar [user]="friend"></app-user-bar>
-  </li>
-</ul>
+<div *ngIf='friends.length else no_friends'>
+<app-avatar class='friends' *ngFor='let friend of friends' [user]="friend"></app-avatar>
+</div>
 <ng-template #no_friends>
 <div class='message-centered'>
 No friends.

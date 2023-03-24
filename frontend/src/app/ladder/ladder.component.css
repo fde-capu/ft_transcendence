@@ -1,6 +1,5 @@
 .podium {
 	position: relative;
-	width: var(--inner-width);
 	height: 400px;
 	display: flex;
 	overflow-x: auto;

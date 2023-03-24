@@ -1,7 +1,5 @@
 :host div {
     display: flex;
     align-items: center;
-	width: 500px;
-	width: calc(var(--inner-width) - 4em);
 	justify-content: space-between;
 }
