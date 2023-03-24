@@ -24,7 +24,7 @@ export class FriendsListComponent {
 	}
 	this.oldId = this.user.intraId;
 	this.userService.getFriends(this.user).subscribe(_=>{
-		console.log("FriendsListComponent got", _);
+		//console.log("FriendsListComponent got", _);
 		this.friends = _;
 	});
   }
