@@ -1,66 +1,56 @@
 <h2>Match History</h2>
 
-<table *ngIf="user && history.length; else no_matches">
-  <tr>
-    <th>id</th>
-    <th>opponents</th>
-    <th>score</th>
-    <th>goals</th>
-    <th>win</th>
-    <th>date/duration</th>
-  </tr>
-  <tr *ngFor="let match of history">
+<table *ngIf='user && history.length else no_matches'>
+	<tr>
+		<th>id</th>
+		<th>opponents</th>
+		<th>score</th>
+		<th>goals</th>
+		<th>win</th>
+		<th>date/duration</th>
+	</tr>
+  <tr *ngFor='let match of history'>
     <td>
-      {{ match.idA }}
-      <br />
-      {{ match.idB }}
-    </td>
-    <td>
-      {{ match.playerA }}
-      <br />
-      {{ match.playerB }}
-    </td>
-    <td>
-      +{{ match.scoreA | number : '2.0-0' }}
-      <br />
-      +{{ match.scoreB | number : '2.0-0' }}
-    </td>
-    <td>
-      {{ match.goalsA }}
-      <br />
-      {{ match.goalsB }}
-    </td>
-    <td>
-      <span *ngIf="match.idA === user.intraId">
-        <span *ngIf="match.winA"
-          ><b>&#10004;</b><br /><span style="color: #555555"
-            >&#x2717;</span
-          ></span
-        >
-        <span *ngIf="!match.winA"
-          >&#x2717;<br /><span style="color: #555555">&#10004;</span></span
-        >
-      </span>
+		{{ match.idA }}
+		<br>
+		{{ match.idB }}
+	</td>
+	<td>
+		 {{ match.playerA }}
+		<br>
+		 {{ match.playerB }}
+	</td>
+	<td>
+		+{{ match.scoreA | number:'2.0-0' }}
+		<br>
+		+{{ match.scoreB | number:'2.0-0' }}
+	</td>
+	<td>
+		{{ match.goalsA }}
+		<br>
+		{{ match.goalsB }}
+	</td>
+	<td>
+		<span *ngIf='match.idA == user.intraId'>
+			<span *ngIf='match.winA'><b>&#10004;</b><br><span style='color:#555555;'>&#x2717;</span></span>
+			<span *ngIf='!match.winA'>&#x2717;<br><span style='color:#555555;'>&#10004;</span></span>
+		</span>
 
-      <span *ngIf="match.idB === user.intraId">
-        <span *ngIf="match.winB"
-          ><span style="color: #555555">&#x2717;</span><br /><b
-            >&#10004;</b
-          ></span
-        >
-        <span *ngIf="!match.winB"
-          ><span style="color: #555555">&#10004;</span><br />&#x2717;</span
-        >
-      </span>
-    </td>
-    <td>
-      {{ match.date | date : 'short' : 'UTC' }}
-      <br />
-      {{ match.duration * 1000 | date : 'mm:ss' }} min.
-    </td>
+		<span *ngIf='match.idB == user.intraId'>
+			<span *ngIf='match.winB'><span style='color:#555555;'>&#x2717;</span><br><b>&#10004;</b></span>
+			<span *ngIf='!match.winB'><span style='color:#555555;'>&#10004;</span><br>&#x2717;</span>
+		</span>
+	</td>
+	<td>
+		{{ match.date | date:'short':'UTC' }}
+		<br>
+		{{ match.duration * 1000 | date:'mm:ss' }} min.
+	</td>
   </tr>
 </table>
 
 <ng-template #no_matches>
-  <div class="message-centered">No matches.</div>
+<div class='message-centered'>
+No matches.
+</div>
 </ng-template>

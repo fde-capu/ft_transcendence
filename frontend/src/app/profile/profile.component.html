@@ -1,97 +1,100 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<h2>{{ profileType }} Profile</h2>
+<h2>{{ profileType }}<span *ngIf='!amIBlocked'> Profile</span></h2>
+<div *ngIf='!amIBlocked; else spying'>
 <table *ngIf="displayUser; else user_unknown">
-  <tr *ngIf="owner; else name_simple">
-    <td>
-      <label>name</label>
-    </td>
-    <td>
-      <input
-        id="name"
-        [(ngModel)]="displayUser.name"
-        (focus)="fun.switchIf('nameButton', 'Change', 'Ok')"
-        (focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); saveUser()"
-        (keydown.enter)="fun.blur('name'); fun.blink('nameButton')" />
-    </td>
-    <td>
-      <button
-        id="nameButton"
-        type="button"
-        (click)="fun.focusIf('nameButton', 'Change', 'name')">
-        Change
-      </button>
-    </td>
-  </tr>
-  <ng-template #name_simple>
-    <tr>
-      <td><label>name</label></td>
-      <td>{{ displayUser.name }}</td>
-    </tr>
-  </ng-template>
+	<tr *ngIf="owner; else name_simple">
+		<td>
+			<label>name</label>
+		</td>
+		<td>
+			<input id="name" [(ngModel)]="displayUser.name"
+			(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
+			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
+			(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
+			/>
+		</td>
+		<td>
+			<button *ngIf='!invalidNameNotice' id="nameButton" type="button" (click)=
+				"fun.focusIf('nameButton', 'Change', 'name');"
+				>Change</button>
+			<span *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;</span>
+		</td>
+	</tr>
+	<ng-template #name_simple>
+		<tr>
+			<td>	<label>name</label>	</td>
+			<td>	{{displayUser.name}}		</td>
+		</tr>
+	</ng-template>
 
-  <tr>
-    <td><label>id</label></td>
-    <td>{{ displayUser.intraId }}</td>
-  </tr>
+	<tr>
+		<td>	<label>id</label>	</td>
+		<td>	{{displayUser.intraId}}	</td>
+	</tr>
 
-  <tr>
-    <td><label>image url</label></td>
-    <td>{{ displayUser.image }}</td>
-  </tr>
+	<tr>
+		<td>	<label>image url</label>	</td>
+		<td>	{{displayUser.image}}				</td>
+	</tr>
 
-  <!-- TODO get image dinamicaly -->
-  <tr *ngIf="owner; else image_simple">
-    <td><label>image</label></td>
-    <td>
-      <div
-        class="profile-image hover_invert"
-        style="
-          background-image: url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');
-        "></div>
-    </td>
-    <td><button type="button">Change</button></td>
-  </tr>
-  <ng-template #image_simple>
-    <tr>
-      <td><label>image</label></td>
-      <td>
-        <div
-          class="profile-image hover_invert"
-          style="
-            background-image: url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');
-          "></div>
-      </td>
-    </tr>
-  </ng-template>
+<!-- TODO get image dinamicaly -->
+	<tr *ngIf="owner; else image_simple">
+		<td>	<label>image</label>	</td>
+		<td>	<div class="profile-image hover_invert"
+			style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+				></div>					</td>
+		<td>	<button type="button">Change</button>
+										</td>
+	</tr>
+	<ng-template #image_simple>
+		<tr>
+			<td>	<label>image</label>	</td>
+			<td>	<div class="profile-image hover_invert"
+				style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+					></div>					</td>
+		</tr>
+	</ng-template>
 
-  <tr *ngIf="owner">
-    <td><label>2FA</label></td>
-    <td>
-      <span>
-        <div *ngIf="displayUser.mfa_enabled">
-          <span class="inverted">[>ON<]</span>
-          <a (click)="switchMfa()">[ OFF ]</a>
-        </div>
-        <div *ngIf="!displayUser.mfa_enabled">
-          <a (click)="switchMfa()">[ ON ]</a>
-          <span class="inverted">[>OFF<]</span>
-        </div>
-      </span>
-    </td>
-    <td>
-      <button type="button" (click)="switchMfa()">Change</button>
-    </td>
-  </tr>
+	<tr *ngIf="owner;">
+		<td>	<label>2FA</label>	</td>
+		<td>
+			<span>
+				<div *ngIf="displayUser.mfa_enabled">
+					<span class="inverted">[>ON<]</span> <a (click)="switchMfa();">[ OFF ]</a>
+				</div>
+				<div *ngIf="!displayUser.mfa_enabled">
+					<a (click)="switchMfa();">[ ON ]</a> <span class="inverted">[>OFF<]</span>
+				</div>
+			</span>
+		</td>
+		<td>
+			<button type="button" (click)="switchMfa();">Change</button>
+		</td>
+	</tr>
+
 </table>
 
-<app-u2u-actions
-  *ngIf="!owner"
-  [isFriend]="isFriend"
-  [user]="displayUser"
-  [caption]="true"></app-u2u-actions>
-<app-friends-list [user]="displayUser"></app-friends-list>
+<app-u2u-actions *ngIf='!owner' [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser' [caption]='true'></app-u2u-actions>
+<app-friends-list [user]="displayUser"></app-friends-list> 
+
+<app-blocks-list *ngIf='owner' [user]="displayUser"></app-blocks-list> 
+
 <app-statistics [user]="displayUser"></app-statistics>
 <app-game-history [user]="displayUser"></app-game-history>
+<app-ladder [user]='user' [them]='displayUser'></app-ladder>
+</div>
 
-<ng-template #user_unknown> User: unknown. </ng-template>
+<ng-template #user_unknown>
+User: unknown.
+</ng-template>
+
+<ng-template #spying>
+<div *ngIf='displayUser'>
+<div class="profile-image hover_invert"
+style="background-image:url('https://cdn.intra.42.fr/users/7d7dbf6608b2dd7c0a5a55d9fa0a08d8/micro_fde-capu.jpg');"
+></div><br>	
+{{displayUser.intraId}}
+<app-u2u-actions *ngIf='!owner' [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser' [caption]='false' [singleline]='true'></app-u2u-actions>
+</div>
+</ng-template>

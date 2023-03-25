@@ -6,11 +6,16 @@ import { Users } from './user/entity/user.entity';
 import { GameHistory } from './game/game-record';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
+import { RegisterController } from './user/controller/registred.controller';
+import { ChatService } from './chat/chat.service';
+import { ChatController } from './chat/chat.controller';
+import { UserService } from './user/service/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
 import { FortyTwoModule } from './forty-two/forty-two.module';
 import { InvitationGateway } from './invite/invite.gateway';
+import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
   imports: [
@@ -35,8 +40,12 @@ import { InvitationGateway } from './invite/invite.gateway';
     FortyTwoModule,
     GameModule,
   ],
-  controllers: [PingController],
-  providers: [InvitationGateway],
+  controllers: [PingController, ChatController],
+  providers: [
+	InvitationGateway,
+	ChatGateway,
+	ChatService
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

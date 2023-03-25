@@ -1,51 +1,77 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 
 @Component({
-  selector: 'app-avatar',
-  templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.css'],
+selector: 'app-avatar',
+templateUrl: './avatar.component.html',
+styleUrls: ['./avatar.component.css']
 })
-export class AvatarComponent implements OnChanges {
-  @Input() user?: User;
-  popUpOn = false;
-  isFriend = false;
-  isMe = false;
+export class AvatarComponent {
+	@Input() user?: User;
+	displayUser?: User;
+	popUpOn = false;
+	isFriend: boolean = false;
+	isBlock: boolean = false;
+	isMe: boolean = false;
+	loggedUser?: User;
+	amIBlocked?: boolean;
 
-  constructor(private userService: UserService) {}
+	constructor(
+		private userService: UserService,
+	){}
 
-  checkMe() {
-    this.userService.getLoggedUser().subscribe(_ => {
-      this.isMe = _.intraId == this.user?.intraId;
-    });
-  }
+	ngOnChanges() {
+		this.checkFriendship();
+		this.checkBlock();
+		this.checkMe();
+		this.updateMe();
+	}
 
-  ngOnChanges() {
-    this.checkFriendship();
-    this.checkMe();
-  }
+	async updateMe() {
+		if (!this.user)
+		{
+			await new Promise(resolve => setTimeout(resolve, 647));
+			await this.updateMe();
+		}
+		else // Because no `return` above, so have to trick TS.
+		{
+			this.userService.getUser(this.user.intraId).subscribe(_=>{
+				if (this.displayUser?.name != _?.name)
+					this.displayUser = _;
+			});
+			// Lazy update, because there are many instances of avatars.
+			// Note: chat messages do not update retroactively, but take changes from point on.
+			await new Promise(resolve => setTimeout(resolve, 7985 + (Math.random() * 6981)));
+			await this.updateMe();
+		}
+	}
 
-  checkFriendship() {
-    this.isFriend = this.userService.isFriend(this.user);
-  }
+	checkMe() {
+		this.userService.getLoggedUser().subscribe(_=>{
+			this.loggedUser = _;
+			this.isMe = _.intraId == this.user?.intraId;
+		});
+	}
 
-  onClick(): void {
-    this.popUpOn = this.popUpOn ? false : true;
-  }
+	checkFriendship() {
+		this.isFriend=this.userService.isFriend(this.user)
+	}
 
-  onHover(): void {
-    this.popUpOn = true;
-    this.repeat();
-  }
+	checkBlock() {
+		this.isBlock=this.userService.isBlock(this.user)
+		this.amIBlocked=this.userService.amIBlocked(this.user);
+	}
 
-  private repeat() {
-    setTimeout(() => {
-      return this.popUpOn ? this.repeat() : false;
-    }, 300);
-  }
+	onClick(): void {
+		this.popUpOn = !this.popUpOn;
+	}
 
-  onHoverOut(): void {
-    this.popUpOn = false;
-  }
+	async onHover() {
+		this.popUpOn = true;
+	}
+
+	onHoverOut(): void {
+		this.popUpOn = false;
+	}
 }

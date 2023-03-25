@@ -1,15 +1,17 @@
 <div class="chat-input-box" id="chatBox">
-  <textarea
-    class="chat-input-text"
-    placeholder=" <- Type here."
-    (keydown.enter)="send($event)"
-    [(ngModel)]="message"
-    autofocus></textarea>
-  <button
-    id="send-button"
-    type="button"
-    (click)="send($event)"
-    style="position: absolute; right: 0; bottom: 0">
-    Enter
-  </button>
+  <textarea *ngIf='!muted' class="chat-input-text" placeholder=" <- Type here."
+	(keydown.enter)="send($event)"
+	[(ngModel)]="message"
+	autofocus
+  ></textarea>
+  <div *ngIf='muted' class="blinker" style='width:100%;text-align:center;'>[ YOU ARE MUTED! ]</div>
+  <button *ngIf='!muted && !messageTooBig'
+	id="send-button" 
+	type="button" (click)="send($event);"
+	style="position: absolute; right: 0; bottom: 0"
+  >Enter</button>
+  <button *ngIf='!muted && messageTooBig'
+	type="button" disabled
+	style="position: absolute; right: 0; bottom: 0"
+  >Message Too Loong! (Max 512)</button>
 </div>

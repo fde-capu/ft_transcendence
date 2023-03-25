@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { ChatRoom } from '../chat-room';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
@@ -8,54 +9,77 @@ import { HelperFunctionsService } from '../helper-functions.service';
 @Component({
   selector: 'app-chat-room-list',
   templateUrl: './chat-room-list.component.html',
-  styleUrls: ['./chat-room-list.component.css'],
+  styleUrls: ['./chat-room-list.component.css']
 })
-export class ChatRoomListComponent implements OnInit {
-  user?: User;
+export class ChatRoomListComponent {
+	user?: User;
+	visibleRooms: ChatRoom[] = [];
+	password = new Map<string, string>;
 
-  visibleRooms: ChatRoom[] = [];
+	constructor(
+		private chatService: ChatService,
+		private userService: UserService,
+		public fun: HelperFunctionsService,
+		private router: Router,
+	) {};
 
-  password = new Map<string, string>();
+	ngOnInit(): void {
+		this.getCurrentUser();
+	}
 
-  constructor(
-    private chatService: ChatService,
-    private userService: UserService,
-    public fun: HelperFunctionsService
-  ) {}
+	async getChatRooms() {
+		this.visibleRooms = await this.chatService.getVisibleChatRooms(this.user?.intraId);
+		for (const room of this.visibleRooms)
+			if (this.chatService.isAdmin(room.id, this.user?.intraId) && room.password)
+				this.password.set(room.id, room.password);
+		await new Promise(resolve => setTimeout(resolve, 1001));
+		this.getChatRooms();
+	}
 
-  ngOnInit(): void {
-    this.getChatRooms();
-    this.getCurrentUser();
-  }
+	getCurrentUser(): void {
+		this.userService.getLoggedUser()
+			.subscribe(user => {
+				this.user = user;
+				this.getChatRooms();
+			});
+	}
 
-  getChatRooms(): void {
-    this.chatService
-      .getVisibleChatRooms()
-      .subscribe(rooms => (this.visibleRooms = rooms));
-  }
+	isCurrentUserBlocked(room: ChatRoom): boolean {
+		return this.chatService.isCurrentUserBlocked(room);
+	}
 
-  getCurrentUser(): void {
-    this.userService.getLoggedUser().subscribe(user => (this.user = user));
-  }
+	isCurrentUserMuted(room: ChatRoom): boolean {
+		return this.chatService.isCurrentUserMuted(room);
+	}
 
-  loggedUserIsIn(room: ChatRoom): boolean {
-    for (const user of room.user) if (user == this.user) return true;
-    return false;
-  }
+	async submitEntrance(room: ChatRoom): Promise<void> {
+		if (!this.password.get(room.id))
+			this.fun.focus('pass'+room.id);
+		else
+		{
+			let block = this.chatService.isCurrentUserBlocked(room)
+			if (this.password.get(room.id) != room.password || block)
+			{
+				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]";
+				this.password.set(room.id, message);
+				this.fun.blink('pass' + room.id);
+				this.fun.blink('btn' + room.id);
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.fun.blink('pass' + room.id);
+				this.fun.blink('btn' + room.id);
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.fun.blink('pass' + room.id);
+				this.fun.blink('btn' + room.id);
+				await new Promise(resolve => setTimeout(resolve, 342));
+				this.password.set(room.id, "");
+				this.fun.focus('pass' + room.id);
+				return ;
+			}
+			this.router.navigate(['/chat/' + room.id]);
+		}
+	}
 
-  loggedUserIsBlocked(room: ChatRoom): boolean {
-    for (const user of room.blocked) if (user == this.user) return true;
-    return false;
-  }
-
-  submitEntrance(room: ChatRoom) {
-    if (!this.password.get(room.id)) this.fun.focus('pass' + room.id);
-    else
-      alert(
-        'Request entrance on ' +
-          room.name +
-          ' useing password ' +
-          this.password.get(room.id)
-      );
-  }
+	isAdmin(intraId?: string, roomId?: string): boolean {
+		return this.chatService.isAdmin(roomId, intraId);
+	}
 }
