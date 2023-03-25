@@ -5,6 +5,8 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   ConnectedSocket,
+  OnGatewayDisconnect,
+  MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
@@ -17,7 +19,9 @@ import { ClientSocket, RoomService } from '../service/room.service';
   cookie: true,
   namespace: 'game',
 })
-export class GameGateway implements OnGatewayInit, OnGatewayConnection {
+export class GameGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
@@ -31,8 +35,18 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection {
     this.roomService.server = server;
   }
 
-  public async handleConnection(client: Socket): Promise<void> {
+  public async handleConnection(client: ClientSocket): Promise<void> {
     await this.authorize(client);
+    this.roomService.connect(client);
+  }
+
+  handleDisconnect(client: ClientSocket) {
+    this.roomService.disconnect(client);
+  }
+
+  @SubscribeMessage('game:room:status')
+  public roomStatus(@ConnectedSocket() client: ClientSocket): void {
+    this.roomService.connect(client);
   }
 
   @SubscribeMessage('game:room:list')
@@ -41,8 +55,26 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   @SubscribeMessage('game:room:create')
-  roomCreate(@ConnectedSocket() client: Socket) {
-    this.roomService.create(client as ClientSocket);
+  roomCreate(@ConnectedSocket() client: ClientSocket) {
+    this.roomService.create(client);
+  }
+
+  @SubscribeMessage('game:room:join')
+  roomJoin(
+    @ConnectedSocket() client: ClientSocket,
+    @MessageBody() roomId: string,
+  ) {
+    this.roomService.join(client, roomId);
+  }
+
+  @SubscribeMessage('game:room:leave')
+  roomLeave(@ConnectedSocket() client: ClientSocket) {
+    this.roomService.leave(client);
+  }
+
+  @SubscribeMessage('game:room:disconnect')
+  roomDisconnect(@ConnectedSocket() client: ClientSocket) {
+    this.roomService.disconnect(client);
   }
 
   private async authorize(client: Socket): Promise<void> {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, tap } from 'rxjs';
-import { Dictionary } from '../../entity/game.entity';
 import { Room } from '../../entity/room.entity';
 import { GameSocket } from '../../socket/game.socket';
 
@@ -20,11 +19,7 @@ export class LobbyComponent implements OnInit {
   ) {
     this.gameSocket
       .fromEvent<string>('game:room:list')
-      .pipe(
-        map(str => JSON.parse(str) as Dictionary<Room>),
-        map(d => Object.values(d)),
-        tap(r => console.table(r))
-      )
+      .pipe(map(str => JSON.parse(str) as Array<Room>))
       .subscribe({ next: r => (this.rooms = r) });
 
     this.gameSocket

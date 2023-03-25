@@ -1,6 +1,6 @@
-import { ClientSocket } from '../service/room.service';
-import { Server } from 'socket.io';
+import { ClientSocket, RoomService } from '../service/room.service';
 import { hideServer } from '../helper/hide-server.replacer';
+import { Logger } from '@nestjs/common';
 
 enum GameMode {
   PONG,
@@ -43,6 +43,8 @@ export class Team {
 }
 
 export class Room {
+  private readonly logger: Logger;
+
   public teams: Array<Team> = [];
 
   public audience: Array<User> = [];
@@ -51,11 +53,14 @@ export class Room {
 
   public running = false;
 
-  public server: Server;
+  public server: { emit(ev: string, ...args: any[]): boolean };
+
+  public service: RoomService;
 
   public mode: GameMode = GameMode.PONG;
 
   public constructor(public readonly id: string, public host: User) {
+    this.logger = new Logger(`Room ${id}`);
     this.setMode(this.mode);
   }
 
@@ -74,6 +79,7 @@ export class Room {
   public join(user: User): void {
     const found = this.getUsers().find((u) => u.id == user.id);
     if (found) {
+      if (!found.connected) this.logger.log(`Connected: ${user.id}`);
       found.connected = true;
       if (
         this.inGame &&
@@ -81,17 +87,20 @@ export class Room {
         this.getPlayers().reduce((s, p) => p.connected && s, true)
       )
         this.resume();
+      this.server.emit('game:room:status', JSON.stringify(this, hideServer));
       return;
     }
 
-    this.audience = [...this.audience, user];
+    this.logger.log(`Join: ${user.id}`);
 
-    this.rebalance();
+    this.audience = [...this.audience, user];
 
     this.server.emit('game:room:status', JSON.stringify(this, hideServer));
   }
 
   public leave(user: User): void {
+    this.logger.log(`Leave: ${user.id}`);
+
     if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
       this.finish();
 
@@ -101,19 +110,16 @@ export class Room {
 
     this.audience = this.audience.filter((u) => u.id != user.id);
 
-    if (!this.isEmpty() && this.host.id == user.id)
+    if (!this.isEmpty() && this.host.id == user.id) {
       this.host = this.getUsers()[0];
+      this.service.notifyRooms();
+    }
 
-    this.rebalance();
-
-    this.server.emit('game:room:status', JSON.stringify(this, hideServer));
+    this.service.deleteIfEmpty(this.id);
   }
 
   public disconnect(user: User): void {
-    if (!this.inGame) {
-      this.leave(user);
-      return;
-    }
+    this.logger.log(`Disconnected: ${user.id}`);
 
     const found = this.getUsers().find((u) => u.id == user.id);
     found.connected = false;
@@ -121,23 +127,21 @@ export class Room {
     if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
       this.pause();
 
-    setTimeout(() => {
-      if (!found.connected) this.leave(user);
-    }, 5000);
-
-    this.server.emit('game:room:status', JSON.stringify(this, hideServer));
+    setTimeout(
+      () => {
+        if (!found.connected) this.leave(user);
+      },
+      this.inGame ? 5000 : 1000,
+    );
   }
 
   private rebalance(): void {
-    let team: Team;
-    this.audience = [
-      ...this.audience.filter((u) => {
-        team = this.teams.find((t) => !t.isFull());
-        if (!team) return true;
-        team.players = [...team.players, Player.from(u)];
-        return false;
-      }),
-    ];
+    this.audience = this.audience.filter((u) => {
+      const team = this.teams.find((t) => !t.isFull());
+      if (!team) return true;
+      team.players = [...team.players, Player.from(u)];
+      return false;
+    });
   }
 
   public setMode(mode: GameMode): void {
@@ -159,6 +163,8 @@ export class Room {
         ];
         break;
     }
+    this.rebalance();
+    this.service?.notifyRooms();
   }
 
   public start(): void {
