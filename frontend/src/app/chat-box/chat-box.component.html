@@ -17,15 +17,16 @@
 				<label>Room Name</label>
 			</td><td>
 				<input id="name" [(ngModel)]="chatRoom.name"
-				(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
+				(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastRoomName();"
 				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
-				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
-				(change)="emit();"
+				(keydown.enter)="fun.blur('name'); fun.blink('nameButton'); validateAndEmit();"
+				(change)="validateAndEmit();"
 				/>
 			</td><td>
-				<button id="nameButton" type="button" (click)=
+				<button *ngIf='!invalidNameNotice' id="nameButton" type="button" (click)=
 					"fun.focusIf('nameButton', 'Change', 'name');"
 					>Change</button>
+			<span *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;</span>
 			</td>
 		</tr>
 		<tr>
@@ -44,21 +45,22 @@
 				<button type="button" (click)="switchPrivacy();">Change</button>
 			</td>
 		</tr>
-		<tr>
+		<tr *ngIf='!chatRoom.isPrivate'>
 			<td>
 				<label>Password</label>
 			</td><td>
 				<input id="password" [(ngModel)]="chatRoom.password"
 				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
 				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
-				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton');"
-				(change)="emitIfUnique();"
+				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton'); validateAndEmit();"
+				(change)="validateAndEmit();"
 				/>
 			</td><td style="min-width:175px;">
-				<button id="passwordButton" type="button" (click)=
+				<button *ngIf='!invalidPasswordNotice' id="passwordButton" type="button" (click)=
 					"fun.focusIf('passwordButton', 'Change', 'password');"
 					>Change</button>
 				<button type="button" (click)="cleanPassword();">Clean</button>
+			<span *ngIf='invalidPasswordNotice' id='invalidPasswordNotice'><- <b>Invalid</b>&nbsp;</span>
 			</td>
 		</tr>
 		<tr>

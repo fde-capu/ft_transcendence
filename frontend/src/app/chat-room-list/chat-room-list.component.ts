@@ -79,37 +79,6 @@ export class ChatRoomListComponent {
 		}
 	}
 
-	async submitEntranceByAnyPassword() {
-		let privatePassword = this.password.get('private');
-		if (!privatePassword)
-			this.fun.focus('passprivate');
-		else
-		{
-			let passwordLink: string|null = this.chatService.testPasswordLink(privatePassword);
-			let block: boolean = false;
-			if (passwordLink)
-				block = !!this.chatService.isCurrentUserBlockedByRoomId(passwordLink);
-			if (!passwordLink || block)
-			{
-				let message = block ? " [ !!! YOU ARE BLOCKED !!! ] " : " [ !!! WRONG !!! ]";
-				this.password.set('private', message);
-				this.fun.blink('passprivate');
-				this.fun.blink('btnprivate');
-				await new Promise(resolve => setTimeout(resolve, 342));
-				this.fun.blink('passprivate');
-				this.fun.blink('btnprivate');
-				await new Promise(resolve => setTimeout(resolve, 342));
-				this.fun.blink('passprivate');
-				this.fun.blink('btnprivate');
-				await new Promise(resolve => setTimeout(resolve, 342));
-				this.password.set('private', "");
-				this.fun.focus('passprivate');
-				return ;
-			}
-			this.router.navigate(['/chat/' + passwordLink]);
-		}
-	}
-
 	isAdmin(intraId?: string, roomId?: string): boolean {
 		return this.chatService.isAdmin(roomId, intraId);
 	}

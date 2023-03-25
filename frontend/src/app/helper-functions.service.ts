@@ -16,6 +16,10 @@ export class HelperFunctionsService {
 		return false;
 	}
 
+	validateString(str:string): boolean {
+		return str.length >= 8 && str.length <= 42;
+	}
+
 	switchIf(el: string, a: string, b: string) {
 		const exist = document.getElementById(el);
 		if (!exist) return ;
