@@ -4,6 +4,7 @@ import { Inject, Injectable } from '@angular/core';
 import { environment } from './../../../environments/environment';
 import {
   catchError,
+  firstValueFrom,
   map,
   Observable,
   ReplaySubject,
@@ -11,7 +12,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { TokenInfoResponse } from '../../token-info-response';
 
 interface ChallengeResponse {
@@ -31,21 +32,25 @@ export class AuthService {
     private readonly httpClient: HttpClient,
     private readonly router: Router
   ) {
+	//console.log("fas = frontend-auth-service: constructor, will subscrive to b/auth/info");
     this.httpClient
       .get<TokenInfoResponse>(`${environment.backendOrigin}/auth/info`, {
         withCredentials: true,
       })
       .subscribe({
         next: res => {
-          this.authContext.next(res);
-        },
+			//console.log("fas got http subscription from b/auth/info:", res);
+			this.authContext.next(res)
+		},
         error: () => {
-          this.authContext.next(undefined);
-        },
+			//console.log("fas got error, will undefine authContext");
+			this.authContext.next(undefined)
+		}
       });
   }
 
   public getAuthContext(): Observable<TokenInfoResponse | undefined> {
+	//console.log("fas getAuthContext run. current ctx:", this.authContext);
     return this.authContext.asObservable();
   }
 
@@ -58,11 +63,10 @@ export class AuthService {
       .get(`${environment.backendOrigin}/auth/logout`, {
         withCredentials: true,
       })
-      .pipe(
-        tap(() => {
-          this.authContext.next(undefined);
-        })
-      )
+      .pipe(tap(_ => {
+		//console.log("fas signOut: ctx set to undefined. Got:", _);
+		this.authContext.next(undefined);
+	  }))
       .subscribe({
         next: () => this.router.navigate(['/logout']),
       });
@@ -94,8 +98,9 @@ export class AuthService {
       )
       .pipe(
         tap(res => {
-          this.authContext.next(res);
-        }),
+			//console.log("fas solveChallange set new ctx:", res);
+			this.authContext.next(res)
+		}),
         map(() => true),
         catchError(() => throwError(() => new Error('Invalid token!')))
       );
@@ -111,8 +116,9 @@ export class AuthService {
       )
       .pipe(
         tap(res => {
-          this.authContext.next(res);
-        }),
+			//console.log("fas disableChallenge set new ctx:", res);
+			this.authContext.next(res)
+		}),
         map(() => true),
         catchError(() => throwError(() => new Error('You cannot do that!')))
       );

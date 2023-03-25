@@ -1,60 +1,52 @@
 <app-menu-bar></app-menu-bar>
 <h2>Create Match</h2>
-<table *ngIf="availableUsers.length" style="min-width: 512px">
-  <tr>
-    <td>
-      <label> Opponent </label>
-    </td>
-    <td style="min-width: 300px">
-      <select (change)="unsetRandomOpponent()" *ngIf="!randomOpponent">
-        <option value="" disabled selected hidden>Please Choose...</option>
-        <option *ngFor="let user of availableUsers">
-          {{ user.intraId }} | {{ user.name }}
-        </option>
-      </select>
-      <span *ngIf="randomOpponent">[...Auto Match...]</span>
-    </td>
-    <td>
-      <button *ngIf="!randomOpponent" (click)="setRandomOpponent()">
-        Random
-      </button>
-      <button *ngIf="randomOpponent" (click)="unsetRandomOpponent()">
-        Choose
-      </button>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <label>Game mode</label>
-    </td>
-    <td>
-      <span>
-        <div *ngIf="!enhancedMode">
-          <span class="inverted">[>NORMAL<]</span>
-          <a (click)="switchGameMode()">[ ENHANCED ]</a>
-        </div>
-        <div *ngIf="enhancedMode">
-          <a (click)="switchGameMode()">[ NORMAL ]</a>
-          <span class="inverted">[>ENHANCED<]</span>
-        </div>
-      </span>
-    </td>
-    <td>
-      <button (click)="switchGameMode()">Change</button>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">&nbsp;</td>
-    <td>
-      <button (click)="submitMatch()">CREATE MATCH</button>
-    </td>
-  </tr>
+<table *ngIf="availableUsers.length" style="min-width: 512px;">
+	<tr>
+		<td>
+			<label>
+				Opponent
+			</label>
+		</td>
+		<td style="min-width: 300px;">
+			<select (change)="unsetRandomOpponent();" *ngIf="!randomOpponent">
+				<option value="" disabled selected hidden>Please Choose...</option>
+				<option *ngFor="let user of availableUsers">{{user.intraId}} | {{user.name}}</option>
+			</select>
+			<span *ngIf="randomOpponent">[...Auto Match...]</span>
+		</td>
+		<td>
+			<button *ngIf="!randomOpponent" (click)="setRandomOpponent();">Random</button>
+			<button *ngIf="randomOpponent" (click)="unsetRandomOpponent();">Choose</button>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label>Game mode</label>
+		</td><td>
+			<span>
+				<div *ngIf="!enhancedMode">
+					<span class="inverted">[>NORMAL<]</span> <a (click)="switchGameMode();">[ ENHANCED ]</a>
+				</div>
+				<div *ngIf="enhancedMode">
+					<a (click)="switchGameMode();">[ NORMAL ]</a> <span class="inverted">[>ENHANCED<]</span>
+				</div>
+			</span>
+		</td>
+		<td>
+			<button (click)="switchGameMode();">Change</button>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">&nbsp;</td><td>
+			<button (click)="submitMatch();">CREATE MATCH</button>
+		</td>
+	</tr>
 </table>
 <div *ngIf="!availableUsers.length">
-  Please wait until some other user is available.
+	Please wait until some other user is available.
 </div>
 <div *ngIf="waitingForMatch" class="overall">
-  Creating match.
-  <span class="blinker">Please hold still...</span>
-  <button (click)="cancelMatchWait()">Cancel</button>
+	Creating match.
+	<span class="blinker">Please hold still...</span>
+	<button (click)="cancelMatchWait()">Cancel</button>
 </div>

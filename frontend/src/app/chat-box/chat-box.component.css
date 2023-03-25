@@ -1,0 +1,7 @@
+.yourself::after {
+	content: " <<<";
+}
+
+.yourself::before {
+	content: ">>> ";
+}
