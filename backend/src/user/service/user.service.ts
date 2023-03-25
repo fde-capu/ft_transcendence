@@ -48,6 +48,7 @@ export class UserService {
 		name: codeFrom42.displayname,
 		image: codeFrom42.image['micro'],
 		friends: [],
+		blocks: [],
 		score: 0,
 		matches : 0,
 		wins : 0,
@@ -134,6 +135,22 @@ export class UserService {
 		return out;
 	}
 
+	async getBlocks(intraId:string):Promise<UserDTO[]>
+	{
+		let out: UserDTO[] = [];
+		const u = await this.getFullUser(intraId);
+		if(!u || !u.blocks){
+			return out;
+		}
+		for (const block of u.blocks)
+		{
+			let n = await this.getUserByIntraId(block);
+			if (!n) return;
+			out.push(n);
+		}
+		return out;
+	}
+
 	async getStats(intraId:string):Promise<StatisticsDTO>
 	{
 		let out: StatisticsDTO = {} as StatisticsDTO;
@@ -168,6 +185,7 @@ export class UserService {
 				score: u.score,
 				mfa_enabled: u.mfa_enabled,
 				friends: u.friends,
+				blocks: u.blocks,
 			};
 			out.push(dto);
 		});

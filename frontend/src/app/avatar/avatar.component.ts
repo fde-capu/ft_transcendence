@@ -12,8 +12,10 @@ export class AvatarComponent {
 	displayUser?: User;
 	popUpOn = false;
 	isFriend: boolean = false;
+	isBlock: boolean = false;
 	isMe: boolean = false;
 	loggedUser?: User;
+	amIBlocked?: boolean;
 
 	constructor(
 		private userService: UserService,
@@ -21,6 +23,7 @@ export class AvatarComponent {
 
 	ngOnChanges() {
 		this.checkFriendship();
+		this.checkBlock();
 		this.checkMe();
 		this.updateMe();
 	}
@@ -53,6 +56,11 @@ export class AvatarComponent {
 
 	checkFriendship() {
 		this.isFriend=this.userService.isFriend(this.user)
+	}
+
+	checkBlock() {
+		this.isBlock=this.userService.isBlock(this.user)
+		this.amIBlocked=this.userService.amIBlocked(this.user);
 	}
 
 	onClick(): void {

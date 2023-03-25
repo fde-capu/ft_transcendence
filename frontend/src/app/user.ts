@@ -6,4 +6,5 @@ export interface User {
 	mfa_enabled?: boolean;
 	isLogged?: boolean;
 	friends?: string[];
+	blocks?: string[];
 }
