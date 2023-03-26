@@ -25,7 +25,7 @@ export class RoomsService {
   }
 
   public deleteIfEmpty(id: string): void {
-    if (this.rooms[id].isEmpty()) delete this.rooms[id];
+    if (this.rooms[id]?.isEmpty()) delete this.rooms[id];
   }
 
   public listNonEmptyRooms(client?: Socket): void {

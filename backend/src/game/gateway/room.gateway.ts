@@ -5,6 +5,7 @@ import {
   SubscribeMessage,
   ConnectedSocket,
   WebSocketServer,
+  MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { parse } from 'cookie';
@@ -12,7 +13,7 @@ import { TokenService } from 'src/auth/service/token.service';
 import { Dictionary } from '../entity/game.entity';
 import { UserService } from 'src/user/service/user.service';
 import { RoomsService } from '../service/rooms.service';
-import { ClientSocket, User } from '../entity/room.entity';
+import { ClientSocket, GameMode, User } from '../entity/room.entity';
 
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
@@ -32,15 +33,40 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   public async handleConnection(client: ClientSocket): Promise<void> {
-    await this.authorize(client);
-    /*client['logs'] = setInterval(
-      () => client.emit('game:logs', client.id),
-      1000,
-    );*/
+    try {
+      const { authorization } = parse(client.handshake.headers.cookie);
+
+      const { sub: subject } = await this.tokenService.inspect(authorization);
+      client['subject'] = subject;
+
+      const { name } = await this.userService.getUserByIntraId(subject);
+      client['name'] = name;
+
+      client['roomId'] = client.nsp.name.match(/rooms\/(?<id>.+)/).groups['id'];
+      if (!this.roomsService.rooms[client['roomId']]) {
+        client.emit('game:error', 'Room does not exist');
+        client.disconnect();
+        return;
+      }
+
+      const oldClient = this.clients[subject];
+      this.clients[subject] = client;
+
+      if (oldClient && oldClient.id != client.id) {
+        oldClient.emit('game:error', 'You logged in elsewhere');
+        oldClient.disconnect();
+      }
+
+      this.roomsService.rooms[client['roomId']].server =
+        client.nsp as unknown as Server;
+      this.roomsService.rooms[client['roomId']]?.join(User.from(client));
+    } catch (error) {
+      client.emit('game:error', 'You are not authenticated!');
+      client.disconnect(true);
+    }
   }
 
   public handleDisconnect(client: ClientSocket): void {
-    //clearInterval(client[`logs`]);
     const roomId = client['roomId'];
     // The socket is just disconnecting
     if (this.clients[client['subject']]?.id == client.id) {
@@ -52,7 +78,7 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // The socket is being replaced with a new one and it has a different room
     else if (
       this.clients[client['subject']] &&
-      roomId != this.clients[client['subject']]['room']
+      roomId != this.clients[client['subject']]['roomId']
     )
       this.roomsService.rooms[roomId]?.leave(User.from(client));
   }
@@ -67,48 +93,24 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.roomsService.rooms[client['roomId']]?.leave(
       User.from(client as ClientSocket),
     );
-    client.emit('game:erro', 'You left the room');
+    client.emit('game:error', 'You left the room');
+    delete this.clients[client['subject']];
     client.disconnect();
   }
 
-  /*@SubscribeMessage('game:player:ready')
-  public playerReady(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() payload: string,
+  @SubscribeMessage('game:room:mode')
+  public roomMode(
+    @ConnectedSocket() client: ClientSocket,
+    @MessageBody() mode: GameMode,
   ): void {
-    throw new Error('Not implemented!');
-  }*/
+    const room = this.roomsService.rooms[client['roomId']];
+    if (room?.host?.id == client['subject']) room?.setMode(mode);
+  }
 
-  private async authorize(client: ClientSocket): Promise<void> {
-    try {
-      const { authorization } = parse(client.handshake.headers.cookie);
-
-      const { sub: subject } = await this.tokenService.inspect(authorization);
-      client['subject'] = subject;
-
-      const { name } = await this.userService.getUserByIntraId(subject);
-      client['name'] = name;
-
-      if (this.clients[subject] && this.clients[subject].id != client.id) {
-        this.clients[subject].emit('game:error', 'You logged in elsewhere');
-        this.clients[subject].disconnect();
-      }
-
-      this.clients[subject] = client;
-
-      client['roomId'] = client.nsp.name.match(/rooms\/(?<id>.+)/).groups['id'];
-      if (!this.roomsService.rooms[client['roomId']]) {
-        client.emit('game:error', 'Room does not exist');
-        client.disconnect();
-        return;
-      }
-
-      this.roomsService.rooms[client['roomId']].server =
-        client.nsp as unknown as Server;
-      this.roomsService.rooms[client['roomId']]?.join(User.from(client));
-    } catch (error) {
-      client.emit('game:error', 'You are not authenticated!');
-      client.disconnect(true);
-    }
+  @SubscribeMessage('game:player:ready')
+  public playerReady(@ConnectedSocket() client: ClientSocket): void {
+    this.roomsService.rooms[client['roomId']]?.ready(
+      User.from(client as ClientSocket),
+    );
   }
 }

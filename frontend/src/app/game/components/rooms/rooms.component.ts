@@ -28,6 +28,7 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameSocket.emit('game:room:list');
+    console.log(history.state);
   }
 
   createRoom() {

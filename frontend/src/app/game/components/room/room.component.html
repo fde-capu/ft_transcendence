@@ -1,36 +1,78 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<section *ngIf="!room">
-  <p>Loading...</p>
-</section>
-<section *ngIf="!!room && !room.inGame">
-
-  <article>
+<main id="container">
+  <section id="content" *ngIf="!room">
+    <p>Loading...</p>
+  </section>
+  <section id="content" *ngIf="!!room && !room.inGame">
     <header>
-      <h2>Teams</h2>
+      <h2>Room {{ room.id }}</h2>
     </header>
-    <ul>
-      <li *ngFor="let team of room.teams">
-        <article>
-          <header>
-            <h3>{{ team.id }}</h3>
-          </header>
-          <ul>
-            <li *ngFor="let player of team.players">{{ player.name }}</li>
-          </ul>
-        </article>
-      </li>
-    </ul>
-  </article>
+    <article>
+      <fieldset>
+        <legend>Options</legend>
+        <label for="mode">Mode</label>
+        <select #gamemode (change)="seMode(gamemode.value)" name="mode" id="mode">
+          <option value="0">PONG</option>
+          <option value="1">PONGDOUBLE</option>
+          <option value="2">QUADRAPONG</option>
+        </select>
 
-  <article *ngIf="room.audience.length">
-    <header>
-      <h2>Audience</h2>
-    </header>
-    <ul>
-      <li *ngFor="let user of room.audience">{{ user.name }}</li>
-    </ul>
-  </article>
-
-</section>
-
+        <button (click)="ready()">Ready</button>
+        <button (click)="leave()">Leave</button>
+      </fieldset>
+    </article>
+    <article>
+      <header>
+        <h2>Teams</h2>
+      </header>
+      <ul id="teams" class="center">
+        <li *ngFor="let team of room.teams">
+          <article class="team center">
+            <header>
+              <h3>{{ team.id }} ({{ team.players.length }}/{{ team.capacity }})</h3>
+            </header>
+            <ul>
+              <li *ngFor="let player of team.players">
+                <span>{{ player.name }}</span>
+                <span class="flag" *ngIf="player.ready">READY</span>
+                <span class="flag" *ngIf="room.host.id === player.id">HOST</span>
+              </li>
+            </ul>
+          </article>
+        </li>
+      </ul>
+    </article>
+    <article>
+      <header>
+        <h2>Audience</h2>
+      </header>
+      <ul id="audience" class="center">
+        <li class="center" *ngFor="let user of room.audience">
+          {{ user.name }}
+        </li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+        <li class="center">foo bar</li>
+      </ul>
+    </article>
+  </section>
+</main>

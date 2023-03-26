@@ -1,10 +1,16 @@
+export enum GameMode {
+  PONG = 0,
+  PONGDOUBLE = 1,
+  QUADRAPONG = 2,
+}
+
 export interface User {
   connected: boolean;
   id: string;
   name: string;
 }
 
-type Player = User & { ready: boolean };
+export type Player = User & { ready: boolean };
 
 export interface Team {
   players: Array<Player>;
@@ -19,4 +25,5 @@ export interface Room {
   running: boolean;
   id: string;
   host: User;
+  mode: GameMode;
 }

@@ -5,10 +5,10 @@ import { RoomsService } from '../service/rooms.service';
 
 export type ClientSocket = Socket & { subject: string; name: string };
 
-enum GameMode {
-  PONG,
-  PONGDOUBLE,
-  QUADRAPONG,
+export enum GameMode {
+  PONG = 0,
+  PONGDOUBLE = 1,
+  QUADRAPONG = 2,
 }
 
 export class User {
@@ -114,7 +114,7 @@ export class Room {
       this.finish();
 
     this.teams.forEach((t) => {
-      t.players = t.players.filter((p) => p.id == user.id);
+      t.players = t.players.filter((p) => p.id != user.id);
     });
 
     this.audience = this.audience.filter((u) => u.id != user.id);
@@ -125,19 +125,24 @@ export class Room {
 
     this.rebalance();
 
+    this.server.emit('game:room:status', hideCircular(this));
     this.service.deleteIfEmpty(this.id);
     this.service.listNonEmptyRooms();
   }
 
   public disconnect(user: User): void {
-    this.logger.log(`Disconnected: ${user.id}`);
-
     const found = this.getUsers().find((u) => u.id == user.id);
     if (!found) return;
+
+    this.logger.log(`Disconnected: ${user.id}`);
+
     found.connected = false;
 
-    if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
-      this.pause();
+    const player = this.getPlayers().find((p) => p.id == user.id);
+    if (player) {
+      player.ready = false;
+      if (this.inGame) this.pause();
+    }
 
     setTimeout(
       () => {
@@ -176,11 +181,20 @@ export class Room {
         break;
     }
     this.rebalance();
+    this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
 
   public sendStatus(client: Socket): void {
     this.server.emit('game:room:status', hideCircular(this));
+  }
+
+  public ready(user: User): void {
+    this.getPlayers()
+      .filter((p) => p.id == user.id)
+      .forEach((p) => (p.ready = !p.ready));
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
   }
 
   public start(): void {
