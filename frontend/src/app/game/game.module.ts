@@ -8,9 +8,10 @@ import { RoomsComponent } from './components/rooms/rooms.component';
 import { RoomComponent } from './components/room/room.component';
 import { MenuBarModule } from '../menu-bar/menu-bar.module';
 import { InviteModule } from '../invitation.module';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
-  declarations: [GameComponent, RoomsComponent, RoomComponent],
+  declarations: [GameComponent, RoomsComponent, RoomComponent, ModalComponent],
   imports: [CommonModule, GameRoutingModule, MenuBarModule, InviteModule],
   providers: [GameSocket],
 })

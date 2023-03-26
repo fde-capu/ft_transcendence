@@ -12,6 +12,9 @@ import { GameSocket } from '../../socket/rooms.socket';
 export class RoomsComponent implements OnInit {
   rooms: Array<Room> = [];
 
+  errorMessage?: string;
+  errorHidden = true;
+
   constructor(
     private readonly gameSocket: GameSocket,
     private readonly router: Router,
@@ -28,7 +31,13 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameSocket.emit('game:room:list');
-    console.log(history.state);
+
+    if (history.state.error) {
+      this.errorMessage = history.state.error;
+      this.errorHidden = false;
+
+      history.pushState({}, '', this.router.url);
+    }
   }
 
   createRoom() {

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { User } from './../../../user';
+import { UserService } from 'src/app/user.service';
 import { Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
 
@@ -10,18 +11,32 @@ import { RoomSocket } from '../../socket/room.socket';
   styleUrls: ['./room.component.css'],
 })
 export class RoomComponent implements OnInit, OnDestroy {
+  userId!: string;
+
   room!: Room;
 
   roomSocket!: RoomSocket;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router,
+    private readonly userService: UserService
+  ) {
+    this.userService
+      .getLoggedUser()
+      .subscribe({ next: u => (this.userId = u.intraId) });
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id') || 'none';
     this.roomSocket = new RoomSocket(id);
+
+    this.roomSocket.fromEvent('game:room:leave').subscribe({
+      next: () =>
+        this.router.navigate(['./..'], {
+          relativeTo: this.route,
+        }),
+    });
 
     this.roomSocket.fromEvent<string>('game:error').subscribe({
       next: str =>
@@ -40,6 +55,12 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.roomSocket?.disconnect();
+  }
+
+  isPlayer(): boolean {
+    return !!this.room.teams
+      .flatMap(t => t.players)
+      .find(p => p.id === this.userId);
   }
 
   seMode(mode: string) {

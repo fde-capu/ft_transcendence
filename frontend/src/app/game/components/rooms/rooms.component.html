@@ -8,7 +8,6 @@
     <article>
       <fieldset>
         <legend>Options</legend>
-        <button>Quick match</button>
         <button (click)="createRoom()">Create new room</button>
       </fieldset>
     </article>
@@ -43,3 +42,4 @@
     </article>
   </section>
 </main>
+<app-modal [(closed)]="errorHidden" title="Error">{{ errorMessage }}</app-modal>

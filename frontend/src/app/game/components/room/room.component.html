@@ -11,14 +11,14 @@
     <article>
       <fieldset>
         <legend>Options</legend>
-        <label for="mode">Mode</label>
-        <select #gamemode (change)="seMode(gamemode.value)" name="mode" id="mode">
+        <label *ngIf="userId === room.host.id" for="mode">Mode</label>
+        <select *ngIf="userId === room.host.id" #gamemode (change)="seMode(gamemode.value)" name="mode" id="mode">
           <option value="0">PONG</option>
           <option value="1">PONGDOUBLE</option>
           <option value="2">QUADRAPONG</option>
         </select>
 
-        <button (click)="ready()">Ready</button>
+        <button *ngIf="isPlayer()" (click)="ready()">Ready</button>
         <button (click)="leave()">Leave</button>
       </fieldset>
     </article>
@@ -37,41 +37,22 @@
                 <span>{{ player.name }}</span>
                 <span class="flag" *ngIf="player.ready">READY</span>
                 <span class="flag" *ngIf="room.host.id === player.id">HOST</span>
+                <span class="flag" *ngIf="userId === player.id">YOU</span>
               </li>
             </ul>
           </article>
         </li>
       </ul>
     </article>
-    <article>
+    <article *ngIf="room.audience.length">
       <header>
         <h2>Audience</h2>
       </header>
       <ul id="audience" class="center">
         <li class="center" *ngFor="let user of room.audience">
-          {{ user.name }}
+          <span>{{ user.name }}</span>
+          <span class="flag" *ngIf="userId === user.id">YOU</span>
         </li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
-        <li class="center">foo bar</li>
       </ul>
     </article>
   </section>

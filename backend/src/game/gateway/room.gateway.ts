@@ -93,7 +93,7 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.roomsService.rooms[client['roomId']]?.leave(
       User.from(client as ClientSocket),
     );
-    client.emit('game:error', 'You left the room');
+    client.emit('game:room:leave');
     delete this.clients[client['subject']];
     client.disconnect();
   }
