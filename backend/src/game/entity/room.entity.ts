@@ -1,6 +1,9 @@
-import { ClientSocket, RoomService } from '../service/room.service';
-import { hideServer } from '../helper/hide-server.replacer';
+import { hideCircular } from '../helper/hide-server.replacer';
+import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { RoomsService } from '../service/rooms.service';
+
+export type ClientSocket = Socket & { subject: string; name: string };
 
 enum GameMode {
   PONG,
@@ -17,7 +20,7 @@ export class User {
   ) {}
 
   public static from(client: ClientSocket): User {
-    return new User(client.subject, client.name);
+    return new User(client['subject'], client['name']);
   }
 }
 
@@ -53,14 +56,16 @@ export class Room {
 
   public running = false;
 
-  public server: { emit(ev: string, ...args: any[]): boolean };
-
-  public service: RoomService;
-
   public mode: GameMode = GameMode.PONG;
 
-  public constructor(public readonly id: string, public host: User) {
+  public constructor(
+    public readonly id: string,
+    public server: Server,
+    public readonly service: RoomsService,
+    public host: User,
+  ) {
     this.logger = new Logger(`Room ${id}`);
+    this.logger.log(`Room ${id} created by ${host.id}`);
     this.setMode(this.mode);
   }
 
@@ -87,7 +92,8 @@ export class Room {
         this.getPlayers().reduce((s, p) => p.connected && s, true)
       )
         this.resume();
-      this.server.emit('game:room:status', JSON.stringify(this, hideServer));
+      this.server.emit('game:room:status', hideCircular(this));
+      this.service.listNonEmptyRooms();
       return;
     }
 
@@ -95,7 +101,10 @@ export class Room {
 
     this.audience = [...this.audience, user];
 
-    this.server.emit('game:room:status', JSON.stringify(this, hideServer));
+    this.rebalance();
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
   }
 
   public leave(user: User): void {
@@ -112,16 +121,19 @@ export class Room {
 
     if (!this.isEmpty() && this.host.id == user.id) {
       this.host = this.getUsers()[0];
-      this.service.notifyRooms();
     }
 
+    this.rebalance();
+
     this.service.deleteIfEmpty(this.id);
+    this.service.listNonEmptyRooms();
   }
 
   public disconnect(user: User): void {
     this.logger.log(`Disconnected: ${user.id}`);
 
     const found = this.getUsers().find((u) => u.id == user.id);
+    if (!found) return;
     found.connected = false;
 
     if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
@@ -164,7 +176,11 @@ export class Room {
         break;
     }
     this.rebalance();
-    this.service?.notifyRooms();
+    this.service.listNonEmptyRooms();
+  }
+
+  public sendStatus(client: Socket): void {
+    this.server.emit('game:room:status', hideCircular(this));
   }
 
   public start(): void {

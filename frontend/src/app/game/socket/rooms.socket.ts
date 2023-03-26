@@ -5,7 +5,7 @@ import { Socket } from 'ngx-socket-io';
 export class GameSocket extends Socket {
   constructor() {
     super({
-      url: 'http://localhost:3000/game',
+      url: 'http://localhost:3000/rooms',
       options: { withCredentials: true },
     });
   }

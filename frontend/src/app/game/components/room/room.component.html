@@ -1,3 +1,36 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-{{ room | json }}
+<section *ngIf="!room">
+  <p>Loading...</p>
+</section>
+<section *ngIf="!!room && !room.inGame">
+
+  <article>
+    <header>
+      <h2>Teams</h2>
+    </header>
+    <ul>
+      <li *ngFor="let team of room.teams">
+        <article>
+          <header>
+            <h3>{{ team.id }}</h3>
+          </header>
+          <ul>
+            <li *ngFor="let player of team.players">{{ player.name }}</li>
+          </ul>
+        </article>
+      </li>
+    </ul>
+  </article>
+
+  <article *ngIf="room.audience.length">
+    <header>
+      <h2>Audience</h2>
+    </header>
+    <ul>
+      <li *ngFor="let user of room.audience">{{ user.name }}</li>
+    </ul>
+  </article>
+
+</section>
+

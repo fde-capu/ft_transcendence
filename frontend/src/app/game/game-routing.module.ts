@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../auth/guard/auth.guard';
-import { LobbyComponent } from './components/lobby/lobby.component';
+import { RoomsComponent } from './components/rooms/rooms.component';
 import { RoomComponent } from './components/room/room.component';
 
 const routes: Routes = [
   {
     path: '',
     canActivate: [AuthGuard],
-    component: LobbyComponent,
+    component: RoomsComponent,
   },
   {
     path: ':id',
@@ -22,4 +22,3 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class GameRoutingModule {}
-
