@@ -3,11 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users, UserDTO, StatisticsDTO } from '../user/entity/user.entity';
 import { GameHistory } from './game-record';
+import { UserService } from '../user/service/user.service';
 
 @Injectable()
 export class GameService {
   constructor(
 	@InjectRepository(GameHistory) private readonly historyRepository: Repository<GameHistory>,
+	private readonly userService: UserService,
   ) {}
 
 	// TODO At the end of each match, backend must call this:
@@ -36,6 +38,87 @@ export class GameService {
 		if (resp === null)
 			return [];
 		return resp;
+	}
+
+	async getStats(intraId:string):Promise<StatisticsDTO>
+	{
+		let games = await this.getGameHistory(intraId);
+		let out: StatisticsDTO = {} as StatisticsDTO;
+		out.score =  0;
+		out.matches = 0;
+		out.wins = 0;
+		out.goalsMade = 0;
+		out.goalsTaken = 0;
+		out.scorePerMatches = 0;
+		out.looses = 0;
+		out.winsPerLooses = 0;
+		out.goalsMadePerTaken = 0;
+		for (const game of games) {
+//			out.score += this.userScore(intraId, game);
+			out.matches++;
+			out.wins += this.didUserWin(intraId, game);
+			out.goalsMade += this.userGoalsMade(intraId, game);
+			out.goalsTaken += this.userGoalsTaken(intraId, game);
+		}
+		out.scorePerMatches = out.score/out.matches;
+		out.looses = out.matches - out.wins;
+		out.winsPerLooses = out.wins/out.looses;
+		out.goalsMadePerTaken = out.goalsMade/out.goalsTaken;
+		return out;
+	}
+
+	async userScore(id: string, game: any): Promise<number> {
+		return (await this.userService.getUserByIntraId(id)).score;
+	}
+
+	didUserWin(id: string, game: any): number {
+		return (
+			game.mode == 'PONG' && (
+				(game.p1_intraId == id
+				&& game.p1_scoreMade > game.p2_scoreMade)
+			||	(game.p2_intraId == id
+				&& game.p2_scoreMade > game.p1_scoreMade)
+			)
+		)
+		||
+		(
+			game.mode == 'PONG2' && (
+				((game.p1_intraId == id || game.p2_intraId == id)
+				&& game.p1_scoreMade + game.p2_scoreMade > game.p3_scoreMade + game.p4_scoreMade)
+			||	((game.p3_intraId == id || game.p4_intraId == id)
+				&& game.p1_scoreMade + game.p2_scoreMade < game.p3_scoreMade + game.p4_scoreMade)
+			)
+		)
+		||
+		(
+			game.mode == 'PONG4' && (
+				(game.p1_intraId == id && game.p1_scoreMade > game.p2_scoreMade && game.p1_scoreMade > game.p3_scoreMade && game.p1_scoreMade > game.p4_scoreMade)
+			||	(game.p2_intraId == id && game.p2_scoreMade > game.p1_scoreMade && game.p2_scoreMade > game.p3_scoreMade && game.p2_scoreMade > game.p4_scoreMade)
+			||	(game.p3_intraId == id && game.p3_scoreMade > game.p1_scoreMade && game.p3_scoreMade > game.p2_scoreMade && game.p3_scoreMade > game.p4_scoreMade)
+			||	(game.p4_intraId == id && game.p4_scoreMade > game.p1_scoreMade && game.p4_scoreMade > game.p2_scoreMade && game.p4_scoreMade > game.p3_scoreMade)
+			)
+		)
+		?
+		 1
+		  :
+		   0
+		    ;
+	}
+
+	userGoalsMade(id: string, game: any): number {
+		return game.p1_intraId == id ? game.p1_goalsMade
+		:	game.p2_intraId == id ? game.p2_goalsMade
+		:	game.p3_intraId == id ? game.p3_goalsMade
+		:	game.p4_intraId == id ? game.p4_goalsMade
+		:	0;
+	}
+
+	userGoalsTaken(id: string, game: any): number {
+		return game.p1_intraId == id ? game.p1_goalsTaken
+		:	game.p2_intraId == id ? game.p2_goalsTaken
+		:	game.p3_intraId == id ? game.p3_goalsTaken
+		:	game.p4_intraId == id ? game.p4_goalsTaken
+		:	0;
 	}
 
 	// TODO: remove this mock when unused.
