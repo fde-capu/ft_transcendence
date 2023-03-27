@@ -9,7 +9,7 @@
 		</td>
 		<td>
 			<input id="name" [(ngModel)]="displayUser.name"
-			(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
+			(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
 			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
 			(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
 			/>
@@ -82,7 +82,6 @@
 
 <app-statistics [user]="displayUser"></app-statistics>
 <app-game-history [user]="displayUser"></app-game-history>
-<app-ladder [user]='user' [them]='displayUser'></app-ladder>
 </div>
 
 <ng-template #user_unknown>

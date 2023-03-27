@@ -26,6 +26,8 @@ export class ProfileComponent {
 	isBlock: boolean = false;
 	amIBlocked?: boolean;
 	invalidNameNotice: boolean = false;
+	lastName: string = "";
+	lastPassword?: string;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -98,13 +100,21 @@ export class ProfileComponent {
 			this.fun.blink('invalidNameNotice');
 			await new Promise(resolve => setTimeout(resolve, 342));
 			this.invalidNameNotice = false;
+			this.displayUser.name = this.lastName;
 			this.fun.focus('invalidNameNotice');
 		}
 	}
 
+	saveLastName() {
+		let save = this.displayUser?.name;
+		this.lastName = save ? save : "";
+	}
+
 	saveUser() {
 		if (this.displayUser)
-			this.userService.saveUser(this.displayUser).subscribe();
+			this.userService.saveUser(this.displayUser).subscribe(_=>{
+				console.log("Saved user", _)
+			});
 	}
 
 	switchMfa() {

@@ -35,6 +35,7 @@ export class ChatBoxComponent {
 	firstTime: boolean = true;
 	invalidNameNotice: boolean = false;
 	invalidPasswordNotice: boolean = false;
+	lastRoomName: string = "";
 
 	ngOnInit() {
 		// TODO: Check for querystring empty: it means its a new creation.
@@ -136,6 +137,10 @@ export class ChatBoxComponent {
 		return false;
 	}
 
+	saveLastRoomName() {
+		this.lastRoomName = this.chatRoom.name;
+	}
+
 	async validateName(): Promise<boolean> {
 		if (this.fun.validateString(this.chatRoom.name))
 			return true;
@@ -148,6 +153,7 @@ export class ChatBoxComponent {
 			this.fun.blink('invalidNameNotice');
 			await new Promise(resolve => setTimeout(resolve, 342));
 			this.invalidNameNotice = false;
+			this.chatRoom.name = this.lastRoomName;
 			this.fun.focus('name');
 			return false;
 		}
