@@ -16,6 +16,7 @@ import { Subject } from 'rxjs';
 import { TokenPayload } from '../decorator/token-payload.decorator';
 import { AuthGuard } from '../guard/auth.guard';
 import { AuthService } from '../service/auth.service';
+import { UserService } from '../../user/service/user.service';
 
 @Controller('auth')
 export class AuthController {
@@ -65,7 +66,8 @@ export class AuthController {
 
   @Get('info')
   public tokenInfo(@TokenPayload() payload?: JWTPayload) {
-    return this.authService.getSessionTokenPublicInfo(payload);
+	//console.log("tokenInfo", payload);
+	return this.authService.getSessionTokenPublicInfo(payload);
   }
 
   @Get('challenge')

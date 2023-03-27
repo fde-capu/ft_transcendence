@@ -1,18 +1,25 @@
+.mainTable {
+	border: 3px solid red;
+}
+
 table {
 	border-collapse: collapse;
-	margin-bottom: 4em;
+	display: inline-table;
 }
 
 td, th {
-	border: var(--border-thin);
-	text-align: center;
-	min-width: 2em;
 	padding: 0 0.5em;
 	white-space: nowrap;
+	min-width: fit-content;
+}
+.match {
+	border: 0.2em solid #333;
 }
 
-td:nth-child(1),
-td:nth-child(2),
-td:nth-child(6) {
-	text-align: left;
+.divisor tr {
+	border-bottom: var(--border-thin);
+}
+
+.non-divisor tr {
+	border-bottom: none;
 }

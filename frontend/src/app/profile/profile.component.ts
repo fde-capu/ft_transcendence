@@ -38,6 +38,7 @@ export class ProfileComponent {
 			backUser => { 
 				//console.log("profile got logged user.", backUser);
 				this.user = backUser;
+				this.userService.setStatus("ONLINE");
 				this.getIdRequest();
 			}
 		)

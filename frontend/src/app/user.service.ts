@@ -25,8 +25,10 @@ export class UserService {
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
 	private blocksUrl = 'http://localhost:3000/user/blocks/?them=';
 	private onlineUsersUrl = 'http://localhost:3000/user/online';
+	private availableUsersUrl = 'http://localhost:3000/user/available';
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
+	private updateUserStatus = 'http://localhost:3000/user/status/';
 	private saveHttpOptions = 
 				{
 					withCredentials: true,
@@ -64,7 +66,7 @@ export class UserService {
 	}
 
 	getLoggedUser(): Observable<User> {
-		if (this.currentUser) {
+		if (this.currentUser && Math.random() > .1) {
 			//console.log("You know better, but I know", this.currentUser.name);
 			return of(this.currentUser);
 		}
@@ -81,17 +83,25 @@ export class UserService {
 	}
 
 	signOut() {
-		this.getLoggedUser().subscribe(_=>{
-			//console.log("fus: ", _.intraId, " will log out.");
-			_.isLogged = false;
-			this.saveUser(_).subscribe(_=>{
-				this.authService.signOut();
-			});
-		});
+		this.setStatus("OFFLINE");
+		this.authService.signOut();
+	}
+
+	setStatus(stat: string) {
+		//console.log("fos setStatus:", u_user.intraId, stat);
+		this.http.put(
+				this.updateUserStatus + this.currentIntraId,
+				{ stat },
+				this.saveHttpOptions
+			)
+			.pipe
+			(
+				catchError(this.handleError<any>('setStatus'))
+			).subscribe();
 	}
 
 	saveUser(u_user: User): Observable<any> {
-		//console.log("fos saving:", u_user);
+		console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
 				u_user,
@@ -100,7 +110,7 @@ export class UserService {
 			.pipe
 			(
 				map(_=>{
-					//console.log("saveUser will call component refresh.");
+					console.log("saveUser will call component refresh.");
 					this.router.navigate([this.router.url])
 				}),
 				catchError(this.handleError<any>('saveUser'))
@@ -110,6 +120,18 @@ export class UserService {
 	getOnlineUsers(): Observable<User[]> {
 		return this.http.get<User[]>(this.onlineUsersUrl,{withCredentials:true})
 			.pipe(catchError(this.handleError<User[]>('getOnlineUsers', [])));
+	}
+
+	getAvailableUsers(): Observable<User[]> {
+		return this.http.get<User[]>(this.availableUsersUrl,{withCredentials:true})
+			.pipe(catchError(this.handleError<User[]>('getOnlineUsers', [])));
+	}
+
+	getLadder(): Observable<any[]> {
+		return this.http.get<User[]>(this.onlineUsersUrl,{withCredentials:true})
+			.pipe(catchError(this.handleError<User[]>('getLadder', [])));
+		// ^ This is exactly like getOnlineUser(), but if later we want to
+		// get all online AND offline users for ranking, this is the place.
 	}
 
 	getFriends(u_user?: User): Observable<User[]> {
@@ -199,12 +221,6 @@ export class UserService {
 			});
 		}
 		return out;
-	}
-
-	getAvailableUsers(): Observable<User[]> {
-		// Must return users online, not playing, and not logged user.
-		const users = USERS;
-		return of(users);
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {
