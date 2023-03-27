@@ -2,7 +2,7 @@ ft_transcendence
 Checklist based on sub. 12.1
 
 [ ]	VERIFICAR: you must use the latest stable version of every library or framework used in your project.
-[ ] CONFIGURAÇÕES DE COMPATIBILIDADE COM FIREFOX ou SAFARI ou OUTRO?: Google Chrome and one additional web browser of your choice.
+[X] CONFIGURAÇÕES DE COMPATIBILIDADE COM FIREFOX ou SAFARI ou OUTRO?: Google Chrome and one additional web browser of your choice.
 [?]	HASHEAMENTO: Any password stored in your database must be hashed. (Não armazenamos nenhum password na DB.) (...) Please make sure you use a strong password hashing algorithm.
 [?] INJEÇÃO: Your website must be protected against SQL injections. (nativo no Angular).
 [?] VALIDAÇÃO: Server-side validation for forms and any user input. (Feito apenas 4 <= string.length <= 42)
