@@ -52,11 +52,11 @@
 				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton'); validateAndEmit();"
 				(change)="validateAndEmit();"
 				/>
-			</td><td style="min-width:175px;">
+			</td><td class='button-box'>
 				<button *ngIf='!invalidPasswordNotice' id="passwordButton" type="button" (click)=
 					"fun.focusIf('passwordButton', 'Change', 'password');"
-					>Change</button>
-				<button type="button" (click)="cleanPassword();">Clean</button>
+					> Change </button>
+				<button type="button" (click)="cleanPassword();"> Clean </button>
 			<span *ngIf='invalidPasswordNotice' id='invalidPasswordNotice'><- <b>Invalid</b>&nbsp;</span>
 			</td>
 		</tr>
@@ -75,12 +75,12 @@
 	<table class="list-of-users">
 		<tr *ngFor="let user of usersInChat" [ngClass]="{'yourself':isMe(user.intraId)}">
 		<td *ngIf='!isMe(user.intraId)'>&nbsp;</td> <!-- Interesting, element yourself::before takes a place in the first column. -->
-		<td>
+		<td class='user-name'>
 			<a routerLink="/profile/{{user.intraId}}">
 				{{ user.intraId }} | {{ user.name }}
 			</a>
 		</td>
-		<td>
+		<td class='button-box'>
 			<span *ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId);">
 				<button style='margin-left:0;' (click)='kickThem(user)'>Kick</button>
 				<button *ngIf="!isBlocked(user)" (click)='tigThem(user)'>Tig</button>
@@ -103,12 +103,12 @@
 	<table *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)" class="list-of-users">
 		<tr *ngFor="let user of usersOutOfChat" [ngClass]="{'yourself':isMe(user.intraId)}">
 		<td *ngIf='!isMe(user.intraId)'>&nbsp;</td> <!-- Interesting, element yourself::before takes a place in the first column. -->
-		<td>
+		<td class='user-name'>
 			<a routerLink="/profile/{{user.intraId}}">
 				{{ user.intraId }} | {{ user.name }}
 			</a>
 		</td>
-		<td>
+		<td class='button-box'>
 			<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
 			<button *ngIf='!isBlocked(user) && !isMe(user.intraId)' style="margin-left:0;" (click)='doInvitationToThisRoom(user)'>Invite</button>
 			<span *ngIf='isMuted(user)'><- Muted&nbsp;</span>

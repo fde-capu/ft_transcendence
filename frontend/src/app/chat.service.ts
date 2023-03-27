@@ -3,7 +3,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChatSocket } from './chat.socket';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject, forkJoin } from 'rxjs';
 import { ChatMessage } from './chat-message';
 import { UserService } from './user.service';
 import { User } from './user';
@@ -210,6 +210,7 @@ export class ChatService {
 	}
 
 	roomById(roomId?: string): ChatRoom|undefined {
+		//console.log(".");
 		//console.log("roomById", roomId, ChatService.allRooms);
 		if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length) undefined;
 		for (const room of ChatService.allRooms)
@@ -272,6 +273,7 @@ export class ChatService {
 
 	revokeAdmin(roomId: string|null|undefined, intraId: string) {
 		if (!roomId) return;
+		console.log("C2");
 		let theRoom = this.roomById(roomId);
 		if (!theRoom) return;
 		let newAdmin: string[] = [];
@@ -322,6 +324,7 @@ export class ChatService {
 
 	isCurrentUserBlockedByRoomId(roomId: string): boolean {
 		if (!ChatService.user) return false;
+		console.log("C4");
 		let chatRoomTest = this.roomById(roomId);
 		if (chatRoomTest)
 			return this.isUserBlocked(ChatService.user.intraId, chatRoomTest);

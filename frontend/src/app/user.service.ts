@@ -235,11 +235,11 @@ export class UserService {
 	}
 
 	async intraIdsToUsers(ulist: string[]): Promise<User[]> {
-		if (!ulist || !ulist.length || !this.authorized()) return [];
+		//console.log("intraIdsToUsers entrance", ulist, this.authorized());
 		let out: User[] = [];
 		for (const one of ulist)
 		{
-			this.getUserById(one).subscribe(_=>{
+			await this.getUserById(one).subscribe(_=>{
 				if (_)
 				{
 					//console.log("intraIdsToUsers:", _);
@@ -249,6 +249,7 @@ export class UserService {
 				//console.log("intraIdsToUsers Error");
 			});
 		}
+		//console.log("intraIdsToUsers returning", out);
 		return out;
 	}
 
