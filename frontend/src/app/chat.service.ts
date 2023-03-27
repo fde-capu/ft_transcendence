@@ -35,13 +35,15 @@ export class ChatService {
 	}
 
 	async getUser(): Promise<User> {
-		if (ChatService.user) return ChatService.user;
-		this.userService.getLoggedUser().subscribe(
-			backUser => { 
-				if (backUser)
-					ChatService.user = backUser;
-			}
-		)
+		if (ChatService.user && Math.random() > .1) return ChatService.user;
+		if (this.userService.getQuickIntraId()) {
+			this.userService.getLoggedUser().subscribe(
+				backUser => { 
+					if (backUser)
+						ChatService.user = backUser;
+				}
+			)
+		}
 		await new Promise(resolve => setTimeout(resolve, 431));
 		return this.getUser();
 	}
@@ -85,9 +87,7 @@ export class ChatService {
 	}
 
 	hasNews(): boolean {
-		if (this.gotNews || Math.random() > .9) {
-			//              ^ ocasional refreshment to solve race condition,
-			//                thus saving cpu.
+		if (this.gotNews) {
 			this.gotNews = false;
 			return true;
 		}
@@ -152,6 +152,36 @@ export class ChatService {
 		});
 	}
 
+	equalArray(a: string[] | undefined, b: string[] | undefined)
+	{
+		if (!b && !a) return true;
+		if (!b || !a) return false;
+		for (const u of a)
+			if (!this.fun.isStringInArray(u, b))
+				return false;
+		for (const u of b)
+			if (!this.fun.isStringInArray(u, a))
+				return false;
+		return true;
+	}
+
+	equalRooms(a: ChatRoom|undefined, b: ChatRoom|undefined) {
+		if (!a && !b) return false;
+		if (!a || !b) return false;
+		if (!this.equalArray(a.user, b.user))
+			return false;
+		if (!this.equalArray(a.admin, b.admin))
+			return false;
+		if (!this.equalArray(a.blocked, b.blocked))
+			return false;
+		if (!this.equalArray(a.muted, b.muted))
+			return false;
+		return (a.id == b.id
+			&&	a.name == b.name
+			&&	a.password == b.password
+			&&	a.isPrivate == b.isPrivate)
+	}
+
 	logOutAllRooms(intraId: string) {
 		for (const i in ChatService.allRooms) {
 			let newRoom: ChatRoom = ChatService.allRooms[i];
@@ -167,10 +197,11 @@ export class ChatService {
 	}
 
 	getOutOfAnyChat() {
-		//console.log("getting out of any chat");
-		this.userService.getLoggedUser().subscribe(_=>{
-			this.logOutAllRooms(_.intraId)
-		});
+		//console.log("getting out of any chat", this.userService.getQuickIntraId());
+		let u = this.userService.getQuickIntraId();
+		//console.log("Logging out of chat", u);
+		if (!u) return;
+		this.logOutAllRooms(u);
 	}
 
 	async putUserInRoom(room: ChatRoom, flush: boolean = true): Promise<ChatRoom> {
@@ -190,7 +221,6 @@ export class ChatService {
 		//console.log("Chat emitting.");
 		this.socket.emit('chat', chatMessage);
 	}
-
 
 	roomById(roomId?: string): ChatRoom|undefined {
 		//console.log("roomById", roomId, ChatService.allRooms);
@@ -395,27 +425,8 @@ export class ChatService {
 
 	private handleError<T>(operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
-
-			// TODO: send the error to remote logging infrastructure
-			console.error("handleError<T>:", error); // log to console instead
-			// ^ Yikes! Don't show if any bug! TODO (comment line above?)
-
-			// Let the app keep running by returning an empty result.
+			//console.error(">> ft_transcendence controlled error (chat.service):", error); // log to console instead
 			return of(result as T);
 		};
 	}
 }
-
-// TODO:
-
-// - Implement direct-messaging.
-// - Chat creationg screen.
-// - "Block user" routine.
-
-// - The user should be able to invite other users to 
-//   play a Pong game through the chat interface.
-// - Should also be able to access user profiles.
-//  :: These two things will be done by the avatar element, however.
-
-// Matchmaking screen.
-

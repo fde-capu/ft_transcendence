@@ -44,7 +44,7 @@ import { ChatGateway } from './chat/chat.gateway';
   providers: [
 	InvitationGateway,
 	ChatGateway,
-	ChatService
+	ChatService,
   ],
 })
 export class AppModule implements NestModule {

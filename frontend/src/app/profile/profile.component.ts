@@ -4,6 +4,7 @@ import { UserService } from '../user.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -52,7 +53,7 @@ export class ProfileComponent {
 	}
 	async getDisplayUser() {
 		//console.log("getDisplayUser", this.idRequest);
-		if (this.owner) return;
+		if (this.owner || !this.userService.authorized()) return;
 		if (!this.idRequest)
 		{
 			this.displayUser = this.user;
@@ -60,7 +61,9 @@ export class ProfileComponent {
 			//console.log("profile set displayUser = user");
 			return ;
 		}
-		this.userService.getUserById(this.idRequest).subscribe(
+		this.userService.getUserById(this.idRequest).pipe(
+			catchError(this.userService.handleError<any>('getDisplayUser'))
+		).subscribe(
 			backUser => { 
 				//console.log("profile got display user:", backUser);
 				if (backUser)
@@ -112,10 +115,12 @@ export class ProfileComponent {
 	}
 
 	saveUser() {
-		if (this.displayUser)
+		//console.log("Save user", this.displayUser);
+		if (this.displayUser) {
 			this.userService.saveUser(this.displayUser).subscribe(_=>{
-				console.log("Saved user", _)
+				//console.log("Saved user") // _ == undefined (no answer)
 			});
+		}
 	}
 
 	switchMfa() {

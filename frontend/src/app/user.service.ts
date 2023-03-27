@@ -18,8 +18,9 @@ import { HelperFunctionsService } from './helper-functions.service';
   providedIn: 'root'
 })
 export class UserService {
-	public currentIntraId?: string;
-	private currentUser?: User;
+	public static currentIntraId?: string;
+	public static currentUser?: User;
+	static isAuthorized: boolean = false;
 	private statsUrl = 'http://localhost:3000/user/stats/?of=';
 	private historyUrl = 'http://localhost:3000/user/history/?of=';
 	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
@@ -29,6 +30,7 @@ export class UserService {
 	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
 	private updateUserUrl = 'http://localhost:3000/user/update/';
 	private updateUserStatus = 'http://localhost:3000/user/status/';
+	private attendanceUrl = 'http://localhost:3000/user/hi/';
 	private saveHttpOptions = 
 				{
 					withCredentials: true,
@@ -41,6 +43,7 @@ export class UserService {
 		private router: Router,
 		private fun: HelperFunctionsService,
 	) {
+		//console.log("User Service constructor.");
 		this.setCurrentIntraId();
 		this.router.routeReuseStrategy.shouldReuseRoute = () => {
 			return false;
@@ -49,29 +52,53 @@ export class UserService {
 
 	setCurrentIntraId() {
 		this.authService.getAuthContext().subscribe(_=>{
-			this.currentIntraId=_?.sub;
-			if (this.currentIntraId)
-				this.getLoggedUser().subscribe(_=>{this.currentUser=_});
+			UserService.isAuthorized = true;
+			if (_?.sub)
+				UserService.currentIntraId=_?.sub;
 		});
+		this.announceMe();
+	}
+
+	async announceMe(): Promise<void> {
+		await new Promise(resolve => setTimeout(resolve, 2391));
+		if (!UserService.currentIntraId) return this.setCurrentIntraId();
+		this.http.put(
+				this.attendanceUrl + UserService.currentIntraId,
+				{},
+				this.saveHttpOptions
+			).pipe(
+				catchError(err=>{
+					UserService.currentIntraId = undefined;
+					return of(this.handleError<any>('announceMe'));
+				})
+			).subscribe();
+		this.announceMe();
+		this.keepUpdating();
 	}
 
 	getQuickIntraId() {
-		return this.currentIntraId;
+		return UserService.currentIntraId;
 	}
 
 	getUserById(intraId: string): Observable<User | undefined> {
+		if (!UserService.currentIntraId) return of(undefined); // In case server disconnected.
 		return this.http
 			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
 			.pipe(catchError(this.handleError<any>('getUserById')))
 	}
 
+	async keepUpdating() {
+		if (!UserService.currentIntraId) return this.setCurrentIntraId();
+		this.getLoggedUser()
+			.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
+			.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
+		await new Promise(resolve => setTimeout(resolve, 2239));
+		this.keepUpdating();
+	}
+
 	getLoggedUser(): Observable<User> {
-		if (this.currentUser && Math.random() > .1) {
-			//console.log("You know better, but I know", this.currentUser.name);
-			return of(this.currentUser);
-		}
 		//console.log("fUS getting logged user");
-		return this.http.get<User>(this.userByLoginUrl + this.currentIntraId,{withCredentials: true})
+		return this.http.get<User>(this.userByLoginUrl + UserService.currentIntraId,{withCredentials: true})
 			.pipe(map(_=>{
 				return _;
 			}),
@@ -82,26 +109,25 @@ export class UserService {
 		return this.getUserById(id);
 	}
 
-	signOut() {
+	signOut(afterRoute: string = '/logout') {
 		this.setStatus("OFFLINE");
-		this.authService.signOut();
+		UserService.isAuthorized = false;
+		this.authService.signOut(afterRoute);
 	}
 
 	setStatus(stat: string) {
 		//console.log("fos setStatus:", u_user.intraId, stat);
 		this.http.put(
-				this.updateUserStatus + this.currentIntraId,
+				this.updateUserStatus + UserService.currentIntraId,
 				{ stat },
 				this.saveHttpOptions
-			)
-			.pipe
-			(
+			).pipe(
 				catchError(this.handleError<any>('setStatus'))
 			).subscribe();
 	}
 
 	saveUser(u_user: User): Observable<any> {
-		console.log("fos saving:", u_user);
+		//console.log("fos saving:", u_user);
 		return this.http.put(
 				this.updateUserUrl + u_user.intraId,
 				u_user,
@@ -110,7 +136,7 @@ export class UserService {
 			.pipe
 			(
 				map(_=>{
-					console.log("saveUser will call component refresh.");
+					//console.log("saveUser will call component refresh.");
 					this.router.navigate([this.router.url])
 				}),
 				catchError(this.handleError<any>('saveUser'))
@@ -141,23 +167,24 @@ export class UserService {
 	}
 
 	isFriend(user_b: User | undefined): boolean {
-		if (!this.currentUser||!this.currentUser.friends||!user_b) return false;
-		return this.fun.isStringInArray(user_b.intraId, this.currentUser.friends);
+		if (!UserService.currentUser||!UserService.currentUser.friends||!user_b) return false;
+		return this.fun.isStringInArray(user_b.intraId, UserService.currentUser.friends);
 	}
 
 	makeFriend(user_b: User|undefined): Observable<any> {
-		if (!this.currentUser||!user_b) return of(false);
-		if (!this.currentUser.friends) this.currentUser.friends = [];
-		this.currentUser.friends.push(user_b.intraId);
-		return this.saveUser(this.currentUser);
+		if (!UserService.currentUser||!user_b) return of(false);
+		if (!UserService.currentUser.friends) UserService.currentUser.friends = [];
+		if (!this.isFriend(user_b))
+			UserService.currentUser.friends.push(user_b.intraId);
+		return this.saveUser(UserService.currentUser);
 	}
 
 	unFriend(user_b: User|undefined): Observable<any> {
-		if (!this.currentUser||!user_b||!this.currentUser.friends) return of(false);
-		for (var i = 0; i < this.currentUser.friends.length; i++)
-			if (this.currentUser.friends[i] == user_b.intraId)
-				this.currentUser.friends.splice(i, 1);
-		return this.saveUser(this.currentUser);
+		if (!UserService.currentUser||!user_b||!UserService.currentUser.friends) return of(false);
+		for (var i = 0; i < UserService.currentUser.friends.length; i++)
+			if (UserService.currentUser.friends[i] == user_b.intraId)
+				UserService.currentUser.friends.splice(i, 1);
+		return this.saveUser(UserService.currentUser);
 	}
 
 	getBlocks(u_user?: User): Observable<User[]> {
@@ -167,30 +194,30 @@ export class UserService {
 	}
 
 	amIBlocked(user_b: User|undefined): boolean {
-		//console.log("Am I", this.currentUser?.intraId, "blocked by?", user_b?.intraId);
-		if (!this.currentUser||!user_b||(user_b.intraId==this.currentUser.intraId)) return false;
+		//console.log("Am I", UserService.currentUser?.intraId, "blocked by?", user_b?.intraId);
+		if (!UserService.currentUser||!user_b||(user_b.intraId==UserService.currentUser.intraId)) return false;
 		//console.log(user_b);
-		return this.fun.isStringInArray(this.currentUser.intraId, user_b.blocks);
+		return this.fun.isStringInArray(UserService.currentUser.intraId, user_b.blocks);
 	}
 
 	isBlock(user_b: User | undefined): boolean {
-		if (!this.currentUser||!this.currentUser.blocks||!user_b) return false;
-		return this.fun.isStringInArray(user_b.intraId, this.currentUser.blocks);
+		if (!UserService.currentUser||!UserService.currentUser.blocks||!user_b) return false;
+		return this.fun.isStringInArray(user_b.intraId, UserService.currentUser.blocks);
 	}
 
 	makeBlock(user_b: User|undefined): Observable<any> {
-		if (!this.currentUser||!user_b) return of(false);
-		if (!this.currentUser.blocks) this.currentUser.blocks = [];
-		this.currentUser.blocks.push(user_b.intraId);
-		return this.saveUser(this.currentUser);
+		if (!UserService.currentUser||!user_b) return of(false);
+		if (!UserService.currentUser.blocks) UserService.currentUser.blocks = [];
+		UserService.currentUser.blocks.push(user_b.intraId);
+		return this.saveUser(UserService.currentUser);
 	}
 
 	unBlock(user_b: User|undefined): Observable<any> {
-		if (!this.currentUser||!user_b||!this.currentUser.blocks) return of(false);
-		for (var i = 0; i < this.currentUser.blocks.length; i++)
-			if (this.currentUser.blocks[i] == user_b.intraId)
-				this.currentUser.blocks.splice(i, 1);
-		return this.saveUser(this.currentUser);
+		if (!UserService.currentUser||!user_b||!UserService.currentUser.blocks) return of(false);
+		for (var i = 0; i < UserService.currentUser.blocks.length; i++)
+			if (UserService.currentUser.blocks[i] == user_b.intraId)
+				UserService.currentUser.blocks.splice(i, 1);
+		return this.saveUser(UserService.currentUser);
 	}
 
 	getStats(u_intraId: string): Observable<Statistics> {
@@ -206,7 +233,7 @@ export class UserService {
 	}
 
 	async intraIdsToUsers(ulist: string[]): Promise<User[]> {
-		if (!ulist || !ulist.length) return [];
+		if (!ulist || !ulist.length || !this.authorized()) return [];
 		let out: User[] = [];
 		for (const one of ulist)
 		{
@@ -223,13 +250,21 @@ export class UserService {
 		return out;
 	}
 
-	private handleError<T>(operation = 'operation', result?: T) {
+	authorized() {
+		//console.log("Returning", UserService.isAuthorized);
+		return UserService.isAuthorized;
+	}
+
+	public handleError<T>(operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
-
-			// TODO: send the error to remote logging infrastructure
-			console.error("handleError<T>:", error); // log to console instead
-
-			// Let the app keep running by returning an empty result.
+			if (error.error.statusCode == 401) {
+				UserService.isAuthorized = false;
+				if (this.router.url.indexOf("/login") != 0
+				&& this.router.url.indexOf("/logout") != 0)
+					this.signOut();
+			}
+			//console.error(">> ft_transcendence controlled error (user.service):", error); // log to console instead
+			console.log("ERROR:::", error.error.statusCode, operation);
 			return of(result as T);
 		};
 	}

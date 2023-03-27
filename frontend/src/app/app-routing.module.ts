@@ -87,8 +87,8 @@ const routes: Routes = [
   },
 ];
 
-
-
+//   Maybe these preLoading and onSameUrl are not useful anymore,
+// v but I can't be sure!
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
