@@ -88,9 +88,9 @@ export class HelperFunctionsService {
 	async blink3(el: string)
 	{
 		this.blink(el);
-		await new Promise(resolve => setTimeout(resolve, 255));
+		await new Promise(resolve => setTimeout(resolve, 355));
 		this.blink(el);
-		await new Promise(resolve => setTimeout(resolve, 255));
+		await new Promise(resolve => setTimeout(resolve, 355));
 		this.blink(el);
 	}
 	focusIf(me: string, cond: string, target: string)
