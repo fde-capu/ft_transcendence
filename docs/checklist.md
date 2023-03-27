@@ -1,5 +1,5 @@
 ft_transcendence
-Checklist based on sub. 12.1
+Checklit based on sub. 12.1
 
 [ ]	VERIFICAR: you must use the latest stable version of every library or framework used in your project.
 [ ] CONFIGURAÇÕES DE COMPATIBILIDADE COM FIREFOX ou SAFARI ou OUTRO?: Google Chrome and one additional web browser of your choice.

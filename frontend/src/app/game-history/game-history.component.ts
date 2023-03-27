@@ -22,7 +22,10 @@ export class GameHistoryComponent {
 		//console.log("getGameHistory got", _);
 		if (_)
 		{
+<<<<<<< HEAD
 		  this.histRender = [];
+=======
+>>>>>>> main
 		  for (const match of _) {
 			let teams: any[] = [];
 

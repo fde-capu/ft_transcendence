@@ -5,6 +5,7 @@
 table {
 	border-collapse: collapse;
 	display: inline-table;
+	display: inline-table;
 }
 
 td, th {
