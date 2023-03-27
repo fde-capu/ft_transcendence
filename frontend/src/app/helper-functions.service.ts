@@ -59,6 +59,14 @@ export class HelperFunctionsService {
 				exist.classList.remove('inverted');
 				}, 200);
 	}
+	async blink3(el: string)
+	{
+		this.blink(el);
+		await new Promise(resolve => setTimeout(resolve, 255));
+		this.blink(el);
+		await new Promise(resolve => setTimeout(resolve, 255));
+		this.blink(el);
+	}
 	focusIf(me: string, cond: string, target: string)
 	{
 		const me_exist = document.getElementById(me);
@@ -79,6 +87,10 @@ export class HelperFunctionsService {
 	};
 	focus(el: string): void {
 		this.focusOn(el);
+	}
+	scrollTo(el: string): void {
+		const exist = document.getElementById(el);
+		if (exist) exist.scrollIntoView();
 	}
 	randomWord(amount: number): string {
 		if (amount <= 0) return "";
