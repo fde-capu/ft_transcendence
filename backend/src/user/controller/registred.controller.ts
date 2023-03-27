@@ -115,7 +115,7 @@ export class RegisterController {
   {
 	try {
 		//console.log("reg stats: fetching.");
-		const resp = await this.userService.getStats(intraId);
+		const resp = await this.gameService.getStats(intraId);
 		return response.status(200).json(resp);
 	} catch (e) {
 		//console.log("reg stats got catch", e);
@@ -135,7 +135,6 @@ export class RegisterController {
 		const resp = await this.gameService.getGameHistory(intraId);
 		return response.status(200).json(resp);
 	} catch (e) {
-		//console.log("reg history got catch", e);
 		response.status(e.status).json(e.data);
 	}
   }

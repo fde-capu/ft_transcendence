@@ -70,18 +70,6 @@ export class Users {
 
   @Column("simple-array")
   blocks?: string[];
-
-	@Column()
-	matches?: number;
-
-	@Column()
-	wins?: number;
-
-	@Column()
-	goalsMade?: number;
-
-	@Column()
-	goalsTaken?: number;
 }
 // Don't forget to update backend/src/user/service/user.service.tx:registerUserOk42
 // Don't forget to `make re` after editing this file!
