@@ -55,7 +55,7 @@ export class GameService {
 		out.goalsMadePerTaken = 0;
 		for (const game of games) {
 //			out.score += this.userScore(intraId, game);
-			console.log("getStats for game", game);
+			//console.log("getStats for game", game);
 			out.matches++;
 			out.wins += this.didUserWin(intraId, game);
 			out.goalsMade += this.userGoalsMade(intraId, game);
