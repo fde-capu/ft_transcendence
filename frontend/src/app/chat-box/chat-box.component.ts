@@ -143,7 +143,7 @@ export class ChatBoxComponent {
 		if (!this.userService.authorized() || !ChatBoxComponent.ignited) return ;
 		this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(
 			outChat => {
-				console.log(this.uniqueId, "Got out-of-chat users.", outChat);
+				//console.log(this.uniqueId, "Got out-of-chat users.", outChat);
 				this.usersOutOfChat = outChat;
 			}
 		);
