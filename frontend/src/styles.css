@@ -34,6 +34,8 @@
 	--font-medium: 24px;
 	--font-small: 20px;
 
+	--set-menu-bar: 64px;
+
 	/* Styles based of paramteres above (no need to touch?): */
 	--margin-plus-border: calc(var(--body-margin) + var(--body-border-width));
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
@@ -267,76 +269,12 @@ label::after {
 	font-size: 75%;
 	*/
 }
-.window-title {
-	margin: 0;
-	font-variant-caps: all-caps;
-	padding: var(--font-medium);
-	font-size: var(--font-large);
-	background: var(--color-shadow);
-	border-bottom: var(--border-thin);
-	line-height: 0.5em;
-}
-.window-close {
-	width: 16px;
-	height: 16px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-image:url('/assets/x.png');
-	opacity: .7;
-	float: right;
-	position: relative;
-	bottom: 2em;
-	margin: 0.25em 1em 0 0;
-}
-.window-menu-burger {
-	width: 16px;
-	height: 16px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-image:url('/assets/burger.png');
-	padding: 0;
-	float: right;
-	position: relative;
-	bottom: 2em;
-	margin: 0.25em 1em 0 0;
-}
-.window-options {
-	background: var(--color-sublow-transp);
-	z-index: 200;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-	flex-direction: column;
-	left: 2em;
-	height: calc(var(--inner-below-menu-height) - 2.6em);
-	position:absolute;
-	overflow: auto;
-}
-.options
-{
-	background: var(--color-shadow);
-	padding: 0 16px;
-}
-.list-of-users {
-    border: 0;
-    border-spacing: 0;
-}
-.list-of-users td {
-	padding-top: 0px;
-	padding-bottom: 0px;
-}
-.list-of-users a {
-	padding: 0px 0.25em;
-}
-.list-of-users button {
-	margin-left: -0.75em;
-}
 .overall {
-	position: absolute;
+	position: fixed;
     top: 0;
 	left: 0;
 	right: 0;
-    height: var(--inner-height);
+	bottom: 0;
     text-align: center;
     background: var(--color-sublow-transp);
     z-index: 3000;

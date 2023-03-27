@@ -12,7 +12,6 @@
 	margin: 0px 0px 2px -16px;
 	display: inline-block;
 	border-bottom: 4px dashed var(--color-border);
-	border: var(--dev1);
 }
 .user-name-small {
 	font-size: var(--font-small);

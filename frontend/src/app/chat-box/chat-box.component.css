@@ -1,7 +1,87 @@
+.window-full {
+	margin: 0;
+	font-size: var(--font-medium);
+	position: fixed;
+	top: var(--set-menu-bar);
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+.options
+{
+	background: var(--color-shadow);
+	padding: 0 16px;
+}
+
 .yourself::after {
 	content: " <<<";
 }
 
 .yourself::before {
 	content: ">>> ";
+}
+.window-title {
+	margin: 0;
+	font-variant-caps: all-caps;
+	padding: var(--font-medium);
+	font-size: var(--font-large);
+	background: var(--color-shadow);
+	border-bottom: var(--border-thin);
+	line-height: 0.5em;
+}
+.window-close {
+	width: 16px;
+	height: 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image:url('/assets/x.png');
+	opacity: .7;
+	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0.25em 1em 0 0;
+}
+.window-menu-burger {
+	width: 16px;
+	height: 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image:url('/assets/burger.png');
+	padding: 0;
+	float: right;
+	position: relative;
+	bottom: 2em;
+	margin: 0.25em 1em 0 0;
+}
+.window-options {
+	background: var(--color-sublow-transp);
+	z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	flex-direction: column;
+	height: calc(var(--inner-below-menu-height) - 2.6em);
+	position:absolute;
+	width: 100%;
+	height: 100%;
+	border: var(--dev1);
+	overflow: auto;
+}
+.list-of-users {
+    border: 0;
+    border-spacing: 0;
+}
+.list-of-users td {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+.list-of-users a {
+	padding: 0px 0.25em;
+}
+.list-of-users button {
+	margin-left: -0.75em;
+}
+button {
+	position: relative;
+	margin: auto;
 }

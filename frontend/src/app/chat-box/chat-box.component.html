@@ -1,12 +1,10 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<div *ngIf="!this.chatRoom.id">Please hold on...</div>
+<div *ngIf="!this.chatRoom.id" class="overall">Please hold on...</div>
 <div *ngIf="this.chatRoom.id" class="window-full">
-<app-window-title
-	[windowName]="windowName"
-	[windowExtras]="windowExtras"
-	(click)="onMenu()"
-></app-window-title>
+<div class="window-title" (click)="onMenu()">
+{{ windowExtras }} {{ windowName }}
+</div>
 	<div class="window-close" (click)="onClose()"></div>
 	<div class="window-menu-burger" (click)="onMenu()"></div>
 <div class="window-options" *ngIf="optionsOn">

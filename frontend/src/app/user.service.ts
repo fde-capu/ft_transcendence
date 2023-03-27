@@ -43,7 +43,7 @@ export class UserService {
 		private router: Router,
 		private fun: HelperFunctionsService,
 	) {
-		console.log("User Service constructor.");
+		//console.log("User Service constructor.");
 		if (!UserService.currentIntraId)
 			this.setCurrentIntraId();
 		this.router.routeReuseStrategy.shouldReuseRoute = () => {
