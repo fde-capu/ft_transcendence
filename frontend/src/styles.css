@@ -121,14 +121,6 @@ a, .hover_invert {
 a:hover, .hover_invert:hover {
 	-webkit-filter: grayscale(100%) invert(100%);
 }
-.user-name-small {
-	font-size: var(--font-small);
-	min-width: max-content;
-	padding: 0px 0.5em;
-}
-.small {
-	font-size: var(--font-small);
-}
 .inline {
 	display: inline;
 }
@@ -189,18 +181,6 @@ li
 	display: flex;
 	align-items: center;
 }
-.chat-line {
-	white-space: normal;
-	min-width: unset;
-	min-height: 68px;
-	list-style-type: none;
-	margin: 0px 0px 2px -16px;
-	width: 97%;
-	display: inline-block;
-    align-items: center;
-	border: none;
-	border-bottom: 4px dashed var(--color-border);
-}
 hr {
 	border: 2px dashed var(--color-border);
 	width: 200px;
@@ -238,13 +218,6 @@ label::after {
 }
 .chat-whole-box {
 	font-size: var(--font-small);
-}
-.chat-text
-{
-	width: 100%;
-	overflow: auto;
-	border: none;
-	height: calc(var(--inner-below-menu-height) - 9em);
 }
 .blinker {
 	animation: text-blinker 0.618s step-end infinite;

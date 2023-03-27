@@ -1,0 +1,27 @@
+.chat-text
+{
+	width: 100%;
+	overflow: auto;
+	border: none;
+	height: calc(var(--inner-below-menu-height) - 9em);
+}
+.chat-line {
+	white-space: normal;
+	min-width: unset;
+	min-height: 68px;
+	list-style-type: none;
+	margin: 0px 0px 2px -16px;
+	width: 97%;
+	display: inline-block;
+    align-items: center;
+	border: none;
+	border-bottom: 4px dashed var(--color-border);
+}
+.user-name-small {
+	font-size: var(--font-small);
+	min-width: max-content;
+	padding: 0px 0.5em;
+}
+.small {
+	font-size: var(--font-small);
+}
