@@ -9,7 +9,7 @@
 		</td>
 		<td>
 			<input id="name" [(ngModel)]="displayUser.name"
-			(focus)="fun.switchIf('nameButton', 'Change', 'Ok');"
+			(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
 			(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
 			(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
 			/>
