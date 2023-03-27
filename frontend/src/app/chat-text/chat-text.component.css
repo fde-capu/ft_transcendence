@@ -8,14 +8,11 @@
 .chat-line {
 	white-space: normal;
 	min-width: unset;
-	min-height: 68px;
 	list-style-type: none;
 	margin: 0px 0px 2px -16px;
-	width: 97%;
 	display: inline-block;
-    align-items: center;
-	border: none;
 	border-bottom: 4px dashed var(--color-border);
+	border: var(--dev1);
 }
 .user-name-small {
 	font-size: var(--font-small);
@@ -24,4 +21,9 @@
 }
 .small {
 	font-size: var(--font-small);
+}
+.avatar-float {
+	float: left;
+	margin-bottom: -1em;
+	margin-right: 8px;
 }
