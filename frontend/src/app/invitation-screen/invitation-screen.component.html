@@ -61,7 +61,7 @@
 <hr>
 <br>
 <button (click)='finalOk();'>Close</button>
-<button (click)='clickGo = true; finalOk();'>Go to Route</button>
+<button *ngIf='!alreadyInRoute()' (click)='clickGo = true; finalOk();'>Go to Route</button>
 </div>
 
 <div class="overall" *ngIf='myState && myState.invitation && myState.notificationScreen'>

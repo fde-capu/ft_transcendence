@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { User } from './user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelperFunctionsService {
 
-  constructor() { }
+  constructor(
+		private readonly router: Router,
+  ) { }
 
 	isStringInArray(str: string, array: string[] = []): boolean {
 		if (!array || !array.length) return false;
@@ -16,8 +19,20 @@ export class HelperFunctionsService {
 		return false;
 	}
 
+	removeStringFromArray(str: string, array: string[]): string[] {
+		let out = [];
+		for (const t of array)
+			if (t != str)
+				out.push(t);
+		return out;
+	}
+
+	refreshScreen() {
+		this.router.navigate([this.router.url]);
+	}
+
 	validateString(str:string): boolean {
-		return str.length >= 8 && str.length <= 42;
+		return str.length >= 4 && str.length <= 42;
 	}
 
 	switchIf(el: string, a: string, b: string) {

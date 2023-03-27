@@ -22,9 +22,15 @@ export interface registerResp {
 @Injectable()
 export class UserService {
   public static status: Map<string, string> = new Map<string, string>;
+  static attendance: Map<string, number> = new Map<string, number>;
+  static attOnce?: boolean;
+
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
-  ) {}
+  ) {
+	if (!UserService.attOnce)
+		this.checkOnStudents();
+  }
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
     let existUser = await this.userRepository.findOneBy({ intraId: codeFrom42.login });
@@ -55,6 +61,7 @@ export class UserService {
 		friends: user.friends,
 		blocks: user.blocks,
 		score: user.score,
+		mfa_enabled : user.mfa_enabled,
 		mfa_verified : user.mfa_verified,
 	}
     const resp = await this.userRepository.createQueryBuilder()
@@ -63,7 +70,6 @@ export class UserService {
     .where("intraId = :intraId", { intraId: intraId })
     .execute();
     if (resp.affected === 0){
-	  console.log("updateUser got exception.");
       throw new NotFoundException(); // SomethingWrongException() ..?
     }
     return resp;
@@ -182,5 +188,23 @@ export class UserService {
 			out.push(dto);
 		});
 		return out;
+	}
+
+  async checkOnStudents() {
+	UserService.attOnce = true;
+	await new Promise(resolve => setTimeout(resolve, 3391));
+	if (!UserService.attendance) return this.checkOnStudents();
+	for (const [u, d] of UserService.attendance.entries()) {
+		let elapsed = Date.now() - d;
+		if (elapsed > 5555) {
+			UserService.attendance.delete(u);
+			UserService.status.set(u, "OFFLINE");
+		}
+	}
+	this.checkOnStudents();
+  }
+
+	presence(intraId: string) {
+		UserService.attendance.set(intraId, Date.now());
 	}
 }
