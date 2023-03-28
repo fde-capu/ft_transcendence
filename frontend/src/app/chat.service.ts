@@ -10,12 +10,13 @@ import { User } from './user';
 import { ChatRoom } from './chat-room';
 import { USERS, CHATS, CHAT_ROOM } from './mocks';
 import { HelperFunctionsService } from './helper-functions.service';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-	private roomsUrl = 'http://localhost:3000/chatrooms/';
+	private roomsUrl = `${environment.backendOrigin}/chatrooms/`;
 	static user?: User;
 	static isConnected: boolean = false;
 	static allRooms: ChatRoom[] = [];

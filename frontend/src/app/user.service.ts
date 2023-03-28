@@ -11,6 +11,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Router } from '@angular/router';
 import { Statistics } from './statistics';
 import { HelperFunctionsService } from './helper-functions.service';
+import { environment } from '../environments/environment';
 
 // TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
 
@@ -21,16 +22,16 @@ export class UserService {
 	public static currentIntraId?: string;
 	public static currentUser?: User;
 	static isAuthorized: boolean = false;
-	private statsUrl = 'http://localhost:3000/user/stats/?of=';
-	private historyUrl = 'http://localhost:3000/user/history/?of=';
-	private friendsUrl = 'http://localhost:3000/user/friends/?with=';
-	private blocksUrl = 'http://localhost:3000/user/blocks/?them=';
-	private onlineUsersUrl = 'http://localhost:3000/user/online';
-	private availableUsersUrl = 'http://localhost:3000/user/available';
-	private userByLoginUrl = 'http://localhost:3000/user/userByLogin/?intraId=';
-	private updateUserUrl = 'http://localhost:3000/user/update/';
-	private updateUserStatus = 'http://localhost:3000/user/status/';
-	private attendanceUrl = 'http://localhost:3000/user/hi/';
+	private statsUrl = `${environment.backendOrigin}/user/stats/?of=`;
+	private historyUrl = `${environment.backendOrigin}/user/history/?of=`;
+	private friendsUrl = `${environment.backendOrigin}/user/friends/?with=`;
+	private blocksUrl = `${environment.backendOrigin}/user/blocks/?them=`;
+	private onlineUsersUrl = `${environment.backendOrigin}/user/online`;
+	private availableUsersUrl = `${environment.backendOrigin}/user/available`;
+	private userByLoginUrl = `${environment.backendOrigin}/user/userByLogin/?intraId=`;
+	private updateUserUrl = `${environment.backendOrigin}/user/update/`;
+	private updateUserStatus = `${environment.backendOrigin}/user/status/`;
+	private attendanceUrl = `${environment.backendOrigin}/user/hi/`;
 	private saveHttpOptions = 
 				{
 					withCredentials: true,
