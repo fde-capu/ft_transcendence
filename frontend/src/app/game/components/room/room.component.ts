@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from './../../../user';
 import { UserService } from 'src/app/user.service';
 import { Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';

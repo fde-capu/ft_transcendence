@@ -1,7 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Users, UserDTO, StatisticsDTO } from '../user/entity/user.entity';
 import { GameHistory } from './game-record';
 
 @Injectable()
@@ -18,8 +17,6 @@ export class GameService {
   }
 
   async getGameHistory(intraId: string): Promise<GameHistory[]> {
-    let out: GameHistory[] = [];
-
     if (!(await this.historyRepository.count()))
       // TODO:
       await this.mockGameHistory(); // Remove these lines.
@@ -30,14 +27,12 @@ export class GameService {
       .orWhere('userPlayed.idB = :idB', { idB: intraId })
       .getMany();
 
-    //console.log("getGameHistory got", resp);
     if (resp === null) return [];
     return resp;
   }
 
   // TODO: remove this mock when unused.
   async mockGameHistory() {
-    //console.log("GameHistory mocking entries");
     let mock = this.historyRepository.create({
       idA: 'fde-capu',
       idB: 'blabla',

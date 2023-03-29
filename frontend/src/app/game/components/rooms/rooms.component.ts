@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs';
 import { Room } from '../../entity/room.entity';
 import { GameSocket } from '../../socket/rooms.socket';
 

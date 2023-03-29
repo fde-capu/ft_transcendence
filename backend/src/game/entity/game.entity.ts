@@ -158,6 +158,12 @@ class Ball extends Rectangle {
   }
 
   public reset() {
+    this.team = undefined;
+    this.outside = false;
+
+    this.x = Game.w / 2 - Ball.s / 2;
+    this.y = Game.h / 2 - Ball.s / 2;
+
     const a000 = 0;
     const a030 = (Math.PI * 1) / 6;
 
@@ -186,8 +192,6 @@ class Ball extends Rectangle {
 
     this.sx = 300 * Math.cos(alpha);
     this.sy = 300 * Math.sin(alpha);
-
-    console.log(alpha * (180 / Math.PI));
   }
 }
 
@@ -198,6 +202,15 @@ abstract class Paddle extends Rectangle {
   public constructor(x = 0, y = 0, w = 0, h = 0) {
     super(x, y, w, h);
   }
+
+  public stopMovement(): void {
+    this.sx = 0;
+    this.sy = 0;
+  }
+
+  public abstract moveForward(): void;
+
+  public abstract moveBackward(): void;
 }
 
 abstract class VerticalPaddle extends Paddle {
@@ -218,6 +231,14 @@ abstract class VerticalPaddle extends Paddle {
     if (this.vy < -this.y) this.vy = -this.y;
     const d = Game.h - this.y - this.h;
     if (this.vy > d) this.vy = d;
+  }
+
+  public override moveForward(): void {
+    this.sy = 400;
+  }
+
+  public override moveBackward(): void {
+    this.sy = -400;
   }
 }
 
@@ -264,6 +285,14 @@ abstract class HorizontalPaddle extends Paddle {
     const d = Game.w - this.x - this.w;
     if (this.vx > d) this.vx = d;
   }
+
+  public override moveForward(): void {
+    this.sx = 400;
+  }
+
+  public override moveBackward(): void {
+    this.sx = -400;
+  }
 }
 
 class TopPaddle extends HorizontalPaddle {
@@ -297,31 +326,39 @@ export interface GameData {
   walls: Dictionary<Wall>;
 }
 
+interface CollisionData {
+  collision: Collision;
+  subject: Ball;
+  target: Rectangle;
+}
+
 export abstract class Game {
   static w = 500;
   static h = 500;
 
   protected context: CanvasRenderingContext2D;
 
-  protected elements: GameData = {
+  public elements: GameData = {
     teams: {},
     balls: {},
     paddles: {},
     walls: {},
   };
 
+  public playerPaddle: Dictionary<string>;
+
   constructor(canvas: HTMLCanvasElement) {
-    canvas.width = Game.w;
+    /*canvas.width = Game.w;
     canvas.height = Game.h;
 
     this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
     if (!this.context) throw new Error('Canvas is not supported!');
 
-    this.context.fillStyle = 'white';
+    this.context.fillStyle = 'white';*/
   }
 
   update(t = 1) {
-    const balls = Object.values(this.elements.balls);
+    const balls = Object.values(this.elements.balls).filter((b) => !b.outside);
     const paddles = Object.values(this.elements.paddles);
     const walls = Object.values(this.elements.walls);
 
@@ -330,7 +367,7 @@ export abstract class Game {
 
     const collisionables: Array<Rectangle> = [...paddles, ...walls];
 
-    let data;
+    let data: CollisionData;
 
     while (
       (data = this.nextCollision(
@@ -339,6 +376,8 @@ export abstract class Game {
       ))
     ) {
       const { collision, subject, target } = data;
+
+      // if (target instanceof Paddle)
 
       subject.sx += target.vx / 2;
       subject.sy += target.vy / 2;
@@ -377,11 +416,17 @@ export abstract class Game {
           this.elements.teams[b.team]++;
           b.team = undefined;
         }
+        setTimeout(() => {
+          b?.reset();
+        }, 2000);
       }
     });
   }
 
-  private nextCollision(subjects: Array<Ball>, targets: Array<Rectangle>) {
+  private nextCollision(
+    subjects: Array<Ball>,
+    targets: Array<Rectangle>,
+  ): CollisionData | undefined {
     let data:
       | { collision: Collision; subject: Ball; target: Rectangle }
       | undefined;
@@ -400,11 +445,11 @@ export abstract class Game {
   }
 
   private draw(r: Rectangle) {
-    this.context.fillRect(r.x, r.y, r.w, r.h);
+    //this.context.fillRect(r.x, r.y, r.w, r.h);
   }
 
   private clear() {
-    this.context.clearRect(0, 0, Game.w, Game.h);
+    //this.context.clearRect(0, 0, Game.w, Game.h);
   }
 
   public from(gameData: DeepPartial<GameData>) {
@@ -431,6 +476,18 @@ export abstract class Game {
 
   private isObject(item: any) {
     return item && typeof item === 'object' && !Array.isArray(item);
+  }
+
+  public moveForward(player: string): void {
+    this.elements.paddles[this.playerPaddle[player]]?.moveForward();
+  }
+
+  public moveBackward(player: string): void {
+    this.elements.paddles[this.playerPaddle[player]]?.moveBackward();
+  }
+
+  public stopMovement(player: string): void {
+    this.elements.paddles[this.playerPaddle[player]]?.stopMovement();
   }
 
   public abstract reset(): void;

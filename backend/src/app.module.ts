@@ -39,11 +39,7 @@ import { ChatGateway } from './chat/chat.gateway';
     GameModule,
   ],
   controllers: [PingController, ChatController],
-  providers: [
-	InvitationGateway,
-	ChatGateway,
-	ChatService
-  ],
+  providers: [InvitationGateway, ChatGateway, ChatService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

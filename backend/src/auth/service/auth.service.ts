@@ -14,7 +14,7 @@ import { encode } from 'querystring';
 import { JWTPayload } from 'jose';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/service/user.service';
-import { UserFortyTwoApi, Versions } from 'src/forty-two/service/user';
+import { UserFortyTwoApi } from 'src/forty-two/service/user';
 
 @Injectable()
 export class AuthService {
@@ -77,7 +77,6 @@ export class AuthService {
           }),
         ),
         catchError((error: ErrorFortyTwoApi) => {
-          //console.log("createSessionToken got error:", error);
           throw new UnauthorizedException();
         }),
       ),

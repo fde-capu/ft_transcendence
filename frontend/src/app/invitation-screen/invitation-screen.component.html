@@ -1,73 +1,88 @@
-<div class="overall" *ngIf='myState && myState.invitation && myState.receiveScreen'>
-	<h2>New Invitation</h2>
-	<hr>
-	{{ myState.invitation.from }}
-	<hr>
-	<b>invites you to</b>
-	<hr>
-	{{ myState.invitation.type }}
-	<hr>
-	<br>
-	<button (click)='accept()'>
-		<span *ngIf='myState.invitation.buttonOk'> {{ myState.invitation.buttonOk }} </span>
-		<span *ngIf='!myState.invitation.buttonOk'>Accept</span>
-	</button>
-	<button (click)='decline()'>
-		<span *ngIf='myState.invitation.buttonCancel'> {{ myState.invitation.buttonCancel }}</span>
-		<span *ngIf='!myState.invitation.buttonCancel'>Decline</span>
-	</button>
+<div
+  class="overall"
+  *ngIf="myState && myState.invitation && myState.receiveScreen">
+  <h2>New Invitation</h2>
+  <hr />
+  {{ myState.invitation.from }}
+  <hr />
+  <b>invites you to</b>
+  <hr />
+  {{ myState.invitation.type }}
+  <hr />
+  <br />
+  <button (click)="accept()">
+    <span *ngIf="myState.invitation.buttonOk">
+      {{ myState.invitation.buttonOk }}
+    </span>
+    <span *ngIf="!myState.invitation.buttonOk">Accept</span>
+  </button>
+  <button (click)="decline()">
+    <span *ngIf="myState.invitation.buttonCancel">
+      {{ myState.invitation.buttonCancel }}</span
+    >
+    <span *ngIf="!myState.invitation.buttonCancel">Decline</span>
+  </button>
 </div>
 
-<div class="overall" *ngIf='myState && myState.sentScreen && myState.invitation'>
-<h2>Invitation sent</h2>
-<hr>
-	<b>To</b>: {{ myState.invitation.to }}
-	<hr>
-	<b>Room name</b>:
-	<br>{{ myState.invitation.type }}
-	<br>
-	<hr>
-	<br>
-<button (click)='finalOk();'>Ok</button>
+<div
+  class="overall"
+  *ngIf="myState && myState.sentScreen && myState.invitation">
+  <h2>Invitation sent</h2>
+  <hr />
+  <b>To</b>: {{ myState.invitation.to }}
+  <hr />
+  <b>Room name</b>: <br />{{ myState.invitation.type }}
+  <br />
+  <hr />
+  <br />
+  <button (click)="finalOk()">Ok</button>
 </div>
 
-<div class="overall" *ngIf='myState && myState.invitation && myState.declineScreen'>
-<b>From</b>:<br>
-{{ myState.invitation.to }}<br><br>
-<b>Invitation to</b>:<br>
-{{ myState.invitation.type }}<br>
-<br>
-<hr>
-<br>
-<b>DECLINED</b>
-<br>
-<br>
-<hr>
-<br>
-<button (click)='finalOk();'>Ok</button>
+<div
+  class="overall"
+  *ngIf="myState && myState.invitation && myState.declineScreen">
+  <b>From</b>:<br />
+  {{ myState.invitation.to }}<br /><br />
+  <b>Invitation to</b>:<br />
+  {{ myState.invitation.type }}<br />
+  <br />
+  <hr />
+  <br />
+  <b>DECLINED</b>
+  <br />
+  <br />
+  <hr />
+  <br />
+  <button (click)="finalOk()">Ok</button>
 </div>
 
-<div class="overall" *ngIf='myState && myState.invitation && myState.acceptScreen'>
-<b>From</b>:<br>
-{{ myState.invitation.to }}<br><br>
-<b>Invitation to</b>:<br>
-{{ myState.invitation.type }}<br>
-<br>
-<hr>
-<br>
-<b>ACCEPTED</b>
-<br>
-<br>
-<hr>
-<br>
-<button (click)='finalOk();'>Close</button>
-<button (click)='clickGo = true; finalOk();'>Go to Route</button>
+<div
+  class="overall"
+  *ngIf="myState && myState.invitation && myState.acceptScreen">
+  <b>From</b>:<br />
+  {{ myState.invitation.to }}<br /><br />
+  <b>Invitation to</b>:<br />
+  {{ myState.invitation.type }}<br />
+  <br />
+  <hr />
+  <br />
+  <b>ACCEPTED</b>
+  <br />
+  <br />
+  <hr />
+  <br />
+  <button (click)="finalOk()">Close</button>
+  <button (click)="clickGo = true; finalOk()">Go to Route</button>
 </div>
 
-<div class="overall" *ngIf='myState && myState.invitation && myState.notificationScreen'>
-<span class='blinker'>{{ myState.invitation.note }}</span>
-<hr>
-<span *ngIf='myState.invitation.type'>{{ myState.invitation.type }}</span>
-<hr *ngIf='myState.invitation.type'>
-<button (click)='clickGo = true; finalOk();'>{{ myState.invitation.button }}</button>
+<div
+  class="overall"
+  *ngIf="myState && myState.invitation && myState.notificationScreen">
+  <span class="blinker">{{ myState.invitation.note }}</span>
+  <hr />
+  <span *ngIf="myState.invitation.type">{{ myState.invitation.type }}</span>
+  <hr *ngIf="myState.invitation.type" />
+  <button (click)="clickGo = true; finalOk()">
+    {{ myState.invitation.button }}
+  </button>
 </div>

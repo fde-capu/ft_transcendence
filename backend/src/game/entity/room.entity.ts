@@ -2,6 +2,7 @@ import { hideCircular } from '../helper/hide-server.replacer';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { RoomsService } from '../service/rooms.service';
+import { Game, Pong, PongDouble, Quadrapong } from './game.entity';
 
 export type ClientSocket = Socket & { subject: string; name: string };
 
@@ -57,6 +58,12 @@ export class Room {
   public running = false;
 
   public mode: GameMode = GameMode.PONG;
+
+  public game?: Game;
+
+  public gameInterval?: NodeJS.Timer;
+
+  public lastUpdate?: number;
 
   public constructor(
     public readonly id: string,
@@ -186,7 +193,7 @@ export class Room {
   }
 
   public sendStatus(client: Socket): void {
-    this.server.emit('game:room:status', hideCircular(this));
+    client.emit('game:room:status', hideCircular(this));
   }
 
   public ready(user: User): void {
@@ -195,27 +202,83 @@ export class Room {
       .forEach((p) => (p.ready = !p.ready));
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
+    if (
+      this.getPlayers().reduce((s, p) => p.ready && s, true) &&
+      this.teams.reduce((s, t) => t.isFull() && s, true)
+    ) {
+      this.start();
+    }
   }
 
   public start(): void {
+    switch (this.mode) {
+      case GameMode.PONG:
+        this.game = new Pong({} as HTMLCanvasElement);
+        break;
+      case GameMode.PONGDOUBLE:
+        this.game = new PongDouble({} as HTMLCanvasElement);
+        break;
+      case GameMode.QUADRAPONG:
+        this.game = new Quadrapong({} as HTMLCanvasElement);
+        break;
+    }
+    this.game.reset();
+
+    setTimeout(() => {
+      this.resume();
+    }, 1000);
+
     this.inGame = true;
-    this.running = true;
-    // TODO
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
   }
 
   private pause(): void {
+    clearInterval(this.gameInterval);
+    this.gameInterval = undefined;
+    this.lastUpdate = undefined;
+
     this.running = false;
-    // TODO
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
   }
 
   private resume(): void {
+    this.lastUpdate = Date.now();
+    this.gameInterval = setInterval(() => {
+      const currentTimestamp = Date.now();
+      this.game?.update((currentTimestamp - this.lastUpdate) / 1000);
+      this.lastUpdate = currentTimestamp;
+      this.server.emit('game:status', this.game?.elements);
+    }, 1000 / 25);
+
     this.running = true;
-    // TODO
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
   }
 
   private finish(): void {
+    this.pause();
+
+    // TODO save the score
+
     this.inGame = false;
-    this.running = false;
-    // TODO
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+  }
+
+  public moveForward(user: User): void {
+    this.game?.moveForward(user.id);
+  }
+
+  public moveBackward(user: User): void {
+    this.game?.moveBackward(user.id);
+  }
+
+  public stopMovement(user: User): void {
+    this.game?.stopMovement(user.id);
   }
 }

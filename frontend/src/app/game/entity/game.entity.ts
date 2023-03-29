@@ -303,7 +303,7 @@ export abstract class Game {
 
   protected context: CanvasRenderingContext2D;
 
-  protected elements: GameData = {
+  public elements: GameData = {
     teams: {},
     balls: {},
     paddles: {},

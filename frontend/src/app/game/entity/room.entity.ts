@@ -16,6 +16,7 @@ export interface Team {
   players: Array<Player>;
   id: string;
   capacity: number;
+  score: number;
 }
 
 export interface Room {

@@ -12,7 +12,12 @@
       <fieldset>
         <legend>Options</legend>
         <label *ngIf="userId === room.host.id" for="mode">Mode</label>
-        <select *ngIf="userId === room.host.id" #gamemode (change)="seMode(gamemode.value)" name="mode" id="mode">
+        <select
+          *ngIf="userId === room.host.id"
+          #gamemode
+          (change)="seMode(gamemode.value)"
+          name="mode"
+          id="mode">
           <option value="0">PONG</option>
           <option value="1">PONGDOUBLE</option>
           <option value="2">QUADRAPONG</option>
@@ -30,13 +35,17 @@
         <li *ngFor="let team of room.teams">
           <article class="team center">
             <header>
-              <h3>{{ team.id }} ({{ team.players.length }}/{{ team.capacity }})</h3>
+              <h3>
+                {{ team.id }} ({{ team.players.length }}/{{ team.capacity }})
+              </h3>
             </header>
             <ul>
               <li *ngFor="let player of team.players">
                 <span>{{ player.name }}</span>
                 <span class="flag" *ngIf="player.ready">READY</span>
-                <span class="flag" *ngIf="room.host.id === player.id">HOST</span>
+                <span class="flag" *ngIf="room.host.id === player.id"
+                  >HOST</span
+                >
                 <span class="flag" *ngIf="userId === player.id">YOU</span>
               </li>
             </ul>
@@ -55,5 +64,8 @@
         </li>
       </ul>
     </article>
+  </section>
+  <section *ngIf="!!room && room.inGame">
+    <app-game [roomSocket]="roomSocket"></app-game>
   </section>
 </main>

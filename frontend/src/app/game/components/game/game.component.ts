@@ -3,9 +3,12 @@ import {
   Component,
   ElementRef,
   HostListener,
+  Input,
   ViewChild,
 } from '@angular/core';
-import { PongDouble } from '../../entity/game.entity';
+import { Game, GameData, Pong } from '../../entity/game.entity';
+import { GameMode, Room } from '../../entity/room.entity';
+import { RoomSocket } from '../../socket/room.socket';
 
 @Component({
   selector: 'app-game',
@@ -16,35 +19,45 @@ export class GameComponent implements AfterViewInit {
   @ViewChild('stage')
   canvas!: ElementRef<HTMLCanvasElement>;
 
+  @Input() roomSocket!: RoomSocket;
+
+  mode!: GameMode;
+
+  game!: Game;
+
   running = false;
 
-  value = 0;
-
   ngAfterViewInit(): void {
-    const game = new PongDouble(this.canvas.nativeElement);
-    game.reset();
+    let gd: GameData | undefined;
+    this.roomSocket
+      .fromEvent<GameData>('game:status')
+      .subscribe({ next: msg => (gd = msg) });
+    this.game = new Pong(this.canvas.nativeElement);
+    this.game.reset();
+
     const frameRate = 1000 / 60;
     let lastUpdate = Date.now();
-    function render() {
+    const render = () => {
+      if (gd) this.game.from(gd);
+      gd = undefined;
       const currentTimestamp = Date.now();
-      game.update((currentTimestamp - lastUpdate) / 1000);
+      this.game.update((currentTimestamp - lastUpdate) / 1000);
       lastUpdate = currentTimestamp;
       setTimeout(() => {
         window.requestAnimationFrame(render);
       }, frameRate);
-    }
+    };
     window.requestAnimationFrame(render);
+    this.running = true;
   }
 
   @HostListener('window:keyup', ['$event'])
   increment(event: KeyboardEvent): void {
     console.dir(event);
-    this.value++;
   }
 
   @HostListener('document:visibilitychange', ['$event'])
   tanana(event: Event): void {
     console.log(document.hidden);
-    this.value++;
   }
 }

@@ -3,124 +3,176 @@
 <div *ngIf="!done && !this.chatRoom.id">Please hold on...</div>
 <div *ngIf="done && !this.chatRoom.id">Unexistent room!</div>
 <div *ngIf="done && this.chatRoom.id" class="window-full">
-<app-window-title
-	[windowName]="windowName"
-	[windowExtras]="windowExtras"
-	(click)="onMenu()"
-></app-window-title>
-	<div class="window-close" (click)="onClose()"></div>
-	<div class="window-menu-burger" (click)="onMenu()"></div>
-<div class="window-options" *ngIf="optionsOn">
-	<table class="options" *ngIf="iAmAdmin">
-		<tr>
-			<td>
-				<label>Room Name</label>
-			</td><td>
-				<input id="name" [(ngModel)]="chatRoom.name"
-				(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastRoomName();"
-				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change');"
-				(keydown.enter)="fun.blur('name'); fun.blink('nameButton'); validateAndEmit();"
-				(change)="validateAndEmit();"
-				/>
-			</td><td>
-				<button *ngIf='!invalidNameNotice' id="nameButton" type="button" (click)=
-					"fun.focusIf('nameButton', 'Change', 'name');"
-					>Change</button>
-			<span *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;</span>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label>Privacy</label>
-			</td><td>
-				<span>
-					<div *ngIf="chatRoom.isPrivate">
-						<span class="inverted">[>ON<]</span> <a (click)="switchPrivacy();">[ OFF ]</a>
-					</div>
-					<div *ngIf="!chatRoom.isPrivate">
-						<a (click)="switchPrivacy();">[ ON ]</a> <span class="inverted">[>OFF<]</span>
-					</div>
-				</span>
-			</td><td>
-				<button type="button" (click)="switchPrivacy();">Change</button>
-			</td>
-		</tr>
-		<tr *ngIf='!chatRoom.isPrivate'>
-			<td>
-				<label>Password</label>
-			</td><td>
-				<input id="password" [(ngModel)]="chatRoom.password"
-				(focus)="fun.switchIf('passwordButton', 'Change', 'Ok');"
-				(focusout)="fun.switchIf('passwordButton', 'Ok', 'Change');"
-				(keydown.enter)="fun.blur('password'); fun.blink('passwordButton'); validateAndEmit();"
-				(change)="validateAndEmit();"
-				/>
-			</td><td style="min-width:175px;">
-				<button *ngIf='!invalidPasswordNotice' id="passwordButton" type="button" (click)=
-					"fun.focusIf('passwordButton', 'Change', 'password');"
-					>Change</button>
-				<button type="button" (click)="cleanPassword();">Clean</button>
-			<span *ngIf='invalidPasswordNotice' id='invalidPasswordNotice'><- <b>Invalid</b>&nbsp;</span>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<button (click)="onMenu()">Ok</button>
-			</td>
-		</tr>
-	</table>
+  <app-window-title
+    [windowName]="windowName"
+    [windowExtras]="windowExtras"
+    (click)="onMenu()"></app-window-title>
+  <div class="window-close" (click)="onClose()"></div>
+  <div class="window-menu-burger" (click)="onMenu()"></div>
+  <div class="window-options" *ngIf="optionsOn">
+    <table class="options" *ngIf="iAmAdmin">
+      <tr>
+        <td>
+          <label>Room Name</label>
+        </td>
+        <td>
+          <input
+            id="name"
+            [(ngModel)]="chatRoom.name"
+            (focus)="
+              fun.switchIf('nameButton', 'Change', 'Ok'); saveLastRoomName()
+            "
+            (focusout)="fun.switchIf('nameButton', 'Ok', 'Change')"
+            (keydown.enter)="
+              fun.blur('name'); fun.blink('nameButton'); validateAndEmit()
+            "
+            (change)="validateAndEmit()" />
+        </td>
+        <td>
+          <button
+            *ngIf="!invalidNameNotice"
+            id="nameButton"
+            type="button"
+            (click)="fun.focusIf('nameButton', 'Change', 'name')">
+            Change
+          </button>
+          <span *ngIf="invalidNameNotice" id="invalidNameNotice"
+            ><- <b>Invalid</b>&nbsp;</span
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>Privacy</label>
+        </td>
+        <td>
+          <span>
+            <div *ngIf="chatRoom.isPrivate">
+              <span class="inverted">[>ON<]</span>
+              <a (click)="switchPrivacy()">[ OFF ]</a>
+            </div>
+            <div *ngIf="!chatRoom.isPrivate">
+              <a (click)="switchPrivacy()">[ ON ]</a>
+              <span class="inverted">[>OFF<]</span>
+            </div>
+          </span>
+        </td>
+        <td>
+          <button type="button" (click)="switchPrivacy()">Change</button>
+        </td>
+      </tr>
+      <tr *ngIf="!chatRoom.isPrivate">
+        <td>
+          <label>Password</label>
+        </td>
+        <td>
+          <input
+            id="password"
+            [(ngModel)]="chatRoom.password"
+            (focus)="fun.switchIf('passwordButton', 'Change', 'Ok')"
+            (focusout)="fun.switchIf('passwordButton', 'Ok', 'Change')"
+            (keydown.enter)="
+              fun.blur('password');
+              fun.blink('passwordButton');
+              validateAndEmit()
+            "
+            (change)="validateAndEmit()" />
+        </td>
+        <td style="min-width: 175px">
+          <button
+            *ngIf="!invalidPasswordNotice"
+            id="passwordButton"
+            type="button"
+            (click)="fun.focusIf('passwordButton', 'Change', 'password')">
+            Change
+          </button>
+          <button type="button" (click)="cleanPassword()">Clean</button>
+          <span *ngIf="invalidPasswordNotice" id="invalidPasswordNotice"
+            ><- <b>Invalid</b>&nbsp;</span
+          >
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <button (click)="onMenu()">Ok</button>
+        </td>
+      </tr>
+    </table>
 
-	<hr>
+    <hr />
 
-	<h3>
-		In-Chat
-	</h3>
-	<table class="list-of-users">
-		<tr *ngFor="let user of usersInChat" [ngClass]="{'yourself':isMe(user.intraId)}">
-		<td *ngIf='!isMe(user.intraId)'>&nbsp;</td> <!-- Interesting, element yourself::before takes a place in the first column. -->
-		<td>
-			<a routerLink="/profile/{{user.intraId}}">
-				{{ user.intraId }} | {{ user.name }}
-			</a>
-		</td>
-		<td>
-			<span *ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId);">
-				<button style='margin-left:0;' (click)='kickThem(user)'>Kick</button>
-				<button *ngIf="!isBlocked(user)" (click)='tigThem(user)'>Tig</button>
-				<button *ngIf="isBlocked(user)" disabled>BLOCKED</button>
-				<button *ngIf='!isMuted(user)' (click)='muteThem(user)'>Mute</button>
-				<button *ngIf='isMuted(user)' disabled>MUTED</button>
-				<button (click)='promoteThem(user)'>Promote</button>
-			</span>
-			<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
-			<button *ngIf='iAmAdmin && isMe(user.intraId)' type="button" (click)="revokeAdmin()" style='margin-left:0;'>Revoke</button>
-			<span *ngIf='!iAmAdmin && isMuted(user)'><- Muted&nbsp;</span>
-			<span *ngIf='!iAmAdmin && isBlocked(user)'><- Blocked&nbsp;</span>
-		</td>
-		</tr>
-	</table>
+    <h3>In-Chat</h3>
+    <table class="list-of-users">
+      <tr
+        *ngFor="let user of usersInChat"
+        [ngClass]="{ yourself: isMe(user.intraId) }">
+        <td *ngIf="!isMe(user.intraId)">&nbsp;</td>
+        <!-- Interesting, element yourself::before takes a place in the first column. -->
+        <td>
+          <a routerLink="/profile/{{ user.intraId }}">
+            {{ user.intraId }} | {{ user.name }}
+          </a>
+        </td>
+        <td>
+          <span
+            *ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId)">
+            <button style="margin-left: 0" (click)="kickThem(user)">
+              Kick
+            </button>
+            <button *ngIf="!isBlocked(user)" (click)="tigThem(user)">
+              Tig
+            </button>
+            <button *ngIf="isBlocked(user)" disabled>BLOCKED</button>
+            <button *ngIf="!isMuted(user)" (click)="muteThem(user)">
+              Mute
+            </button>
+            <button *ngIf="isMuted(user)" disabled>MUTED</button>
+            <button (click)="promoteThem(user)">Promote</button>
+          </span>
+          <span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
+          <button
+            *ngIf="iAmAdmin && isMe(user.intraId)"
+            type="button"
+            (click)="revokeAdmin()"
+            style="margin-left: 0">
+            Revoke
+          </button>
+          <span *ngIf="!iAmAdmin && isMuted(user)"><- Muted&nbsp;</span>
+          <span *ngIf="!iAmAdmin && isBlocked(user)"><- Blocked&nbsp;</span>
+        </td>
+      </tr>
+    </table>
 
-	<h3 *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)">
-		Users not in Chat
-	</h3>
-	<table *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)" class="list-of-users">
-		<tr *ngFor="let user of usersOutOfChat" [ngClass]="{'yourself':isMe(user.intraId)}">
-		<td *ngIf='!isMe(user.intraId)'>&nbsp;</td> <!-- Interesting, element yourself::before takes a place in the first column. -->
-		<td>
-			<a routerLink="/profile/{{user.intraId}}">
-				{{ user.intraId }} | {{ user.name }}
-			</a>
-		</td>
-		<td>
-			<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
-			<button *ngIf='!isBlocked(user) && !isMe(user.intraId)' style="margin-left:0;" (click)='doInvitationToThisRoom(user)'>Invite</button>
-			<span *ngIf='isMuted(user)'><- Muted&nbsp;</span>
-			<span *ngIf='isBlocked(user)'><- Blocked&nbsp;</span>
-		</td>
-		</tr>
-	</table>
-
-</div>
-<app-chat-text [room]='chatRoom'></app-chat-text>
-<app-chat-input [room]='chatRoom'></app-chat-input>
+    <h3 *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)">
+      Users not in Chat
+    </h3>
+    <table
+      *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)"
+      class="list-of-users">
+      <tr
+        *ngFor="let user of usersOutOfChat"
+        [ngClass]="{ yourself: isMe(user.intraId) }">
+        <td *ngIf="!isMe(user.intraId)">&nbsp;</td>
+        <!-- Interesting, element yourself::before takes a place in the first column. -->
+        <td>
+          <a routerLink="/profile/{{ user.intraId }}">
+            {{ user.intraId }} | {{ user.name }}
+          </a>
+        </td>
+        <td>
+          <span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
+          <button
+            *ngIf="!isBlocked(user) && !isMe(user.intraId)"
+            style="margin-left: 0"
+            (click)="doInvitationToThisRoom(user)">
+            Invite
+          </button>
+          <span *ngIf="isMuted(user)"><- Muted&nbsp;</span>
+          <span *ngIf="isBlocked(user)"><- Blocked&nbsp;</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <app-chat-text [room]="chatRoom"></app-chat-text>
+  <app-chat-input [room]="chatRoom"></app-chat-input>
 </div>

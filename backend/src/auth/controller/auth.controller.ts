@@ -56,7 +56,7 @@ export class AuthController {
   }
 
   @Get('logout')
-  public logout(@Res() res: Response= null) {
+  public logout(@Res() res: Response = null) {
     res
       .clearCookie('authorization')
       .json({ message: 'Did you have a good trip?' });
