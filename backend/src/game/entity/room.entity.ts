@@ -222,10 +222,10 @@ export class Room {
       case GameMode.PONGDOUBLE:
         this.game = new PongDouble();
         this.game.playerPaddle = {
-          [this.teams[0].players[0].id]: 'left',
-          [this.teams[0].players[1].id]: 'left',
-          [this.teams[1].players[0].id]: 'right',
-          [this.teams[1].players[1].id]: 'right',
+          [this.teams[0].players[0].id]: 'left1',
+          [this.teams[0].players[1].id]: 'left2',
+          [this.teams[1].players[0].id]: 'right1',
+          [this.teams[1].players[1].id]: 'right2',
         };
         break;
       case GameMode.QUADRAPONG:
@@ -277,6 +277,7 @@ export class Room {
 
   private finish(): void {
     this.pause();
+    this.teams.forEach((t) => t.players.forEach((p) => (p.ready = false)));
 
     // TODO save the score
 

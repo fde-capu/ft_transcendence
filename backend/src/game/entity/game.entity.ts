@@ -484,11 +484,11 @@ export abstract class Game {
 export class Pong extends Game {
   public override reset(): void {
     this.elements = {
-      teams: { left: 0, right: 0 },
+      teams: { LEFT: 0, RIGHT: 0 },
       balls: { a: new Ball() },
       paddles: {
-        left: new LeftPaddle('left', 1 * VerticalPaddle.w),
-        right: new RightPaddle('right', Game.w - 2 * VerticalPaddle.w),
+        left: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
+        right: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
       },
       walls: {
         top: new Wall(-5, -5, Game.w + 10, 5),
@@ -502,13 +502,13 @@ export class Pong extends Game {
 export class PongDouble extends Game {
   public override reset(): void {
     this.elements = {
-      teams: { left: 0, right: 0 },
+      teams: { LEFT: 0, RIGHT: 0 },
       balls: { a: new Ball() },
       paddles: {
-        left1: new LeftPaddle('left', 1 * VerticalPaddle.w),
-        left2: new LeftPaddle('left', 3 * VerticalPaddle.w),
-        right1: new RightPaddle('right', Game.w - 4 * VerticalPaddle.w),
-        right2: new RightPaddle('right', Game.w - 2 * VerticalPaddle.w),
+        left1: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
+        left2: new LeftPaddle('LEFT', 3 * VerticalPaddle.w),
+        right1: new RightPaddle('RIGHT', Game.w - 4 * VerticalPaddle.w),
+        right2: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
       },
       walls: {
         top: new Wall(-5, -5, Game.w + 10, 5),
@@ -523,17 +523,17 @@ export class Quadrapong extends Game {
   public override reset(): void {
     this.elements = {
       teams: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+        LEFT: 0,
+        RIGHT: 0,
+        TOP: 0,
+        BOTTOM: 0,
       },
       balls: { a: new Ball() },
       paddles: {
-        left: new LeftPaddle('left', 1 * VerticalPaddle.w),
-        right: new RightPaddle('right', Game.w - 2 * VerticalPaddle.w),
-        top: new TopPaddle('top', HorizontalPaddle.h),
-        bottom: new BottomPaddle('bottom', Game.h - 2 * HorizontalPaddle.h),
+        left: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
+        right: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
+        top: new TopPaddle('TOP', HorizontalPaddle.h),
+        bottom: new BottomPaddle('BOTTOM', Game.h - 2 * HorizontalPaddle.h),
       },
       walls: {
         left: new Wall(-5, -5, 5, Game.h + 10),

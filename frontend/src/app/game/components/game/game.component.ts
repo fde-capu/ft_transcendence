@@ -6,7 +6,8 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { Game, GameData, Pong } from '../../entity/game.entity';
+import { distinct, map, tap } from 'rxjs';
+import { Game, GameData, Pong, Dictionary } from '../../entity/game.entity';
 import { GameMode, Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
 
@@ -21,19 +22,29 @@ export class GameComponent implements AfterViewInit {
 
   @Input() roomSocket!: RoomSocket;
 
-  mode!: GameMode;
+  @Input() room!: Room;
 
   game!: Game;
 
-  running = false;
+  score: Dictionary<number> = {};
 
   ngAfterViewInit(): void {
+    this.game = new Pong(this.canvas.nativeElement);
+    this.game.reset();
+
     let gd: GameData | undefined;
     this.roomSocket
       .fromEvent<GameData>('game:status')
       .subscribe({ next: msg => (gd = msg) });
-    this.game = new Pong(this.canvas.nativeElement);
-    this.game.reset();
+
+    this.roomSocket
+      .fromEvent<GameData>('game:status')
+      .pipe(
+        map(gd => gd.teams),
+        distinct(),
+        tap(s => console.log(s))
+      )
+      .subscribe({ next: s => (this.score = s) });
 
     const frameRate = 1000 / 60;
     let lastUpdate = Date.now();
@@ -48,7 +59,6 @@ export class GameComponent implements AfterViewInit {
       }, frameRate);
     };
     window.requestAnimationFrame(render);
-    this.running = true;
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -66,6 +76,17 @@ export class GameComponent implements AfterViewInit {
       case 'ArrowRight':
         this.roomSocket.emit('game:player:move:forward');
         break;
+      case 'KeyW':
+        this.roomSocket.emit('game:player:move:backward');
+        break;
+      case 'KeyA':
+        this.roomSocket.emit('game:player:move:backward');
+        break;
+      case 'KeyS':
+        this.roomSocket.emit('game:player:move:forward');
+        break;
+      case 'KeyD':
+        this.roomSocket.emit('game:player:move:forward');
     }
   }
 
@@ -74,8 +95,7 @@ export class GameComponent implements AfterViewInit {
     this.roomSocket.emit('game:player:move:stop');
   }
 
-  @HostListener('document:visibilitychange', ['$event'])
-  tanana(event: Event): void {
-    console.log(document.hidden);
+  getTeamScore(teamId: string): number {
+    return this.score[teamId] || 0;
   }
 }

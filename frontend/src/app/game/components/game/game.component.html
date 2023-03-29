@@ -1,12 +1,12 @@
 <div id="container" class="center">
   <div id="content" class="center">
     <ul id="teams" class="center">
-      <li class="team center">
-        <span>left</span>
+      <li *ngFor="let team of room.teams" class="team center">
+        <span>{{ team.id }}</span>
         <ul class="players">
-          <li>msales-a</li>
+          <li *ngFor="let player of team.players">{{ player.name }}</li>
         </ul>
-        <span>0</span>
+        <span>{{ getTeamScore(team.id) }}</span>
       </li>
     </ul>
     <canvas #stage id="stage">Canvas is not supported!</canvas>
