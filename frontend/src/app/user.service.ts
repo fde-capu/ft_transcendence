@@ -13,8 +13,6 @@ import { Statistics } from './statistics';
 import { HelperFunctionsService } from './helper-functions.service';
 import { environment } from '../environments/environment';
 
-// TODO: Check if its all unmocked. If so, remove `import { USERS } ...` abome.
-
 @Injectable({
   providedIn: 'root'
 })
@@ -139,6 +137,9 @@ export class UserService {
 			.pipe
 			(
 				map(_=>{
+					if (u_user.intraId == UserService.currentIntraId)
+						this.getLoggedUser()
+							.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
 					//console.log("saveUser will call component refresh.");
 					this.router.navigate([this.router.url])
 				}),
@@ -180,6 +181,26 @@ export class UserService {
 		if (!this.isFriend(user_b))
 			UserService.currentUser.friends.push(user_b.intraId);
 		return this.saveUser(UserService.currentUser);
+	}
+
+	async mutualFriends(a: string|undefined, b: string|undefined): Promise<void> {
+		if (!a || !b) return;
+		this.getUser(a).subscribe(u_a=>{
+			this.getUser(b).subscribe(u_b=>{
+				if (!u_a) return;
+				if (!u_a.friends) u_a.friends = [];
+				if (!this.fun.isStringInArray(b, u_a.friends)) {
+					u_a.friends.push(b);
+					this.saveUser(u_a).subscribe();
+				}
+				if (!u_b) return;
+				if (!u_b.friends) u_b.friends = [];
+				if (!this.fun.isStringInArray(a, u_b.friends)) {
+					u_b.friends.push(a);
+					this.saveUser(u_b).subscribe();
+				}
+			});
+		});
 	}
 
 	unFriend(user_b: User|undefined): Observable<any> {

@@ -18,7 +18,6 @@ export class InvitationScreenComponent {
 	clickGo?: boolean;
 
 	constructor (
-		private readonly chatService: ChatService,
 		private readonly invitationService: InvitationService,
 		private readonly fun: HelperFunctionsService,
 		private readonly router: Router,
@@ -33,12 +32,14 @@ export class InvitationScreenComponent {
 			if (_) {
 				//console.log("Invitation subscription.", _);
 				if (_.receiveScreen
+				||	_.friendScreen
 				||	_.declineScreen
 				||	_.acceptScreen
 				||	_.sentScreen
 				||	_.notificationScreen
 				)	InvitationScreenComponent.state.push({
 						receiveScreen : _.receiveScreen,
+						friendScreen : _.friendScreen,
 						declineScreen : _.declineScreen,
 						acceptScreen : _.acceptScreen,
 						sentScreen : _.sentScreen,
@@ -76,6 +77,8 @@ export class InvitationScreenComponent {
 	finalOk() {
 		let old = this.flip();
 		if (!old) return;
+		if (old.acceptScreen && old.invitation && old.invitation.type == "Friendship Request")
+			this.invitationService.mutualFriends(old.invitation.from, old.invitation.to);
 		const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
 		let route = go ? old.invitation?.route : null;
 		if (go && route && !this.alreadyInRoute())
