@@ -18,7 +18,7 @@ export class InvitationService {
 	acceptScreen: boolean = false;
 	sentScreen: boolean = false;
 	notificationScreen: boolean = false;
-	inviteState: BehaviorSubject<InviteState|undefined> = new BehaviorSubject<InviteState|undefined>(undefined);
+	static inviteState: BehaviorSubject<InviteState|undefined> = new BehaviorSubject<InviteState|undefined>(undefined);
 
   constructor(
 		private readonly router: Router,
@@ -27,12 +27,15 @@ export class InvitationService {
 		private readonly chatService: ChatService,
 		private readonly userService: UserService,
   ) {
+		//console.log("InvitationService constructor");
 		this.getUser();
 		this.doSubscription();
 	}
 
 	getUser(): void {
-		this.userService.getLoggedUser().subscribe(backUser=>{this.user=backUser;})
+		this.userService.getLoggedUser().subscribe(backUser=>{
+			this.user = backUser;
+		})
 	}
 
 	doSubscription() {
@@ -74,7 +77,7 @@ export class InvitationService {
 						   _.payload.to == this.user?.intraId
 						&& !!_.payload.note;
 
-					this.inviteState.next({
+					InvitationService.inviteState.next({
 						receiveScreen: this.receiveScreen,
 						declineScreen: this.declineScreen,
 						acceptScreen: this.acceptScreen,
@@ -82,6 +85,14 @@ export class InvitationService {
 						notificationScreen: this.notificationScreen,
 						invitation: _.payload,
 					});
+
+					if (this.notificationScreen && _.payload.routeBefore) {
+						const self = this;
+						setTimeout(function(){
+							return self.go(_.payload.route);
+						}, 1000);
+					}
+
 				}
 			},
 		);
@@ -129,7 +140,7 @@ export class InvitationService {
 			to: to,
 			type: "PRIVATE CHAT: " + newRoomName,
 			route: "/chat/" + newRoomId,
-			instantaneous: true,
+			instantaneous: false,
 			isReply: false
 		});
 	}

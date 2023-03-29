@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-menu-bar',
@@ -18,13 +19,10 @@ export class MenuBarComponent {
   ngOnInit(): void {
 	this.getUser();
   }
-  getUser(): void {
-	this.userService.getLoggedUser().subscribe(
-		backUser => { 
-			//console.log("menu-bar got subscrition", backUser);
-			this.user = backUser;
-		}
-	)
+  async getUser(): Promise<void> {
+	this.user = UserService.currentUser;
+	await new Promise(resolve => setTimeout(resolve, 1007));
+	this.getUser();
   }
 
   onClickBurger(): void {

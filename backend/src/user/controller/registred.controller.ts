@@ -59,6 +59,20 @@ export class RegisterController {
     }
   }
 
+  @Put('hi/:intraId')
+  @UseGuards(AuthGuard)
+  async attendance(
+	@Param('intraId') intraId: string,
+    @Res() response: Response = null,
+    @Body() stat: any,
+  ): Promise<any> {
+    try {
+	  this.userService.presence(intraId);
+      return response.status(200).json(':)');
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
 
   @Get('userByLogin')
   @UseGuards(AuthGuard)

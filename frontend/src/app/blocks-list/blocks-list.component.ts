@@ -13,11 +13,15 @@ export class BlocksListComponent {
   ) {}
 	@Input() user: User | undefined;
   blocks: User[] = [];
-  ngOnChanges(): void {this.getBlocks();}
-  getBlocks(): void {
+  ngOnChanges() {
+		this.getBlocks();
+  }
+  async getBlocks() {
 	this.userService.getBlocks(this.user).subscribe(_=>{
 		//console.log("FriendsListComponent got", _);
 		this.blocks = _;
 	});
+	await new Promise(resolve => setTimeout(resolve, 6543));
+	this.getBlocks();
   }
 }

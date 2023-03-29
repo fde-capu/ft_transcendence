@@ -13,11 +13,15 @@ export class FriendsListComponent {
   ) {}
 	@Input() user: User | undefined;
   friends: User[] = [];
-  ngOnChanges(): void {this.getFriends();}
-  getFriends(): void {
+  ngOnChanges() {
+		this.getFriends();
+  }
+  async getFriends() {
 	this.userService.getFriends(this.user).subscribe(_=>{
 		//console.log("FriendsListComponent got", _);
 		this.friends = _;
 	});
+	await new Promise(resolve => setTimeout(resolve, 6543));
+	this.getFriends();
   }
 }
