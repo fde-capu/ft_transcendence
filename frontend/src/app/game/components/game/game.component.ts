@@ -29,7 +29,17 @@ export class GameComponent implements AfterViewInit {
   score: Dictionary<number> = {};
 
   ngAfterViewInit(): void {
-    this.game = new Pong(this.canvas.nativeElement);
+    switch (this.room.mode) {
+      case GameMode.PONG:
+        this.game = new Pong(this.canvas.nativeElement);
+        break;
+      case GameMode.PONGDOUBLE:
+        this.game = new Pong(this.canvas.nativeElement);
+        break;
+      case GameMode.QUADRAPONG:
+        this.game = new Pong(this.canvas.nativeElement);
+        break;
+    }
     this.game.reset();
 
     let gd: GameData | undefined;
