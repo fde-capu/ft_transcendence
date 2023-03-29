@@ -199,7 +199,7 @@ abstract class Paddle extends Rectangle {
   static shortSide = 15;
   static longSide = 50;
 
-  public constructor(x = 0, y = 0, w = 0, h = 0) {
+  public constructor(public readonly team: string, x = 0, y = 0, w = 0, h = 0) {
     super(x, y, w, h);
   }
 
@@ -217,8 +217,9 @@ abstract class VerticalPaddle extends Paddle {
   static w = Paddle.shortSide;
   static h = Paddle.longSide;
 
-  public constructor(x = 0) {
+  public constructor(team: string, x = 0) {
     super(
+      team,
       x,
       Game.h / 2 - Paddle.longSide / 2,
       Paddle.shortSide,
@@ -243,10 +244,6 @@ abstract class VerticalPaddle extends Paddle {
 }
 
 class LeftPaddle extends VerticalPaddle {
-  public constructor(x = 0) {
-    super(x);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vx > 0) return;
@@ -255,10 +252,6 @@ class LeftPaddle extends VerticalPaddle {
 }
 
 class RightPaddle extends VerticalPaddle {
-  public constructor(x = 0) {
-    super(x);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vx < 0) return;
@@ -270,8 +263,9 @@ abstract class HorizontalPaddle extends Paddle {
   static w = Paddle.longSide;
   static h = Paddle.shortSide;
 
-  public constructor(y = 0) {
+  public constructor(team: string, y = 0) {
     super(
+      team,
       Game.w / 2 - Paddle.longSide / 2,
       y,
       Paddle.longSide,
@@ -296,10 +290,6 @@ abstract class HorizontalPaddle extends Paddle {
 }
 
 class TopPaddle extends HorizontalPaddle {
-  public constructor(y = 0) {
-    super(y);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vy > 0) return;
@@ -308,10 +298,6 @@ class TopPaddle extends HorizontalPaddle {
 }
 
 class BottomPaddle extends HorizontalPaddle {
-  public constructor(y = 0) {
-    super(y);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vy < 0) return;
@@ -336,7 +322,7 @@ export abstract class Game {
   static w = 500;
   static h = 500;
 
-  protected context: CanvasRenderingContext2D;
+  protected context?: CanvasRenderingContext2D;
 
   public elements: GameData = {
     teams: {},
@@ -347,14 +333,16 @@ export abstract class Game {
 
   public playerPaddle: Dictionary<string>;
 
-  constructor(canvas: HTMLCanvasElement) {
-    /*canvas.width = Game.w;
-    canvas.height = Game.h;
+  constructor(canvas?: HTMLCanvasElement) {
+    if (canvas) {
+      canvas.width = Game.w;
+      canvas.height = Game.h;
 
-    this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
-    if (!this.context) throw new Error('Canvas is not supported!');
+      this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
+      if (!this.context) throw new Error('Canvas is not supported!');
 
-    this.context.fillStyle = 'white';*/
+      this.context.fillStyle = 'white';
+    }
   }
 
   update(t = 1) {
@@ -377,7 +365,7 @@ export abstract class Game {
     ) {
       const { collision, subject, target } = data;
 
-      // if (target instanceof Paddle)
+      if (target instanceof Paddle) subject.team = target.team;
 
       subject.sx += target.vx / 2;
       subject.sy += target.vy / 2;
@@ -445,11 +433,11 @@ export abstract class Game {
   }
 
   private draw(r: Rectangle) {
-    //this.context.fillRect(r.x, r.y, r.w, r.h);
+    this.context?.fillRect(r.x, r.y, r.w, r.h);
   }
 
   private clear() {
-    //this.context.clearRect(0, 0, Game.w, Game.h);
+    this.context?.clearRect(0, 0, Game.w, Game.h);
   }
 
   public from(gameData: DeepPartial<GameData>) {
@@ -494,17 +482,13 @@ export abstract class Game {
 }
 
 export class Pong extends Game {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
   public override reset(): void {
     this.elements = {
       teams: { left: 0, right: 0 },
       balls: { a: new Ball() },
       paddles: {
-        left: new LeftPaddle(1 * VerticalPaddle.w),
-        right: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+        left: new LeftPaddle('left', 1 * VerticalPaddle.w),
+        right: new RightPaddle('right', Game.w - 2 * VerticalPaddle.w),
       },
       walls: {
         top: new Wall(-5, -5, Game.w + 10, 5),
@@ -516,19 +500,15 @@ export class Pong extends Game {
 }
 
 export class PongDouble extends Game {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
   public override reset(): void {
     this.elements = {
       teams: { left: 0, right: 0 },
       balls: { a: new Ball() },
       paddles: {
-        left1: new LeftPaddle(1 * VerticalPaddle.w),
-        left2: new LeftPaddle(3 * VerticalPaddle.w),
-        right1: new RightPaddle(Game.w - 4 * VerticalPaddle.w),
-        right2: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+        left1: new LeftPaddle('left', 1 * VerticalPaddle.w),
+        left2: new LeftPaddle('left', 3 * VerticalPaddle.w),
+        right1: new RightPaddle('right', Game.w - 4 * VerticalPaddle.w),
+        right2: new RightPaddle('right', Game.w - 2 * VerticalPaddle.w),
       },
       walls: {
         top: new Wall(-5, -5, Game.w + 10, 5),
@@ -540,10 +520,6 @@ export class PongDouble extends Game {
 }
 
 export class Quadrapong extends Game {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
   public override reset(): void {
     this.elements = {
       teams: {
@@ -554,10 +530,10 @@ export class Quadrapong extends Game {
       },
       balls: { a: new Ball() },
       paddles: {
-        left: new LeftPaddle(1 * VerticalPaddle.w),
-        right: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
-        top: new TopPaddle(HorizontalPaddle.h),
-        bottom: new BottomPaddle(Game.h - 2 * HorizontalPaddle.h),
+        left: new LeftPaddle('left', 1 * VerticalPaddle.w),
+        right: new RightPaddle('right', Game.w - 2 * VerticalPaddle.w),
+        top: new TopPaddle('top', HorizontalPaddle.h),
+        bottom: new BottomPaddle('bottom', Game.h - 2 * HorizontalPaddle.h),
       },
       walls: {
         left: new Wall(-5, -5, 5, Game.h + 10),

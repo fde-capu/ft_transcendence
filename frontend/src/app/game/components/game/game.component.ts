@@ -51,9 +51,27 @@ export class GameComponent implements AfterViewInit {
     this.running = true;
   }
 
+  @HostListener('window:keydown', ['$event'])
+  move(event: KeyboardEvent): void {
+    switch (event.code) {
+      case 'ArrowUp':
+        this.roomSocket.emit('game:player:move:backward');
+        break;
+      case 'ArrowLeft':
+        this.roomSocket.emit('game:player:move:backward');
+        break;
+      case 'ArrowDown':
+        this.roomSocket.emit('game:player:move:forward');
+        break;
+      case 'ArrowRight':
+        this.roomSocket.emit('game:player:move:forward');
+        break;
+    }
+  }
+
   @HostListener('window:keyup', ['$event'])
-  increment(event: KeyboardEvent): void {
-    console.dir(event);
+  stop(): void {
+    this.roomSocket.emit('game:player:move:stop');
   }
 
   @HostListener('document:visibilitychange', ['$event'])

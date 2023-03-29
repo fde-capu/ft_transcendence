@@ -113,4 +113,25 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
       User.from(client as ClientSocket),
     );
   }
+
+  @SubscribeMessage('game:player:move:forward')
+  public playerMoveForward(@ConnectedSocket() client: ClientSocket): void {
+    this.roomsService.rooms[client['roomId']]?.moveForward(
+      User.from(client as ClientSocket),
+    );
+  }
+
+  @SubscribeMessage('game:player:move:backward')
+  public playerMoveBackward(@ConnectedSocket() client: ClientSocket): void {
+    this.roomsService.rooms[client['roomId']]?.moveBackward(
+      User.from(client as ClientSocket),
+    );
+  }
+
+  @SubscribeMessage('game:player:move:stop')
+  public playerStopMovement(@ConnectedSocket() client: ClientSocket): void {
+    this.roomsService.rooms[client['roomId']]?.stopMovement(
+      User.from(client as ClientSocket),
+    );
+  }
 }

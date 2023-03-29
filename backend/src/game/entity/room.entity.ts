@@ -213,13 +213,29 @@ export class Room {
   public start(): void {
     switch (this.mode) {
       case GameMode.PONG:
-        this.game = new Pong({} as HTMLCanvasElement);
+        this.game = new Pong();
+        this.game.playerPaddle = {
+          [this.teams[0].players[0].id]: 'left',
+          [this.teams[1].players[0].id]: 'right',
+        };
         break;
       case GameMode.PONGDOUBLE:
-        this.game = new PongDouble({} as HTMLCanvasElement);
+        this.game = new PongDouble();
+        this.game.playerPaddle = {
+          [this.teams[0].players[0].id]: 'left',
+          [this.teams[0].players[1].id]: 'left',
+          [this.teams[1].players[0].id]: 'right',
+          [this.teams[1].players[1].id]: 'right',
+        };
         break;
       case GameMode.QUADRAPONG:
-        this.game = new Quadrapong({} as HTMLCanvasElement);
+        this.game = new Quadrapong();
+        this.game.playerPaddle = {
+          [this.teams[0].players[0].id]: 'left',
+          [this.teams[1].players[0].id]: 'right',
+          [this.teams[2].players[0].id]: 'top',
+          [this.teams[3].players[0].id]: 'bottom',
+        };
         break;
     }
     this.game.reset();
