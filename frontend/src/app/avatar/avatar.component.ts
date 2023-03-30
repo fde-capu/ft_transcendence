@@ -10,7 +10,7 @@ styleUrls: ['./avatar.component.css']
 })
 export class AvatarComponent {
 	@Input() user?: User;
-	popUpOn = false;
+	popUpOn?: boolean;
 	isFriend: boolean = false;
 	isBlock: boolean = false;
 	isMe: boolean = false;

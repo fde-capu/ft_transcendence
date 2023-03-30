@@ -83,5 +83,6 @@ export class InvitationScreenComponent {
 		let route = go ? old.invitation?.route : null;
 		if (go && route && !this.alreadyInRoute())
 			this.invitationService.go(route);
+		this.router.navigate([this.router.url]);
 	}
 }

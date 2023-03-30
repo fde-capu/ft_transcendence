@@ -204,11 +204,15 @@ export class UserService {
 	}
 
 	unFriend(user_b: User|undefined): Observable<any> {
-		if (!UserService.currentUser||!user_b||!UserService.currentUser.friends) return of(false);
-		for (var i = 0; i < UserService.currentUser.friends.length; i++)
-			if (UserService.currentUser.friends[i] == user_b.intraId)
-				UserService.currentUser.friends.splice(i, 1);
-		return this.saveUser(UserService.currentUser);
+		if (!UserService.currentUser) return of(false);
+		if (!user_b) return of(false);
+		if (UserService.currentUser.friends)
+			UserService.currentUser.friends = this.fun.removeStringFromArray(user_b.intraId, UserService.currentUser.friends);
+		if (user_b.friends)
+			user_b.friends = this.fun.removeStringFromArray(UserService.currentUser.intraId, user_b.friends);
+		this.saveUser(user_b).subscribe();
+		this.saveUser(UserService.currentUser).subscribe();
+		return of(true);
 	}
 
 	getBlocks(u_user?: User): Observable<User[]> {
