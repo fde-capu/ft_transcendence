@@ -302,6 +302,7 @@ export interface GameData {
   paddles: Dictionary<Paddle>;
   walls: Dictionary<Wall>;
   sounds: Array<GameSound>;
+  running: boolean;
 }
 
 export abstract class Game {
@@ -316,6 +317,7 @@ export abstract class Game {
     paddles: {},
     walls: {},
     sounds: [],
+    running: false,
   };
 
   constructor(canvas: HTMLCanvasElement) {
@@ -329,6 +331,8 @@ export abstract class Game {
   }
 
   update(t = 1) {
+    if (!this.elements.running) return;
+
     const balls = Object.values(this.elements.balls);
     const paddles = Object.values(this.elements.paddles);
     const walls = Object.values(this.elements.walls);
@@ -462,6 +466,7 @@ export class Pong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [],
+      running: true,
     };
   }
 }
@@ -486,6 +491,7 @@ export class PongDouble extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [],
+      running: true,
     };
   }
 }
@@ -517,6 +523,7 @@ export class Quadrapong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [],
+      running: true,
     };
   }
 }

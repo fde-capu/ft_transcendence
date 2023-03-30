@@ -317,6 +317,7 @@ export interface GameData {
   paddles: Dictionary<Paddle>;
   walls: Dictionary<Wall>;
   sounds: Array<GameSound>;
+  running: boolean;
 }
 
 interface CollisionData {
@@ -337,6 +338,7 @@ export abstract class Game {
     paddles: {},
     walls: {},
     sounds: [],
+    running: false,
   };
 
   public playerPaddle: Dictionary<string>;
@@ -354,6 +356,8 @@ export abstract class Game {
   }
 
   update(t = 1) {
+    if (!this.elements.running) return;
+
     this.elements.sounds = [];
 
     const balls = Object.values(this.elements.balls).filter((b) => !b.outside);
@@ -503,6 +507,7 @@ export class Pong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [GameSound.SCORE],
+      running: true,
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
   }
@@ -539,6 +544,7 @@ export class PongDouble extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [GameSound.SCORE],
+      running: true,
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
   }
@@ -582,6 +588,7 @@ export class Quadrapong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [GameSound.SCORE],
+      running: true,
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
   }

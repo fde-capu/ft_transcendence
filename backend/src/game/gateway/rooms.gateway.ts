@@ -10,6 +10,7 @@ import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
 import { RoomsService } from '../service/rooms.service';
 import { ClientSocket } from '../entity/room.entity';
+import { UserService } from 'src/user/service/user.service';
 
 @WebSocketGateway({
   cors: { origin: 'http://localhost:4200', credentials: true },
@@ -19,6 +20,7 @@ import { ClientSocket } from '../entity/room.entity';
 export class RoomsGateway implements OnGatewayInit, OnGatewayConnection {
   public constructor(
     private readonly tokenService: TokenService,
+    private readonly userService: UserService,
     private readonly roomsService: RoomsService,
   ) {}
 
@@ -29,8 +31,12 @@ export class RoomsGateway implements OnGatewayInit, OnGatewayConnection {
   public async handleConnection(client: Socket): Promise<void> {
     try {
       const { authorization } = parse(client.handshake.headers.cookie);
+
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
+
+      const { name } = await this.userService.getUserByIntraId(subject);
+      client['name'] = name;
     } catch (error) {
       client.emit('game:error', 'You are not authenticated!');
       client.disconnect(true);

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './auth/guard/auth.guard';
@@ -11,17 +11,13 @@ import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { GameComponent } from './game/components/game/game.component';
 import { LogOutComponent } from './log-out/log-out.component';
+import { GameHistoryComponent } from './game-history/game-history.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',
-  },
-  {
-    path: 'gg',
-    canActivate: [AuthGuard],
-    component: GameComponent,
   },
   {
     path: 'home',
@@ -71,6 +67,10 @@ const routes: Routes = [
   {
     path: 'logout',
     component: LogOutComponent,
+  },
+  {
+    path: 'gamehistory',
+    component: GameHistoryComponent,
   },
   {
     path: 'login',

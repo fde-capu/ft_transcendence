@@ -253,17 +253,20 @@ export class Room {
   }
 
   private pause(): void {
-    clearInterval(this.gameInterval);
     this.gameInterval = undefined;
     this.lastUpdate = undefined;
 
     this.running = false;
+    this.game.elements.running = false;
+    this.server.emit('game:status', this.game?.elements);
+    clearInterval(this.gameInterval);
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
 
   private resume(): void {
+    this.game.elements.running = true;
     if (!this.gameTimeout)
       setTimeout(() => {
         this.finish();
