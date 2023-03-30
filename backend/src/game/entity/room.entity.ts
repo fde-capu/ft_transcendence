@@ -65,6 +65,8 @@ export class Room {
 
   public lastUpdate?: number;
 
+  public gameTimeout?: NodeJS.Timeout;
+
   public constructor(
     public readonly id: string,
     public server: Server,
@@ -262,6 +264,10 @@ export class Room {
   }
 
   private resume(): void {
+    if (!this.gameTimeout)
+      setTimeout(() => {
+        this.finish();
+      }, 60000);
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
@@ -278,6 +284,7 @@ export class Room {
   private finish(): void {
     this.pause();
     this.teams.forEach((t) => t.players.forEach((p) => (p.ready = false)));
+    if (this.gameTimeout) clearTimeout(this.gameTimeout);
 
     // TODO save the score
 

@@ -51,8 +51,7 @@ export class GameComponent implements AfterViewInit {
       .fromEvent<GameData>('game:status')
       .pipe(
         map(gd => gd.teams),
-        distinct(),
-        tap(s => console.log(s))
+        distinct()
       )
       .subscribe({ next: s => (this.score = s) });
 
