@@ -34,7 +34,36 @@ export class RegisterController {
     } catch (e) {
       response.status(e.status).json(e.data);
     }
-    this.userService.updateUser(intraId, user);
+  }
+
+  @Put('status/:intraId')
+  @UseGuards(AuthGuard)
+  async updateStatus(
+    @Param('intraId') intraId: string,
+    @Res() response: Response = null,
+    @Body() stat: any,
+  ) {
+    try {
+      UserService.status.set(intraId, stat.stat);
+      return response.status(200).json(stat);
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+
+  @Put('hi/:intraId')
+  @UseGuards(AuthGuard)
+  async attendance(
+    @Param('intraId') intraId: string,
+    @Res() response: Response = null,
+    @Body() stat: any,
+  ): Promise<any> {
+    try {
+      this.userService.presence(intraId);
+      return response.status(200).json(':)');
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
   }
 
   @Get('userByLogin')
@@ -59,6 +88,17 @@ export class RegisterController {
   async getOnlineUsers(@Res() response: Response = null): Promise<any> {
     try {
       const resp = await this.userService.getOnlineUsers();
+      return response.status(200).json(resp);
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+
+  @Get('available')
+  @UseGuards(AuthGuard)
+  async getAvailableUsers(@Res() response: Response = null): Promise<any> {
+    try {
+      const resp = await this.userService.getAvailableUsers();
       return response.status(200).json(resp);
     } catch (e) {
       response.status(e.status).json(e.data);
@@ -100,7 +140,7 @@ export class RegisterController {
     @Res() response: Response = null,
   ): Promise<any> {
     try {
-      const resp = await this.userService.getStats(intraId);
+      const resp = await this.gameService.getStats(intraId);
       return response.status(200).json(resp);
     } catch (e) {
       response.status(e.status).json(e.data);

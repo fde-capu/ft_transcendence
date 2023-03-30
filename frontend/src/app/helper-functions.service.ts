@@ -1,17 +1,30 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HelperFunctionsService {
+  constructor(private readonly router: Router) {}
+
   isStringInArray(str: string, array: string[] = []): boolean {
     if (!array || !array.length) return false;
     for (const user of array) if (user == str) return true;
     return false;
   }
 
+  removeStringFromArray(str: string, array: string[]): string[] {
+    const out = [];
+    for (const t of array) if (t != str) out.push(t);
+    return out;
+  }
+
+  refreshScreen() {
+    this.router.navigate([this.router.url]);
+  }
+
   validateString(str: string): boolean {
-    return str.length >= 8 && str.length <= 42;
+    return str.length >= 4 && str.length <= 42;
   }
 
   switchIf(el: string, a: string, b: string) {
@@ -36,6 +49,7 @@ export class HelperFunctionsService {
       exist.classList.remove('inverted');
     }, 200);
   }
+
   async blink3(el: string) {
     this.blink(el);
     await new Promise(resolve => setTimeout(resolve, 255));
@@ -74,9 +88,9 @@ export class HelperFunctionsService {
 
   randomWord(amount: number): string {
     if (amount <= 0) return '';
-    const letters = 'abcdefghijklmnopqrstuvwxyz';
+    const constters = 'abcdefghijklmnopqrstuvwxyz';
     return (
-      letters[Math.floor(Math.random() * letters.length)] +
+      constters[Math.floor(Math.random() * constters.length)] +
       this.randomWord(--amount)
     );
   }

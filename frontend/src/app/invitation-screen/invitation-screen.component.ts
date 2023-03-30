@@ -25,7 +25,7 @@ export class InvitationScreenComponent implements OnInit {
     this.myState = InvitationScreenComponent.state[0];
     if (InvitationScreenComponent.connected) return;
     InvitationScreenComponent.connected = true;
-    this.invitationService.inviteState.subscribe(_ => {
+    InvitationService.inviteState.subscribe(_ => {
       if (_) {
         if (
           _.receiveScreen ||
@@ -42,7 +42,6 @@ export class InvitationScreenComponent implements OnInit {
             notificationScreen: _.notificationScreen,
             invitation: _.invitation,
           });
-        this.myState = InvitationScreenComponent.state[0];
         this.router.navigate([this.router.url]);
       }
     });
@@ -65,11 +64,16 @@ export class InvitationScreenComponent implements OnInit {
       this.invitationService.replyFalse(old.invitation);
   }
 
+  alreadyInRoute(): boolean {
+    const route = this.myState?.invitation?.route;
+    return route == this.router.url;
+  }
+
   finalOk() {
     const old = this.flip();
     if (!old) return;
     const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
     const route = go ? old.invitation?.route : null;
-    if (go && route) this.invitationService.go(route);
+    if (go && route && !this.alreadyInRoute()) this.invitationService.go(route);
   }
 }

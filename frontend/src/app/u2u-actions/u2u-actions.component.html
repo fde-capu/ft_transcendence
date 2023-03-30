@@ -2,9 +2,10 @@
   <h2 *ngIf="caption">Actions</h2>
   <div class="message-centered" [ngClass]="{ singleline: singleline }">
     <div *ngIf="amIBlocked"><b><- HAS BLOCKED YOU</b></div>
+    <div class="status" *ngIf="user?.status">{{ user?.status }}</div>
     <button
       [ngClass]="{ oneliner: !caption }"
-      *ngIf="!amIBlocked"
+      *ngIf="!amIBlocked && availability"
       (click)="inviteToChat()">
       Private Message
     </button>
@@ -32,9 +33,12 @@
       (click)="unBlock()">
       Unblock
     </button>
-    <button [ngClass]="{ oneliner: !caption }" *ngIf="!amIBlocked">
+    <button
+      [ngClass]="{ oneliner: !caption }"
+      *ngIf="!amIBlocked && availability">
       INVITE TO GAME
     </button>
   </div>
 </div>
+<div *ngIf="isMe"></div>
 <div *ngIf="isMe"></div>

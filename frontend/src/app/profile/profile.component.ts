@@ -3,6 +3,7 @@ import { User } from '../user';
 import { UserService } from '../user.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HelperFunctionsService } from '../helper-functions.service';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -35,6 +36,7 @@ export class ProfileComponent implements OnInit {
   getUser(): void {
     this.userService.getLoggedUser().subscribe(backUser => {
       this.user = backUser;
+      this.userService.setStatus('ONLINE');
       this.getIdRequest();
     });
   }
@@ -47,22 +49,30 @@ export class ProfileComponent implements OnInit {
   }
 
   async getDisplayUser() {
-    if (this.owner) return;
+    if (this.owner || !this.userService.authorized()) return;
     if (!this.idRequest) {
       this.displayUser = this.user;
       this.setOwnership();
       return;
     }
-
-    this.userService.getUserById(this.idRequest).subscribe(backUser => {
-      if (backUser) this.displayUser = backUser;
-      else this.displayUser = undefined;
-      // ^ Above seems redundant but condition is needed.
-      this.setOwnership();
-      this.amIBlocked = this.userService.amIBlocked(this.displayUser);
-    });
+    this.userService
+      .getUserById(this.idRequest)
+      .pipe(catchError(this.userService.handleError<any>('getDisplayUser')))
+      .subscribe(backUser => {
+        if (backUser) this.displayUser = backUser;
+        else this.displayUser = undefined;
+        // ^ Above seems redundant but condition is needed.
+        this.setOwnership();
+        this.amIBlocked = this.userService.amIBlocked(this.displayUser);
+      });
     await new Promise(resolve => setTimeout(resolve, 3007));
     await this.getDisplayUser();
+  }
+
+  saveUser() {
+    if (this.displayUser) {
+      this.userService.saveUser(this.displayUser).subscribe(() => ({}));
+    }
   }
 
   async setOwnership() {
@@ -95,13 +105,6 @@ export class ProfileComponent implements OnInit {
   saveLastName() {
     const save = this.displayUser?.name;
     this.lastName = save ? save : '';
-  }
-
-  saveUser() {
-    if (this.displayUser)
-      this.userService.saveUser(this.displayUser).subscribe(_ => {
-        console.log('Saved user', _);
-      });
   }
 
   switchMfa() {

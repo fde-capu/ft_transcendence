@@ -53,7 +53,7 @@ export class AuthService {
     this.document.location.href = `${environment.backendOrigin}/auth/authorize`;
   }
 
-  public signOut(): void {
+  public signOut(afterRoute = '/logout'): void {
     this.httpClient
       .get(`${environment.backendOrigin}/auth/logout`, {
         withCredentials: true,
@@ -64,7 +64,7 @@ export class AuthService {
         })
       )
       .subscribe({
-        next: () => this.router.navigate(['/logout']),
+        next: () => this.router.navigate([afterRoute]),
       });
   }
 

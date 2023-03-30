@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-avatar',
@@ -23,24 +24,26 @@ export class AvatarComponent implements OnChanges {
     this.checkFriendship();
     this.checkBlock();
     this.checkMe();
-    this.updateMe();
   }
 
-  async updateMe() {
-    if (!this.user) {
-      await new Promise(resolve => setTimeout(resolve, 647));
-      await this.updateMe();
-    } // Because no `return` above, so have to trick TS.
-    else {
-      this.userService.getUser(this.user.intraId).subscribe(_ => {
-        if (this.displayUser?.name != _?.name) this.displayUser = _;
-      });
-      // Lazy update, because there are many instances of avatars.
-      // Note: chat messages do not update retroactively, but take changes from point on.
-      await new Promise(resolve =>
-        setTimeout(resolve, 7985 + Math.random() * 6981)
-      );
-      await this.updateMe();
+  async updateMe(): Promise<void> {
+    await new Promise(resolve =>
+      setTimeout(resolve, 1985 + Math.random() * 6981)
+    );
+    if (!this.userService.authorized()) return;
+    if (this.user) {
+      this.userService
+        .getUser(this.user.intraId)
+        .pipe(
+          catchError(err => {
+            this.userService.handleError<any>('updateMe');
+            return of(err);
+          })
+        )
+        .subscribe(_ => {
+          if (this.displayUser?.name != _?.name) this.displayUser = _;
+          this.updateMe();
+        });
     }
   }
 

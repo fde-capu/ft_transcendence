@@ -38,7 +38,8 @@
       <label>Wins/Looses</label>
     </td>
     <td width="16%">
-      <div>{{ stat.winsPerLooses | number : '1.2-2' }}</div>
+      <div *ngIf="stat.looses">{{ stat.winsPerLooses | number : '1.2-2' }}</div>
+      <div *ngIf="stat.wins && !stat.looses">Undefeated!</div>
     </td>
   </tr>
 

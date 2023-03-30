@@ -13,13 +13,15 @@ export class BlocksListComponent implements OnChanges {
 
   constructor(private userService: UserService) {}
 
-  ngOnChanges(): void {
+  ngOnChanges() {
     this.getBlocks();
   }
 
-  getBlocks(): void {
-    this.userService.getBlocks(this.user).subscribe(blocks => {
-      this.blocks = blocks;
+  async getBlocks() {
+    this.userService.getBlocks(this.user).subscribe(_ => {
+      this.blocks = _;
     });
+    await new Promise(resolve => setTimeout(resolve, 6543));
+    this.getBlocks();
   }
 }

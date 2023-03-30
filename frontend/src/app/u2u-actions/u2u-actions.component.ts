@@ -15,7 +15,8 @@ export class U2uActionsComponent implements OnChanges {
   @Input() caption?: boolean;
   @Input() singleline?: boolean;
   @Input() amIBlocked?: boolean;
-  isMe = false;
+  isMe?: boolean;
+  availability?: boolean;
 
   constructor(
     private userService: UserService,
@@ -24,6 +25,8 @@ export class U2uActionsComponent implements OnChanges {
 
   ngOnChanges() {
     this.checkMe();
+    this.availability =
+      this.user?.status != 'OFFLINE' && this.user?.status != 'INGAME';
   }
 
   inviteToChat() {
@@ -49,8 +52,6 @@ export class U2uActionsComponent implements OnChanges {
   }
 
   checkMe() {
-    this.userService.getLoggedUser().subscribe(_ => {
-      this.isMe = _.intraId == this.user?.intraId;
-    });
+    this.isMe = UserService.currentIntraId == this.user?.intraId;
   }
 }

@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { ChatService } from './chat.service';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
-  constructor(public router: Router, public chatService: ChatService) {}
-
+export class AppComponent {
+  constructor(
+    public router: Router,
+    public chatService: ChatService,
+    public userService: UserService
+  ) {}
   ngOnInit() {
     setInterval(function () {
       const skrollers = Array.from(document.getElementsByClassName('scroller'));

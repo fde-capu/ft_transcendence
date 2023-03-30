@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
   getUser() {
     this.userService.getLoggedUser().subscribe(user => {
       this.user = user;
+      this.userService.setStatus('ONLINE');
     });
   }
 }

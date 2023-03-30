@@ -1,6 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChatSocket } from './chat.socket';
 import { Observable, of, BehaviorSubject } from 'rxjs';
@@ -15,20 +14,19 @@ import { HelperFunctionsService } from './helper-functions.service';
   providedIn: 'root',
 })
 export class ChatService {
-  private roomsUrl = 'http://localhost:3000/chatrooms/';
   static user?: User;
   static isConnected = false;
   static allRooms: ChatRoom[] = [];
   public readonly messageList = new BehaviorSubject<ChatMessage>(
     {} as ChatMessage
   );
+
   gotNews = false;
 
   constructor(
     private readonly socket: ChatSocket,
     public route: ActivatedRoute,
     private readonly router: Router,
-    private http: HttpClient,
     public userService: UserService,
     private readonly fun: HelperFunctionsService
   ) {
@@ -37,10 +35,12 @@ export class ChatService {
   }
 
   async getUser(): Promise<User> {
-    if (ChatService.user) return ChatService.user;
-    this.userService.getLoggedUser().subscribe(backUser => {
-      if (backUser) ChatService.user = backUser;
-    });
+    if (ChatService.user && Math.random() > 0.1) return ChatService.user;
+    if (this.userService.getQuickIntraId()) {
+      this.userService.getLoggedUser().subscribe(backUser => {
+        if (backUser) ChatService.user = backUser;
+      });
+    }
     await new Promise(resolve => setTimeout(resolve, 431));
     return this.getUser();
   }
@@ -48,7 +48,6 @@ export class ChatService {
   think(msg: any) {
     this.gotNews = true;
     if (msg.payload.roomId) {
-      // This checks if is a simple message.
       for (const room of ChatService.allRooms)
         if (room.id == msg.payload.roomId) {
           // Now see if is not private-and-owned-by-others,
@@ -77,9 +76,7 @@ export class ChatService {
   }
 
   hasNews(): boolean {
-    if (this.gotNews || Math.random() > 0.9) {
-      //              ^ ocasional refreshment to solve race condition,
-      //                thus saving cpu.
+    if (this.gotNews) {
       this.gotNews = false;
       return true;
     }
@@ -136,6 +133,29 @@ export class ChatService {
     });
   }
 
+  equalArray(a: string[] | undefined, b: string[] | undefined) {
+    if (!b && !a) return true;
+    if (!b || !a) return false;
+    for (const u of a) if (!this.fun.isStringInArray(u, b)) return false;
+    for (const u of b) if (!this.fun.isStringInArray(u, a)) return false;
+    return true;
+  }
+
+  equalRooms(a: ChatRoom | undefined, b: ChatRoom | undefined) {
+    if (!a && !b) return false;
+    if (!a || !b) return false;
+    if (!this.equalArray(a.user, b.user)) return false;
+    if (!this.equalArray(a.admin, b.admin)) return false;
+    if (!this.equalArray(a.blocked, b.blocked)) return false;
+    if (!this.equalArray(a.muted, b.muted)) return false;
+    return (
+      a.id == b.id &&
+      a.name == b.name &&
+      a.password == b.password &&
+      a.isPrivate == b.isPrivate
+    );
+  }
+
   logOutAllRooms(intraId: string) {
     for (const i in ChatService.allRooms) {
       const newRoom: ChatRoom = ChatService.allRooms[i];
@@ -149,15 +169,14 @@ export class ChatService {
   }
 
   getOutOfAnyChat() {
-    this.userService.getLoggedUser().subscribe(_ => {
-      this.logOutAllRooms(_.intraId);
-    });
+    const u = this.userService.getQuickIntraId();
+    if (!u) return;
+    this.logOutAllRooms(u);
   }
 
   async putUserInRoom(room: ChatRoom, flush = true): Promise<ChatRoom> {
     if (!room || !ChatService.user) return {} as ChatRoom;
     if (!this.fun.isStringInArray(ChatService.user.intraId, room.user)) {
-      //console.log("Putting user in the room!", ChatService.user.intraId);
       if (!room.user) room.user = [];
       room.user.push(ChatService.user.intraId);
       if (flush) this.roomChanged(room);
@@ -200,7 +219,7 @@ export class ChatService {
 
   getOutOfChatUsers(roomId?: string): Observable<User[]> {
     if (!roomId) return of([]);
-    const response = this.userService.getOnlineUsers().pipe(
+    const response = this.userService.getAvailableUsers().pipe(
       map(result => {
         const out: User[] = [];
         for (const user of result)
@@ -301,10 +320,9 @@ export class ChatService {
         if (!room.blocked) room.blocked = [];
         room.blocked.push(tigged);
         this.roomChanged(room);
-        const self = this;
         setTimeout(
-          function (tigged: string, tigRoom: ChatRoom) {
-            self.unTIG(tigged, tigRoom, self);
+          (tigged: string, tigRoom: ChatRoom) => {
+            this.unTIG(tigged, tigRoom, self);
           },
           ONE_MINUTE,
           tigged,
@@ -315,14 +333,14 @@ export class ChatService {
   }
 
   // Don't mess with this function!
-  unMute(muted: string, muteRoom: ChatRoom, self: any = this) {
+  unMute(muted: string, muteRoom: ChatRoom) {
     for (const room of ChatService.allRooms)
       if (room.id == muteRoom.id) {
         const newMutes: string[] = [];
         if (!room.muted || !room.muted.length) return;
         for (const user of room.muted) if (user != muted) newMutes.push(user);
         room.muted = newMutes;
-        self.roomChanged(room);
+        this.roomChanged(room);
       }
   }
 
@@ -334,10 +352,9 @@ export class ChatService {
         if (!room.muted) room.muted = [];
         room.muted.push(muted);
         this.roomChanged(room);
-        const self = this;
         setTimeout(
-          function (muted: string, muteRoom: ChatRoom) {
-            self.unMute(muted, muteRoom, self);
+          (muted: string, muteRoom: ChatRoom) => {
+            this.unMute(muted, muteRoom);
           },
           ONE_MINUTE,
           muted,
@@ -356,25 +373,7 @@ export class ChatService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error('handleError<T>:', error); // log to console instead
-      // ^ Yikes! Don't show if any bug! TODO (comment line above?)
-
-      // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 }
-
-// TODO:
-
-// - Implement direct-messaging.
-// - Chat creationg screen.
-// - "Block user" routine.
-
-// - The user should be able to invite other users to
-//   play a Pong game through the chat interface.
-// - Should also be able to access user profiles.
-//  :: These two things will be done by the avatar element, however.
-
-// Matchmaking screen.

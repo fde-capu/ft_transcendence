@@ -8,6 +8,7 @@ export interface UserDTO {
   mfa_enabled: boolean;
   friends?: string[];
   blocks?: string[];
+  status?: string;
 }
 
 export interface StatisticsDTO {
@@ -62,26 +63,11 @@ export class Users {
   @Column()
   score?: number;
 
-  @Column({ default: false })
-  isLogged?: boolean;
-
   @Column('simple-array')
   friends?: string[];
 
   @Column('simple-array')
   blocks?: string[];
-
-  @Column()
-  matches?: number;
-
-  @Column()
-  wins?: number;
-
-  @Column()
-  goalsMade?: number;
-
-  @Column()
-  goalsTaken?: number;
 }
 // Don't forget to update backend/src/user/service/user.service.tx:registerUserOk42
 // Don't forget to `make re` after editing this file!

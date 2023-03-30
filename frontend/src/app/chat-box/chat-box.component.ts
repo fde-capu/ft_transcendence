@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ChatRoom } from '../chat-room';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
@@ -12,7 +12,15 @@ import { InvitationService } from '../invitation.service';
   templateUrl: './chat-box.component.html',
   styleUrls: ['./chat-box.component.css'],
 })
-export class ChatBoxComponent implements OnInit {
+export class ChatBoxComponent {
+  constructor(
+    public chatService: ChatService,
+    public userService: UserService,
+    public fun: HelperFunctionsService,
+    public route: ActivatedRoute,
+    public invitationService: InvitationService,
+    private readonly router: Router
+  ) {}
   chatRoom: ChatRoom = {} as ChatRoom;
   windowTitle = 'CHAT';
   windowName = '';
@@ -24,32 +32,25 @@ export class ChatBoxComponent implements OnInit {
   user?: User;
   id?: string | null;
   iAmAdmin = false;
-  firstTime = true;
   invalidNameNotice = false;
   invalidPasswordNotice = false;
   lastRoomName = '';
-
-  constructor(
-    public chatService: ChatService,
-    public userService: UserService,
-    public fun: HelperFunctionsService,
-    public route: ActivatedRoute,
-    public invitationService: InvitationService,
-    private readonly router: Router
-  ) {}
+  static uid = 1;
+  uniqueId = 0;
+  static umap: Map<string, number> = new Map<string, number>();
 
   ngOnInit() {
-    // TODO: Check for querystring empty: it means its a new creation.
-    // In this case (empty query):
-    //		Async await call to endpoint requiring new room.
-    //		...when its done, redirect to "/chat/chatId?optionsOn=true".
-    // If there is a query, continue:
     this.getUserAndStuff();
+  }
+
+  ngOnDestroy() {
+    this.done = false;
   }
 
   getUserAndStuff(): void {
     this.userService.getLoggedUser().subscribe(backUser => {
       this.user = backUser;
+      this.userService.setStatus('INCHAT');
       this.initChatRoom();
     });
   }
@@ -61,10 +62,7 @@ export class ChatBoxComponent implements OnInit {
       this.router.navigate(['/chat/' + newRoomId]);
       return;
     }
-    if (this.id) {
-      const chatRoomTest = this.chatService.roomById(this.id);
-      if (chatRoomTest) this.chatRoom = chatRoomTest;
-    }
+    if (this.id) this.keepTryingToIdentify(this.id);
     // ^ If it is a new room (roomId is null), the route will actualy
     // be deceipt by the ChatService, by consequence the component will
     // reload, and the param roomId will be present.
@@ -77,6 +75,7 @@ export class ChatBoxComponent implements OnInit {
       this.chatRoom.user[0] == this.chatRoom.admin[0]
     )
       this.optionsOn = true;
+    this.uniqueId = ChatBoxComponent.uid++;
     this.updateRoomRecursive();
     this.checkAdminRecursive();
     this.getOutOfChatUsersRecursiveOnce();
@@ -84,19 +83,44 @@ export class ChatBoxComponent implements OnInit {
     this.done = true;
   }
 
-  async updateRoomRecursive() {
+  async keepTryingToIdentify(id: string) {
+    const chatRoomTest = this.chatService.roomById(id);
+    if (chatRoomTest) this.chatRoom = chatRoomTest;
+    else {
+      await new Promise(resolve => setTimeout(resolve, 345));
+      this.keepTryingToIdentify(id);
+    }
+  }
+
+  async updateRoomRecursive(): Promise<void> {
+    if (
+      this.user &&
+      this.chatRoom &&
+      !this.fun.isStringInArray(this.user.intraId, this.chatRoom.user)
+    ) {
+      return;
+    }
     if (!this.id) {
-      await new Promise(resolve => setTimeout(resolve, 2209));
-      await this.updateRoomRecursive();
+      await new Promise(resolve => setTimeout(resolve, 337));
+      return await this.updateRoomRecursive();
     } else {
+      const solo = ChatBoxComponent.umap.get(this.id);
+      if (!solo || solo < this.uniqueId)
+        ChatBoxComponent.umap.set(this.id, this.uniqueId);
+      if (solo && solo > this.uniqueId) return;
+
       const chatRoomTest = this.chatService.roomById(this.id);
-      if (chatRoomTest) this.chatRoom = chatRoomTest;
-      if (this.chatService.hasNews() || this.firstTime)
+      if (
+        !this.chatService.equalRooms(chatRoomTest, this.chatRoom) ||
+        !this.done
+      ) {
+        if (chatRoomTest) this.chatRoom = chatRoomTest;
+        else return;
         this.usersInChat = await this.userService.intraIdsToUsers(
           this.chatRoom.user
         );
-      this.firstTime = false;
-      await new Promise(resolve => setTimeout(resolve, 870));
+      }
+      await new Promise(resolve => setTimeout(resolve, 1357));
       this.updateRoomRecursive();
     }
   }
@@ -109,10 +133,11 @@ export class ChatBoxComponent implements OnInit {
   }
 
   async getOutOfChatUsersRecursiveOnce() {
+    if (!this.userService.authorized()) return;
     this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(outChat => {
       this.usersOutOfChat = outChat;
     });
-    await new Promise(resolve => setTimeout(resolve, 7447));
+    await new Promise(resolve => setTimeout(resolve, 1447));
     this.getOutOfChatUsersRecursiveOnce();
   }
 
@@ -217,31 +242,33 @@ export class ChatBoxComponent implements OnInit {
     this.chatService.roomChanged(this.chatRoom);
   }
 
-  kickThem(kicked: User) {
-    const innocents: string[] = [];
-    for (const suspect of this.chatRoom.user)
-      if (suspect != kicked.intraId) innocents.push(suspect);
-    this.chatRoom.user = innocents;
+  async kickThem(kicked: User) {
+    this.chatRoom.user = this.fun.removeStringFromArray(
+      kicked.intraId,
+      this.chatRoom.user
+    );
     this.invitationService.notify({
       to: kicked.intraId,
       note: 'You have been kicked.',
       route: '/rooms',
       button: this.fun.funnyInnocence(),
+      routeBefore: true,
     });
     this.chatService.roomChanged(this.chatRoom);
   }
 
   tigThem(tigged: User) {
-    const innocents: string[] = [];
-    for (const suspect of this.chatRoom.user)
-      if (suspect != tigged.intraId) innocents.push(suspect);
-    this.chatRoom.user = innocents;
+    this.chatRoom.user = this.fun.removeStringFromArray(
+      tigged.intraId,
+      this.chatRoom.user
+    );
     this.invitationService.notify({
       to: tigged.intraId,
       note: 'TIG!',
       type: 'One minute banned!',
       route: '/rooms',
       button: this.fun.funnyInnocence(),
+      routeBefore: true,
     });
     this.chatService.TIG(tigged.intraId, this.chatRoom);
     this.chatService.roomChanged(this.chatRoom);

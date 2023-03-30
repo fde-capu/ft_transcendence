@@ -1,57 +1,40 @@
 <h2>Match History</h2>
-
-<table *ngIf="user && history.length; else no_matches">
-  <tr>
-    <th>id</th>
-    <th>opponents</th>
-    <th>score</th>
-    <th>goals</th>
-    <th>win</th>
-    <th>date/duration</th>
-  </tr>
-  <tr *ngFor="let match of history">
+<table *ngIf="user && histRender.length; else no_matches" class="mainTable">
+  <tr *ngFor="let match of histRender" class="match">
+    <td>{{ match.pongMode }}</td>
     <td>
-      {{ match.idA }}
-      <br />
-      {{ match.idB }}
-    </td>
-    <td>
-      {{ match.playerA }}
-      <br />
-      {{ match.playerB }}
-    </td>
-    <td>
-      +{{ match.scoreA | number : '2.0-0' }}
-      <br />
-      +{{ match.scoreB | number : '2.0-0' }}
-    </td>
-    <td>
-      {{ match.goalsA }}
-      <br />
-      {{ match.goalsB }}
-    </td>
-    <td>
-      <span *ngIf="match.idA === user.intraId">
-        <span *ngIf="match.winA"
-          ><b>&#10004;</b><br /><span style="color: #555555"
-            >&#x2717;</span
-          ></span
-        >
-        <span *ngIf="!match.winA"
-          >&#x2717;<br /><span style="color: #555555">&#10004;</span></span
-        >
-      </span>
-
-      <span *ngIf="match.idB === user.intraId">
-        <span *ngIf="match.winB"
-          ><span style="color: #555555">&#x2717;</span><br /><b
-            >&#10004;</b
-          ></span
-        >
-        <span *ngIf="!match.winB"
-          ><span style="color: #555555">&#10004;</span><br />&#x2717;</span
-        >
-      </span>
+      <table class="divisor">
+        <tr *ngFor="let team of match.teams">
+          <td>
+            <span *ngIf="isUserIn(team); else not">
+              <span *ngIf="team.victory">&#10004;</span>
+              <span *ngIf="!team.victory">&#x2717;</span>
+            </span>
+            <ng-template #not>
+              <span *ngIf="team.victory" style="opacity: 0.3">&#10004;</span>
+              <span *ngIf="!team.victory" style="opacity: 0.3">&#x2717;</span>
+            </ng-template>
+          </td>
+          <td>
+            <table style="display: inline-table" class="non-divisor">
+              <tr *ngFor="let player of team.players">
+                <td style="min-width: 4em">
+                  {{ player.intraId }}
+                </td>
+                <td style="width: 12em; max-width: 12em; overflow: hidden">
+                  {{ player.nameInGame }}
+                </td>
+                <td style="width: 4em">
+                  +{{ player.scoreMade | number : '2.0-0' }}
+                </td>
+                <td style="width: 2em">
+                  {{ player.goalsMade }}/{{ player.goalsTaken }}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     </td>
     <td>
       {{ match.date | date : 'short' : 'UTC' }}

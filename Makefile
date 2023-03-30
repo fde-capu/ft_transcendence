@@ -3,15 +3,15 @@
 all : dev
 
 dev :
-	export FTT_MODE="development"; \
+	export FTT_MODE="development" && \
 	docker compose up --build
 
 build :
-	export FTT_MODE="build"; \
+	export FTT_MODE="build" && \
 	docker compose up --build
 
 production :
-	export FTT_MODE="production"; \
+	export FTT_MODE="production" && \
 	docker compose up --build
 
 clean :

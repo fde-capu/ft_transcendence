@@ -64,7 +64,8 @@ export class AuthController {
 
   @Get('info')
   public tokenInfo(@TokenPayload() payload?: JWTPayload) {
-    return this.authService.getSessionTokenPublicInfo(payload);
+	//console.log("tokenInfo", payload);
+	return this.authService.getSessionTokenPublicInfo(payload);
   }
 
   @Get('challenge')

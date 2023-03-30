@@ -6,7 +6,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { TokenService } from 'src/auth/service/token.service';
 
 export interface Invitation {
   from: string;
@@ -24,8 +23,6 @@ export interface Invitation {
 export class InvitationGateway {
   @WebSocketServer()
   server: Server;
-
-  constructor(private readonly tokenService: TokenService) {}
 
   @SubscribeMessage('invitation')
   handleMessage(

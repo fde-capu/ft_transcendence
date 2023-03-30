@@ -41,12 +41,14 @@ export class ChatRoomListComponent implements OnInit {
     this.getChatRooms();
   }
 
-  getCurrentUser(): void {
-    this.userService.getLoggedUser().subscribe(user => {
-      this.user = user;
-      this.getChatRooms();
-    });
-  }
+	getCurrentUser(): void {
+		this.userService.getLoggedUser()
+			.subscribe(user => {
+				this.user = user;
+				this.userService.setStatus("ONLINE");
+				this.getChatRooms();
+			});
+	}
 
   isCurrentUserBlocked(room: ChatRoom): boolean {
     return this.chatService.isCurrentUserBlocked(room);

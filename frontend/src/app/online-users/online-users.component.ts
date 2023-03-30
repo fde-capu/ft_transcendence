@@ -9,15 +9,29 @@ import { UserService } from '../user.service';
 })
 export class OnlineUsersComponent implements OnInit {
   users: User[] = [];
+  user?: User;
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
+    this.getUser();
     this.getOnlineUsers();
   }
 
+  getUser(): void {
+    this.userService.getLoggedUser().subscribe(backUser => {
+      this.user = backUser;
+      this.userService.setStatus('ONLINE');
+    });
+  }
+
   async getOnlineUsers() {
-    this.userService.getOnlineUsers().subscribe(users => (this.users = users));
+    if (!this.userService.authorized() || !UserService.currentIntraId) return;
+    this.userService.getOnlineUsers().subscribe(users => {
+      const out = [];
+      for (const u of users) if (u.intraId != this.user?.intraId) out.push(u);
+      this.users = out;
+    });
     await new Promise(resolve =>
       setTimeout(resolve, 3399 + Math.random() * 10234)
     );

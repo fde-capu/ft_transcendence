@@ -17,10 +17,10 @@ export class MenuBarComponent implements OnInit {
     this.getUser();
   }
 
-  getUser(): void {
-    this.userService.getLoggedUser().subscribe(backUser => {
-      this.user = backUser;
-    });
+  async getUser(): Promise<void> {
+    this.user = UserService.currentUser;
+    await new Promise(resolve => setTimeout(resolve, 1007));
+    this.getUser();
   }
 
   onClickBurger(): void {

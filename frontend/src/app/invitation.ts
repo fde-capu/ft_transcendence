@@ -10,6 +10,7 @@ export interface Invitation {
   instantaneous?: boolean;
   note?: string;
   button?: string;
+  routeBefore?: boolean;
 }
 
 export interface InviteState {
