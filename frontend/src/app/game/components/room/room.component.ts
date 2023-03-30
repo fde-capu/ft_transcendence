@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from 'src/app/user.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 import { Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
 
@@ -19,11 +19,11 @@ export class RoomComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly userService: UserService
+    private readonly authService: AuthService
   ) {
-    this.userService
-      .getLoggedUser()
-      .subscribe({ next: u => (this.userId = u.intraId) });
+    this.authService
+      .getAuthContext()
+      .subscribe({ next: ctx => (this.userId = ctx!.sub) });
   }
 
   ngOnInit() {

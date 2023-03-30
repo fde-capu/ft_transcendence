@@ -71,6 +71,7 @@ export class UserService {
       .execute();
     if (resp.affected === 0) {
       throw new NotFoundException(); // SomethingWrongException() ..?
+      // TODO: this exception is not been handled and is crashing the server
     }
     return resp;
   }

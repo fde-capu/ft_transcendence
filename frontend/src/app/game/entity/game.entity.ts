@@ -463,7 +463,6 @@ export class Pong extends Game {
       },
       sounds: [],
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
   }
 }
 
@@ -488,7 +487,6 @@ export class PongDouble extends Game {
       },
       sounds: [],
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
   }
 }
 
@@ -520,6 +518,5 @@ export class Quadrapong extends Game {
       },
       sounds: [],
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
   }
 }

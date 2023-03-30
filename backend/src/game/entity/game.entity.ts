@@ -375,7 +375,12 @@ export abstract class Game {
     ) {
       const { collision, subject, target } = data;
 
-      if (target instanceof Paddle) {
+      if (target instanceof VerticalPaddle && collision.ynormal === 0) {
+        subject.team = target.team;
+        this.elements.sounds.push(GameSound.PADDLE);
+      }
+
+      if (target instanceof HorizontalPaddle && collision.xnormal === 0) {
         subject.team = target.team;
         this.elements.sounds.push(GameSound.PADDLE);
       }
@@ -409,22 +414,7 @@ export abstract class Game {
       this.draw(p);
     });
 
-    Object.values(this.elements.balls).forEach((b) => {
-      if (
-        !b.outside &&
-        (b.x + b.w < 0 || b.x > Game.w || b.y + b.h < 0 || b.y > Game.h)
-      ) {
-        b.outside = true;
-        if (b.team) {
-          this.elements.teams[b.team]++;
-          b.team = undefined;
-          this.elements.sounds.push(GameSound.SCORE);
-        }
-        setTimeout(() => {
-          b?.reset();
-        }, 2000);
-      }
-    });
+    Object.values(this.elements.balls).forEach((b) => this.applyScore(b));
   }
 
   private nextCollision(
@@ -447,6 +437,8 @@ export abstract class Game {
     }
     return data;
   }
+
+  protected abstract applyScore(b: Ball): void;
 
   private draw(r: Rectangle) {
     this.context?.fillRect(r.x, r.y, r.w, r.h);
@@ -514,6 +506,21 @@ export class Pong extends Game {
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
   }
+
+  protected override applyScore(b: Ball): void {
+    if (!b.outside && (b.x + b.w < 0 || b.x > Game.w)) {
+      b.outside = true;
+      this.elements.sounds.push(GameSound.SCORE);
+
+      if (b.x + b.w < 0) this.elements.teams['RIGHT']++;
+
+      if (b.x > Game.w) this.elements.teams['LEFT']++;
+
+      setTimeout(() => {
+        b?.reset();
+      }, 2000);
+    }
+  }
 }
 
 export class PongDouble extends Game {
@@ -534,6 +541,21 @@ export class PongDouble extends Game {
       sounds: [GameSound.SCORE],
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
+  }
+
+  protected override applyScore(b: Ball): void {
+    if (!b.outside && (b.x + b.w < 0 || b.x > Game.w)) {
+      b.outside = true;
+      this.elements.sounds.push(GameSound.SCORE);
+
+      if (b.x + b.w < 0) this.elements.teams['RIGHT']++;
+
+      if (b.x > Game.w) this.elements.teams['LEFT']++;
+
+      setTimeout(() => {
+        b?.reset();
+      }, 2000);
+    }
   }
 }
 
@@ -562,5 +584,32 @@ export class Quadrapong extends Game {
       sounds: [GameSound.SCORE],
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
+  }
+
+  protected override applyScore(b: Ball): void {
+    if (
+      !b.outside &&
+      (b.x + b.w < 0 || b.x > Game.w || b.y + b.h < 0 || b.y > Game.h)
+    ) {
+      b.outside = true;
+      this.elements.sounds.push(GameSound.SCORE);
+
+      if (b.team) {
+        this.elements.teams[b.team]++;
+        b.team = undefined;
+      }
+
+      if (b.x + b.w < 0) this.elements.teams['LEFT']--;
+
+      if (b.x > Game.w) this.elements.teams['RIGHT']--;
+
+      if (b.y + b.h < 0) this.elements.teams['TOP']--;
+
+      if (b.y > Game.h) this.elements.teams['BOTTOM']--;
+
+      setTimeout(() => {
+        b?.reset();
+      }, 2000);
+    }
   }
 }
