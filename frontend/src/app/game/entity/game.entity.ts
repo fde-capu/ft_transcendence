@@ -290,11 +290,18 @@ class BottomPaddle extends HorizontalPaddle {
   }
 }
 
+export enum GameSound {
+  PADDLE = 0,
+  WALL = 1,
+  SCORE = 2,
+}
+
 export interface GameData {
   teams: Dictionary<number>;
   balls: Dictionary<Ball>;
   paddles: Dictionary<Paddle>;
   walls: Dictionary<Wall>;
+  sounds: Array<GameSound>;
 }
 
 export abstract class Game {
@@ -308,6 +315,7 @@ export abstract class Game {
     balls: {},
     paddles: {},
     walls: {},
+    sounds: [],
   };
 
   constructor(canvas: HTMLCanvasElement) {
@@ -453,6 +461,7 @@ export class Pong extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
+      sounds: [],
     };
     Object.values(this.elements.balls).forEach(b => b.reset());
   }
@@ -477,6 +486,7 @@ export class PongDouble extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
+      sounds: [],
     };
     Object.values(this.elements.balls).forEach(b => b.reset());
   }
@@ -508,6 +518,7 @@ export class Quadrapong extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
+      sounds: [],
     };
     Object.values(this.elements.balls).forEach(b => b.reset());
   }

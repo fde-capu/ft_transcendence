@@ -190,8 +190,8 @@ class Ball extends Rectangle {
       (a330 <= alpha && alpha <= a360)
     );
 
-    this.sx = 300 * Math.cos(alpha);
-    this.sy = 300 * Math.sin(alpha);
+    this.sx = 200 * Math.cos(alpha);
+    this.sy = 200 * Math.sin(alpha);
   }
 }
 
@@ -235,11 +235,11 @@ abstract class VerticalPaddle extends Paddle {
   }
 
   public override moveForward(): void {
-    this.sy = 400;
+    this.sy = 300;
   }
 
   public override moveBackward(): void {
-    this.sy = -400;
+    this.sy = -300;
   }
 }
 
@@ -281,11 +281,11 @@ abstract class HorizontalPaddle extends Paddle {
   }
 
   public override moveForward(): void {
-    this.sx = 400;
+    this.sx = 300;
   }
 
   public override moveBackward(): void {
-    this.sx = -400;
+    this.sx = -300;
   }
 }
 
@@ -305,11 +305,18 @@ class BottomPaddle extends HorizontalPaddle {
   }
 }
 
+export enum GameSound {
+  PADDLE = 0,
+  WALL = 1,
+  SCORE = 2,
+}
+
 export interface GameData {
   teams: Dictionary<number>;
   balls: Dictionary<Ball>;
   paddles: Dictionary<Paddle>;
   walls: Dictionary<Wall>;
+  sounds: Array<GameSound>;
 }
 
 interface CollisionData {
@@ -329,6 +336,7 @@ export abstract class Game {
     balls: {},
     paddles: {},
     walls: {},
+    sounds: [],
   };
 
   public playerPaddle: Dictionary<string>;
@@ -346,6 +354,8 @@ export abstract class Game {
   }
 
   update(t = 1) {
+    this.elements.sounds = [];
+
     const balls = Object.values(this.elements.balls).filter((b) => !b.outside);
     const paddles = Object.values(this.elements.paddles);
     const walls = Object.values(this.elements.walls);
@@ -365,7 +375,12 @@ export abstract class Game {
     ) {
       const { collision, subject, target } = data;
 
-      if (target instanceof Paddle) subject.team = target.team;
+      if (target instanceof Paddle) {
+        subject.team = target.team;
+        this.elements.sounds.push(GameSound.PADDLE);
+      }
+
+      if (target instanceof Wall) this.elements.sounds.push(GameSound.WALL);
 
       subject.sx += target.vx / 2;
       subject.sy += target.vy / 2;
@@ -403,6 +418,7 @@ export abstract class Game {
         if (b.team) {
           this.elements.teams[b.team]++;
           b.team = undefined;
+          this.elements.sounds.push(GameSound.SCORE);
         }
         setTimeout(() => {
           b?.reset();
@@ -494,6 +510,7 @@ export class Pong extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
+      sounds: [GameSound.SCORE],
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
   }
@@ -514,6 +531,7 @@ export class PongDouble extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
+      sounds: [GameSound.SCORE],
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
   }
@@ -541,6 +559,7 @@ export class Quadrapong extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
+      sounds: [GameSound.SCORE],
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
   }

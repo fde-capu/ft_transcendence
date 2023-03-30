@@ -6,7 +6,7 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { distinct, map, tap } from 'rxjs';
+import { distinct, map } from 'rxjs';
 import { Game, GameData, Pong, Dictionary } from '../../entity/game.entity';
 import { GameMode, Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
@@ -28,6 +28,12 @@ export class GameComponent implements AfterViewInit {
 
   score: Dictionary<number> = {};
 
+  sounds = [
+    new Audio('/assets/sounds/paddle.mp3'),
+    new Audio('/assets/sounds/wall.mp3'),
+    new Audio('/assets/sounds/score.mp3'),
+  ];
+
   ngAfterViewInit(): void {
     switch (this.room.mode) {
       case GameMode.PONG:
@@ -43,17 +49,13 @@ export class GameComponent implements AfterViewInit {
     this.game.reset();
 
     let gd: GameData | undefined;
-    this.roomSocket
-      .fromEvent<GameData>('game:status')
-      .subscribe({ next: msg => (gd = msg) });
-
-    this.roomSocket
-      .fromEvent<GameData>('game:status')
-      .pipe(
-        map(gd => gd.teams),
-        distinct()
-      )
-      .subscribe({ next: s => (this.score = s) });
+    this.roomSocket.fromEvent<GameData>('game:status').subscribe({
+      next: status => {
+        gd = status;
+        this.score = status.teams;
+        status.sounds.forEach(sound => this.sounds[sound].play());
+      },
+    });
 
     const frameRate = 1000 / 60;
     let lastUpdate = Date.now();

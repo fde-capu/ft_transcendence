@@ -267,7 +267,7 @@ export class Room {
     if (!this.gameTimeout)
       setTimeout(() => {
         this.finish();
-      }, 60000);
+      }, 100000);
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
