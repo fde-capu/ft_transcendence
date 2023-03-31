@@ -3,6 +3,7 @@ import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { RoomsService } from '../service/rooms.service';
 import { Game, Pong, PongDouble, Quadrapong } from './game.entity';
+import { createMatchHistory } from '../util/game-data-to-match-history.converter';
 
 export type ClientSocket = Socket & { subject: string; name: string };
 
@@ -116,11 +117,11 @@ export class Room {
     this.service.listNonEmptyRooms();
   }
 
-  public leave(user: User): void {
+  public async leave(user: User): Promise<void> {
     this.logger.log(`Leave: ${user.id}`);
 
     if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
-      this.finish();
+      await this.finish();
 
     this.teams.forEach((t) => {
       t.players = t.players.filter((p) => p.id != user.id);
@@ -284,14 +285,22 @@ export class Room {
     this.service.listNonEmptyRooms();
   }
 
-  private finish(): void {
+  private async finish(): Promise<void> {
+    if (this.inGame === false) return;
+    this.inGame = false;
+
     this.pause();
     this.teams.forEach((t) => t.players.forEach((p) => (p.ready = false)));
     if (this.gameTimeout) clearTimeout(this.gameTimeout);
 
-    // TODO save the score
+    let match = createMatchHistory(
+      structuredClone(this.mode),
+      structuredClone(this.teams),
+      structuredClone(this.game?.elements.teams),
+    );
 
-    this.inGame = false;
+    match = await this.service.historyService.saveMatchHistory(match);
+    this.logger.log(`Match finished: ${match.id}`);
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();

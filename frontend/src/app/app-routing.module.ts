@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './auth/guard/auth.guard';
@@ -9,7 +9,6 @@ import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
-import { GameComponent } from './game/components/game/game.component';
 import { LogOutComponent } from './log-out/log-out.component';
 import { GameHistoryComponent } from './game-history/game-history.component';
 
@@ -67,10 +66,6 @@ const routes: Routes = [
   {
     path: 'logout',
     component: LogOutComponent,
-  },
-  {
-    path: 'gamehistory',
-    component: GameHistoryComponent,
   },
   {
     path: 'login',

@@ -5,12 +5,15 @@ import { Server, Socket } from 'socket.io';
 import { Dictionary } from '../entity/game.entity';
 import { ClientSocket, Room, User } from '../entity/room.entity';
 import { hideCircular } from '../helper/hide-server.replacer';
+import { MatchHistoryService } from './match-history.service';
 
 @Injectable()
 export class RoomsService {
   server: Server;
 
   rooms: Dictionary<Room> = {};
+
+  public constructor(public readonly historyService: MatchHistoryService) {}
 
   public roomCreate(client: ClientSocket): void {
     let id: string;

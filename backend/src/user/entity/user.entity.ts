@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 export interface UserDTO {
   intraId: string;
@@ -26,16 +26,7 @@ export interface StatisticsDTO {
 
 @Entity()
 export class Users {
-  @PrimaryGeneratedColumn({
-    name: 'id',
-  })
-  id?: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-    name: 'intraId',
-  })
+  @PrimaryColumn()
   intraId?: string;
 
   @Column({
