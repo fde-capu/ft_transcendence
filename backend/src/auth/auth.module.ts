@@ -9,8 +9,8 @@ import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/user/entity/user.entity';
-import { GameHistory } from '../game/game-record';
 import { ConfigService } from '@nestjs/config';
+import { QRSecret } from './qrsecret-entity';
 
 @Module({
   providers: [
@@ -22,7 +22,7 @@ import { ConfigService } from '@nestjs/config';
 	AuthController,
   ],
   imports: [FortyTwoModule, UserModule,
-    TypeOrmModule.forFeature([Users, GameHistory])],
+    TypeOrmModule.forFeature([Users, QRSecret])],
   controllers: [AuthController],
   exports: [TokenService, AuthController],
 })

@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
 import { catchError, firstValueFrom, map, switchMap, tap } from 'rxjs';
 import { ErrorFortyTwoApi } from 'src/forty-two/service/error';
@@ -14,6 +11,14 @@ import { JWTPayload } from 'jose';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/service/user.service';
 import { UserFortyTwoApi, Versions } from 'src/forty-two/service/user';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { QRSecret } from '../qrsecret-entity';
+
+export interface qrSecret {
+	id: string;
+	secret: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -27,9 +32,24 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly otp: OtpService,
     readonly configService: ConfigService,
+	@InjectRepository(QRSecret) private readonly qrRepository: Repository<QRSecret>,
   ) {
     this.frontendOrigin = this.configService.get<string>('FRONTEND_ORIGIN');
+	this.setQrMap({intraId: "T-t-teste", secret: "XXX"});
   }
+
+	async setQrMap(record:QRSecret):Promise<QRSecret> {
+		return await this.qrRepository.save(record);
+	}
+
+//	async getQrMap(intraId:string):Promise<string> {
+//		const resp = await this.qrRepository.createQueryBuilder("qr")
+//			.where("qr.intraId = :intraId", { intraId: intraId })
+//			.getOne();
+//		if (resp === null)
+//			return "";
+//		return resp.secret;
+//	}
 
   public redirectToAuthorizeEndpoint(response: Response, state?: string) {
     response.redirect(this.fortyTwoService.getAuthorizeUrl(state));

@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
 import { Users } from './user/entity/user.entity';
 import { GameHistory } from './game/game-record';
+import { QRSecret } from './auth/qrsecret-entity';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
 import { RegisterController } from './user/controller/registred.controller';
@@ -31,7 +32,7 @@ import { ChatGateway } from './chat/chat.gateway';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Users, GameHistory],
+        entities: [Users, GameHistory, QRSecret],
         synchronize: true,
       }),
       inject: [ConfigService],
