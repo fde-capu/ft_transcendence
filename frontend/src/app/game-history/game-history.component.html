@@ -1,9 +1,9 @@
 <h2>Match History</h2>
 <table *ngIf='user && histRender.length else no_matches' class='mainTable'>
   <tr *ngFor='let match of histRender' class='match'>
-	<td> {{ match.pongMode }} </td>
+	<td style='width: 1em;'> <div class='vertical'> {{ match.pongMode }} </div></td>
 	<td>
-		<table class="divisor">
+		<table>
 			<tr *ngFor='let team of match.teams'>
 				<td>
 					<span *ngIf='isUserIn(team) else not'>
@@ -14,20 +14,23 @@
 						<span *ngIf='team.victory' style='opacity:.3;'>&#10004;</span>
 						<span *ngIf='!team.victory' style='opacity:.3;'>&#x2717;</span>
 					</ng-template>
+					<span *ngIf='match.pongMode == "PONG2"' class='ununstrusiveKey'>&#123;</span>
 				</td>
 				<td>
-					<table style='display: inline-table' class='non-divisor'>
+					<table style='display: inline-table'>
 						<tr *ngFor='let player of team.players'>
 							<td style='min-width: 4em;'>
 								{{ player.intraId }}
 							</td>
-							<td style='width: 12em; max-width: 12em; overflow: hidden;'>
+							<td>
+							<span style='width: 14em; max-width: 14em; overflow: hidden; display:block;'>
 								{{ player.nameInGame }}
+							</span>
 							</td>
-							<td style='width: 4em;'>
+							<td style='width: 5em; min-width: 5em; text-align: center;'>
 								+{{ player.scoreMade | number:'2.0-0' }}
 							</td>
-							<td style='width: 2em;'>
+							<td style='width: 2em; text-align: center;'>
 								{{ player.goalsMade }}/{{ player.goalsTaken }}
 							</td>
 						</tr>
@@ -36,7 +39,7 @@
 			</tr>
 		</table>
 	</td>
-	<td>
+	<td style='text-align: center;'>
 		{{ match.date | date:'short':'UTC' }}
 		<br>
 		{{ match.duration * 1000 | date:'mm:ss' }} min.

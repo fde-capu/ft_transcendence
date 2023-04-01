@@ -76,8 +76,6 @@ export class ProfileComponent {
 				this.amIBlocked=this.userService.amIBlocked(this.displayUser);
 			}
 		)
-		await new Promise(resolve => setTimeout(resolve, 3007));
-		await this.getDisplayUser();
 	}
 
 	async setOwnership() {

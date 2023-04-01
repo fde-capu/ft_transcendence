@@ -1,5 +1,5 @@
 .mainTable {
-	border: 3px solid red;
+	margin-bottom: 1em;
 }
 
 table {
@@ -8,7 +8,7 @@ table {
 }
 
 td, th {
-	padding: 0 0.5em;
+	padding: 0 var(--pad);
 	white-space: nowrap;
 	min-width: fit-content;
 }
@@ -16,10 +16,13 @@ td, th {
 	border: 0.2em solid #333;
 }
 
-.divisor tr {
-	border-bottom: var(--border-thin);
+.vertical {
+    transform: rotate(-90deg);
 }
-
-.non-divisor tr {
-	border-bottom: none;
+.ununstrusiveKey {
+	position: absolute;
+	font-size: 3em;
+	margin-top: -0.40em;
+	margin-left: 0px;
+	opacity: .2;
 }

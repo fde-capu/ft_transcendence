@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { InvitationService } from '../invitation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-u2u-actions',
@@ -21,6 +22,7 @@ export class U2uActionsComponent {
 	constructor(
 		private userService: UserService,
 		private readonly invitationService: InvitationService,
+		private readonly router: Router,
 	){}
 
 	ngOnChanges() {
@@ -52,5 +54,9 @@ export class U2uActionsComponent {
 
 	checkMe() {
 		this.isMe = UserService.currentIntraId == this.user?.intraId;
+	}
+
+	goToProfile() {
+		this.router.navigate(['/profile/' + this.user?.intraId]);
 	}
 }

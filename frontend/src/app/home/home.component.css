@@ -1,1 +1,12 @@
-
+.main-screen {
+}
+.big-title {
+	font-variant-caps: all-petite-caps;
+	margin: 4px 0px 0px 24px;
+	font-size:var(--font-huge);
+}
+.menu-items {
+	position: absolute;
+	right: 0;
+	bottom: 1em;
+}

@@ -13,7 +13,6 @@ import { ChatTextComponent } from './chat-text/chat-text.component';
 import { RenderFilterComponent } from './render-filter/render-filter.component';
 import { ChatInputComponent } from './chat-input/chat-input.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
-import { WindowTitleComponent } from './window-title/window-title.component';
 import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { LogOutComponent } from './log-out/log-out.component';
@@ -43,7 +42,6 @@ import { InviteModule } from './invitation.module';
     RenderFilterComponent,
     ChatInputComponent,
     ChatBoxComponent,
-    WindowTitleComponent,
 	ChatRoomListComponent,
 	CreateMatchComponent,
  LogOutComponent,

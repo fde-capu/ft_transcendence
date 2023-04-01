@@ -2,7 +2,7 @@ ft_transcendence
 Checklist based on sub. 12.1
 
 [ ]	VERIFICAR: you must use the latest stable version of every library or framework used in your project.
-[ ] CONFIGURAÇÕES DE COMPATIBILIDADE COM FIREFOX ou SAFARI ou OUTRO?: Google Chrome and one additional web browser of your choice.
+[X] CONFIGURAÇÕES DE COMPATIBILIDADE COM FIREFOX ou SAFARI ou OUTRO?: Google Chrome and one additional web browser of your choice.
 [?]	HASHEAMENTO: Any password stored in your database must be hashed. (Não armazenamos nenhum password na DB.) (...) Please make sure you use a strong password hashing algorithm.
 [?] INJEÇÃO: Your website must be protected against SQL injections. (nativo no Angular).
 [?] VALIDAÇÃO: Server-side validation for forms and any user input. (Feito apenas 4 <= string.length <= 42)
@@ -37,3 +37,23 @@ Bug notes:
 [X] Better behavior on frontend while server is down. (Solution not perfect, still some ERR::CONNECTION CLOSED from browser, but there are not too many anymore);
 [X] Check if behavior is of with 2FA from 42 API + PONG!
 [X] Menu-bar blinking when updating.
+
+
+- When installing frontend packs
+npm WARN deprecated @npmcli/move-file@2.0.1: This functionality has been moved 
+to @npmcli/fs
+npm WARN deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-cod
+ec instead
+
+- On install backend pack
+npm WARN deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-cod
+ec instead
+
+- On frontend and backedn npm build:
+MANY TIMES REPEATED:
+npm WARN tar TAR_ENTRY_ERROR EINVAL: invalid argument, fchown
+
+- On finished Compilation of frontend:
+frontend                    | Warning: /app/node_modules/angularx-qrcode/fesm2020/angularx-qrcode.mjs depends on 'qrcode'. CommonJS 
+or AMD dependencies can cause optimization bailouts.
+frontend                    | For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies

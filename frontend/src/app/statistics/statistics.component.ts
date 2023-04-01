@@ -14,12 +14,14 @@ export class StatisticsComponent {
 	){};
 	@Input() user?: User;
 	stat?: Statistics;
-	ngOnChanges() {
+	ngOnInit() {
 		this.getStats();
 	}
-	getStats() {
-		if (!this.user)
-			return ;
+	async getStats(): Promise<void> {
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 211));
+			return await this.getStats();
+		}
 		this.userService.getStats(this.user.intraId).subscribe(_=>{
 			//console.log("Statistics got:", _);
 			this.stat=_;

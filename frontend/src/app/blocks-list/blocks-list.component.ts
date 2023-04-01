@@ -12,16 +12,20 @@ export class BlocksListComponent {
     private userService: UserService,
   ) {}
 	@Input() user: User | undefined;
+	oldId: string = "";
   blocks: User[] = [];
   ngOnChanges() {
 		this.getBlocks();
   }
-  async getBlocks() {
+  async getBlocks() : Promise<void> {
+	if ((!this.user) || (this.oldId == this.user.intraId)) {
+		await new Promise(resolve => setTimeout(resolve, 5239));
+		return await this.getBlocks();
+	}
+	this.oldId = this.user.intraId;
 	this.userService.getBlocks(this.user).subscribe(_=>{
 		//console.log("FriendsListComponent got", _);
 		this.blocks = _;
 	});
-	await new Promise(resolve => setTimeout(resolve, 6543));
-	this.getBlocks();
   }
 }

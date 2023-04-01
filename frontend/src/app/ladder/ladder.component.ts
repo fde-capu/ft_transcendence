@@ -19,7 +19,15 @@ export class LadderComponent {
 		private readonly fun: HelperFunctionsService,
 	){};
 
-	ngOnChanges() {
+	ngOnInit() {
+		this.getLadderOnce();
+	}
+
+	async getLadderOnce(): Promise<void> {
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 211));
+			return await this.getLadderOnce();
+		}
 		this.userService.getLadder().subscribe(_=>{
 			this.ladder=_;
 			this.ladder.sort(function(a:any, b:any){return (b.score - a.score)});

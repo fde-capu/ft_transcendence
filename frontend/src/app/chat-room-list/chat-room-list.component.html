@@ -1,31 +1,29 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
 <h2>Chat Room List</h2>
-<table *ngIf='visibleRooms.length'>
-<tr *ngFor="let room of visibleRooms">
-	<td><b>
-		<span *ngIf="room.isPrivate">PRIVATE </span>
-		<span *ngIf="!room.isPrivate">PUBLIC </span>
-		<span *ngIf="room.password">PROTECTED</span>
-		CHAT:
-	</b></td><td>
-		{{ room.name }}
-	</td>
-	<td>
-		<span *ngIf="!isCurrentUserBlocked(room)">
-			<button *ngIf="!room.password" routerLink="/chat/{{room.id}}">ENTER</button>
-			<span *ngIf="room.password">
-				<button id="btn{{room.id}}" (click)='submitEntrance(room)'>ENTER</button>
-				<input id="pass{{room.id}}" [ngModel]="password.get(room.id)" (ngModelChange)="password.set(room.id, $event)"
-					(keydown.enter)="fun.blur('pass' + room.id); fun.blink('btn' + room.id); submitEntrance(room);"
-					placeholder="<- Type password."
-				/>
+<div *ngIf='visibleRooms.length'>
+	<div *ngFor="let room of visibleRooms" class='room-line'>
+			<span *ngIf="room.isPrivate">PRIVATE </span>
+			<span *ngIf="!room.isPrivate">PUBLIC </span>
+			<span *ngIf="room.password">PROTECTED</span>
+			CHAT:
+		
+			{{ room.name }}
+		<div>
+			<span *ngIf="!isCurrentUserBlocked(room)">
+				<button *ngIf="!room.password" routerLink="/chat/{{room.id}}">ENTER</button>
+				<span *ngIf="room.password">
+					<button id="btn{{room.id}}" (click)='submitEntrance(room)'>ENTER</button>
+					<input id="pass{{room.id}}" [ngModel]="password.get(room.id)" (ngModelChange)="password.set(room.id, $event)"
+						(keydown.enter)="fun.blur('pass' + room.id); fun.blink('btn' + room.id); submitEntrance(room);"
+						placeholder="<- Type password."
+					/>
+				</span>
+				<span *ngIf="isAdmin(user?.intraId, room.id)"><-[ Administrator ]</span>
 			</span>
-			<span *ngIf="isAdmin(user?.intraId, room.id)"><-[ Administrator ]</span>
-		</span>
-		<span *ngIf="isCurrentUserBlocked(room)">&nbsp;<b><- YOU ARE BLOCKED!</b></span>
-		<span *ngIf="isCurrentUserMuted(room)">&nbsp;<b><- YOU ARE MUTED!</b></span>
-	</td>
-</tr>
-</table>
+			<span *ngIf="isCurrentUserBlocked(room)">&nbsp;<b><- YOU ARE BLOCKED!</b></span>
+			<span *ngIf="isCurrentUserMuted(room)">&nbsp;<b><- YOU ARE MUTED!</b></span>
+		</div>
+	</div>
+</div>
 <div *ngIf='!visibleRooms.length'>Nada.</div>

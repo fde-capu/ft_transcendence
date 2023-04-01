@@ -8,10 +8,8 @@
   <button *ngIf='!muted && !messageTooBig'
 	id="send-button" 
 	type="button" (click)="send($event);"
-	style="position: absolute; right: 0; bottom: 0"
   >Enter</button>
   <button *ngIf='!muted && messageTooBig'
 	type="button" disabled
-	style="position: absolute; right: 0; bottom: 0"
   >Message Too Loong! (Max 512)</button>
 </div>
