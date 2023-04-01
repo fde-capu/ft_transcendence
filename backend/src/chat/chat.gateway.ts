@@ -3,12 +3,9 @@ import {
   WebSocketGateway,
   MessageBody,
   ConnectedSocket,
-  OnGatewayConnection,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { parse } from 'cookie';
-import { TokenService } from 'src/auth/service/token.service';
 import { ChatService } from './chat.service';
 
 @WebSocketGateway({
@@ -16,73 +13,57 @@ import { ChatService } from './chat.service';
   cookie: true,
   namespace: 'chat',
 })
-export class ChatGateway implements OnGatewayConnection {
+export class ChatGateway {
   @WebSocketServer()
   server: Server;
-  constructor(
-	private readonly tokenService: TokenService,
-	private chatService: ChatService,
-  ) {}
 
-  async handleConnection(client: Socket, ...args: any[]) {}
+  constructor(private chatService: ChatService) {}
 
   @SubscribeMessage('chat')
   handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() payload: string,
+    @MessageBody() payload: any, // TODO create a interface for it
   ) {
-	//console.log("Chat got", payload);
-	let data: any;
-	data = payload; // Magicaly converts unreadable JSON data into readable. (Payload is kindda string|Object, JSON.parse fails (!) and this works (!).)
-	//console.log("Chat data", data);
-
-	if (data.room_gone)
-	{
-		console.log("-> room_gone;");
-		this.chatService.roomGone(data.room_gone);
-		this.broadcastChatRooms(client);
-		return ;
-	}
-	if (data.room_changed)
-	{
-		console.log("-> room_changed;");
-		this.chatService.roomChanged(data.room_changed);
-		this.broadcastChatRooms(client);
-		return ;
-	}
-	if (payload == "get_rooms")
-	{
-		this.sendChatRoomsToSingleClient(client);
-		return ;
-	}
-	// (else) // Watta terrible switch case!
-	console.log("-> copy of payload (individual messages);");
-	this.server.emit('chat', {
-		author: client['subject'],
-		payload: payload,
-	});
-	return ;
+    if (payload.room_gone) {
+      console.log('-> room_gone;');
+      this.chatService.roomGone(payload.room_gone);
+      this.broadcastChatRooms(client);
+      return;
+    }
+    if (payload.room_changed) {
+      console.log('-> room_changed;');
+      this.chatService.roomChanged(payload.room_changed);
+      this.broadcastChatRooms(client);
+      return;
+    }
+    if (payload == 'get_rooms') {
+      this.sendChatRoomsToSingleClient(client);
+      return;
+    }
+    console.log('-> copy of payload (individual messages);');
+    this.server.emit('chat', {
+      author: client['subject'],
+      payload: payload,
+    });
+    return;
   }
 
-  broadcastChatRooms(client: Socket)
-  {
-	console.log("-> allRooms broadcast;");
-	this.server.emit('chat', {
-		author: client['subject'],
-		payload: {
-			update_rooms: this.chatService.allRooms()
-		}
-	});
+  broadcastChatRooms(client: Socket) {
+    console.log('-> allRooms broadcast;');
+    this.server.emit('chat', {
+      author: client['subject'],
+      payload: {
+        update_rooms: this.chatService.allRooms(),
+      },
+    });
   }
 
-  sendChatRoomsToSingleClient(client: Socket)
-  {
-	console.log("-> allRooms sendChatRoomsToSingleClient;");
-	client.emit('chat', {
-		author: client['subject'],
-		payload: {
-			update_rooms: this.chatService.allRooms()
-		}
-	});
+  sendChatRoomsToSingleClient(client: Socket) {
+    client.emit('chat', {
+      author: client['subject'],
+      payload: {
+        update_rooms: this.chatService.allRooms(),
+      },
+    });
   }
 }

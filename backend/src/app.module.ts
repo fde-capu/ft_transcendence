@@ -2,14 +2,10 @@ import { HttpModule } from '@nestjs/axios';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
-import { Users } from './user/entity/user.entity';
-import { GameHistory } from './game/game-record';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
-import { RegisterController } from './user/controller/registred.controller';
 import { ChatService } from './chat/chat.service';
 import { ChatController } from './chat/chat.controller';
-import { UserService } from './user/service/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
@@ -31,7 +27,7 @@ import { ChatGateway } from './chat/chat.gateway';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Users, GameHistory],
+        autoLoadEntities: true,
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -41,11 +37,7 @@ import { ChatGateway } from './chat/chat.gateway';
     GameModule,
   ],
   controllers: [PingController, ChatController],
-  providers: [
-	InvitationGateway,
-	ChatGateway,
-	ChatService,
-  ],
+  providers: [InvitationGateway, ChatGateway, ChatService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

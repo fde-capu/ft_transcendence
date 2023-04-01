@@ -1,232 +1,320 @@
+import { hideCircular } from '../helper/hide-server.replacer';
+import { Server, Socket } from 'socket.io';
+import { Logger } from '@nestjs/common';
+import { RoomsService } from '../service/rooms.service';
+import { Game, Pong, PongDouble, Quadrapong } from './game.entity';
+import { createMatchHistory } from '../util/game-data-to-match-history.converter';
+
+export type ClientSocket = Socket & { subject: string; name: string };
+
+export enum GameMode {
+  PONG = 0,
+  PONGDOUBLE = 1,
+  QUADRAPONG = 2,
+}
+
 export class User {
-  private connected = true;
+  public connected = true;
 
-  constructor(private readonly id: string, private readonly name: string) {}
+  public constructor(
+    public readonly id: string,
+    public readonly name: string,
+  ) {}
 
-  public getId(): string {
-    return this.id;
-  }
-
-  public getName(): string {
-    return this.name;
-  }
-
-  public getConnected(): boolean {
-    return this.connected;
-  }
-
-  public setConnected(value: boolean): void {
-    this.connected = value;
+  public static from(client: ClientSocket): User {
+    return new User(client['subject'], client['name']);
   }
 }
 
 export class Player extends User {
-  private ready = false;
+  public ready = false;
 
-  public constructor(id: string, name: string) {
-    super(id, name);
-  }
-
-  public isReady(): boolean {
-    return this.ready;
-  }
-
-  public setReady(status: boolean): void {
-    this.ready = status;
-  }
-
-  static fromUser(user: User): Player {
-    const player = new Player(user.getId(), user.getName());
-    player.setConnected(user.getConnected());
-    return player;
-  }
-
-  public setConnected(value: boolean): void {
-    if (!value) this.setReady(false);
-    super.setConnected(value);
+  public static from(user: User): Player {
+    return new Player(user.id, user.name);
   }
 }
 
 export class Team {
-  private players: { [id: string]: Player } = {};
+  public players: Array<Player> = [];
 
-  public constructor(private readonly capacity: number = 1) {
-    if (capacity <= 0)
-      throw new Error('Capacity must be a positive non-zero value');
-  }
-
-  public isReady(): boolean {
-    return Object.values(this.players).reduce(
-      (c, p) => c && p.isReady(),
-      this.isFull(),
-    );
-  }
-
-  public resetReadyStatus(): void {
-    Object.values(this.players).forEach((p) => p.setReady(false));
-  }
+  public constructor(
+    public readonly id: string,
+    public readonly capacity = 1,
+  ) {}
 
   public isFull(): boolean {
-    return Object.keys(this.players).length == this.capacity;
+    return this.players.length == this.capacity;
   }
-
-  public addPlayer(player: User): void {
-    if (Object.keys(this.players).length + 1 > this.capacity)
-      throw new Error('Capacity overflow');
-    this.players[player.getId()] = Player.fromUser(player);
-  }
-
-  public removePlayer(player: User): void {
-    delete this.players[player.getId()];
-  }
-
-  public getPlayers(): Array<Player> {
-    return Object.values(this.players);
-  }
-
-  public getPlayer(user: User): Player | undefined {
-    return this.players[user.getId()];
-  }
-}
-
-export enum Mode {
-  PONG,
-  PONGDOUBLE,
-  QUADRAPONG,
 }
 
 export class Room {
-  private teams: { [id: string]: Team } = {};
+  private readonly logger: Logger;
 
-  private audience: Array<User> = [];
+  public teams: Array<Team> = [];
 
-  private mode: Mode = Mode.PONG;
+  public audience: Array<User> = [];
 
-  private inGame = false;
+  public inGame = false;
 
-  private host?: User;
+  public running = false;
 
-  public constructor(private readonly id: string) {
+  public mode: GameMode = GameMode.PONG;
+
+  public game?: Game;
+
+  public gameInterval?: NodeJS.Timer;
+
+  public lastUpdate?: number;
+
+  public gameTimeout?: NodeJS.Timeout;
+
+  public constructor(
+    public readonly id: string,
+    public server: Server,
+    public readonly service: RoomsService,
+    public host: User,
+  ) {
+    this.logger = new Logger(`Room ${id}`);
+    this.logger.log(`Room ${id} created by ${host.id}`);
     this.setMode(this.mode);
   }
 
-  public getId(): string {
-    return this.id;
-  }
-
-  public getHost(): User {
-    return this.host;
-  }
-
-  public getTeams(): Array<Team> {
-    return Object.values(this.teams);
-  }
-
-  private assignPlayersToTeams(): void {
-    let team: Team;
-    this.audience = [
-      ...this.audience.filter((u) => {
-        team = this.getTeams().find((t) => !t.isFull() && t != team);
-        if (!team) return true;
-        team.addPlayer(u);
-        return false;
-      }),
-    ];
-  }
-
-  public join(user: User): void {
-    const userInRoom =
-      this.audience.find((u) => u.getId() == user.getId()) ||
-      this.getTeams()
-        .map((t) => t.getPlayer(user))
-        .find((p) => p != null);
-    if (userInRoom) {
-      userInRoom.setConnected(true);
-      return;
-    }
-    user.setConnected(true);
-    if (!this.host) this.host = user;
-    this.audience.push(user);
-    this.assignPlayersToTeams();
-  }
-
-  public leave(user: User): void {
-    if (this.host?.getId() == user.getId()) {
-      this.host = this.getTeams()
-        .flatMap((t) => t.getPlayers())
-        .find((p) => p.getId() != user.getId());
-    }
-    this.getTeams().forEach((t) => t.removePlayer(user));
-    this.audience = this.audience.filter((u) => u != user);
-    this.assignPlayersToTeams();
-  }
-
-  public isReady(): boolean {
-    return this.getTeams().reduce((c, t) => c && t.isReady(), true);
-  }
-
-  public resetReadyStatus(): void {
-    this.getTeams().forEach((t) => t.resetReadyStatus());
-  }
-
-  public getMode(): Mode {
-    return this.mode;
-  }
-
-  public setMode(mode: Mode): void {
-    this.resetReadyStatus();
-    this.audience = [
-      ...this.getTeams().flatMap((t) => t.getPlayers()),
-      ...this.audience,
-    ];
-    switch (mode) {
-      case Mode.PONG:
-        this.teams = {
-          left: new Team(1),
-          right: new Team(1),
-        };
-      case Mode.PONGDOUBLE:
-        this.teams = {
-          left: new Team(2),
-          right: new Team(2),
-        };
-      case Mode.QUADRAPONG:
-        this.teams = {
-          left: new Team(1),
-          right: new Team(1),
-          top: new Team(1),
-          bottom: new Team(1),
-        };
-    }
-    this.mode = mode;
-    this.assignPlayersToTeams();
-  }
-
-  public isInGame(): boolean {
-    return this.inGame;
-  }
-
-  public setStatus(inGame: boolean): void {
-    if (!this.isReady() && inGame)
-      throw new Error('All players must be ready before starting the game');
-    this.inGame = inGame;
+  public getPlayers(): Array<Player> {
+    return this.teams.flatMap((t) => t.players);
   }
 
   public getUsers(): Array<User> {
-    return this.audience.concat(this.getTeams().flatMap((t) => t.getPlayers()));
-  }
-
-  public disconnect(user: User): void {
-    const u = this.getUsers().find((u) => u.getId() == user.getId());
-    if (u) {
-      u.setConnected(false);
-      setTimeout(() => {
-        if (!u.getConnected()) this.leave(u);
-      }, 5000);
-    }
+    return [...this.getPlayers(), ...this.audience];
   }
 
   public isEmpty(): boolean {
-    return !!this.host;
+    return this.getUsers().length == 0;
+  }
+
+  public join(user: User): void {
+    const found = this.getUsers().find((u) => u.id == user.id);
+    if (found) {
+      if (!found.connected) this.logger.log(`Connected: ${user.id}`);
+      found.connected = true;
+      if (
+        this.inGame &&
+        !this.running &&
+        this.getPlayers().reduce((s, p) => p.connected && s, true)
+      )
+        this.resume();
+      this.server.emit('game:room:status', hideCircular(this));
+      this.service.listNonEmptyRooms();
+      return;
+    }
+
+    this.logger.log(`Join: ${user.id}`);
+
+    this.audience = [...this.audience, user];
+
+    this.rebalance();
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+  }
+
+  public async leave(user: User): Promise<void> {
+    this.logger.log(`Leave: ${user.id}`);
+
+    if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
+      await this.finish();
+
+    this.teams.forEach((t) => {
+      t.players = t.players.filter((p) => p.id != user.id);
+    });
+
+    this.audience = this.audience.filter((u) => u.id != user.id);
+
+    if (!this.isEmpty() && this.host.id == user.id) {
+      this.host = this.getUsers()[0];
+    }
+
+    this.rebalance();
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.deleteIfEmpty(this.id);
+    this.service.listNonEmptyRooms();
+  }
+
+  public disconnect(user: User): void {
+    const found = this.getUsers().find((u) => u.id == user.id);
+    if (!found) return;
+
+    this.logger.log(`Disconnected: ${user.id}`);
+
+    found.connected = false;
+
+    const player = this.getPlayers().find((p) => p.id == user.id);
+    if (player) {
+      player.ready = false;
+      if (this.inGame) this.pause();
+    }
+
+    setTimeout(
+      () => {
+        if (!found.connected) this.leave(user);
+      },
+      this.inGame ? 5000 : 1000,
+    );
+  }
+
+  private rebalance(): void {
+    this.audience = this.audience.filter((u) => {
+      const team = this.teams.find((t) => !t.isFull());
+      if (!team) return true;
+      team.players = [...team.players, Player.from(u)];
+      return false;
+    });
+  }
+
+  public setMode(mode: GameMode): void {
+    this.mode = mode;
+    this.audience = this.getUsers();
+    switch (mode) {
+      case GameMode.PONG:
+        this.teams = [new Team('LEFT', 1), new Team('RIGHT', 1)];
+        break;
+      case GameMode.PONGDOUBLE:
+        this.teams = [new Team('LEFT', 2), new Team('RIGHT', 2)];
+        break;
+      case GameMode.QUADRAPONG:
+        this.teams = [
+          new Team('LEFT', 1),
+          new Team('RIGHT', 1),
+          new Team('TOP', 1),
+          new Team('BOTTOM', 1),
+        ];
+        break;
+    }
+    this.rebalance();
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+  }
+
+  public sendStatus(client: Socket): void {
+    client.emit('game:room:status', hideCircular(this));
+  }
+
+  public ready(user: User): void {
+    this.getPlayers()
+      .filter((p) => p.id == user.id)
+      .forEach((p) => (p.ready = !p.ready));
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+    if (
+      this.getPlayers().reduce((s, p) => p.ready && s, true) &&
+      this.teams.reduce((s, t) => t.isFull() && s, true)
+    ) {
+      this.start();
+    }
+  }
+
+  public start(): void {
+    switch (this.mode) {
+      case GameMode.PONG:
+        this.game = new Pong();
+        this.game.playerPaddle = {
+          [this.teams[0].players[0].id]: 'left',
+          [this.teams[1].players[0].id]: 'right',
+        };
+        break;
+      case GameMode.PONGDOUBLE:
+        this.game = new PongDouble();
+        this.game.playerPaddle = {
+          [this.teams[0].players[0].id]: 'left1',
+          [this.teams[0].players[1].id]: 'left2',
+          [this.teams[1].players[0].id]: 'right1',
+          [this.teams[1].players[1].id]: 'right2',
+        };
+        break;
+      case GameMode.QUADRAPONG:
+        this.game = new Quadrapong();
+        this.game.playerPaddle = {
+          [this.teams[0].players[0].id]: 'left',
+          [this.teams[1].players[0].id]: 'right',
+          [this.teams[2].players[0].id]: 'top',
+          [this.teams[3].players[0].id]: 'bottom',
+        };
+        break;
+    }
+    this.game.reset();
+
+    setTimeout(() => {
+      this.resume();
+    }, 1000);
+
+    this.inGame = true;
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+  }
+
+  private pause(): void {
+    this.gameInterval = undefined;
+    this.lastUpdate = undefined;
+
+    this.running = false;
+    this.game.elements.running = false;
+    this.server.emit('game:status', this.game?.elements);
+    clearInterval(this.gameInterval);
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+  }
+
+  private resume(): void {
+    this.game.elements.running = true;
+    if (!this.gameTimeout)
+      setTimeout(() => {
+        this.finish();
+      }, 100000);
+    this.lastUpdate = Date.now();
+    this.gameInterval = setInterval(() => {
+      const currentTimestamp = Date.now();
+      this.game?.update((currentTimestamp - this.lastUpdate) / 1000);
+      this.lastUpdate = currentTimestamp;
+      this.server.emit('game:status', this.game?.elements);
+    }, 1000 / 25);
+
+    this.running = true;
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+  }
+
+  private async finish(): Promise<void> {
+    if (this.inGame === false) return;
+    this.inGame = false;
+
+    this.pause();
+    this.teams.forEach((t) => t.players.forEach((p) => (p.ready = false)));
+    if (this.gameTimeout) clearTimeout(this.gameTimeout);
+
+    let match = createMatchHistory(
+      structuredClone(this.mode),
+      structuredClone(this.teams),
+      structuredClone(this.game?.elements.teams),
+    );
+
+    match = await this.service.historyService.saveMatchHistory(match);
+    this.logger.log(`Match finished: ${match.id}`);
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
+  }
+
+  public moveForward(user: User): void {
+    this.game?.moveForward(user.id);
+  }
+
+  public moveBackward(user: User): void {
+    this.game?.moveBackward(user.id);
+  }
+
+  public stopMovement(user: User): void {
+    this.game?.stopMovement(user.id);
   }
 }

@@ -6,13 +6,9 @@ import { InvitationScreenComponent } from './invitation-screen/invitation-screen
 import { InviteSocket } from './invite.socket';
 
 @NgModule({
-  declarations: [
-	InvitationScreenComponent
-  ],
+  declarations: [InvitationScreenComponent],
   imports: [CommonModule, InviteRoutingModule],
   providers: [InviteSocket],
-  exports: [
-	InvitationScreenComponent,
-  ]
+  exports: [InvitationScreenComponent],
 })
 export class InviteModule {}

@@ -20,15 +20,12 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
 import { BlocksListComponent } from './blocks-list/blocks-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
-import { GameHistoryComponent } from './game-history/game-history.component';
 import { LadderComponent } from './ladder/ladder.component';
-
-import { U2uActionsModule } from './u2u-actions/u2u-actions.module';
 import { MenuBarModule } from './menu-bar/menu-bar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
 import { InviteModule } from './invitation.module';
-
+import { GameModule } from './game/game.module';
 
 @NgModule({
   declarations: [
@@ -42,15 +39,14 @@ import { InviteModule } from './invitation.module';
     RenderFilterComponent,
     ChatInputComponent,
     ChatBoxComponent,
-	ChatRoomListComponent,
-	CreateMatchComponent,
- LogOutComponent,
- FriendsListComponent,
- BlocksListComponent,
- UserBarComponent,
- StatisticsComponent,
- GameHistoryComponent,
- LadderComponent,
+    ChatRoomListComponent,
+    CreateMatchComponent,
+    LogOutComponent,
+    FriendsListComponent,
+    BlocksListComponent,
+    UserBarComponent,
+    StatisticsComponent,
+    LadderComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,14 +54,14 @@ import { InviteModule } from './invitation.module';
     HttpClientModule,
     AuthModule,
     FormsModule,
-	MenuBarModule,
-	AvatarModule,
-	MainMenuModule,
-	InviteModule,
+    MenuBarModule,
+    AvatarModule,
+    MainMenuModule,
+    InviteModule,
+    GameModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [
-	],
+  exports: [],
 })
 export class AppModule {}

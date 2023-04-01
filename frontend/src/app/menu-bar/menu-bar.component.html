@@ -1,15 +1,18 @@
 <div class="menu-bar">
-<div *ngIf='user' class='flex-line'>
-	<div class="burger" (click)="onClickBurger();"></div>
-	<div *ngIf="menuOpen" class="burger-menu" (mouseleave)="menuOff();" (click)="menuOff();">
-		<app-main-menu></app-main-menu>
-	</div>
-	<app-avatar></app-avatar>
-	<a class="user-name" routerLink="/profile/{{user.intraId}}">
-		{{user.intraId}} | {{user.name}}
-	</a>
-	<div class="score-big">{{ user.score | number:'6.0-0' }}</div>
-</div>
-<div *ngIf='!user' class='loading blinker'>
-</div>
+  <div *ngIf="user" class="flex-line">
+    <div class="burger" (click)="onClickBurger()"></div>
+    <div
+      *ngIf="menuOpen"
+      class="burger-menu"
+      (mouseleave)="menuOff()"
+      (click)="menuOff()">
+      <app-main-menu></app-main-menu>
+    </div>
+    <app-avatar></app-avatar>
+    <a class="user-name" routerLink="/profile/{{ user.intraId }}">
+      {{ user.intraId }} | {{ user.name }}
+    </a>
+    <div class="score-big">{{ user.score | number : '6.0-0' }}</div>
+  </div>
+  <div *ngIf="!user" class="loading blinker"></div>
 </div>

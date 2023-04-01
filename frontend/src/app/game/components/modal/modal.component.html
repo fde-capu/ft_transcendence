@@ -1,0 +1,11 @@
+<div *ngIf="!closed" id="container" class="center">
+  <article id="content">
+    <button id="closebtn" (click)="close()">X</button>
+    <header *ngIf="title">
+      {{ title }}
+    </header>
+    <div class="center">
+      <ng-content></ng-content>
+    </div>
+  </article>
+</div>

@@ -1,0 +1,65 @@
+<main id="container">
+  <header>
+    <h2>Match History</h2>
+  </header>
+  <nav>
+    <fieldset>
+      <legend>Options</legend>
+      <label for="mode">Mode</label>
+      <select
+        #gamemode
+        (change)="setMode(gamemode.value)"
+        name="mode"
+        id="mode">
+        <option value="0">PONG</option>
+        <option value="1">PONGDOUBLE</option>
+        <option value="2">QUADRAPONG</option>
+      </select>
+    </fieldset>
+  </nav>
+  <section *ngIf="!(matches | async)?.length" id="content" class="center">
+    <p>No matches found.</p>
+  </section>
+  <section *ngIf="(matches | async)?.length" id="content" class="center">
+    <h3 *ngIf="mode === 0">Pong</h3>
+    <h3 *ngIf="mode === 1">PongDouble</h3>
+    <h3 *ngIf="mode === 2">QuadraPong</h3>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">Left</th>
+          <th colspan="2">Right</th>
+          <ng-container *ngIf="mode >= 2">
+            <th colspan="2">Top</th>
+            <th colspan="2">Bottom</th>
+          </ng-container>
+        </tr>
+        <tr>
+          <th>Team</th>
+          <th>Score</th>
+          <th>Team</th>
+          <th>Score</th>
+          <ng-container *ngIf="mode >= 2">
+            <th>Team</th>
+            <th>Score</th>
+            <th>Team</th>
+            <th>Score</th>
+          </ng-container>
+        </tr>
+
+      </thead>
+      <tbody>
+        <tr *ngFor="let match of matches | async">
+          <ng-container *ngFor="let team of match.teams | keyvalue">
+            <td *ngIf="team.value">
+              <ul class="center">
+                <li *ngFor="let player of team.value.players">{{ player.name }}</li>
+              </ul>
+            </td>
+            <td *ngIf="team.value">{{ team.value.score }}</td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
