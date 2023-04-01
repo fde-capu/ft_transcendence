@@ -3,7 +3,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
 import { Users } from './user/entity/user.entity';
-import { GameHistory } from './game/game-record';
+import { MatchHistory } from './game/entity/match-history.entity';
 import { QRSecret } from './auth/qrsecret-entity';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
@@ -30,7 +30,7 @@ import { ChatGateway } from './chat/chat.gateway';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Users, GameHistory, QRSecret],
+        entities: [Users, MatchHistory, QRSecret],
         autoLoadEntities: true,
         synchronize: true,
       }),

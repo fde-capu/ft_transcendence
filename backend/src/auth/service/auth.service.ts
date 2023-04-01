@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
 import { catchError, firstValueFrom, map, switchMap, tap } from 'rxjs';
 import { ErrorFortyTwoApi } from 'src/forty-two/service/error';
