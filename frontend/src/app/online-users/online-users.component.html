@@ -1,6 +1,4 @@
-<app-menu-bar></app-menu-bar>
-<app-invitation-screen></app-invitation-screen>
-<h2 *ngIf='users.length'>Online Users</h2>
-<div *ngIf='users.length' class='multi-pics'>
-<app-avatar *ngFor='let friend of users' [user]="friend"></app-avatar>
+<h2 *ngIf="users.length">Online Users</h2>
+<div *ngIf="users.length" class="multi-pics">
+  <app-avatar *ngFor="let friend of users" [user]="friend"></app-avatar>
 </div>

@@ -3,18 +3,16 @@ import {
   WebSocketGateway,
   MessageBody,
   ConnectedSocket,
-  OnGatewayConnection,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { parse } from 'cookie';
 
 export interface Invitation {
-	from: string;
-	to: string;
-	type: string;
-	route: string;
-	answer?: boolean;
+  from: string;
+  to: string;
+  type: string;
+  route: string;
+  answer?: boolean;
 }
 
 @WebSocketGateway({
@@ -22,18 +20,15 @@ export interface Invitation {
   cookie: true,
   namespace: 'invite',
 })
-export class InvitationGateway implements OnGatewayConnection {
+export class InvitationGateway {
   @WebSocketServer()
   server: Server;
-
-  async handleConnection(client: Socket, ...args: any[]) { }
 
   @SubscribeMessage('invitation')
   handleMessage(
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: string,
   ) {
-	//console.log("Invitation got", payload);
     this.server.emit('invitation', {
       author: client['subject'],
       payload: payload,

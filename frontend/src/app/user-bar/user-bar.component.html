@@ -1,17 +1,16 @@
 <div *ngIf="user">
-	<app-avatar [user]="user" class='user-bar-avatar'></app-avatar>
-	<div class="mini-id">
-		{{user.intraId}}
-	</div>
-	<a class="user-name-medium" routerLink="/profile/{{user.intraId}}">
-		{{user.name}}
-	</a>
-	<app-u2u-actions
-		[isFriend]='isFriend'
-		[isBlock]='isBlock'
-		[amIBlocked]='amIBlocked'
-		[user]='user'
-		[singleline]='true'
-	></app-u2u-actions>
-	<div>{{ user.score | number:'6.0-0' }}</div>
+  <app-avatar [user]="user" class="user-bar-avatar"></app-avatar>
+  <div class="mini-id">
+    {{ user.intraId }}
+  </div>
+  <a class="user-name-medium" routerLink="/profile/{{ user.intraId }}">
+    {{ user.name }}
+  </a>
+  <app-u2u-actions
+    [isFriend]="isFriend"
+    [isBlock]="isBlock"
+    [amIBlocked]="amIBlocked"
+    [user]="user"
+    [singleline]="true"></app-u2u-actions>
+  <div>{{ user.score | number : '6.0-0' }}</div>
 </div>

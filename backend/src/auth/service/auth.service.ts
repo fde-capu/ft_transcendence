@@ -14,7 +14,7 @@ import { encode } from 'querystring';
 import { JWTPayload } from 'jose';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/service/user.service';
-import { UserFortyTwoApi, Versions } from 'src/forty-two/service/user';
+import { UserFortyTwoApi } from 'src/forty-two/service/user';
 
 @Injectable()
 export class AuthService {
@@ -68,9 +68,9 @@ export class AuthService {
         //store infos in DB
         switchMap((r) => this.userService.registerUserOk42(r)),
         // Create Session Token for the ft_transcendence
-		//exp: Math.floor(Date.now() / this.thousand) + expiresIn,
-		// ^ this was before, expiresIn is about 25 minutes
-		// v Our token expires in 86400, equals 24h.
+        //exp: Math.floor(Date.now() / this.thousand) + expiresIn,
+        // ^ this was before, expiresIn is about 25 minutes
+        // v Our token expires in 86400, equals 24h.
         map((r) =>
           this.tokenService.sign({
             sub: r.intraId,
@@ -80,7 +80,6 @@ export class AuthService {
           }),
         ),
         catchError((error: ErrorFortyTwoApi) => {
-          //console.log("createSessionToken got error:", error);
           throw new UnauthorizedException();
         }),
       ),
@@ -128,8 +127,8 @@ export class AuthService {
     const secret = this.getUserChallengeSecret(payload.sub);
     const valid = this.otp.verify(code, secret);
     if (!valid) {
-		throw new BadRequestException();
-	}
+      throw new BadRequestException();
+    }
 
     const token = await this.tokenService.sign({
       ...payload,
