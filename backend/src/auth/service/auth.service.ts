@@ -35,21 +35,20 @@ export class AuthService {
 	@InjectRepository(QRSecret) private readonly qrRepository: Repository<QRSecret>,
   ) {
     this.frontendOrigin = this.configService.get<string>('FRONTEND_ORIGIN');
-	this.setQrMap({intraId: "T-t-teste", secret: "XXX"});
   }
 
 	async setQrMap(record:QRSecret):Promise<QRSecret> {
 		return await this.qrRepository.save(record);
 	}
 
-//	async getQrMap(intraId:string):Promise<string> {
-//		const resp = await this.qrRepository.createQueryBuilder("qr")
-//			.where("qr.intraId = :intraId", { intraId: intraId })
-//			.getOne();
-//		if (resp === null)
-//			return "";
-//		return resp.secret;
-//	}
+	async getQrMap(intraId:string):Promise<string> {
+		const resp = await this.qrRepository.createQueryBuilder("qr")
+			.where("qr.intraId = :intraId", { intraId: intraId })
+			.getOne();
+		if (resp === null)
+			return "";
+		return resp.secret;
+	}
 
   public redirectToAuthorizeEndpoint(response: Response, state?: string) {
     response.redirect(this.fortyTwoService.getAuthorizeUrl(state));
@@ -119,16 +118,18 @@ export class AuthService {
     return { sub: payload.sub, exp: payload.exp, mfa: payload['mfa'] };
   }
 
-  private getUserChallengeSecret(subject: string) {
-    return 'LMWVYBAAAVES2FKG'; // TODO: get the user secret from database
+  private async getUserChallengeSecret(subject: string): Promise<string> {
+	let userSecret = await this.getQrMap(subject);
+	if (!userSecret) {
+		userSecret = this.otp.generateSecret();
+		this.setQrMap({intraId: subject, secret: userSecret});
+	}
+	return userSecret;
   }
 
-  public enableChallenge(payload?: JWTPayload) {
-	//console.log("enableChallenge part 1", payload);
+  public async enableChallenge(payload?: JWTPayload): Promise<any> {
     if (!payload) throw new UnauthorizedException();
-
-    // const secret = this.otp.generateSecret(); // TODO: save this information
-    const secret = this.getUserChallengeSecret(payload.sub); // TODO: Use generated secret instead
+    const secret = await this.getUserChallengeSecret(payload.sub);
     return {
       secret,
       uri: this.otp.getUri(payload.sub, secret),
@@ -142,7 +143,7 @@ export class AuthService {
     if (!payload) throw new UnauthorizedException();
     if (!code) throw new UnauthorizedException();
 
-    const secret = this.getUserChallengeSecret(payload.sub);
+    const secret = await this.getUserChallengeSecret(payload.sub);
     const valid = this.otp.verify(code, secret);
     if (!valid) {
 		throw new UnauthorizedException();

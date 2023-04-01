@@ -49,12 +49,12 @@ export class LoginComponent {
     });
 
 	this.authService.getChallenge().subscribe({
-		next: () => {
-			this.challengeUri = 'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
+		next: secret => {
+			this.challengeUri = secret;
 			this.message = "Please open Google/Microsoft Authenticator and type in the code.";
 		},
 		error: () => {
-			console.log("Subscription went wrong");
+			console.log("Subscription went wrong!");
 		},
 	});
   }
