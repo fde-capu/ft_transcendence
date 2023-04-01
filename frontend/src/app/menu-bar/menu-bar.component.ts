@@ -19,7 +19,7 @@ export class MenuBarComponent implements OnInit {
 
   async getUser(): Promise<void> {
     this.user = UserService.currentUser;
-    await new Promise(resolve => setTimeout(resolve, 1007));
+    await new Promise(resolve => setTimeout(resolve, this.user ? 7989 : 42));
     this.getUser();
   }
 

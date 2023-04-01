@@ -1,0 +1,57 @@
+.opt-box {
+	padding: 2em;
+}
+.options {
+	padding: 1em;
+	min-height: 3em;
+}
+.left {
+	display: block;
+}
+.middle {
+    overflow:hidden;
+	width: 100%;
+}
+.right {
+}
+.big-user {
+	position: relative;
+	font-size:var(--font-x-large);
+	max-width: 100%;
+	padding-right: 1em;
+}
+.small-id {
+	font-size:var(--font-small);
+	display: block;
+	margin-top: 8px;
+}
+.profile-image {
+	filter: grayscale(100%);
+	width: 6em;
+	height: 6em;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	display: -webkit-inline-box;
+	float: left;
+	margin: 0;
+	margin-right: 1em;
+}
+.info {
+	padding-top: 2em;
+	height: 4em;
+	overflow: auto;
+}
+.small-profile-image {
+	filter: grayscale(100%);
+	width: 3em;
+	height: 3em;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	display: -webkit-inline-box;
+	margin: 0;
+}
+.actions {
+	margin-left: 6em;
+}

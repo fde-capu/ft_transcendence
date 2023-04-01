@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from '../user';
 import { HelperFunctionsService } from '../helper-functions.service';
@@ -8,9 +8,9 @@ import { HelperFunctionsService } from '../helper-functions.service';
   templateUrl: './ladder.component.html',
   styleUrls: ['./ladder.component.css'],
 })
-export class LadderComponent implements OnChanges {
+export class LadderComponent implements OnInit {
   maxScore = 0;
-  ladder: any = [];
+  ladder: any[] = [];
 
   @Input() user?: User;
   @Input() them?: User;
@@ -19,7 +19,15 @@ export class LadderComponent implements OnChanges {
     private readonly fun: HelperFunctionsService
   ) {}
 
-  ngOnChanges() {
+  ngOnInit() {
+    this.getLadderOnce();
+  }
+
+  async getLadderOnce(): Promise<void> {
+    if (!this.user) {
+      await new Promise(resolve => setTimeout(resolve, 211));
+      return await this.getLadderOnce();
+    }
     this.userService.getLadder().subscribe(_ => {
       this.ladder = _;
       this.ladder.sort(function (a: any, b: any) {

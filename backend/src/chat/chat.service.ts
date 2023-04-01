@@ -14,7 +14,7 @@ export class ChatService {
   }
 
   validStringLength(str: string, min: number, max: number): boolean {
-    return str.length >= min && str.length <= max;
+    return str && str.length >= min && str.length <= max;
   }
 
   roomChanged(u_room: ChatRoomDTO) {

@@ -1,10 +1,8 @@
-<div *ngIf="!done && !this.chatRoom.id">Please hold on...</div>
-<div *ngIf="done && !this.chatRoom.id">Unexistent room!</div>
-<div *ngIf="done && this.chatRoom.id" class="window-full">
-  <app-window-title
-    [windowName]="windowName"
-    [windowExtras]="windowExtras"
-    (click)="onMenu()"></app-window-title>
+<div *ngIf="!this.chatRoom.id" class="overall">Please hold on...</div>
+<div *ngIf="this.chatRoom.id" class="window-full">
+  <div class="window-title" (click)="onMenu()">
+    {{ windowExtras }} {{ windowName }}
+  </div>
   <div class="window-close" (click)="onClose()"></div>
   <div class="window-menu-burger" (click)="onMenu()"></div>
   <div class="window-options" *ngIf="optionsOn">
@@ -76,7 +74,7 @@
             "
             (change)="validateAndEmit()" />
         </td>
-        <td style="min-width: 175px">
+        <td class="button-box">
           <button
             *ngIf="!invalidPasswordNotice"
             id="passwordButton"
@@ -106,12 +104,12 @@
         [ngClass]="{ yourself: isMe(user.intraId) }">
         <td *ngIf="!isMe(user.intraId)">&nbsp;</td>
         <!-- Interesting, element yourself::before takes a place in the first column. -->
-        <td>
+        <td class="user-name">
           <a routerLink="/profile/{{ user.intraId }}">
             {{ user.intraId }} | {{ user.name }}
           </a>
         </td>
-        <td>
+        <td class="button-box">
           <span
             *ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId)">
             <button style="margin-left: 0" (click)="kickThem(user)">
@@ -137,6 +135,36 @@
           </button>
           <span *ngIf="!iAmAdmin && isMuted(user)"><- Muted&nbsp;</span>
           <span *ngIf="!iAmAdmin && isBlocked(user)"><- Blocked&nbsp;</span>
+        </td>
+      </tr>
+    </table>
+
+    <h3 *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)">
+      Users not in Chat
+    </h3>
+    <table
+      *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)"
+      class="list-of-users">
+      <tr
+        *ngFor="let user of usersOutOfChat"
+        [ngClass]="{ yourself: isMe(user.intraId) }">
+        <td *ngIf="!isMe(user.intraId)">&nbsp;</td>
+        <!-- Interesting, element yourself::before takes a place in the first column. -->
+        <td class="user-name">
+          <a routerLink="/profile/{{ user.intraId }}">
+            {{ user.intraId }} | {{ user.name }}
+          </a>
+        </td>
+        <td class="button-box">
+          <span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
+          <button
+            *ngIf="!isBlocked(user) && !isMe(user.intraId)"
+            style="margin-left: 0"
+            (click)="doInvitationToThisRoom(user)">
+            Invite
+          </button>
+          <span *ngIf="isMuted(user)"><- Muted&nbsp;</span>
+          <span *ngIf="isBlocked(user)"><- Blocked&nbsp;</span>
         </td>
       </tr>
     </table>

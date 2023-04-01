@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-render-filter',
   templateUrl: './render-filter.component.html',
   styleUrls: ['./render-filter.component.css'],
 })
-export class RenderFilterComponent implements OnInit {
+export class RenderFilterComponent {
   ngOnInit() {
     const efx_glitch_frequency = 42; // seconds
     const noise_stream_max = 50; // number of frames

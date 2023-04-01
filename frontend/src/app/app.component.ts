@@ -8,12 +8,15 @@ import { UserService } from './user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  cleanChat = false;
+
   constructor(
     public router: Router,
     public chatService: ChatService,
     public userService: UserService
   ) {}
+
   ngOnInit() {
     setInterval(function () {
       const skrollers = Array.from(document.getElementsByClassName('scroller'));
@@ -25,8 +28,9 @@ export class AppComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.router.url.indexOf('/chat') != 0) {
-          this.chatService.getOutOfAnyChat();
-        }
+          if (!this.cleanChat) this.chatService.getOutOfAnyChat();
+          this.cleanChat = true;
+        } else this.cleanChat = false;
       }
     });
   }

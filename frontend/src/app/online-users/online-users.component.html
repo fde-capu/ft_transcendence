@@ -1,6 +1,4 @@
-<h2>Online Users</h2>
-<ul>
-  <li *ngFor="let user of users">
-    <app-user-bar [user]="user"></app-user-bar>
-  </li>
-</ul>
+<h2 *ngIf="users.length">Online Users</h2>
+<div *ngIf="users.length" class="multi-pics">
+  <app-avatar *ngFor="let friend of users" [user]="friend"></app-avatar>
+</div>

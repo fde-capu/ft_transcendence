@@ -13,10 +13,12 @@ import { BehaviorSubject } from 'rxjs';
 export class InvitationService {
   user?: User;
   receiveScreen = false;
+  friendScreen = false;
   declineScreen = false;
   acceptScreen = false;
   sentScreen = false;
   notificationScreen = false;
+  friendshipRequestString = 'Friendship Request';
   static inviteState: BehaviorSubject<InviteState | undefined> =
     new BehaviorSubject<InviteState | undefined>(undefined);
 
@@ -48,7 +50,14 @@ export class InvitationService {
         this.receiveScreen =
           _.payload.to == this.user?.intraId &&
           !_.payload.isReply &&
-          !_.payload.note;
+          !_.payload.note &&
+          _.payload.type != this.friendshipRequestString;
+
+        this.friendScreen =
+          _.payload.to == this.user?.intraId &&
+          !_.payload.isReply &&
+          !_.payload.note &&
+          _.payload.type == this.friendshipRequestString;
 
         this.declineScreen =
           _.payload.from == this.user?.intraId &&
@@ -77,6 +86,7 @@ export class InvitationService {
 
         InvitationService.inviteState.next({
           receiveScreen: this.receiveScreen,
+          friendScreen: this.friendScreen,
           declineScreen: this.declineScreen,
           acceptScreen: this.acceptScreen,
           sentScreen: this.sentScreen,
@@ -85,9 +95,8 @@ export class InvitationService {
         });
 
         if (this.notificationScreen && _.payload.routeBefore) {
-          const self = this;
-          setTimeout(function () {
-            return self.go(_.payload.route);
+          setTimeout(() => {
+            return this.go(_.payload.route);
           }, 1000);
         }
       }
@@ -138,5 +147,17 @@ export class InvitationService {
       instantaneous: false,
       isReply: false,
     });
+  }
+
+  async friendshipRequest(from: string, to: string) {
+    this.invite({
+      from: from,
+      to: to,
+      type: this.friendshipRequestString,
+    });
+  }
+
+  mutualFriends(a: string | undefined, b: string | undefined) {
+    this.userService.mutualFriends(a, b);
   }
 }

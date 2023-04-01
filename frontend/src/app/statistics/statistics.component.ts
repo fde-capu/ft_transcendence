@@ -2,8 +2,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
-  SimpleChanges,
 } from '@angular/core';
 import { User } from '../user';
 import { Statistics } from '../statistics';

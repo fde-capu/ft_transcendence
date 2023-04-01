@@ -29,6 +29,7 @@ export class InvitationScreenComponent implements OnInit {
       if (_) {
         if (
           _.receiveScreen ||
+          _.friendScreen ||
           _.declineScreen ||
           _.acceptScreen ||
           _.sentScreen ||
@@ -36,6 +37,7 @@ export class InvitationScreenComponent implements OnInit {
         )
           InvitationScreenComponent.state.push({
             receiveScreen: _.receiveScreen,
+            friendScreen: _.friendScreen,
             declineScreen: _.declineScreen,
             acceptScreen: _.acceptScreen,
             sentScreen: _.sentScreen,
@@ -72,8 +74,18 @@ export class InvitationScreenComponent implements OnInit {
   finalOk() {
     const old = this.flip();
     if (!old) return;
+    if (
+      old.acceptScreen &&
+      old.invitation &&
+      old.invitation.type == 'Friendship Request'
+    )
+      this.invitationService.mutualFriends(
+        old.invitation.from,
+        old.invitation.to
+      );
     const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
     const route = go ? old.invitation?.route : null;
     if (go && route && !this.alreadyInRoute()) this.invitationService.go(route);
+    this.router.navigate([this.router.url]);
   }
 }

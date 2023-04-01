@@ -11,12 +11,6 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-  constructor(
-    private userService: UserService,
-    public fun: HelperFunctionsService,
-    private route: ActivatedRoute
-  ) {}
-
   user?: User;
   displayUser?: User;
   idRequest!: string;
@@ -28,6 +22,12 @@ export class ProfileComponent implements OnInit {
   invalidNameNotice = false;
   lastName = '';
   lastPassword?: string;
+
+  constructor(
+    private userService: UserService,
+    public fun: HelperFunctionsService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.getUser();
@@ -65,14 +65,6 @@ export class ProfileComponent implements OnInit {
         this.setOwnership();
         this.amIBlocked = this.userService.amIBlocked(this.displayUser);
       });
-    await new Promise(resolve => setTimeout(resolve, 3007));
-    await this.getDisplayUser();
-  }
-
-  saveUser() {
-    if (this.displayUser) {
-      this.userService.saveUser(this.displayUser).subscribe(() => ({}));
-    }
   }
 
   async setOwnership() {
@@ -105,6 +97,14 @@ export class ProfileComponent implements OnInit {
   saveLastName() {
     const save = this.displayUser?.name;
     this.lastName = save ? save : '';
+  }
+
+  saveUser() {
+    if (this.displayUser) {
+      this.userService
+        .saveUser(this.displayUser)
+        .subscribe({ next: () => ({}) });
+    }
   }
 
   switchMfa() {

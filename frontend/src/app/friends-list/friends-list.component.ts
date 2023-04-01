@@ -16,12 +16,15 @@ export class FriendsListComponent implements OnChanges {
   ngOnChanges() {
     this.getFriends();
   }
-
-  async getFriends() {
+  async getFriends(): Promise<void> {
+    if (!this.user) {
+      await new Promise(resolve => setTimeout(resolve, 539));
+      return await this.getFriends();
+    }
     this.userService.getFriends(this.user).subscribe(_ => {
       this.friends = _;
     });
-    await new Promise(resolve => setTimeout(resolve, 6543));
+    await new Promise(resolve => setTimeout(resolve, 5239));
     this.getFriends();
   }
 }

@@ -9,6 +9,7 @@ import { UserService } from '../user.service';
 })
 export class BlocksListComponent implements OnChanges {
   @Input() user?: User;
+  oldId = '';
   blocks: User[] = [];
 
   constructor(private userService: UserService) {}
@@ -17,11 +18,14 @@ export class BlocksListComponent implements OnChanges {
     this.getBlocks();
   }
 
-  async getBlocks() {
+  async getBlocks(): Promise<void> {
+    if (!this.user || this.oldId == this.user.intraId) {
+      await new Promise(resolve => setTimeout(resolve, 5239));
+      return await this.getBlocks();
+    }
+    this.oldId = this.user.intraId;
     this.userService.getBlocks(this.user).subscribe(_ => {
       this.blocks = _;
     });
-    await new Promise(resolve => setTimeout(resolve, 6543));
-    this.getBlocks();
   }
 }

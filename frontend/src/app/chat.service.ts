@@ -1,5 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ChatSocket } from './chat.socket';
 import { Observable, of, BehaviorSubject } from 'rxjs';
@@ -20,13 +21,13 @@ export class ChatService {
   public readonly messageList = new BehaviorSubject<ChatMessage>(
     {} as ChatMessage
   );
-
   gotNews = false;
 
   constructor(
     private readonly socket: ChatSocket,
     public route: ActivatedRoute,
     private readonly router: Router,
+    private http: HttpClient,
     public userService: UserService,
     private readonly fun: HelperFunctionsService
   ) {
@@ -35,7 +36,7 @@ export class ChatService {
   }
 
   async getUser(): Promise<User> {
-    if (ChatService.user && Math.random() > 0.1) return ChatService.user;
+    if (ChatService.user && Math.random() > 0.04) return ChatService.user;
     if (this.userService.getQuickIntraId()) {
       this.userService.getLoggedUser().subscribe(backUser => {
         if (backUser) ChatService.user = backUser;
@@ -48,6 +49,7 @@ export class ChatService {
   think(msg: any) {
     this.gotNews = true;
     if (msg.payload.roomId) {
+      // This checks if is a simple message.
       for (const room of ChatService.allRooms)
         if (room.id == msg.payload.roomId) {
           // Now see if is not private-and-owned-by-others,
@@ -133,21 +135,13 @@ export class ChatService {
     });
   }
 
-  equalArray(a: string[] | undefined, b: string[] | undefined) {
-    if (!b && !a) return true;
-    if (!b || !a) return false;
-    for (const u of a) if (!this.fun.isStringInArray(u, b)) return false;
-    for (const u of b) if (!this.fun.isStringInArray(u, a)) return false;
-    return true;
-  }
-
   equalRooms(a: ChatRoom | undefined, b: ChatRoom | undefined) {
     if (!a && !b) return false;
     if (!a || !b) return false;
-    if (!this.equalArray(a.user, b.user)) return false;
-    if (!this.equalArray(a.admin, b.admin)) return false;
-    if (!this.equalArray(a.blocked, b.blocked)) return false;
-    if (!this.equalArray(a.muted, b.muted)) return false;
+    if (!this.fun.equalArray(a.user, b.user)) return false;
+    if (!this.fun.equalArray(a.admin, b.admin)) return false;
+    if (!this.fun.equalArray(a.blocked, b.blocked)) return false;
+    if (!this.fun.equalArray(a.muted, b.muted)) return false;
     return (
       a.id == b.id &&
       a.name == b.name &&
@@ -239,6 +233,7 @@ export class ChatService {
 
   revokeAdmin(roomId: string | null | undefined, intraId: string) {
     if (!roomId) return;
+    console.log('C2');
     const theRoom = this.roomById(roomId);
     if (!theRoom) return;
     const newAdmin: string[] = [];
@@ -283,6 +278,7 @@ export class ChatService {
 
   isCurrentUserBlockedByRoomId(roomId: string): boolean {
     if (!ChatService.user) return false;
+    console.log('C4');
     const chatRoomTest = this.roomById(roomId);
     if (chatRoomTest)
       return this.isUserBlocked(ChatService.user.intraId, chatRoomTest);
@@ -369,11 +365,5 @@ export class ChatService {
       this.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
       this.mockChat();
     }, Math.random() * 10000 + 5000);
-  }
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      return of(result as T);
-    };
   }
 }

@@ -2,6 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { InvitationService } from '../invitation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-u2u-actions',
@@ -18,10 +19,11 @@ export class U2uActionsComponent implements OnChanges {
   isMe?: boolean;
   availability?: boolean;
 
-  constructor(
-    private userService: UserService,
-    private readonly invitationService: InvitationService
-  ) {}
+	constructor(
+		private userService: UserService,
+		private readonly invitationService: InvitationService,
+		private readonly router: Router,
+	){}
 
   ngOnChanges() {
     this.checkMe();
@@ -35,9 +37,11 @@ export class U2uActionsComponent implements OnChanges {
     this.invitationService.invitePrivate(myId, this.user.intraId);
   }
 
-  makeFriend() {
-    this.userService.makeFriend(this.user).subscribe();
-  }
+	makeFriend(){
+		const myId = this.userService.getQuickIntraId();
+		if (!myId || !this.user) return;
+		this.invitationService.friendshipRequest(myId, this.user.intraId);
+	}
 
   unFriend() {
     this.userService.unFriend(this.user).subscribe();
@@ -51,7 +55,11 @@ export class U2uActionsComponent implements OnChanges {
     this.userService.unBlock(this.user).subscribe();
   }
 
-  checkMe() {
-    this.isMe = UserService.currentIntraId == this.user?.intraId;
-  }
+	checkMe() {
+		this.isMe = UserService.currentIntraId == this.user?.intraId;
+	}
+
+	goToProfile() {
+		this.router.navigate(['/profile/' + this.user?.intraId]);
+	}
 }

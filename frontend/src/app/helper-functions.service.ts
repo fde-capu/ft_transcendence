@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { User } from './user';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -19,6 +20,24 @@ export class HelperFunctionsService {
     return out;
   }
 
+  equalArray(a: string[] | undefined, b: string[] | undefined) {
+    if (!b && !a) return true;
+    if (!b || !a) return false;
+    for (const u of a) if (!this.isStringInArray(u, b)) return false;
+    for (const u of b) if (!this.isStringInArray(u, a)) return false;
+    return true;
+  }
+
+  equalUserArray(u_a: User[] | undefined, u_b: User[] | undefined) {
+    if (!u_b && !u_a) return true;
+    if (!u_b || !u_a) return false;
+    const a: string[] = [];
+    const b: string[] = [];
+    for (const u of u_a) a.push(u.intraId);
+    for (const u of u_b) b.push(u.intraId);
+    return this.equalArray(a, b);
+  }
+
   refreshScreen() {
     this.router.navigate([this.router.url]);
   }
@@ -34,13 +53,11 @@ export class HelperFunctionsService {
       exist.innerHTML = exist.innerHTML == a ? b : a;
     }, 300);
   }
-
   blur(el: string) {
     const exist = document.getElementById(el);
     if (!exist) return;
     exist.blur();
   }
-
   blink(el: string) {
     const exist = document.getElementById(el);
     if (!exist) return;
@@ -49,15 +66,13 @@ export class HelperFunctionsService {
       exist.classList.remove('inverted');
     }, 200);
   }
-
   async blink3(el: string) {
     this.blink(el);
-    await new Promise(resolve => setTimeout(resolve, 255));
+    await new Promise(resolve => setTimeout(resolve, 355));
     this.blink(el);
-    await new Promise(resolve => setTimeout(resolve, 255));
+    await new Promise(resolve => setTimeout(resolve, 355));
     this.blink(el);
   }
-
   focusIf(me: string, cond: string, target: string) {
     const me_exist = document.getElementById(me);
     if (!me_exist) return;
@@ -65,36 +80,30 @@ export class HelperFunctionsService {
     if (!target_exist) return;
     if (me_exist.innerHTML === cond) target_exist.focus();
   }
-
   switchHTML(el: string, a: string, b: string) {
     const exist = document.getElementById(el);
     if (!exist) return;
     exist.innerHTML = exist.innerHTML == a ? b : a;
   }
-
   focusOn(el: string): void {
     const exist = document.getElementById(el);
     if (exist) exist.focus();
   }
-
   focus(el: string): void {
     this.focusOn(el);
   }
-
   scrollTo(el: string): void {
     const exist = document.getElementById(el);
     if (exist) exist.scrollIntoView();
   }
-
   randomWord(amount: number): string {
     if (amount <= 0) return '';
-    const constters = 'abcdefghijklmnopqrstuvwxyz';
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
     return (
-      constters[Math.floor(Math.random() * constters.length)] +
+      letters[Math.floor(Math.random() * letters.length)] +
       this.randomWord(--amount)
     );
   }
-
   funnyName(): string {
     const nouns: string[] = [
       'House',
@@ -175,7 +184,6 @@ export class HelperFunctionsService {
       selectedObject
     );
   }
-
   funnyInnocence(): string {
     const phrases: string[] = [
       'Who? Me?',

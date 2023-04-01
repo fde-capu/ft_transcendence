@@ -26,13 +26,37 @@
 
 <div
   class="overall"
+  *ngIf="myState && myState.invitation && myState.friendScreen">
+  <h2>{{ myState.invitation.type }}</h2>
+  <hr />
+  <b>from</b>
+  <hr />
+  {{ myState.invitation.from }}
+  <hr />
+  <br />
+  <button (click)="accept()">
+    <span *ngIf="myState.invitation.buttonOk">
+      {{ myState.invitation.buttonOk }}
+    </span>
+    <span *ngIf="!myState.invitation.buttonOk">Accept</span>
+  </button>
+  <button (click)="decline()">
+    <span *ngIf="myState.invitation.buttonCancel">
+      {{ myState.invitation.buttonCancel }}</span
+    >
+    <span *ngIf="!myState.invitation.buttonCancel">Decline</span>
+  </button>
+</div>
+
+<div
+  class="overall"
   *ngIf="myState && myState.sentScreen && myState.invitation">
-  <h2>Invitation sent</h2>
+  <h2>Sent</h2>
   <hr />
   <b>To</b>: {{ myState.invitation.to }}
-  <hr />
-  <b>Room name</b>: <br />{{ myState.invitation.type }}
   <br />
+  <hr />
+  <br />{{ myState.invitation.type }} <br /><br />
   <hr />
   <br />
   <button (click)="finalOk()">Ok</button>
@@ -42,15 +66,16 @@
   class="overall"
   *ngIf="myState && myState.invitation && myState.declineScreen">
   <b>From</b>:<br />
-  {{ myState.invitation.to }}<br /><br />
-  <b>Invitation to</b>:<br />
+  {{ myState.invitation.to }}
+  <br />
+  <hr />
+  <br />
   {{ myState.invitation.type }}<br />
   <br />
   <hr />
   <br />
   <b>DECLINED</b>
-  <br />
-  <br />
+  <br /><br />
   <hr />
   <br />
   <button (click)="finalOk()">Ok</button>
@@ -67,12 +92,15 @@
   <hr />
   <br />
   <b>ACCEPTED</b>
-  <br />
-  <br />
+  <br /><br />
   <hr />
   <br />
   <button (click)="finalOk()">Close</button>
-  <button *ngIf="!alreadyInRoute()" (click)="clickGo = true; finalOk()">
+  <button
+    *ngIf="
+      !alreadyInRoute() && myState.invitation.type !== 'Friendship Request'
+    "
+    (click)="clickGo = true; finalOk()">
     Go to Route
   </button>
 </div>
