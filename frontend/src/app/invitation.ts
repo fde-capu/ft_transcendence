@@ -15,10 +15,10 @@ export interface Invitation {
 
 export interface InviteState {
 	receiveScreen: boolean,
+	friendScreen: boolean,
 	declineScreen: boolean,
 	acceptScreen: boolean,
 	sentScreen: boolean,
 	notificationScreen: boolean,
 	invitation?: Invitation,
 }
-
