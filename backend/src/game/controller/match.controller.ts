@@ -19,9 +19,9 @@ export class MatchController {
     @Query('user') user?: string,
     @Query('mode') mode?: string,
   ): Promise<Array<MatchHistory>> {
-    if (user) return await this.historyService.getMatchHistoriesByUser(user);
-    if (mode)
-      return await this.historyService.getMatchHistoriesByMode(parseInt(mode));
-    return await this.historyService.getMatchHistories();
+    return await this.historyService.getMatchHistoriesByOptions(
+      user,
+      parseInt(mode) || undefined,
+    );
   }
 }

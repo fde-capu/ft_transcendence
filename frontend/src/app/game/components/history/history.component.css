@@ -26,11 +26,7 @@ fieldset {
   padding: 1rem;
 }
 
-fieldset > *:not(:last-child) {
-  margin-right: .5rem;
-}
-
-caption, h1, h2, h3, h4 {
+caption, h1, h2, h3, h4, section, nav, fieldset {
   margin-bottom: 1rem;
 }
 

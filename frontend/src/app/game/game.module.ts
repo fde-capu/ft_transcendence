@@ -21,5 +21,6 @@ import { HistoryComponent } from './components/history/history.component';
   ],
   imports: [CommonModule, GameRoutingModule, MenuBarModule, InviteModule],
   providers: [GameSocket],
+  exports: [HistoryComponent],
 })
 export class GameModule {}

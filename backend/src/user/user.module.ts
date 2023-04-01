@@ -5,17 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RegisterController } from './controller/registred.controller';
 import { Users } from './entity/user.entity';
 import { UserService } from './service/user.service';
-import { GameHistory } from '../game/game-record';
-import { GameService } from '../game/game.service';
 
 @Module({
   imports: [
     HttpModule,
     ConfigModule.forRoot(),
-    TypeOrmModule.forFeature([Users, GameHistory]),
+    TypeOrmModule.forFeature([Users]),
   ],
   controllers: [RegisterController],
-  providers: [UserService, GameService],
+  providers: [UserService],
   exports: [UserService],
 })
 export class UserModule {}

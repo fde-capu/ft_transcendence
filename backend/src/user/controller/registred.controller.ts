@@ -9,17 +9,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
-import { GameService } from '../../game/game.service';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Users } from '../entity/user.entity';
 
 @Controller('user')
 export class RegisterController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly gameService: GameService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Put('update/:intraId')
   @UseGuards(AuthGuard)
@@ -127,34 +123,6 @@ export class RegisterController {
   ): Promise<any> {
     try {
       const resp = await this.userService.getBlocks(intraId);
-      return response.status(200).json(resp);
-    } catch (e) {
-      response.status(e.status).json(e.data);
-    }
-  }
-
-  @Get('stats')
-  @UseGuards(AuthGuard)
-  async getStats(
-    @Query('of') intraId: string,
-    @Res() response: Response = null,
-  ): Promise<any> {
-    try {
-      const resp = await this.gameService.getStats(intraId);
-      return response.status(200).json(resp);
-    } catch (e) {
-      response.status(e.status).json(e.data);
-    }
-  }
-
-  @Get('history')
-  @UseGuards(AuthGuard)
-  async getGameHistory(
-    @Query('of') intraId: string,
-    @Res() response: Response = null,
-  ): Promise<any> {
-    try {
-      const resp = await this.gameService.getGameHistory(intraId);
       return response.status(200).json(resp);
     } catch (e) {
       response.status(e.status).json(e.data);

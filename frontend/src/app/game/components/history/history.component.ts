@@ -1,16 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Component, Input } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { GameMode } from '../../entity/room.entity';
 import {
   MatchHistory,
   MatchHistoryMap,
 } from './../../entity/match-history.entity';
-import {
-  TeamPosition,
-  TeamMatchHistory,
-} from './../../entity/match-history.entity';
-import { Dictionary } from './../../entity/game.entity';
+import { TeamPosition } from './../../entity/match-history.entity';
+import { User } from 'src/app/user';
 
 @Component({
   selector: 'app-history',
@@ -18,6 +15,8 @@ import { Dictionary } from './../../entity/game.entity';
   styleUrls: ['./history.component.css'],
 })
 export class HistoryComponent {
+  @Input() user?: User;
+
   mode: GameMode = GameMode.PONG;
 
   matches!: Observable<Array<MatchHistoryMap>>;
@@ -28,13 +27,14 @@ export class HistoryComponent {
 
   setMode(mode: GameMode | string) {
     this.mode = parseInt(mode as string);
+    const params = new HttpParams();
+    params.append('mode', this.mode);
+    if (this.user) params.append('', this.user.intraId);
     this.matches = this.httpClient
-      .get<Array<MatchHistory>>(
-        `http://localhost:3000/game/history?mode=${this.mode}`,
-        {
-          withCredentials: true,
-        }
-      )
+      .get<Array<MatchHistory>>(`http://localhost:3000/game/history`, {
+        params,
+        withCredentials: true,
+      })
       .pipe(
         map(matches =>
           matches.map(match => ({

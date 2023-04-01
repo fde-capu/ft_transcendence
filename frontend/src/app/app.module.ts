@@ -21,12 +21,12 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
 import { BlocksListComponent } from './blocks-list/blocks-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
-import { GameHistoryComponent } from './game-history/game-history.component';
 import { LadderComponent } from './ladder/ladder.component';
 import { MenuBarModule } from './menu-bar/menu-bar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
 import { InviteModule } from './invitation.module';
+import { GameModule } from './game/game.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,6 @@ import { InviteModule } from './invitation.module';
     BlocksListComponent,
     UserBarComponent,
     StatisticsComponent,
-    GameHistoryComponent,
     LadderComponent,
   ],
   imports: [
@@ -61,6 +60,7 @@ import { InviteModule } from './invitation.module';
     AvatarModule,
     MainMenuModule,
     InviteModule,
+    GameModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

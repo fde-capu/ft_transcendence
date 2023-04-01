@@ -6,7 +6,6 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { distinct, map } from 'rxjs';
 import { Game, GameData, Pong, Dictionary } from '../../entity/game.entity';
 import { GameMode, Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';

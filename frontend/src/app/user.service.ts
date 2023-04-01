@@ -18,8 +18,6 @@ export class UserService {
   public static currentIntraId?: string;
   public static currentUser?: User;
   static isAuthorized = false;
-  private statsUrl = 'http://localhost:3000/user/stats/?of=';
-  private historyUrl = 'http://localhost:3000/user/history/?of=';
   private friendsUrl = 'http://localhost:3000/user/friends/?with=';
   private blocksUrl = 'http://localhost:3000/user/blocks/?them=';
   private onlineUsersUrl = 'http://localhost:3000/user/online';
@@ -242,20 +240,6 @@ export class UserService {
       if (UserService.currentUser.blocks[i] == user_b.intraId)
         UserService.currentUser.blocks.splice(i, 1);
     return this.saveUser(UserService.currentUser);
-  }
-
-  getStats(u_intraId: string): Observable<Statistics> {
-    return this.http
-      .get<Statistics>(this.statsUrl + u_intraId, { withCredentials: true })
-      .pipe(catchError(this.handleError<Statistics>('getStats')));
-  }
-
-  getGameHistory(u_intraId: string): Observable<GameHistory[]> {
-    return this.http
-      .get<GameHistory[]>(this.historyUrl + u_intraId, {
-        withCredentials: true,
-      })
-      .pipe(catchError(this.handleError<GameHistory[]>('getGameHistory')));
   }
 
   async intraIdsToUsers(ulist: string[]): Promise<User[]> {
