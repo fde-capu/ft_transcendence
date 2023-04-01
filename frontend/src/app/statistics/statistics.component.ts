@@ -1,8 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { User } from '../user';
 import { Statistics } from '../statistics';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -18,17 +14,11 @@ export class StatisticsComponent implements OnChanges {
   @Input() user?: User;
 
   stat: Statistics = {
-    goalsMade: 0,
-    goalsMadePerTaken: 0,
-    goalsTaken: 0,
-    looses: 0,
     matches: 0,
-    playingTime: 0,
-    score: 0,
-    scorePerMatches: 0,
-    scorePerMinute: 0,
     wins: 0,
+    looses: 0,
     winsPerLooses: 0,
+    goalsMade: 0,
   };
 
   constructor(private readonly httpClient: HttpClient) {}
@@ -77,6 +67,6 @@ export class StatisticsComponent implements OnChanges {
       );
     }, 0);
 
-    this.stat.winsPerLooses = this.stat.wins / this.stat.looses;
+    this.stat.winsPerLooses = this.stat.wins / this.stat.looses || 0;
   }
 }
