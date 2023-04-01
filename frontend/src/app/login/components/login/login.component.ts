@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
@@ -10,12 +10,14 @@ import { UserService } from '../../../user.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  step_one = false;
-  step_two = false;
+	@Input() stepActivate: boolean = false;
+	step_one: Boolean = false;
+	step_two: Boolean = false;
+	authOk: Boolean = false;
 
-  // TODO: Remove it. It is only here for tests proposes. If you want to generate the code use this.authService.getChallenge()
-  challengeUri =
-    'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
+  // TODO: Remove it. It is only here for tests proposes.
+  // If you want to generate the code use this.authService.getChallenge()
+  public challengeUri?: string;
 
   message?: string;
 
@@ -26,24 +28,40 @@ export class LoginComponent {
   ) {
     this.authService.getAuthContext().subscribe({
       next: ctx => {
-        //console.log("login got new ctx", ctx);
-        if (!ctx) {
-          this.step_one = true;
-          return;
-        }
-        this.step_one = false;
-        if (ctx.mfa.enabled) {
-          if (ctx.mfa.verified === true) {
-            this.router.navigate(['/']);
-          }
-          this.step_two = true;
-          this.message =
-            ctx?.sub +
-            ", you have enabled 2FA. Please scan this quick response code on Google or Microsoft Authenticator if you haven't already:";
-        }
-      },
+		//console.log("login got new ctx", ctx);
+		if (!ctx) { this.step_one = true; return; }
+		this.step_one = false;
+		if (ctx.mfa.enabled)
+		{
+			if (ctx.mfa.verified === true)
+			{
+				this.authOk = true;
+				this.saveAuth(ctx.sub);
+				//console.log("Login authorized with MFA.");
+				if (this.router.url.indexOf("/login") == 0)
+					this.router.navigate(['/']);
+			}
+			this.step_two = true;
+		}
+    },
     });
+
+	this.authService.getChallenge().subscribe({
+		next: secret => {
+			this.challengeUri = secret;
+			this.message = "Please open Google/Microsoft Authenticator and type in the code.";
+		},
+		error: () => {
+			console.log("Subscription went wrong!");
+		},
+	});
   }
+
+	ngOnChanges() {
+		if (this.stepActivate)
+			this.step_two = true;
+	}
+
 
   signIn() {
     this.authService.signIn();
@@ -53,11 +71,20 @@ export class LoginComponent {
     this.authService.solveChallenge(form.value.code).subscribe({
       next: () => {
         this.message = 'Nicely done!';
+		this.authOk = true;
       },
       error: () => {
         this.message += ' [' + form.value.code + ']?? Yikes! Wrong code, bud!';
       },
     });
+  }
+
+  saveAuth(intraId: string) {
+	this.userService.getUserById(intraId).subscribe(_=>{
+		if (!_ || (!!_ && !!_.mfa_enabled)) return;
+		_.mfa_enabled = true;
+		this.userService.saveUser(_).subscribe();
+	});
   }
 
   signOut() {

@@ -25,6 +25,7 @@ export class RegisterController {
     @Body() user: Users,
   ) {
     try {
+		console.log("< update", intraId);
       await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
     } catch (e) {

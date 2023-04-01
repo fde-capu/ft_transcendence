@@ -134,24 +134,28 @@ export class UserService {
       .subscribe();
   }
 
-  saveUser(u_user: User): Observable<any> {
-    //console.log("fos saving:", u_user);
-    return this.http
-      .put(this.updateUserUrl + u_user.intraId, u_user, this.saveHttpOptions)
-      .pipe(
-        map(_ => {
-          if (u_user.intraId == UserService.currentIntraId)
-            this.getLoggedUser().subscribe(_ => {
-              if (_) {
-                UserService.currentUser = _;
-              }
-            });
-          //console.log("saveUser will call component refresh.");
-          this.router.navigate([this.router.url]);
-        }),
-        catchError(this.handleError<any>('saveUser'))
-      );
-  }
+	saveUser(u_user: User): Observable<any> {
+		//console.log("fos saving:", u_user.intraId, UserService.currentIntraId);
+		return this.http.put(
+				this.updateUserUrl + u_user.intraId,
+				u_user,
+				this.saveHttpOptions
+			)
+			.pipe
+			(
+				map(_=>{
+					if (u_user.intraId == UserService.currentIntraId) {
+						this.getLoggedUser()
+							.subscribe(_=>{
+								if(!!_){
+									UserService.currentUser=_;
+							}});
+					}
+					this.router.navigate([this.router.url])
+				}),
+				catchError(this.handleError<any>('saveUser'))
+			);
+	}
 
   getOnlineUsers(): Observable<User[]> {
     return this.http

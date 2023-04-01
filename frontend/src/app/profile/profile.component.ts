@@ -1,33 +1,39 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { catchError } from 'rxjs/operators';
+import { LoginComponent } from '../login/components/login/login.component';
+import { LoginModule } from '../login/login.module';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent implements OnInit {
-  user?: User;
-  displayUser?: User;
-  idRequest!: string;
-  owner = false;
-  profileType = 'USER';
-  isFriend = false;
-  isBlock = false;
-  amIBlocked?: boolean;
-  invalidNameNotice = false;
-  lastName = '';
-  lastPassword?: string;
 
-  constructor(
-    private userService: UserService,
-    public fun: HelperFunctionsService,
-    private route: ActivatedRoute
-  ) {}
+export class ProfileComponent {
+	constructor (
+		private userService: UserService,
+		public fun: HelperFunctionsService,
+		private route: ActivatedRoute,
+		private loginComponent: LoginComponent,
+	) {};
+
+	user: User | undefined = undefined;
+	displayUser: User | undefined = undefined;
+	idRequest!: string;
+	owner: Boolean = false;
+	profileType: string = "USER";
+	isFriend: boolean = false;
+	isBlock: boolean = false;
+	amIBlocked?: boolean;
+	invalidNameNotice: boolean = false;
+	lastName: string = "";
+	lastPassword?: string;
+	mfaOpened?: boolean;
 
   ngOnInit(): void {
     this.getUser();
@@ -77,6 +83,23 @@ export class ProfileComponent implements OnInit {
     this.profileType += this.amIBlocked ? ' BLOCKED YOU' : '';
   }
 
+	switchMfa() {
+		if (this.displayUser) {
+			this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
+			if (this.displayUser.mfa_enabled)
+				this.mfaOpened = true;
+			else
+				this.saveUser();
+		}
+	}
+
+	cancelMfa() {
+	} // TODO What the?
+
+	solveChallenge(form: NgForm) {
+		this.loginComponent.solveChallenge(form);
+	}
+
   async validateAndSaveUser() {
     if (!this.displayUser) return;
     if (this.fun.validateString(this.displayUser.name)) this.saveUser();
@@ -105,11 +128,5 @@ export class ProfileComponent implements OnInit {
         .saveUser(this.displayUser)
         .subscribe({ next: () => ({}) });
     }
-  }
-
-  switchMfa() {
-    if (this.displayUser)
-      this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
-    this.saveUser();
   }
 }
