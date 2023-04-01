@@ -1,0 +1,43 @@
+<main id="container">
+  <section id="content">
+    <header>
+      <h2>Lobby</h2>
+    </header>
+    <article>
+      <fieldset>
+        <legend>Options</legend>
+        <button (click)="createRoom()">Create new room</button>
+      </fieldset>
+    </article>
+    <article>
+      <table id="rooms">
+        <caption>
+          Game rooms
+        </caption>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Mode</th>
+            <th>Host</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let room of rooms">
+            <th>{{ room.id }}</th>
+            <th>
+              <span *ngIf="room.mode === 0">PONG</span>
+              <span *ngIf="room.mode === 1">PONGDOUBLE</span>
+              <span *ngIf="room.mode === 2">QUADRAPONG</span>
+            </th>
+            <th>{{ room.host.name }}</th>
+            <th>{{ room.inGame ? 'In game' : 'Waiting' }}</th>
+            <th><button routerLink="./{{ room.id }}">Join</button></th>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+</main>
+<app-modal [(closed)]="errorHidden" title="Error">{{ errorMessage }}</app-modal>

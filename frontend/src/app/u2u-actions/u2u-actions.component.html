@@ -1,16 +1,19 @@
-<div *ngIf='!isMe'>
-<h2 *ngIf='caption'>Actions</h2>
-<div [ngClass]="{'singleline':singleline}">
-	<div *ngIf='amIBlocked'><b><- HAS BLOCKED YOU</b></div>
-	<span class='status' *ngIf='user?.status'>{{ user?.status }}</span>
-	<button *ngIf='!singleline' (click)='goToProfile()'>Profile</button>
-	<button *ngIf='!amIBlocked && availability' (click)='inviteToChat()'>Private Message</button>
-	<button *ngIf="!isFriend" (click)='makeFriend()'>Add as Friend</button>
-	<button *ngIf="isFriend" (click)='unFriend()'>Unfriend</button>
-	<button *ngIf="!isBlock" (click)='makeBlock()'>Block</button>
-	<button *ngIf="isBlock" (click)='unBlock()'>Unblock</button>
-	<button *ngIf="!amIBlocked && availability" >INVITE TO GAME</button>
+<div *ngIf="!isMe">
+  <h2 *ngIf="caption">Actions</h2>
+  <div [ngClass]="{ singleline: singleline }">
+    <div *ngIf="amIBlocked"><b><- HAS BLOCKED YOU</b></div>
+    <span class="status" *ngIf="user?.status">{{ user?.status }}</span>
+    <button *ngIf="!singleline" (click)="goToProfile()">Profile</button>
+    <button *ngIf="!amIBlocked && availability" (click)="inviteToChat()">
+      Private Message
+    </button>
+    <button *ngIf="!isFriend" (click)="makeFriend()">Add as Friend</button>
+    <button *ngIf="isFriend" (click)="unFriend()">Unfriend</button>
+    <button *ngIf="!isBlock" (click)="makeBlock()">Block</button>
+    <button *ngIf="isBlock" (click)="unBlock()">Unblock</button>
+    <button *ngIf="!amIBlocked && availability">INVITE TO GAME</button>
+  </div>
 </div>
-</div>
-<div *ngIf='isMe'>
-</div>
+<div *ngIf="isMe"></div>
+<div *ngIf="isMe"></div>
+<div *ngIf="isMe"></div>

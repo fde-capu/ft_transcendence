@@ -1,81 +1,69 @@
-<app-menu-bar></app-menu-bar>
-<app-invitation-screen></app-invitation-screen>
-<main>
-  <header>
-    <h2>Room 12345</h2>
-  </header>
-  <aside>
-    <form>
+<main id="container">
+  <section id="content" *ngIf="!room">
+    <p>Loading...</p>
+  </section>
+  <section id="content" *ngIf="!!room && !room.inGame">
+    <header>
+      <h2>Room {{ room.id }}</h2>
+    </header>
+    <article>
       <fieldset>
-        <legend>Game Mode</legend>
-        <label>
-          <input type="radio" name="mode" value="PONG" checked>
-          <span>PONG</span>
-        </label>
-        <label>
-          <input type="radio" name="mode" value="PONGDOUBLE">
-          <span>PONGDOUBLE</span>
-        </label>
-        <label>
-          <input type="radio" name="mode" value="QUADRAPONG">
-          <span>QUADRAPONG</span>
-        </label>
-      <button type="submit">Set Mode</button>
+        <legend>Options</legend>
+        <label *ngIf="userId === room.host.id" for="mode">Mode</label>
+        <select
+          *ngIf="userId === room.host.id"
+          #gamemode
+          (change)="seMode(gamemode.value)"
+          name="mode"
+          id="mode">
+          <option value="0">PONG</option>
+          <option value="1">PONGDOUBLE</option>
+          <option value="2">QUADRAPONG</option>
+        </select>
+
+        <button *ngIf="isPlayer()" (click)="ready()">Ready</button>
+        <button (click)="leave()">Leave</button>
       </fieldset>
-    </form>
-    <form>
-      <fieldset>
-        <legend>Invite</legend>
-        <label>
-          Player:
-			<select name="playerToInvite">
-				<option value="" disabled selected hidden>Please Choose...</option>
-				<option *ngFor="let user of availableUsers">{{user.intraId}} | {{user.name}}</option>
-			</select>
-        </label>
-		<button (click)='doInvitation()'>Invite</button>
-      </fieldset>
-    </form>
-    <button>Leave</button>
-    <button>Ready</button>
-    <button disabled="true">Start</button>
-  </aside>
-  <section>
-    <table>
-      <caption>Players</caption>
-      <thead>
-        <tr>
-          <th>Team</th>
-          <th>Name</th>
-          <th>Ready</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Left</td>
-          <td>msales-a</td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>Left</td>
-          <td>msales-b</td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>Right</td>
-          <td>msales-c</td>
-          <td>Yes</td>
-        </tr>
-      </tbody>
-    </table>
-    <div>
-      <h3>Audience</h3>
-      <ul>
-        <li>foo</li>
-        <li>bar</li>
-        <li>foobar</li>
+    </article>
+    <article>
+      <header>
+        <h2>Teams</h2>
+      </header>
+      <ul id="teams" class="center">
+        <li *ngFor="let team of room.teams">
+          <article class="team center">
+            <header>
+              <h3>
+                {{ team.id }} ({{ team.players.length }}/{{ team.capacity }})
+              </h3>
+            </header>
+            <ul>
+              <li *ngFor="let player of team.players">
+                <span>{{ player.name }}</span>
+                <span class="flag" *ngIf="player.ready">READY</span>
+                <span class="flag" *ngIf="room.host.id === player.id"
+                  >HOST</span
+                >
+                <span class="flag" *ngIf="userId === player.id">YOU</span>
+              </li>
+            </ul>
+          </article>
+        </li>
       </ul>
-    </div>
+    </article>
+    <article *ngIf="room.audience.length">
+      <header>
+        <h2>Audience</h2>
+      </header>
+      <ul id="audience" class="center">
+        <li class="center" *ngFor="let user of room.audience">
+          <span>{{ user.name }}</span>
+          <span class="flag" *ngIf="userId === user.id">YOU</span>
+        </li>
+      </ul>
+    </article>
+  </section>
+  <section *ngIf="!!room && room.inGame">
+    <app-game [roomSocket]="roomSocket" [room]="room"></app-game>
   </section>
 </main>
-<app-game></app-game>

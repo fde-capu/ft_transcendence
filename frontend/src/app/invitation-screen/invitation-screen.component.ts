@@ -1,88 +1,91 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { InvitationService } from '../invitation.service';
-import { Invitation, InviteState } from '../invitation';
-import { ChatService } from '../chat.service';
+import { InviteState } from '../invitation';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invitation-screen',
   templateUrl: './invitation-screen.component.html',
-  styleUrls: ['./invitation-screen.component.css']
+  styleUrls: ['./invitation-screen.component.css'],
 })
-export class InvitationScreenComponent {
-	static state: InviteState[] = [];
-	static connected: boolean = false;
-	myState: InviteState|undefined = undefined
-	clickGo?: boolean;
+export class InvitationScreenComponent implements OnInit {
+  static state: InviteState[] = [];
+  static connected = false;
+  myState: InviteState | undefined = undefined;
+  clickGo?: boolean;
 
-	constructor (
-		private readonly invitationService: InvitationService,
-		private readonly fun: HelperFunctionsService,
-		private readonly router: Router,
-	){}
+  constructor(
+    private readonly invitationService: InvitationService,
+    private readonly fun: HelperFunctionsService,
+    private readonly router: Router
+  ) {}
 
-	ngOnInit() {
-		this.myState = InvitationScreenComponent.state[0];
-		if (InvitationScreenComponent.connected) return;
-		InvitationScreenComponent.connected = true;
-		//console.log("Will subscribe.");
-		const subscription = InvitationService.inviteState.subscribe(_=>{
-			if (_) {
-				//console.log("Invitation subscription.", _);
-				if (_.receiveScreen
-				||	_.friendScreen
-				||	_.declineScreen
-				||	_.acceptScreen
-				||	_.sentScreen
-				||	_.notificationScreen
-				)	InvitationScreenComponent.state.push({
-						receiveScreen : _.receiveScreen,
-						friendScreen : _.friendScreen,
-						declineScreen : _.declineScreen,
-						acceptScreen : _.acceptScreen,
-						sentScreen : _.sentScreen,
-						notificationScreen : _.notificationScreen,
-						invitation : _.invitation,
-					});
-				this.router.navigate([this.router.url]);
-			}
-		});
-	}
+  ngOnInit() {
+    this.myState = InvitationScreenComponent.state[0];
+    if (InvitationScreenComponent.connected) return;
+    InvitationScreenComponent.connected = true;
+    InvitationService.inviteState.subscribe(_ => {
+      if (_) {
+        if (
+          _.receiveScreen ||
+          _.friendScreen ||
+          _.declineScreen ||
+          _.acceptScreen ||
+          _.sentScreen ||
+          _.notificationScreen
+        )
+          InvitationScreenComponent.state.push({
+            receiveScreen: _.receiveScreen,
+            friendScreen: _.friendScreen,
+            declineScreen: _.declineScreen,
+            acceptScreen: _.acceptScreen,
+            sentScreen: _.sentScreen,
+            notificationScreen: _.notificationScreen,
+            invitation: _.invitation,
+          });
+        this.router.navigate([this.router.url]);
+      }
+    });
+  }
 
-	flip(): InviteState|undefined {
-		let old = InvitationScreenComponent.state.shift();
-		this.myState = InvitationScreenComponent.state[0];
-		return old;
-	}
+  flip(): InviteState | undefined {
+    const old = InvitationScreenComponent.state.shift();
+    this.myState = InvitationScreenComponent.state[0];
+    return old;
+  }
 
-	accept() {
-		let old = this.flip();
-		if (old && old.invitation)
-			this.invitationService.replyTrue(old.invitation);
-	}
+  accept() {
+    const old = this.flip();
+    if (old && old.invitation) this.invitationService.replyTrue(old.invitation);
+  }
 
-	decline() {
-		let old = this.flip();
-		if (old && old.invitation)
-			this.invitationService.replyFalse(old.invitation);
-	}
+  decline() {
+    const old = this.flip();
+    if (old && old.invitation)
+      this.invitationService.replyFalse(old.invitation);
+  }
 
-	alreadyInRoute(): boolean {
-		let route = this.myState?.invitation?.route;
-		return route == this.router.url;
-	}
+  alreadyInRoute(): boolean {
+    const route = this.myState?.invitation?.route;
+    return route == this.router.url;
+  }
 
-	finalOk() {
-		let old = this.flip();
-		if (!old) return;
-		if (old.acceptScreen && old.invitation && old.invitation.type == "Friendship Request")
-			this.invitationService.mutualFriends(old.invitation.from, old.invitation.to);
-		const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
-		let route = go ? old.invitation?.route : null;
-		if (go && route && !this.alreadyInRoute())
-			this.invitationService.go(route);
-		this.router.navigate([this.router.url]);
-	}
+  finalOk() {
+    const old = this.flip();
+    if (!old) return;
+    if (
+      old.acceptScreen &&
+      old.invitation &&
+      old.invitation.type == 'Friendship Request'
+    )
+      this.invitationService.mutualFriends(
+        old.invitation.from,
+        old.invitation.to
+      );
+    const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
+    const route = go ? old.invitation?.route : null;
+    if (go && route && !this.alreadyInRoute()) this.invitationService.go(route);
+    this.router.navigate([this.router.url]);
+  }
 }

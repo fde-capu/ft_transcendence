@@ -6,23 +6,15 @@ import { U2uActionsModule } from '../u2u-actions/u2u-actions.module';
 import { MenuBarRoutingModule } from './menu-bar-routing.module';
 import { MainMenuModule } from '../main-menu/main-menu.module';
 
-
 @NgModule({
-  declarations: [
-	MenuBarComponent,
-  ],
+  declarations: [MenuBarComponent],
   imports: [
     CommonModule,
-	AvatarModule,
-	U2uActionsModule,
-	MainMenuModule,
-	MenuBarRoutingModule,
+    AvatarModule,
+    U2uActionsModule,
+    MainMenuModule,
+    MenuBarRoutingModule,
   ],
-  exports: [
-	MenuBarComponent,
-	AvatarModule,
-	U2uActionsModule,
-	MainMenuModule,
-  ]
+  exports: [MenuBarComponent, AvatarModule, U2uActionsModule, MainMenuModule],
 })
-export class MenuBarModule { }
+export class MenuBarModule {}

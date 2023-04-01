@@ -2,35 +2,46 @@
 </div>
 
 <div class="render-filter reflexes">
-	<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-	<defs>
-		<radialGradient id="reflex" cx="50%" cy="50%" r="50%">
-			<stop offset="0" stop-color="#aaaaaa" stop-opacity="1"/>
-			<stop offset="1" stop-color="#000000" stop-opacity="0"/>
-		</radialGradient>
-		<radialGradient id="reflex2" cx="50%" cy="50%" r="50%">
-			<stop offset="0" stop-color="#eeeeee" stop-opacity="1"/>
-			<stop offset="1" stop-color="#000000" stop-opacity="0"/>
-		</radialGradient>
-		<radialGradient id="shadow" cx="50%" cy="50%" r="50%">
-			<stop offset="0" stop-color="#000000" stop-opacity="0"/>
-			<stop offset="0.7" stop-color="#000000" stop-opacity="1"/>
-			<stop offset="1" stop-color="#000000" stop-opacity="0"/>
-		</radialGradient>
-	</defs>
-	<ellipse fill="url(#shadow)" cx="50%" cy="90%" rx="30%" ry="20%"/>
-	<circle fill="url(#reflex)" cx="0" cy="100%" r="30%" />
-	<circle fill="url(#reflex)" cx="100%" cy="100%" r="30%" />
-	<circle fill="url(#reflex)" cx="100%" cy="0" r="30%" />
-	<circle fill="url(#reflex)" cx="0" cy="0" r="30%" />
-	<circle fill="url(#reflex2)" cx="90%" cy="10%" r="17%" />
-	<ellipse fill="url(#reflex2)" cx="92%" cy="20%" rx="10%" ry="15%" />
-	</svg>
+  <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <defs>
+      <radialGradient id="reflex" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#aaaaaa" stop-opacity="1" />
+        <stop offset="1" stop-color="#000000" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="reflex2" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#eeeeee" stop-opacity="1" />
+        <stop offset="1" stop-color="#000000" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="shadow" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#000000" stop-opacity="0" />
+        <stop offset="0.7" stop-color="#000000" stop-opacity="1" />
+        <stop offset="1" stop-color="#000000" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <ellipse fill="url(#shadow)" cx="50%" cy="90%" rx="30%" ry="20%" />
+    <circle fill="url(#reflex)" cx="0" cy="100%" r="30%" />
+    <circle fill="url(#reflex)" cx="100%" cy="100%" r="30%" />
+    <circle fill="url(#reflex)" cx="100%" cy="0" r="30%" />
+    <circle fill="url(#reflex)" cx="0" cy="0" r="30%" />
+    <circle fill="url(#reflex2)" cx="90%" cy="10%" r="17%" />
+    <ellipse fill="url(#reflex2)" cx="92%" cy="20%" rx="10%" ry="15%" />
+  </svg>
 </div>
 
 <svg>
-	<filter id='noise'>
-		<feTurbulence id="noise_turbulence" type="fractalNoise" baseFrequency="0 0" result="NOISE" numOctaves="2"></feTurbulence>
-		<feDisplacementMap id="noise_source" in="SourceGraphic" in2="NOISE" scale="0" xChannelSelector="R" yChannelSelector="R"></feDisplacementMap>
-	</filter>
+  <filter id="noise">
+    <feTurbulence
+      id="noise_turbulence"
+      type="fractalNoise"
+      baseFrequency="0 0"
+      result="NOISE"
+      numOctaves="2"></feTurbulence>
+    <feDisplacementMap
+      id="noise_source"
+      in="SourceGraphic"
+      in2="NOISE"
+      scale="0"
+      xChannelSelector="R"
+      yChannelSelector="R"></feDisplacementMap>
+  </filter>
 </svg>

@@ -4,7 +4,6 @@ import { AuthController } from './controller/auth.controller';
 import { TokenService } from './service/token.service';
 import { OtpService } from './service/otp.service';
 import { AuthService } from './service/auth.service';
-import { UserService } from 'src/user/service/user.service';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -23,7 +22,8 @@ import { QRSecret } from './qrsecret-entity';
   ],
   imports: [FortyTwoModule, UserModule,
     TypeOrmModule.forFeature([Users, QRSecret])],
+  providers: [TokenService, OtpService, AuthService, ConfigService],
   controllers: [AuthController],
-  exports: [TokenService, AuthController],
+  exports: [TokenService],
 })
 export class AuthModule {}

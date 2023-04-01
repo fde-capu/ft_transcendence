@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 export interface UserDTO {
   intraId: string;
@@ -12,30 +12,21 @@ export interface UserDTO {
 }
 
 export interface StatisticsDTO {
-	score: number;
-	matches: number;
-	wins: number;
-	goalsMade: number;
-	goalsTaken: number;
-	scorePerMatches: number; // *
-	looses: number; // *
-	winsPerLooses: number; // *
-	goalsMadePerTaken: number; // *
-	// * No need to be on database, because its calculated.
+  score: number;
+  matches: number;
+  wins: number;
+  goalsMade: number;
+  goalsTaken: number;
+  scorePerMatches: number; // *
+  looses: number; // *
+  winsPerLooses: number; // *
+  goalsMadePerTaken: number; // *
+  // * No need to be on database, because its calculated.
 }
 
 @Entity()
 export class Users {
-  @PrimaryGeneratedColumn({
-    name: 'id',
-  })
-  id?: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-    name: 'intraId',
-  })
+  @PrimaryColumn()
   intraId?: string;
 
   @Column({
@@ -63,10 +54,10 @@ export class Users {
   @Column()
   score?: number;
 
-  @Column("simple-array")
+  @Column('simple-array')
   friends?: string[];
 
-  @Column("simple-array")
+  @Column('simple-array')
   blocks?: string[];
 }
 // Don't forget to update backend/src/user/service/user.service.tx:registerUserOk42

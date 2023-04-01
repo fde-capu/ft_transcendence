@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { UserService } from '../../../user.service';
-import { USERS } from '../../../mocks';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +22,10 @@ export class LoginComponent {
   message?: string;
 
   constructor(
-	private userService: UserService,
+    private userService: UserService,
     private readonly authService: AuthService,
     private readonly router: Router
   ) {
-	//console.log("login will subscribe to fas getAuthContext");
     this.authService.getAuthContext().subscribe({
       next: ctx => {
 		//console.log("login got new ctx", ctx);
@@ -45,7 +43,7 @@ export class LoginComponent {
 			}
 			this.step_two = true;
 		}
-      },
+    },
     });
 
 	this.authService.getChallenge().subscribe({
@@ -66,7 +64,6 @@ export class LoginComponent {
 
 
   signIn() {
-	//console.log("Login signing in");
     this.authService.signIn();
   }
 
@@ -77,7 +74,7 @@ export class LoginComponent {
 		this.authOk = true;
       },
       error: () => {
-        this.message += " [" + form.value.code + ']?? Yikes! Wrong code, bud!';
+        this.message += ' [' + form.value.code + ']?? Yikes! Wrong code, bud!';
       },
     });
   }
@@ -92,7 +89,7 @@ export class LoginComponent {
 
   signOut() {
     this.userService.signOut();
-	this.step_two = false;
-	this.step_one = true;
+    this.step_two = false;
+    this.step_one = true;
   }
 }

@@ -68,31 +68,37 @@
 <app-u2u-actions *ngIf='!owner'
 	[isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser'
 	[caption]='false' [singleline]='true'></app-u2u-actions>
-</div>
+</div>  
+  
 
-<app-friends-list [user]="displayUser"></app-friends-list> 
+  <app-friends-list [user]="displayUser"></app-friends-list>
 
-<app-blocks-list *ngIf='owner' [user]="displayUser"></app-blocks-list> 
+  <app-blocks-list *ngIf="owner" [user]="displayUser"></app-blocks-list>
 
-<app-statistics [user]="displayUser"></app-statistics>
+  <app-statistics [user]="displayUser"></app-statistics>
 
-<app-ladder [user]='user' [them]='displayUser'></app-ladder>
+  <app-ladder [user]="user" [them]="displayUser"></app-ladder>
 
-<app-game-history [user]="displayUser"></app-game-history>
+  <app-history [user]="displayUser"></app-history>
 
 
-</div>
 
-<ng-template #user_unknown>
-User: unknown.
-</ng-template>
+<ng-template #user_unknown> User: unknown. </ng-template>
 
 <ng-template #spying>
-<div *ngIf='displayUser'>
-<div class="profile-image hover_invert"
-style="background-image:url('DEFAULT_IMAGE');"
-></div><br>	
-{{displayUser.intraId}}
-<app-u2u-actions *ngIf='!owner' [isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser' [caption]='false' [singleline]='true'></app-u2u-actions>
-</div>
+  <div *ngIf="displayUser">
+    <div
+      class="profile-image hover_invert"
+      style="background-image: url('DEFAULT_IMAGE')"></div>
+    <br />
+    {{ displayUser.intraId }}
+    <app-u2u-actions
+      *ngIf="!owner"
+      [isFriend]="isFriend"
+      [isBlock]="isBlock"
+      [amIBlocked]="amIBlocked"
+      [user]="displayUser"
+      [caption]="false"
+      [singleline]="true"></app-u2u-actions>
+  </div>
 </ng-template>

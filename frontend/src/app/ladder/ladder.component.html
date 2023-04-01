@@ -1,25 +1,37 @@
-<h2>Ladder
-	<button *ngIf='user?.intraId != them?.intraId' (click)='showUserPosition()' style='font-size: var(--font-small);'>User's Position</button>
-	<button (click)='showMyself()' style='font-size: var(--font-small);'>Your Position</button>
+<h2>
+  Ladder
+  <button
+    *ngIf="user?.intraId !== them?.intraId"
+    (click)="showUserPosition()"
+    style="font-size: var(--font-small)">
+    User's Position
+  </button>
+  <button (click)="showMyself()" style="font-size: var(--font-small)">
+    Your Position
+  </button>
 </h2>
-<div class='podium' id='ladderView' *ngIf='user'>
-	<div class='tower' *ngFor='let u of ladder'>
-		<div style='height:2em;text-align:center;'>
-<span *ngIf='u.intraId == user?.intraId' id='focusMe'>[ YOU ]</span>
-<span *ngIf='u.intraId == them?.intraId && user?.intraId != them?.intraId' id='focusThem'>[ USER ]</span>
-<br>
-{{ u.position }}
-		</div>
-		<app-avatar [user]='u' 
-			[positionbottom]='u.score < maxScore / 2'
-		></app-avatar>
-		<span class='score'>{{ u.score | number:'6.0-0' }}</span>
-		<div class='pit' style='height:{{ u.score * 100 / maxScore * 3}}px;'>
-			<div class='vertical'>
-				{{ u.intraId }}
-				<br>
-				{{ u.name }}
-			</div>
-		</div>
-	</div>
+<div class="podium" id="ladderView" *ngIf="user">
+  <div class="tower" *ngFor="let u of ladder">
+    <div style="height: 2em; text-align: center">
+      <span *ngIf="u.intraId === user?.intraId" id="focusMe">[ YOU ]</span>
+      <span
+        *ngIf="u.intraId === them?.intraId && user?.intraId !== them?.intraId"
+        id="focusThem"
+        >[ USER ]</span
+      >
+      <br />
+      {{ u.position }}
+    </div>
+    <app-avatar
+      [user]="u"
+      [positionbottom]="u.score < maxScore / 2"></app-avatar>
+    <span class="score">{{ u.score | number : '6.0-0' }}</span>
+    <div class="pit" style="height:{{ ((u.score * 100) / maxScore) * 3 }}px;">
+      <div class="vertical">
+        {{ u.intraId }}
+        <br />
+        {{ u.name }}
+      </div>
+    </div>
+  </div>
 </div>

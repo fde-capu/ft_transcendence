@@ -7,10 +7,8 @@ import { GameHistory } from './game/game-record';
 import { QRSecret } from './auth/qrsecret-entity';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
-import { RegisterController } from './user/controller/registred.controller';
 import { ChatService } from './chat/chat.service';
 import { ChatController } from './chat/chat.controller';
-import { UserService } from './user/service/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
@@ -33,6 +31,7 @@ import { ChatGateway } from './chat/chat.gateway';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [Users, GameHistory, QRSecret],
+        autoLoadEntities: true,
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -42,11 +41,7 @@ import { ChatGateway } from './chat/chat.gateway';
     GameModule,
   ],
   controllers: [PingController, ChatController],
-  providers: [
-	InvitationGateway,
-	ChatGateway,
-	ChatService,
-  ],
+  providers: [InvitationGateway, ChatGateway, ChatService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

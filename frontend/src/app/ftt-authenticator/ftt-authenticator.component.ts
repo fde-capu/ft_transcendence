@@ -11,9 +11,9 @@ import { UserService } from '../user.service';
 export class FttAuthenticatorComponent {
   subject$: Observable<string>;
   constructor(
-		private readonly authService: AuthService,
-		private readonly userService: UserService
-	) {
+    authService: AuthService,
+    private readonly userService: UserService
+  ) {
     this.subject$ = authService
       .getAuthContext()
       .pipe(map(ctx => ctx?.sub || 'loading'));
