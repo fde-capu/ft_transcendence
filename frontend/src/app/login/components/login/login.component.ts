@@ -40,12 +40,8 @@ export class LoginComponent {
 				this.authOk = true;
 				this.saveAuth(ctx.sub);
 				//console.log("Login authorized with MFA.");
-				if (!this.stepActivate)
+				if (this.router.url.indexOf("/login") == 0)
 					this.router.navigate(['/']);
-//				else {
-//					console.log("Save user");
-					//this.userService.saveUser();
-//				}
 			}
 			this.step_two = true;
 		}
