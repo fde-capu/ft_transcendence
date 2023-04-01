@@ -42,7 +42,17 @@
 						<a (click)="switchMfa();">[ ON ]</a> <span class="inverted">[>OFF<]</span>
 					</div>
 				</span>
-				<button type="button" (click)="switchMfa();">Change</button>
+
+				<div *ngIf='mfaOpened'>
+					Please scan this quick response code on Google or Microsoft Authenticator.
+  <form #challenge="ngForm" (ngSubmit)="solveChallenge(challenge)">
+	<qrcode [qrdata]="challengeUri" [width]="256"></qrcode>
+    <input type="text" name="code" placeholder="<- MFA" autofocus required ngModel/>
+    <button type="submit">Send</button>
+	<button (click)="cancelMfa()">Cancel</button>
+  </form>
+				</div>
+
 		</div>
 
 	</div>

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { LoginComponent } from '../login/components/login/login.component';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +18,7 @@ export class ProfileComponent {
 		private userService: UserService,
 		public fun: HelperFunctionsService,
 		private route: ActivatedRoute,
+		private loginComponent: LoginComponent,
 	) {};
 
 	user: User | undefined = undefined;
@@ -29,6 +32,7 @@ export class ProfileComponent {
 	invalidNameNotice: boolean = false;
 	lastName: string = "";
 	lastPassword?: string;
+	mfaOpened?: boolean = true;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -126,4 +130,12 @@ export class ProfileComponent {
 			this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
 		this.saveUser();
 	}
+
+	cancelMfa() {
+	}
+
+	solveChallenge(form: NgForm) {
+		this.loginComponent.solveChallenge(form);
+	}
+
 }

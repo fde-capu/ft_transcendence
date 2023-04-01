@@ -14,9 +14,9 @@ export class LoginComponent {
 	step_one: Boolean = false;
 	step_two: Boolean = false;
 
-  // TODO: Remove it. It is only here for tests proposes. If you want to generate the code use this.authService.getChallenge()
-  challengeUri =
-    'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
+  // TODO: Remove it. It is only here for tests proposes.
+  // If you want to generate the code use this.authService.getChallenge()
+  public static challengeUri: string = "";
 
   message?: string;
 
@@ -39,10 +39,16 @@ export class LoginComponent {
 				this.router.navigate(['/']);
 			}
 			this.step_two = true;
-			this.message = ctx?.sub + ", you have enabled 2FA. Please scan this quick response code on Google or Microsoft Authenticator if you haven't already:";
+			this.message = ctx?.sub + ", you have enabled 2FA.\
+				Please open Google/Microsoft Authenticator and type the code";
 		}
       },
     });
+
+	this.authService.getChallenge.subscribe(_=>{
+		LoginComponent.challengeUri = \
+		'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
+	});
   }
 
   signIn() {
