@@ -34,7 +34,13 @@ export class U2uActionsComponent implements OnChanges {
   inviteToChat() {
     const myId = this.userService.getQuickIntraId();
     if (!myId || !this.user) return;
-    this.invitationService.invitePrivate(myId, this.user.intraId);
+    this.invitationService.invitePrivateChat(myId, this.user.intraId);
+  }
+
+  inviteToMatch() {
+    const myId = this.userService.getQuickIntraId();
+    if (!myId || !this.user) return;
+    this.invitationService.invitePrivateMatch(myId, this.user.intraId);
   }
 
 	makeFriend(){

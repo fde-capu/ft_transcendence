@@ -52,12 +52,6 @@ export class ChatService {
       // This checks if is a simple message.
       for (const room of ChatService.allRooms)
         if (room.id == msg.payload.roomId) {
-          // Now see if is not private-and-owned-by-others,
-          // etc., a good place to displace the sensible
-          // information (irrelevant to user, even). This way,
-          // they would not actually known by ChatService.allRooms.
-          // However, this does not mean that the information
-          // has not arrived here at frontend.
           if (
             (this.userIsInChat(room.id, ChatService.user?.intraId) ||
               msg.payload.to == ChatService.user ||
@@ -85,7 +79,6 @@ export class ChatService {
     return false;
   }
 
-  // Promise<void> is needed \/ in this case, even being void.
   async subscribeOnce(): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 500));
     if (!ChatService.isConnected) this.socketSubscription();

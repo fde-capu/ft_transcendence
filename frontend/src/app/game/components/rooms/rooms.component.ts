@@ -24,8 +24,10 @@ export class RoomsComponent implements OnInit {
       .subscribe({ next: r => (this.rooms = r) });
 
     this.gameSocket.fromEvent<string>('game:room:create').subscribe({
-      next: id => this.router.navigate([`./${id}`], { relativeTo: this.route }),
-    });
+      next: id => {
+		console.log("gameSocket got", id);
+		this.router.navigate([`./${id}`], { relativeTo: this.route });
+    }});
   }
 
   ngOnInit(): void {

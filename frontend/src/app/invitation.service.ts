@@ -6,6 +6,7 @@ import { ChatService } from './chat.service';
 import { UserService } from './user.service';
 import { User } from './user';
 import { BehaviorSubject } from 'rxjs';
+import { RoomsComponent } from './game/components/rooms/rooms.components';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,8 @@ export class InvitationService {
     private readonly router: Router,
     private readonly socket: InviteSocket,
     private readonly chatService: ChatService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+	private readonly roomsComponent: RoomsComponent,
   ) {
     this.getUser();
     this.doSubscription();
@@ -137,7 +139,7 @@ export class InvitationService {
     return this.socket.fromEvent<any>('invitation');
   }
 
-  async invitePrivate(from: string, to: string) {
+  async invitePrivateChat(from: string, to: string) {
     const [newRoomId, newRoomName] = await this.chatService.newRoom([from, to]);
     this.invite({
       from: from,
@@ -145,8 +147,19 @@ export class InvitationService {
       type: 'PRIVATE CHAT: ' + newRoomName,
       route: '/chat/' + newRoomId,
       instantaneous: false,
-      isReply: false,
     });
+  }
+
+  async invitePrivateMatch(from: string, to: string) {
+    this.roomsComponent.emit('game:room:create');
+//    const [newRoomId, newRoomName] = await this.gameService.newRoom([from, to]);
+//    this.invite({
+//      from: from,
+//      to: to,
+//      type: 'A MATCH! ' + newRoomName,
+//      route: '/game/' + newRoomId,
+//      instantaneous: false,
+//    });
   }
 
   async friendshipRequest(from: string, to: string) {
