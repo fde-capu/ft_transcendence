@@ -37,7 +37,9 @@ export class U2uActionsComponent {
 	}
 
 	makeFriend(){
-		this.userService.makeFriend(this.user).subscribe();
+		let myId = this.userService.getQuickIntraId();
+		if (!myId || !this.user) return;
+		this.invitationService.friendshipRequest(myId, this.user.intraId);
 	}
 
 	unFriend(){
