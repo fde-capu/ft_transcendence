@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 export class GameSocket extends Socket {
   constructor() {
     super({
-      url: `${environment.backendOrigin}/game`,
+      url: `${environment.backendOrigin}/rooms`,
       options: { withCredentials: true },
     });
   }
