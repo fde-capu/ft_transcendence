@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -105,9 +104,8 @@ export class AuthService {
   }
 
   public enableChallenge(payload?: JWTPayload) {
+	//console.log("enableChallenge part 1", payload);
     if (!payload) throw new UnauthorizedException();
-
-    if (payload['mfa']['enabled']) throw new BadRequestException();
 
     // const secret = this.otp.generateSecret(); // TODO: save this information
     const secret = this.getUserChallengeSecret(payload.sub); // TODO: Use generated secret instead
@@ -122,13 +120,12 @@ export class AuthService {
     payload: JWTPayload,
   ): Promise<[string, CookieOptions, JWTPayload]> {
     if (!payload) throw new UnauthorizedException();
-
-    if (!code) throw new BadRequestException();
+    if (!code) throw new UnauthorizedException();
 
     const secret = this.getUserChallengeSecret(payload.sub);
     const valid = this.otp.verify(code, secret);
     if (!valid) {
-		throw new BadRequestException();
+		throw new UnauthorizedException();
 	}
 
     const token = await this.tokenService.sign({

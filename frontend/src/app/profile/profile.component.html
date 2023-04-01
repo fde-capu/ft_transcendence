@@ -36,22 +36,15 @@
 			<label>2FA</label>
 				<span>
 					<div *ngIf="displayUser.mfa_enabled">
-						<span class="inverted">[>ON<]</span> <a (click)="switchMfa();">[ OFF ]</a>
+						ACTIVE<br><a (click)="switchMfa();">[ DEACTIVATE ]</a>
 					</div>
 					<div *ngIf="!displayUser.mfa_enabled">
-						<a (click)="switchMfa();">[ ON ]</a> <span class="inverted">[>OFF<]</span>
+						OFF<br><a (click)="switchMfa();">[ ACTIVATE ]</a>
 					</div>
 				</span>
 
-				<div *ngIf='mfaOpened'>
-					Please scan this quick response code on Google or Microsoft Authenticator.
-  <form #challenge="ngForm" (ngSubmit)="solveChallenge(challenge)">
-	<qrcode [qrdata]="challengeUri" [width]="256"></qrcode>
-    <input type="text" name="code" placeholder="<- MFA" autofocus required ngModel/>
-    <button type="submit">Send</button>
-	<button (click)="cancelMfa()">Cancel</button>
-  </form>
-				</div>
+<app-login *ngIf='mfaOpened' [stepActivate]='true'>
+</app-login>
 
 		</div>
 

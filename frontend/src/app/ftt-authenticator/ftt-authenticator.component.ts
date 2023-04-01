@@ -4,7 +4,7 @@ import { AuthService } from '../auth/service/auth.service';
 import { UserService } from '../user.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-authenticator',
   templateUrl: './ftt-authenticator.component.html',
   styleUrls: ['./ftt-authenticator.component.css'],
 })

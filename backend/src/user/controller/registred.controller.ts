@@ -36,6 +36,7 @@ export class RegisterController {
   ) {
 	  //console.log("Registred will call updateUser.");
     try {
+		console.log("< update", intraId);
       await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
     } catch (e) {

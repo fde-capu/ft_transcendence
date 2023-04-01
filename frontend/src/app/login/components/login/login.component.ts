@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
@@ -11,12 +11,14 @@ import { USERS } from '../../../mocks';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
+	@Input() stepActivate: boolean = false;
 	step_one: Boolean = false;
 	step_two: Boolean = false;
+	authOk: Boolean = false;
 
   // TODO: Remove it. It is only here for tests proposes.
   // If you want to generate the code use this.authService.getChallenge()
-  public static challengeUri: string = "";
+  public challengeUri?: string;
 
   message?: string;
 
@@ -35,21 +37,37 @@ export class LoginComponent {
 		{
 			if (ctx.mfa.verified === true)
 			{
+				this.authOk = true;
+				this.saveAuth(ctx.sub);
 				//console.log("Login authorized with MFA.");
-				this.router.navigate(['/']);
+				if (!this.stepActivate)
+					this.router.navigate(['/']);
+//				else {
+//					console.log("Save user");
+					//this.userService.saveUser();
+//				}
 			}
 			this.step_two = true;
-			this.message = ctx?.sub + ", you have enabled 2FA.\
-				Please open Google/Microsoft Authenticator and type the code";
 		}
       },
     });
 
-	this.authService.getChallenge.subscribe(_=>{
-		LoginComponent.challengeUri = \
-		'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
+	this.authService.getChallenge().subscribe({
+		next: () => {
+			this.challengeUri = 'otpauth://totp/ft_transcendence:msales-a?secret=LMWVYBAAAVES2FKG&period=30&digits=6&algorithm=SHA1&issuer=ft_transcendence';
+			this.message = "Please open Google/Microsoft Authenticator and type in the code.";
+		},
+		error: () => {
+			console.log("Subscription went wrong");
+		},
 	});
   }
+
+	ngOnChanges() {
+		if (this.stepActivate)
+			this.step_two = true;
+	}
+
 
   signIn() {
 	//console.log("Login signing in");
@@ -60,11 +78,20 @@ export class LoginComponent {
     this.authService.solveChallenge(form.value.code).subscribe({
       next: () => {
         this.message = 'Nicely done!';
+		this.authOk = true;
       },
       error: () => {
         this.message += " [" + form.value.code + ']?? Yikes! Wrong code, bud!';
       },
     });
+  }
+
+  saveAuth(intraId: string) {
+	this.userService.getUserById(intraId).subscribe(_=>{
+		if (!_ || (!!_ && !!_.mfa_enabled)) return;
+		_.mfa_enabled = true;
+		this.userService.saveUser(_).subscribe();
+	});
   }
 
   signOut() {

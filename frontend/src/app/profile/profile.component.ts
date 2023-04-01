@@ -7,6 +7,7 @@ import { HelperFunctionsService } from '../helper-functions.service';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoginComponent } from '../login/components/login/login.component';
+import { LoginModule } from '../login/login.module';
 
 @Component({
   selector: 'app-profile',
@@ -32,7 +33,7 @@ export class ProfileComponent {
 	invalidNameNotice: boolean = false;
 	lastName: string = "";
 	lastPassword?: string;
-	mfaOpened?: boolean = true;
+	mfaOpened?: boolean;
 
 	ngOnInit(): void {
 		//console.log("Profile Component Init");
@@ -126,9 +127,13 @@ export class ProfileComponent {
 	}
 
 	switchMfa() {
-		if (this.displayUser)
+		if (this.displayUser) {
 			this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
-		this.saveUser();
+			if (this.displayUser.mfa_enabled)
+				this.mfaOpened = true;
+			else
+				this.saveUser();
+		}
 	}
 
 	cancelMfa() {

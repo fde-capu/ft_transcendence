@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
+import { LoginModule } from './login/login.module';
 import { FttAuthenticatorComponent } from './ftt-authenticator/ftt-authenticator.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -57,6 +58,7 @@ import { InviteModule } from './invitation.module';
     AppRoutingModule,
     HttpClientModule,
     AuthModule,
+	LoginModule,
     FormsModule,
 	MenuBarModule,
 	AvatarModule,
@@ -65,7 +67,6 @@ import { InviteModule } from './invitation.module';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [
-	],
+  exports: [],
 })
 export class AppModule {}
