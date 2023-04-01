@@ -1,39 +1,34 @@
-<app-menu-bar></app-menu-bar>
-<app-invitation-screen></app-invitation-screen>
 <h1>{{ profileType }}<span *ngIf='!amIBlocked'> Profile</span></h1>
 <div *ngIf='!amIBlocked; else spying'>
+	<div *ngIf="displayUser; else user_unknown" style='margin-bottom: 0em;'>
+		<div class='opt-box' *ngIf="owner">
+			<div class='options'>
+				<label class='left'>name
+				</label>
+				<input id="name" [(ngModel)]="displayUser.name" class='middle'
+					(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
+					(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
+					(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
+				/>
+				<div *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;
+				</div>
+				<button *ngIf='!invalidNameNotice' id="nameButton" type="button" class='right' (click)=
+					"fun.focusIf('nameButton', 'Change', 'name');"
+					>Change
+				</button>
+			</div>
 
-<div *ngIf="displayUser; else user_unknown" style='margin-bottom: 0em;'>
+			<div class='options'>
+				<div class="small-profile-image hover_invert"
+					style="background-image:url('DEFAULT_IMAGE');">
+				</div>
+				<button type="button">Change Image
+				</button>
+			</div>
 
-
-	<div class='opt-box' *ngIf="owner">
-
-		<div class='options'>
-
-			<label class='left'>name</label>
-
-			<input id="name" [(ngModel)]="displayUser.name" class='middle'
-				(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
-				(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
-				(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
-			/>
-			<div *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;</div>
-
-			<button *ngIf='!invalidNameNotice' id="nameButton" type="button" class='right' (click)=
-				"fun.focusIf('nameButton', 'Change', 'name');"
-				>Change</button>
-		</div>
-
-
-		<div class='options'>
-			<div class="small-profile-image hover_invert"
-				style="background-image:url('DEFAULT_IMAGE');"
-			></div>
-			<button type="button">Change Image</button>
-		</div>
-
-		<div class='options'>
-			<label>2FA</label>
+			<div class='options'>
+				<label>2FA
+				</label>
 				<span>
 					<div *ngIf="displayUser.mfa_enabled">
 						ACTIVE<br><a (click)="switchMfa();">[ DEACTIVATE ]</a>
@@ -42,14 +37,10 @@
 						OFF<br><a (click)="switchMfa();">[ ACTIVATE ]</a>
 					</div>
 				</span>
-
-<app-login *ngIf='mfaOpened' [stepActivate]='true'>
-</app-login>
-
+				<app-login *ngIf='mfaOpened' [stepActivate]='true'>
+				</app-login>
+			</div>
 		</div>
-
-	</div>
-
 
 		<div class='oneliner'>
 			<div class="profile-image hover_invert"
@@ -61,35 +52,30 @@
 			</div>
 		</div>
 
+		<div class='actions'>
+		<app-u2u-actions *ngIf='!owner'
+			[isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser'
+			[caption]='false' [singleline]='true'>
+		</app-u2u-actions>
+		</div>  
 
+		<app-friends-list [user]="displayUser"></app-friends-list>
+		<app-blocks-list *ngIf="owner" [user]="displayUser"></app-blocks-list>
+		<app-statistics [user]="displayUser"></app-statistics>
+		<app-ladder [user]="user" [them]="displayUser"></app-ladder>
+		<app-history [user]="displayUser"></app-history>
+	</div>
 </div>
 
-<div class='actions'>
-<app-u2u-actions *ngIf='!owner'
-	[isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser'
-	[caption]='false' [singleline]='true'></app-u2u-actions>
-</div>  
-  
-
-  <app-friends-list [user]="displayUser"></app-friends-list>
-
-  <app-blocks-list *ngIf="owner" [user]="displayUser"></app-blocks-list>
-
-  <app-statistics [user]="displayUser"></app-statistics>
-
-  <app-ladder [user]="user" [them]="displayUser"></app-ladder>
-
-  <app-history [user]="displayUser"></app-history>
-
-
-
-<ng-template #user_unknown> User: unknown. </ng-template>
+<ng-template #user_unknown> User: unknown.
+</ng-template>
 
 <ng-template #spying>
   <div *ngIf="displayUser">
     <div
       class="profile-image hover_invert"
-      style="background-image: url('DEFAULT_IMAGE')"></div>
+      style="background-image: url('DEFAULT_IMAGE')">
+	</div>
     <br />
     {{ displayUser.intraId }}
     <app-u2u-actions
@@ -99,6 +85,7 @@
       [amIBlocked]="amIBlocked"
       [user]="displayUser"
       [caption]="false"
-      [singleline]="true"></app-u2u-actions>
+      [singleline]="true">
+	</app-u2u-actions>
   </div>
 </ng-template>
