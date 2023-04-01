@@ -1,0 +1,37 @@
+.chat-input-text {
+	border-radius: 0.5em;
+	padding: 0.5em;
+	height: 2.25em;
+	background: var(--color-sublow);
+	resize: none;
+	box-shadow: inset 0px 8px 64px #77777719;
+	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
+	position: fixed;
+	width: auto;
+	width: -moz-available;
+	left: 1em;
+	right: 1em;
+}
+.chat-input-text:focus-visible {
+	outline-style: unset;
+	animation: none;
+}
+.chat-input-box {
+	height: 3em;
+/*	top: calc(var(--inner-below-menu-height) - 2em);
+*/
+	filter: drop-shadow(0px 16px 128px #aaaaaaff);
+	border-top: var(--border-thin);
+	padding: var(--font-medium);
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 3.5em;
+}
+
+button {
+	position: absolute;
+	right: 1em;
+	bottom: 0;
+}

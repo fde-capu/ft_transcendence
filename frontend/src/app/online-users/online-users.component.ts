@@ -9,19 +9,9 @@ import { UserService } from '../user.service';
 })
 export class OnlineUsersComponent {
 	users: User[] = [];
-	user?: User;
 	constructor(private userService: UserService) {};
 	ngOnInit(): void {
-		this.getUser();
 		this.getOnlineUsers();
-	}
-	getUser(): void {
-		this.userService.getLoggedUser().subscribe(
-			backUser => { 
-				this.user = backUser;
-				this.userService.setStatus("ONLINE");
-			}
-		)
 	}
 	async getOnlineUsers() {
 		if (!this.userService.authorized() || !UserService.currentIntraId) return;
@@ -29,7 +19,7 @@ export class OnlineUsersComponent {
 			.subscribe(users => {
 				let out = [];
 				for (const u of users)
-					if (u.intraId != this.user?.intraId)
+					if (u.intraId != UserService.currentIntraId)
 						out.push(u);
 				this.users = out;
 			});

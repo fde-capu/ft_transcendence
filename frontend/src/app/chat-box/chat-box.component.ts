@@ -28,7 +28,7 @@ export class ChatBoxComponent {
 	optionsOn = false;
 	usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
 	usersInChat: User[] = [];
-	done: Boolean = false;
+	static ignited: Boolean = false;
 	user?: User;
 	id?: string|null;
 	iAmAdmin: boolean = false;
@@ -44,7 +44,7 @@ export class ChatBoxComponent {
 	}
 
 	ngOnDestroy() {
-		this.done = false;
+		ChatBoxComponent.ignited = false;
 	}
 
 	getUserAndStuff(): void {
@@ -66,11 +66,10 @@ export class ChatBoxComponent {
 			this.router.navigate(['/chat/' + newRoomId]);
 			return ;
 		}
-		if (this.id)
-			this.keepTryingToIdentify(this.id);
 		// ^ If it is a new room (roomId is null), the route will actualy
 		// be deceipt by the ChatService, by consequence the component will
 		// reload, and the param roomId will be present.
+		this.keepTryingToIdentify(this.id);
 		this.chatRoom = await this.chatService.putUserInRoom(this.chatRoom);
 		if (this.chatRoom.user && this.chatRoom.user.length == 1
 			&& this.chatRoom.admin && this.chatRoom.admin.length == 1
@@ -79,76 +78,54 @@ export class ChatBoxComponent {
 		this.uniqueId = ChatBoxComponent.uid++;
 		this.updateRoomRecursive();
 		this.checkAdminRecursive()
-		this.getOutOfChatUsersRecursiveOnce();
+		this.getOutOfChatUsers();
+		ChatBoxComponent.ignited = true;
 		this.imprintRecursive();
-		this.done = true;
 	}
 
-	async keepTryingToIdentify(id: string) {
-		//console.log("The id is", id);
-		const chatRoomTest = this.chatService.roomById(id);
-		if (chatRoomTest)
-			this.chatRoom = chatRoomTest;
-		else {
-			await new Promise(resolve => setTimeout(resolve, 345));
-			this.keepTryingToIdentify(id);
+	async keepTryingToIdentify(id: string|null) {
+		//console.log("keepTryingToIdentify");
+		if (id) {
+			const chatRoomTest = this.chatService.roomById(id);
+			if (chatRoomTest) {
+				this.chatRoom = chatRoomTest;
+				this.chatRoom.user = chatRoomTest.user;
+				await new Promise(resolve => setTimeout(resolve, 5234));
+			}
 		}
+		await new Promise(resolve => setTimeout(resolve, 234));
+		this.keepTryingToIdentify(id);
 	}
 
 	async updateRoomRecursive(): Promise<void> {
-		if (this.user && this.chatRoom && !this.fun.isStringInArray(this.user.intraId, this.chatRoom.user))
-		{
-			//console.log("Returning", this.uniqueId);
-			return ;
+		if (this.chatRoom) {
+			if (!this.chatRoom.user) this.chatRoom.user = [];
+			this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
 		}
-		if (!this.id) {
-			//console.log("A1");
-			await new Promise(resolve => setTimeout(resolve, 337));
-			//console.log("A2");
-			return await this.updateRoomRecursive();
-		} else {
-			let solo = ChatBoxComponent.umap.get(this.id);
-			if (!solo || solo < this.uniqueId)
-				ChatBoxComponent.umap.set(this.id, this.uniqueId);
-			if (solo && solo > this.uniqueId)
-				return ;
-
-			let chatRoomTest = this.chatService.roomById(this.id);
-			if (!this.chatService.equalRooms(chatRoomTest, this.chatRoom) || !this.done) {
-				//console.log("update", chatRoomTest);
-				if (chatRoomTest)
-					this.chatRoom = chatRoomTest;
-				else
-					return;
-				//console.log("A3");
-				//console.log("Updating users in chat", this.chatRoom);
-				this.usersInChat = await this.userService.intraIdsToUsers(this.chatRoom.user);
-				//console.log("A4", this.uniqueId, this.chatRoom.name);
-			}
-			await new Promise(resolve => setTimeout(resolve, 1357));
-			this.updateRoomRecursive();
-		}
+		await new Promise(resolve => setTimeout(resolve, this.id ? 5357 : 123));
+		this.updateRoomRecursive();
 	}
-
+;
 	async checkAdminRecursive() {
-		if (!this.user) return;
-		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
-		//console.log("A6");
-		await new Promise(resolve => setTimeout(resolve, 1075));
-		//console.log("A7");
+		if (!this.user) {} else {
+			this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
+		}
+		await new Promise(resolve => setTimeout(resolve, this.id ? 5075 : 135));
 		this.checkAdminRecursive();
 	}
 
-	async getOutOfChatUsersRecursiveOnce() {
-		if (!this.userService.authorized()) return ;
-		this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(
-			outChat => {
-				//console.log("Got out-of-chat users.", outChat);
-				this.usersOutOfChat = outChat;
-			}
-		);
-		await new Promise(resolve => setTimeout(resolve, 1447));
-		this.getOutOfChatUsersRecursiveOnce();
+	async getOutOfChatUsers() {
+		if (!this.userService.authorized() || !ChatBoxComponent.ignited)
+		{} else {
+			this.chatService.getOutOfChatUsers(this.chatRoom.id).subscribe(
+				outChat => {
+					//console.log(this.uniqueId, "Got out-of-chat users.", outChat);
+					this.usersOutOfChat = outChat;
+				}
+			);
+		}
+		await new Promise(resolve => setTimeout(resolve, this.id ? 6447 : 653));
+		this.getOutOfChatUsers();
 	}
 
 	async allValid() {
@@ -174,12 +151,7 @@ export class ChatBoxComponent {
 			return true;
 		else {
 			this.invalidNameNotice = true;
-			this.fun.blink('invalidNameNotice');
-			await new Promise(resolve => setTimeout(resolve, 342));
-			this.fun.blink('invalidNameNotice');
-			await new Promise(resolve => setTimeout(resolve, 342));
-			this.fun.blink('invalidNameNotice');
-			await new Promise(resolve => setTimeout(resolve, 342));
+			await this.fun.blink3('invalidNameNotice');
 			this.invalidNameNotice = false;
 			this.chatRoom.name = this.lastRoomName;
 			this.fun.focus('name');
@@ -188,7 +160,10 @@ export class ChatBoxComponent {
 	}
 
 	emit() {
-		//console.log("Noticed room changed.");
+		console.log("Noticed room changed.",
+			"users", this.chatRoom.user,
+			"mutes", this.chatRoom.muted,
+			"blocks", this.chatRoom.blocked);
 		this.chatService.roomChanged(this.chatRoom);
 	}
 
@@ -200,12 +175,7 @@ export class ChatBoxComponent {
 		)
 		{
 			this.invalidPasswordNotice = true;
-			this.fun.blink('invalidPasswordNotice');
-			await new Promise(resolve => setTimeout(resolve, 342));
-			this.fun.blink('invalidPasswordNotice');
-			await new Promise(resolve => setTimeout(resolve, 342));
-			this.fun.blink('invalidPasswordNotice');
-			await new Promise(resolve => setTimeout(resolve, 342));
+			await this.fun.blink3('invalidPasswordNotice');
 			this.invalidPasswordNotice = false;
 			if (this.fun.validateString(this.chatRoom.name))
 				this.fun.focus('password');
@@ -313,6 +283,8 @@ export class ChatBoxComponent {
 
 	switchPrivacy() {
 		this.chatRoom.isPrivate = !this.chatRoom.isPrivate;
+		if (this.chatRoom.isPrivate)
+			this.chatRoom.password = "";
 		this.validateAndEmit();
 	}
 
@@ -322,7 +294,9 @@ export class ChatBoxComponent {
 	}
 
 	isAdmin(intraId?: string): boolean {
-		return this.chatService.isAdmin(this.id, intraId);
+		if (intraId)
+			return this.fun.isStringInArray(intraId, this.chatRoom.admin);
+		return false;
 	}
 
 	revokeAdmin() {

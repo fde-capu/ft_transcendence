@@ -44,7 +44,8 @@ export class UserService {
 		private fun: HelperFunctionsService,
 	) {
 		//console.log("User Service constructor.");
-		this.setCurrentIntraId();
+		if (!UserService.currentIntraId)
+			this.setCurrentIntraId();
 		this.router.routeReuseStrategy.shouldReuseRoute = () => {
 			return false;
 		};
@@ -55,13 +56,14 @@ export class UserService {
 			UserService.isAuthorized = true;
 			if (_?.sub)
 				UserService.currentIntraId=_?.sub;
+			this.announceMe();
+			this.keepUpdating();
 		});
-		this.announceMe();
 	}
 
 	async announceMe(): Promise<void> {
-		await new Promise(resolve => setTimeout(resolve, 2391));
-		if (!UserService.currentIntraId) return this.setCurrentIntraId();
+		await new Promise(resolve => setTimeout(resolve, 10391));
+		if (!UserService.currentIntraId) return;
 		this.http.put(
 				this.attendanceUrl + UserService.currentIntraId,
 				{},
@@ -73,6 +75,15 @@ export class UserService {
 				})
 			).subscribe();
 		this.announceMe();
+	}
+
+	async keepUpdating() {
+		if (!UserService.currentIntraId) return;
+		await new Promise(resolve => setTimeout(resolve, 321)); // Useful for first run.
+		this.getLoggedUser()
+			.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
+			.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
+		await new Promise(resolve => setTimeout(resolve, 9369));
 		this.keepUpdating();
 	}
 
@@ -85,15 +96,6 @@ export class UserService {
 		return this.http
 			.get<User>(this.userByLoginUrl + intraId,{withCredentials: true})
 			.pipe(catchError(this.handleError<any>('getUserById')))
-	}
-
-	async keepUpdating() {
-		if (!UserService.currentIntraId) return this.setCurrentIntraId();
-		this.getLoggedUser()
-			.pipe(catchError(this.handleError<any>('setCurrentIntraId')))
-			.subscribe(_=>{if(!!_){UserService.currentUser=_;}});
-		await new Promise(resolve => setTimeout(resolve, 2239));
-		this.keepUpdating();
 	}
 
 	getLoggedUser(): Observable<User> {
@@ -233,11 +235,11 @@ export class UserService {
 	}
 
 	async intraIdsToUsers(ulist: string[]): Promise<User[]> {
-		if (!ulist || !ulist.length || !this.authorized()) return [];
+		//console.log("intraIdsToUsers entrance", ulist, this.authorized());
 		let out: User[] = [];
 		for (const one of ulist)
 		{
-			this.getUserById(one).subscribe(_=>{
+			await this.getUserById(one).subscribe(_=>{
 				if (_)
 				{
 					//console.log("intraIdsToUsers:", _);
@@ -247,6 +249,7 @@ export class UserService {
 				//console.log("intraIdsToUsers Error");
 			});
 		}
+		//console.log("intraIdsToUsers returning", out);
 		return out;
 	}
 

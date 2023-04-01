@@ -1,7 +1,9 @@
 :host div {
-    display: flex;
-    align-items: center;
-	width: 500px;
-	width: calc(var(--inner-width) - 4em);
-	justify-content: space-between;
+}
+.user-bar-avatar {
+	float: left;
+	margin: 8px;
+}
+.mini-id {
+	font-size: var(--font-small);
 }

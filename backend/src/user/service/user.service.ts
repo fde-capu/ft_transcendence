@@ -196,7 +196,7 @@ export class UserService {
 	if (!UserService.attendance) return this.checkOnStudents();
 	for (const [u, d] of UserService.attendance.entries()) {
 		let elapsed = Date.now() - d;
-		if (elapsed > 5555) {
+		if (elapsed > 14999) {
 			UserService.attendance.delete(u);
 			UserService.status.set(u, "OFFLINE");
 		}
