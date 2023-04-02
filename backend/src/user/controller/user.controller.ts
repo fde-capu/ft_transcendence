@@ -157,9 +157,10 @@ export class UserController {
     )
     file: Express.Multer.File,
   ) {
-    await this.userService.updateUser(payload.sub, {
-      intraId: `http://localhost:3000/${file.path}`,
-    });
+    console.log(file);
+    console.log(payload);
+    const p = await this.userService.updateProfileImage(payload.sub, file.path);
+    console.log(p);
     return file;
   }
 }

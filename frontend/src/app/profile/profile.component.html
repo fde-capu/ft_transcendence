@@ -22,8 +22,8 @@
 				<div class="small-profile-image hover_invert"
 					style="background-image:url('{{ displayUser.image }}');">
 				</div>
-				<button type="button">Change Image
-				</button>
+        <input #file type="file" name="file" accept="image/*">
+				<button type="button" (click)="upload(file)">Change Image</button>
 			</div>
 
 			<div class='options'>

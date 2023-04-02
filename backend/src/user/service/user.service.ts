@@ -196,4 +196,11 @@ export class UserService {
   presence(intraId: string) {
     UserService.attendance.set(intraId, Date.now());
   }
+
+  async updateProfileImage(intraId: string, imagePath: string) {
+    return await this.userRepository.update(
+      { intraId },
+      { image: `http://localhost:3000/${imagePath}` },
+    );
+  }
 }
