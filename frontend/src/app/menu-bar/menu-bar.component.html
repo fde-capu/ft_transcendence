@@ -12,7 +12,7 @@
     <a class="user-name" routerLink="/profile/{{ user.intraId }}">
       {{ user.intraId }} | {{ user.name }}
     </a>
-    <div class="score-big">{{ user.score | number : '6.0-0' }}</div>
+    <div class="score-big">{{ user.score | number : '2.0-0' }}</div>
   </div>
   <div *ngIf="!user" class="loading blinker"></div>
 </div>

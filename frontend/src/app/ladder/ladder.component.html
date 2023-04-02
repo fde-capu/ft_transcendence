@@ -25,7 +25,7 @@
     <app-avatar
       [user]="u"
       [positionbottom]="u.score < maxScore / 2"></app-avatar>
-    <span class="score">{{ u.score | number : '6.0-0' }}</span>
+    <span class="score">{{ u.score | number : '2.0-0' }}</span>
     <div class="pit" style="height:{{ ((u.score * 100) / maxScore) * 3 }}px;">
       <div class="vertical">
         {{ u.intraId }}
