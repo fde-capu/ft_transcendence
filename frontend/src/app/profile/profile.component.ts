@@ -93,9 +93,6 @@ export class ProfileComponent {
 		}
 	}
 
-	cancelMfa() {
-	} // TODO What the?
-
 	solveChallenge(form: NgForm) {
 		this.loginComponent.solveChallenge(form);
 	}

@@ -14,11 +14,7 @@ export class LoginComponent {
 	step_one: Boolean = false;
 	step_two: Boolean = false;
 	authOk: Boolean = false;
-
-  // TODO: Remove it. It is only here for tests proposes.
-  // If you want to generate the code use this.authService.getChallenge()
-  public challengeUri?: string;
-
+	public challengeUri?: string;
   message?: string;
 
   constructor(
@@ -43,7 +39,7 @@ export class LoginComponent {
 			}
 			this.step_two = true;
 		}
-    },
+	  },
     });
 
 	this.authService.getChallenge().subscribe({

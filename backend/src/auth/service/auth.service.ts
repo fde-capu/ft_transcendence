@@ -170,7 +170,6 @@ export class AuthService {
   public async disableChallenge(
     payload?: JWTPayload,
   ): Promise<[string, CookieOptions, JWTPayload]> {
-    // TODO: disable challenge for the user on the database
     const token = await this.tokenService.sign({
       ...payload,
       mfa: { enabled: false, verified: false },

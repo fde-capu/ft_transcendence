@@ -22,7 +22,9 @@ export class ChatGateway {
   @SubscribeMessage('chat')
   handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() payload: any, // TODO create a interface for it
+    @MessageBody() payload: any, // Maleable json objects
+																 // are bein used for different
+																 // responses. No fixed interface.
   ) {
     if (payload.room_gone) {
       console.log('-> room_gone;');

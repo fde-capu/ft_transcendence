@@ -75,8 +75,10 @@ export class UserService {
       .where('intraId = :intraId', { intraId: intraId })
       .execute();
     if (resp.affected === 0) {
-      throw new NotFoundException(); // SomethingWrongException() ..?
+      throw new NotFoundException();
       // TODO: this exception is not been handled and is crashing the server
+			// This happens only if a malicious user tries to update an
+			// unexisten user.
     }
     return resp;
   }
@@ -107,7 +109,6 @@ export class UserService {
     for (const u of resp)
       if (UserService.status.get(u.intraId) != 'OFFLINE') out.push(u);
     return this.makeUserDto(out);
-    // TODO: remove main-user from this list.
   }
 
   async getAvailableUsers(): Promise<UserDTO[]> {
@@ -123,7 +124,6 @@ export class UserService {
       )
         out.push(u);
     return this.makeUserDto(out);
-    // TODO: remove main-user from this list.
   }
 
   async getFriends(intraId: string): Promise<UserDTO[]> {
