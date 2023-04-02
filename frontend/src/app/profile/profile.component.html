@@ -22,10 +22,10 @@
 
 			<div class='options'>
 				<div class="small-profile-image hover_invert"
-					style="background-image:url('DEFAULT_IMAGE');">
+					style="background-image:url('{{ displayUser.image }}');">
 				</div>
-				<button type="button">Change Image
-				</button>
+        <input #file type="file" name="file" accept="image/*">
+				<button type="button" (click)="upload(file)">Change Image</button>
 			</div>
 
 			<div class='options'>
@@ -46,7 +46,7 @@
 
 		<div class='oneliner'>
 			<div class="profile-image hover_invert"
-				style="background-image:url('DEFAULT_IMAGE');">
+				style="background-image:url('{{ displayUser.image }}');">
 			</div>
 			<div class='info'>
 				<span class='small-id'>{{displayUser.intraId}}</span>
@@ -59,7 +59,7 @@
 			[isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser'
 			[caption]='false' [singleline]='true'>
 		</app-u2u-actions>
-		</div>  
+		</div>
 
 		<app-friends-list [user]="displayUser"></app-friends-list>
 		<app-blocks-list *ngIf="owner" [user]="displayUser"></app-blocks-list>
@@ -76,7 +76,7 @@
   <div *ngIf="displayUser">
     <div
       class="profile-image hover_invert"
-      style="background-image: url('DEFAULT_IMAGE')">
+      style="background-image: url('{{ displayUser.image }}')">
 	</div>
     <br />
     {{ displayUser.intraId }}

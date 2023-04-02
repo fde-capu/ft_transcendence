@@ -7,33 +7,34 @@ import { HelperFunctionsService } from '../helper-functions.service';
 import { catchError } from 'rxjs/operators';
 import { LoginComponent } from '../login/components/login/login.component';
 import { LoginModule } from '../login/login.module';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-
 export class ProfileComponent {
-	constructor (
-		private userService: UserService,
-		public fun: HelperFunctionsService,
-		private route: ActivatedRoute,
-		private loginComponent: LoginComponent,
-	) {};
+  constructor(
+    private userService: UserService,
+    public fun: HelperFunctionsService,
+    private route: ActivatedRoute,
+    private loginComponent: LoginComponent,
+    private readonly httpClient: HttpClient
+  ) {}
 
-	user: User | undefined = undefined;
-	displayUser: User | undefined = undefined;
-	idRequest!: string;
-	owner: Boolean = false;
-	profileType: string = "USER";
-	isFriend: boolean = false;
-	isBlock: boolean = false;
-	amIBlocked?: boolean;
-	invalidNameNotice: boolean = false;
-	lastName: string = "";
-	lastPassword?: string;
-	mfaOpened?: boolean;
+  user: User | undefined = undefined;
+  displayUser: User | undefined = undefined;
+  idRequest!: string;
+  owner: Boolean = false;
+  profileType: string = 'USER';
+  isFriend: boolean = false;
+  isBlock: boolean = false;
+  amIBlocked?: boolean;
+  invalidNameNotice: boolean = false;
+  lastName: string = '';
+  lastPassword?: string;
+  mfaOpened?: boolean;
 
   ngOnInit(): void {
     this.getUser();
@@ -83,15 +84,13 @@ export class ProfileComponent {
     this.profileType += this.amIBlocked ? ' BLOCKED YOU' : '';
   }
 
-	switchMfa() {
-		if (this.displayUser) {
-			this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
-			if (this.displayUser.mfa_enabled)
-				this.mfaOpened = true;
-			else
-				this.saveUser();
-		}
-	}
+  switchMfa() {
+    if (this.displayUser) {
+      this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
+      if (this.displayUser.mfa_enabled) this.mfaOpened = true;
+      else this.saveUser();
+    }
+  }
 
 	solveChallenge(form: NgForm) {
 		this.loginComponent.solveChallenge(form);
@@ -125,5 +124,19 @@ export class ProfileComponent {
         .saveUser(this.displayUser)
         .subscribe({ next: () => ({}) });
     }
+  }
+
+  upload(file: HTMLInputElement) {
+    if (!file.files) return;
+    const fd = new FormData();
+    fd.append('file', file.files[0], file.files[0].name);
+    this.httpClient
+      .post<void>('http://localhost:3000/user/profile/image', fd, {
+        withCredentials: true,
+      })
+      .subscribe({
+        next: () => window.location.reload(),
+        error: err => console.error(err),
+      });
   }
 }

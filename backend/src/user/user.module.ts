@@ -2,7 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RegisterController } from './controller/registred.controller';
+import { UserController } from './controller/user.controller';
 import { Users } from './entity/user.entity';
 import { UserService } from './service/user.service';
 
@@ -12,7 +12,7 @@ import { UserService } from './service/user.service';
     ConfigModule.forRoot(),
     TypeOrmModule.forFeature([Users]),
   ],
-  controllers: [RegisterController],
+  controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
 })

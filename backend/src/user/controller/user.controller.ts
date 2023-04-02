@@ -2,30 +2,41 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Param,
+  ParseFilePipeBuilder,
+  Post,
   Put,
   Query,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Users } from '../entity/user.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { randomUUID } from 'crypto';
+import { extname } from 'path';
+import { TokenPayload } from 'src/auth/decorator/token-payload.decorator';
+import { JWTPayload } from 'jose';
 
 @Controller('user')
-export class RegisterController {
+@UseGuards(AuthGuard)
+export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Put('update/:intraId')
-  @UseGuards(AuthGuard)
   async updateUser(
     @Param('intraId') intraId: string,
     @Res() response: Response = null,
     @Body() user: Users,
   ) {
     try {
-		console.log("< update", intraId);
+      console.log('< update', intraId);
       await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
     } catch (e) {
@@ -34,7 +45,6 @@ export class RegisterController {
   }
 
   @Put('status/:intraId')
-  @UseGuards(AuthGuard)
   async updateStatus(
     @Param('intraId') intraId: string,
     @Res() response: Response = null,
@@ -49,7 +59,6 @@ export class RegisterController {
   }
 
   @Put('hi/:intraId')
-  @UseGuards(AuthGuard)
   async attendance(
     @Param('intraId') intraId: string,
     @Res() response: Response = null,
@@ -64,7 +73,6 @@ export class RegisterController {
   }
 
   @Get('userByLogin')
-  @UseGuards(AuthGuard)
   async getUserByIntraId(
     @Query('intraId') code: string,
     @Res() response: Response = null,
@@ -81,7 +89,6 @@ export class RegisterController {
   }
 
   @Get('online')
-  @UseGuards(AuthGuard)
   async getOnlineUsers(@Res() response: Response = null): Promise<any> {
     try {
       const resp = await this.userService.getOnlineUsers();
@@ -92,7 +99,6 @@ export class RegisterController {
   }
 
   @Get('available')
-  @UseGuards(AuthGuard)
   async getAvailableUsers(@Res() response: Response = null): Promise<any> {
     try {
       const resp = await this.userService.getAvailableUsers();
@@ -103,7 +109,6 @@ export class RegisterController {
   }
 
   @Get('friends')
-  @UseGuards(AuthGuard)
   async getFriends(
     @Query('with') intraId: string,
     @Res() response: Response = null,
@@ -117,7 +122,6 @@ export class RegisterController {
   }
 
   @Get('blocks')
-  @UseGuards(AuthGuard)
   async getBlocks(
     @Query('them') intraId: string,
     @Res() response: Response = null,
@@ -128,5 +132,35 @@ export class RegisterController {
     } catch (e) {
       response.status(e.status).json(e.data);
     }
+  }
+
+  @Post('profile/image')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename(req, file, callback) {
+          callback(null, `${randomUUID()}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async changeProfileImage(
+    @TokenPayload() payload: JWTPayload,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: /(jpe?g|png|gif)$/,
+        })
+        .addMaxSizeValidator({ maxSize: 3000000 })
+        .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
+    )
+    file: Express.Multer.File,
+  ) {
+    console.log(file);
+    console.log(payload);
+    const p = await this.userService.updateProfileImage(payload.sub, file.path);
+    console.log(p);
+    return file;
   }
 }

@@ -8,7 +8,7 @@ import { UserService } from '../user.service';
   styleUrls: ['./avatar.component.css'],
 })
 export class AvatarComponent implements OnChanges {
-  @Input() user?: User;
+  @Input() user!: User;
   popUpOn?: boolean;
   isFriend = false;
   isBlock = false;
