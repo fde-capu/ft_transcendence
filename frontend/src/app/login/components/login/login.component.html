@@ -1,4 +1,8 @@
-<section *ngIf="step_one">
+<section class='overall' *ngIf="step_one">
+	<div style='font-size: var(--font-large)' class="slow-blinker big-title block">
+PONG!
+	</div>
+	<hr>
   <button (click)="signIn()">Sign In</button>
 </section>
 <section *ngIf="step_two && !authOk">
