@@ -1,4 +1,9 @@
-<h2 *ngIf="users.length">Online Users</h2>
-<div *ngIf="users.length" class="multi-pics">
+<app-menu-bar></app-menu-bar>
+<app-invitation-screen></app-invitation-screen>
+<h2>Online Users</h2>
+<div *ngIf="users.length; else no_one_here" class="multi-pics">
   <app-avatar *ngFor="let friend of users" [user]="friend"></app-avatar>
 </div>
+<ng-template #no_one_here>
+You're alone.
+</ng-template>

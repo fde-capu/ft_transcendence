@@ -1,3 +1,5 @@
+<app-menu-bar></app-menu-bar>
+<app-invitation-screen></app-invitation-screen>
 <div *ngIf="!this.chatRoom.id" class="overall">Please hold on...</div>
 <div *ngIf="this.chatRoom.id" class="window-full">
   <div class="window-title" (click)="onMenu()">
@@ -169,35 +171,6 @@
       </tr>
     </table>
 
-    <h3 *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)">
-      Users not in Chat
-    </h3>
-    <table
-      *ngIf="iAmAdmin || (!chatRoom.isPrivate && !chatRoom.password)"
-      class="list-of-users">
-      <tr
-        *ngFor="let user of usersOutOfChat"
-        [ngClass]="{ yourself: isMe(user.intraId) }">
-        <td *ngIf="!isMe(user.intraId)">&nbsp;</td>
-        <!-- Interesting, element yourself::before takes a place in the first column. -->
-        <td>
-          <a routerLink="/profile/{{ user.intraId }}">
-            {{ user.intraId }} | {{ user.name }}
-          </a>
-        </td>
-        <td>
-          <span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
-          <button
-            *ngIf="!isBlocked(user) && !isMe(user.intraId)"
-            style="margin-left: 0"
-            (click)="doInvitationToThisRoom(user)">
-            Invite
-          </button>
-          <span *ngIf="isMuted(user)"><- Muted&nbsp;</span>
-          <span *ngIf="isBlocked(user)"><- Blocked&nbsp;</span>
-        </td>
-      </tr>
-    </table>
   </div>
   <app-chat-text [room]="chatRoom"></app-chat-text>
   <app-chat-input [room]="chatRoom"></app-chat-input>

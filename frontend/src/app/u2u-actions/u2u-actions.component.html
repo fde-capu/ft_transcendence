@@ -11,7 +11,7 @@
     <button *ngIf="isFriend" (click)="unFriend()">Unfriend</button>
     <button *ngIf="!isBlock" (click)="makeBlock()">Block</button>
     <button *ngIf="isBlock" (click)="unBlock()">Unblock</button>
-    <button *ngIf="!amIBlocked && availability">INVITE TO GAME</button>
+    <button *ngIf="!amIBlocked && availability" (click)="inviteToMatch()">INVITE TO GAME</button>
   </div>
 </div>
 <div *ngIf="isMe"></div>

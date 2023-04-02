@@ -85,7 +85,8 @@ export class InvitationScreenComponent implements OnInit {
       );
     const go = (old.acceptScreen || old.notificationScreen) && this.clickGo;
     const route = go ? old.invitation?.route : null;
-    if (go && route && !this.alreadyInRoute()) this.invitationService.go(route);
+	console.log("Ok:", go, route, this.alreadyInRoute());
+    if (go && route && !this.alreadyInRoute()) return this.invitationService.go(route);
     this.router.navigate([this.router.url]);
   }
 }

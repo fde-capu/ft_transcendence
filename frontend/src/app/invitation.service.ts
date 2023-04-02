@@ -6,7 +6,7 @@ import { ChatService } from './chat.service';
 import { UserService } from './user.service';
 import { User } from './user';
 import { BehaviorSubject } from 'rxjs';
-import { RoomsComponent } from './game/components/rooms/rooms.components';
+import { RoomsComponent } from './game/components/rooms/rooms.component';
 
 @Injectable({
   providedIn: 'root',
@@ -151,15 +151,14 @@ export class InvitationService {
   }
 
   async invitePrivateMatch(from: string, to: string) {
-    this.roomsComponent.emit('game:room:create');
-//    const [newRoomId, newRoomName] = await this.gameService.newRoom([from, to]);
-//    this.invite({
-//      from: from,
-//      to: to,
-//      type: 'A MATCH! ' + newRoomName,
-//      route: '/game/' + newRoomId,
-//      instantaneous: false,
-//    });
+    let link = await this.roomsComponent.getLastLink();
+    this.invite({
+      from: from,
+      to: to,
+      type: 'A MATCH! ' + link,
+      route: link,
+      instantaneous: false,
+    });
   }
 
   async friendshipRequest(from: string, to: string) {
