@@ -14,7 +14,7 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Users } from '../entity/user.entity';
 
 @Controller('user')
-export class RegisterController {
+export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Put('update/:intraId')
@@ -25,7 +25,7 @@ export class RegisterController {
     @Body() user: Users,
   ) {
     try {
-		console.log("< update", intraId);
+      console.log('< update', intraId);
       await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
     } catch (e) {

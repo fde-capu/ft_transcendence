@@ -1,21 +1,21 @@
 import { HttpModule } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { RegisterController } from '../../../src/user/controller/registred.controller';
+import { UserController } from '../../../src/user/controller/user.controller';
 import { UserService } from '../../../src/user/service/user.service';
 jest.mock('../../../src/user/service/user.service');
 
 describe('RegisterController', () => {
-  let controller: RegisterController;
+  let controller: UserController;
   // let userService: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [RegisterController],
+      controllers: [UserController],
       providers: [UserService],
       imports: [HttpModule],
     }).compile();
 
-    controller = module.get<RegisterController>(RegisterController);
+    controller = module.get<UserController>(UserController);
   });
 
   it('should be defined', () => {
