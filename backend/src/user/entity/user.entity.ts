@@ -48,7 +48,7 @@ export class Users {
   @Column()
   name?: string;
 
-  @Column({ default: 'DEFAULT_IMAGE' })
+  @Column()
   image?: string;
 
   @Column()
