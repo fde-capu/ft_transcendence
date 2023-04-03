@@ -1,0 +1,27 @@
+<h2>
+  Ladder
+</h2>
+  <button (click)="showMyself()">
+    Check Your Position
+  </button>
+<div class="podium" id="ladderView">
+  <div class="tower" *ngFor="let u of ladder">
+    <div style="height: 2em; text-align: center">
+      <span *ngIf="u.intraId === userId" id="focusMe">[ YOU ]</span>
+      <br />
+      {{ u.position }}
+    </div>
+    <app-avatar
+      [user]="u"
+			[dummy]="true"
+			></app-avatar>
+    <span class="score">{{ u.score | number : '2.0-0' }}</span>
+    <div class="pit" style="height:{{ ((u.score * 100) / maxScore) * 3 }}px;">
+      <div class="vertical">
+        {{ u.intraId }}
+        <br />
+        {{ u.name }}
+      </div>
+    </div>
+  </div>
+</div>

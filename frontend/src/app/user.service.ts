@@ -166,15 +166,7 @@ export class UserService {
   getAvailableUsers(): Observable<User[]> {
     return this.http
       .get<User[]>(this.availableUsersUrl, { withCredentials: true })
-      .pipe(catchError(this.handleError<User[]>('getOnlineUsers', [])));
-  }
-
-  getLadder(): Observable<any[]> {
-    return this.http
-      .get<User[]>(this.onlineUsersUrl, { withCredentials: true })
-      .pipe(catchError(this.handleError<User[]>('getLadder', [])));
-    // ^ This is exactly like getOnlineUser(), but if later we want to
-    // get all online AND offline users for ranking, this is the place.
+      .pipe(catchError(this.handleError<User[]>('getAvailableUsers', [])));
   }
 
   getFriends(u_user?: User): Observable<User[]> {

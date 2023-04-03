@@ -2,6 +2,7 @@
 	cursor:url("assets/cursor.png") 8 8, cell;
 	--pad: 0.33em;
 	--base-normal-width: 1000px;
+	--base-minimal-width: 500px;
 	--color-high:#eee;
 	--color-subhigh:#aaa;
 	--color-supmed:#888;

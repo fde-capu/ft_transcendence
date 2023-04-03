@@ -27,6 +27,7 @@
 	min-height: 2em !important;
 	max-width: 2em !important;
 	max-height: 2em !important;
+	margin: auto !important;
 }
 .avatar-menu
 {

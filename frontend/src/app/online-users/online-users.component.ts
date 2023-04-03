@@ -30,5 +30,6 @@ export class OnlineUsersComponent implements OnInit {
     // ^ Lazy update so the pop-up don't keep disapearing too often.
 //    await this.getOnlineUsers();
 // TODO ^ uncomment this line!
+// TODO check the timing
   }
 }
