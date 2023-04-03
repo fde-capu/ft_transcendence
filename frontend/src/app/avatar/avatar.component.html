@@ -11,8 +11,7 @@
     class="avatar-menu"
 		>
     <div
-			class="pad hover_invert"
-			style="background: rgba(0,0,0,1);"
+			class="name pad hover_invert"
 			(click)='goToProfile()'
 		><span class='id'>
       {{ user.intraId }}
@@ -35,5 +34,7 @@
 <ng-template #plain>
   <div
     class="avatar-image hover_invert dummy"
-    style="background-image:url('{{ user.image }}');"></div>
+    style="background-image:url('{{ user.image }}');"
+		(click)='goToProfile()'
+	></div>
 </ng-template>

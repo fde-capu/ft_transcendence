@@ -40,6 +40,7 @@
 	font-size:var(--font-x-large);
 	max-width: 100%;
 	white-space: normal;
+	line-height: 0.7em;
 }
 .small-id {
 	font-size:var(--font-small);

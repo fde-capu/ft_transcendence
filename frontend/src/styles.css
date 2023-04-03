@@ -92,7 +92,6 @@ h3 {
 }
 input, textarea, select
 {
-	width: 15em;
 	padding: 0;
 	text-shadow: inherit;
 	border: none;
@@ -102,33 +101,31 @@ input, textarea, select
 	font-size: inherit;
 	cursor: inherit;
 }
-input:hover, select:hover {
-	background: var(--color-high);
-	color: var(--color-low);
-}
 input:focus-visible, select:focus-visible {
 	outline-style: none;
-	background: var(--color-high);
-	color: var(--color-low);
 }
 input:selection, select:selection {
-	-webkit-filter: invert(100%);
-	filter: invert(100%);
 }
 .inverted {
 	-webkit-filter: invert(100%);
 	filter: invert(100%);
-	background: var(--color-low);
 }
 a {
 	all: unset;
 }
-a, .hover_invert {
+a:hover,
+input:hover,
+button:hover,
+textarea:hover,
+textarea:active {
+	background: black;
 }
-a:hover {
-	background: #222; /* NOT var(--color-low) because of darkreader bug. */
-}
-a:hover, .hover_invert:hover {
+.hover_invert:hover,
+a:hover,
+input:active,
+button:hover,
+textarea:hover,
+textarea:active {
 	-webkit-filter: grayscale(100%) invert(100%) !important;
 	filter: grayscale(100%) invert(100%) !important;
 }
@@ -150,11 +147,6 @@ button,
 	color: var(--color-high);
 	padding-top: 0;
 	padding-bottom: 0;
-}
-button:hover
-{
-	background: var(--color-high);
-	color: var(--color-low);
 }
 button:disabled:hover {
 	background: inherit;
@@ -286,25 +278,25 @@ label::after {
 }
 .overall {
 	position: fixed;
-    top: 0;
+	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-    text-align: center;
-    background: var(--color-sublow-transp);
-    z-index: 3000;
-    border: var(--border-thick);
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
+	text-align: center;
+	background: var(--color-sublow-transp);
+	z-index: 3000;
+	border: var(--border-thick);
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
 	-webkit-filter:
-			drop-shadow(0px 0px 190px #00000055)
-			drop-shadow(0px 0px 90px #00000055);
+		drop-shadow(0px 0px 190px #00000055)
+		drop-shadow(0px 0px 90px #00000055);
 	filter:
-			drop-shadow(0px 0px 190px #00000055)
-			drop-shadow(0px 0px 90px #00000055);
+		drop-shadow(0px 0px 190px #00000055)
+		drop-shadow(0px 0px 90px #00000055);
 }
 
 .high-noise {

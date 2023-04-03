@@ -45,3 +45,6 @@
 .pad {
 	padding: 4px;
 }
+.name:hover {
+	background: var(--color-low);
+}
