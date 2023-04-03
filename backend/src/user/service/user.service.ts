@@ -24,6 +24,7 @@ export class UserService {
   public static status: Map<string, string> = new Map<string, string>();
   static attendance: Map<string, number> = new Map<string, number>();
   static attOnce?: boolean;
+	private static logOffTimeOut: number = 1000 * 60 * 20; // 20 minutes
 
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
@@ -106,7 +107,8 @@ export class UserService {
       .getMany();
     const out = [];
     for (const u of resp)
-      if (UserService.status.get(u.intraId) != 'OFFLINE') out.push(u);
+      if (UserService.status.get(u.intraId) != 'OFFLINE')
+				out.push(u);
     return this.makeUserDto(out);
   }
 
@@ -192,7 +194,7 @@ export class UserService {
     if (!UserService.attendance) return this.checkOnStudents();
     for (const [u, d] of UserService.attendance.entries()) {
       const elapsed = Date.now() - d;
-      if (elapsed > 14999) {
+      if (elapsed > UserService.logOffTimeOut) {
         UserService.attendance.delete(u);
         UserService.status.set(u, 'OFFLINE');
       }

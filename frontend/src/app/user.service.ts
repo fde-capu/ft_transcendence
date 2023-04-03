@@ -45,7 +45,7 @@ export class UserService {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
-		this.getAllUsersCycle();
+		this.getAllUsersCycle(3333);
   }
 
   setCurrentIntraId() {
@@ -78,7 +78,7 @@ export class UserService {
 
   async keepUpdating() {
     if (!UserService.currentIntraId) return;
-		UserService.currentUser = this.getUserById(UserService.currentIntraId);
+		UserService.currentUser = this.getUser(UserService.currentIntraId);
     await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();
   }
@@ -87,10 +87,10 @@ export class UserService {
     return UserService.currentIntraId;
   }
 
-  getUserById(intraId: string|undefined): User|undefined {
-		if (!intraId) return undefined;
+  getUser(id: string|undefined): User|undefined {
+		if (!id) return undefined;
 		for (const u of UserService.all)
-			if (u.intraId == intraId)
+			if (u.intraId == id)
 				return u;
 		return undefined;
   }
@@ -98,10 +98,6 @@ export class UserService {
   getLoggedUser(): User|undefined {
     //console.log("fUS getting logged user");
 		return this.getUser(UserService.currentIntraId);
-  }
-
-  getUser(id: string|undefined): User|undefined {
-    return id ? this.getUserById(id) : undefined;
   }
 
   signOut(afterRoute = '/logout') {
@@ -141,13 +137,13 @@ export class UserService {
 			);
 	}
 
-	async getAllUsersCycle() {
+	async getAllUsersCycle(deltaMs: number) {
 		this.getAllUsers().subscribe(_=>{
 			console.log("All users in!", _.length);
 			UserService.all = _;
 		});
-		await new Promise(resolve => setTimeout(resolve, 10333));
-		this.getAllUsersCycle();
+		await new Promise(resolve => setTimeout(resolve, deltaMs));
+		this.getAllUsersCycle(deltaMs);
 	}
 
   getAllUsers(): Observable<User[]> {

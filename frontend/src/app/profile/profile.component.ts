@@ -39,12 +39,12 @@ export class ProfileComponent {
 
   ngOnInit(): void {
     this.getUser();
+		this.getIdRequest();
   }
 
-  getUser(): void {
+  getUser() {
 		this.user = this.userService.getLoggedUser();
 		this.userService.setStatus('ONLINE');
-		this.getIdRequest();
   }
 
   getIdRequest() {
@@ -61,7 +61,7 @@ export class ProfileComponent {
       this.setOwnership();
       return;
     }
-    this.displayUser = this.userService.getUserById(this.idRequest);
+    this.displayUser = this.userService.getUser(this.idRequest);
 		this.setOwnership();
 		this.amIBlocked = this.userService.amIBlocked(this.displayUser);
   }
