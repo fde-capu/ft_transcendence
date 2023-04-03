@@ -58,8 +58,10 @@ fieldset {
   display: flex;
   flex-direction: row;
 
-  border: solid 2px gray;
+  border: var(--border-extra);
   padding: 1rem;
+	width: fit-content;
+	margin: 0 auto;
 }
 
 fieldset > *:not(:last-child) {

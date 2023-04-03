@@ -17,13 +17,16 @@
 }
 
 #container, #content {
-  width: 100%;
-  height: 100%;
+  width: var(--base-normal-width);
+	min-width: var(--base-minimal-width);
+	margin: 0 auto 1em;
 }
 
 fieldset {
-  border: solid 2px gray;
+  border: var(--border-extra);
   padding: 1rem;
+	width: fit-content;
+	margin: 0 auto;
 }
 
 caption, h1, h2, h3, h4, section, nav, fieldset {
@@ -34,6 +37,12 @@ table {
   width: 100%;
 }
 
-th, td{
+th, td {
   text-align: center;
+	border: var(--border-thin);
+	padding: 0;
+}
+
+.break-line {
+	border: var(--devx);
 }

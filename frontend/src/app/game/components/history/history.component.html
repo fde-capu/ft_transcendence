@@ -9,16 +9,16 @@
   </header>
   <nav>
     <fieldset>
-      <legend>Options</legend>
+      <legend>Choose</legend>
       <label for="mode">Mode</label>
       <select
         #gamemode
         (change)="setMode(gamemode.value)"
         name="mode"
         id="mode">
-        <option value="0">PONG</option>
-        <option value="1">PONGDOUBLE</option>
-        <option value="2">QUADRAPONG</option>
+        <option value="0">PONG!</option>
+        <option value="1">PONGDOUBLE!</option>
+        <option value="2">QUADRAPONG!</option>
       </select>
     </fieldset>
   </nav>
@@ -26,9 +26,7 @@
     <p>No matches found.</p>
   </section>
   <section *ngIf="(matches | async)?.length" id="content" class="center">
-    <h3 *ngIf="mode === 0">Pong</h3>
-    <h3 *ngIf="mode === 1">PongDouble</h3>
-    <h3 *ngIf="mode === 2">QuadraPong</h3>
+		<!-- H3 not needed since the mode is chosen above. -->
     <table>
       <thead>
         <tr>
@@ -51,7 +49,6 @@
             <th>Score</th>
           </ng-container>
         </tr>
-
       </thead>
       <tbody>
         <tr *ngFor="let match of matches | async">
@@ -66,5 +63,21 @@
         </tr>
       </tbody>
     </table>
+
+
+        <div *ngFor="let match of matches | async">
+          <ng-container *ngFor="let team of match.teams | keyvalue">
+            <div *ngIf="team.value">
+							<div *ngFor="let player of team.value.players">
+								{{ player.name }}
+							</div>
+            </div>
+            <div *ngIf="team.value">
+							{{ team.value.score }}
+						</div>
+          </ng-container>
+        </div>
+
+
   </section>
 </main>

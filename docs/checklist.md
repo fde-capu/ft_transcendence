@@ -59,4 +59,5 @@ frontend                    | For more info see: https://angular.io/guide/build#
 
 [ ] Even if user have blocked you, if you F5 the profile, you still can see everything.
 [ ] On saving the game record, set the user scores (+ goals made by the team)
-
+[ ] On match history, choosing the exibition game mode does not filter properly (allways show all games?).
+[ ] Invitation to Match sometimes does not create the room.

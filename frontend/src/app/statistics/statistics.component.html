@@ -23,7 +23,7 @@
     <tr>
       <td>Wins/Looses</td>
       <td *ngIf='stat.winsPerLooses && stat.winsPerLooses < 1'>{{ stat.winsPerLooses | number : '1.2-2' }}</td>
-			<td *ngIf='stat.winsPerLooses && stat.winsPerLooses == 1'>Perfect!</td>
+			<td *ngIf='!stat.looses'>Perfect!</td>
 			<td *ngIf='!stat.winsPerLooses'>Terrible!</td>
     </tr>
 </table>
