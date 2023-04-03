@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-avatar',
@@ -16,7 +17,10 @@ export class AvatarComponent implements OnChanges {
   amIBlocked?: boolean;
 	@Input() dummy?: boolean;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private router: Router,
+		private userService: UserService,
+	) {}
 
   ngOnChanges() {
     this.checkFriendship();
@@ -31,4 +35,8 @@ export class AvatarComponent implements OnChanges {
     this.isBlock = this.userService.isBlock(this.user);
     this.amIBlocked = this.userService.amIBlocked(this.user);
   }
+
+	goToProfile() {
+		this.router.navigate(['/profile/' + this.user?.intraId]);
+	}
 }

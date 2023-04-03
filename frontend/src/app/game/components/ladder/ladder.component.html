@@ -2,12 +2,15 @@
   Ladder
 </h2>
   <button (click)="showMyself()">
-    Check Your Position
+    Check <span *ngIf='isMe'>Your </span>Position
   </button>
 <div class="podium" id="ladderView">
   <div class="tower" *ngFor="let u of ladder">
     <div style="height: 2em; text-align: center">
-      <span *ngIf="u.intraId === userId" id="focusMe">[ YOU ]</span>
+      <span *ngIf="u.intraId === userId" id="focusMe">[ 
+				<span *ngIf='isMe'>YOU</span>
+				<span *ngIf='!isMe'>USER</span>
+			]</span>
       <br />
       {{ u.position }}
     </div>

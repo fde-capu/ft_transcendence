@@ -5,17 +5,22 @@
   <div
     class="avatar-image hover_invert"
     style="background-image:url('{{ user.image }}');"
+		(click)='goToProfile()'
 	></div>
   <div
     class="avatar-menu"
 		>
-    <div><span class='id'>
+    <div
+			class="pad hover_invert"
+			style="background: rgba(0,0,0,1);"
+			(click)='goToProfile()'
+		><span class='id'>
       {{ user.intraId }}
 			</span>
       <br />
 			{{ user.name }}
     </div>
-		<div>
+		<div class='pad'>
 			<app-u2u-actions
 				[isFriend]="isFriend"
 				[isBlock]="isBlock"

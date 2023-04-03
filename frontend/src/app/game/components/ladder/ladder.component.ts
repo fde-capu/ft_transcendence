@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-//import { UserService } from '../user.service';
 import { HttpClient } from '@angular/common/http';
 import { User } from 'src/app/user';
-//import { HelperFunctionsService } from '../../../helper-functions.service';
 import { environment } from '../../../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -18,26 +16,35 @@ export class LadderComponent implements OnInit {
 	// TODO ^ Make endport for getting all users.
   maxScore = 0;
   ladder: any[] = [];
-  userId!: string;
-  @Input() them?: User;
+  @Input() userId?: string;
+	isMe?: boolean;
   constructor(
     private http: HttpClient,
     private readonly authService: AuthService
-//    private readonly userService: UserService,
-//    private readonly fun: HelperFunctionsService
-  ) {
-    this.authService
-      .getAuthContext()
-      .subscribe({ next: ctx => (this.userId = ctx!.sub) });
-	}
+  ) {}
 
   ngOnInit() {
     this.getLadderOnce();
+		this.getMyself();
   }
+
+	ngOnChanges() {
+		this.getMyself();
+	}
+
+	async getMyself() {
+    this.authService
+      .getAuthContext()
+      .subscribe({ next: ctx => 
+				{
+					if (!this.userId)
+						this.userId = ctx!.sub;
+					this.isMe = this.userId == ctx!.sub;
+				} });
+	}
 
   async getLadderOnce(): Promise<void> {
     this.getLadder().subscribe(_ => {
-			console.log("getLadder got", _);
       this.ladder = _;
       this.ladder.sort(function (a: any, b: any) {
         return b.score - a.score;
