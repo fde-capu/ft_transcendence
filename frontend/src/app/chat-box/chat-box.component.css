@@ -24,7 +24,7 @@
 	margin: 0;
 	font-variant-caps: all-caps;
 	padding: var(--font-medium);
-	font-size: var(--font-large);
+	font-size: var(--font-medium);
 	background: var(--color-shadow);
 	border-bottom: var(--border-thin);
 	line-height: 0.5em;

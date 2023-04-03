@@ -42,15 +42,19 @@ export class ProfileComponent {
 		this.getIdRequest();
   }
 
-  getUser() {
+  async getUser() {
 		this.user = this.userService.getLoggedUser();
+    await new Promise(resolve => setTimeout(resolve, 111));
+		this.getUser();
   }
 
-  getIdRequest() {
+  async getIdRequest() {
     this.route.params.subscribe((params: Params) => {
       this.idRequest = params['intraId'];
       this.getDisplayUser();
     });
+    await new Promise(resolve => setTimeout(resolve, 111));
+		this.getIdRequest();
   }
 
   async getDisplayUser() {

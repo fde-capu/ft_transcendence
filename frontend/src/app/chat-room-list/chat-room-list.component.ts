@@ -41,8 +41,12 @@ export class ChatRoomListComponent implements OnInit {
     this.getChatRooms();
   }
 
-	getCurrentUser(): void {
+	async getCurrentUser() {
 		this.user = this.userService.getLoggedUser();
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 101));
+			this.getCurrentUser();
+		}
 		this.getChatRooms();
 	}
 
