@@ -23,6 +23,7 @@ export class AvatarComponent implements OnChanges {
 	) {}
 
   ngOnChanges() {
+		if (this.dummy) return;
     this.checkFriendship();
     this.checkBlock();
   }

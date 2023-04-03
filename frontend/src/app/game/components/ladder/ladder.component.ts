@@ -45,6 +45,7 @@ export class LadderComponent implements OnInit {
 
   async getLadderOnce(): Promise<void> {
     this.getLadder().subscribe(_ => {
+			//console.log("gotLadder", _);
       this.ladder = _;
       this.ladder.sort(function (a: any, b: any) {
         return b.score - a.score;
@@ -75,6 +76,10 @@ export class LadderComponent implements OnInit {
       return of(result as T);
     };
   }
+
+	myHeight(n: number) {
+		return n * 500 / this.maxScore;
+	}
 
   blink(el: string) {
     const exist = document.getElementById(el);

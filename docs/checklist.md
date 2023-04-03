@@ -64,3 +64,5 @@ frontend                    | For more info see: https://angular.io/guide/build#
 	...So, TODO would really be: [ ] Refactor GET /game/history for no need of using params {'mode': this.mode}.
 [ ] Invitation to Match sometimes does not create the room.
 [ ] Quadrapong and PongDouble failed (frozen) with "ERROR TypeError: p.setVelocity is not a function"@game.component.ts:68
+[ ] Check all "localhost" mentions, make it configService;
+[ ] Main menu is behind avatars...
