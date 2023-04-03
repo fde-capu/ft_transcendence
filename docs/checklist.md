@@ -66,7 +66,7 @@ frontend                    | For more info see: https://angular.io/guide/build#
 [ ] Quadrapong and PongDouble failed (frozen) with "ERROR TypeError: p.setVelocity is not a function"@game.component.ts:68
 [ ] Check all "localhost" mentions, make it configService;
 [ ] Main menu is behind avatars...
-[ ] Re-check layout of chat options screen.
+[X] Re-check layout of chat options screen. Fixed identification by url.
 [ ] Some page refreshment cancels profile edition. Maybe this happens also in chat-options.
 [ ] ^ This case is strange because the change name input accepts and rejects alternatively.
 [ ] Profile is not accepting F5.

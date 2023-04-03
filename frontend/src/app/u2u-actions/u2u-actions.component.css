@@ -18,3 +18,15 @@
 button {
 	margin-left: -0.5em;
 }
+
+.tinyForChat {
+	font-size: var(--font-small);
+	display: inline-flex;
+	flex-direction: row;
+	align-items: baseline;
+}
+
+.tyleForChat button {
+	display: inline;
+}
+

@@ -44,7 +44,7 @@
 	--inner-minimum: 512px;
 
 	--dev1: 2px solid red;
-	--dev1: 2px solid blue;
+	--dev1: 2px solid yellow;
 	--devx: 20px solid purple;
 }
 body
@@ -90,6 +90,7 @@ h2 {
 h3 {
 	font-variant-caps: all-petite-caps;
 	margin: 4px 0px 0px 24px;
+	text-align: center;
 }
 input,
 textarea,
@@ -206,8 +207,6 @@ li
 }
 hr {
 	border: 2px dashed var(--color-border);
-	width: 200px;
-	margin: 0.25em 0;
 }
 label
 {
@@ -317,12 +316,12 @@ label::after {
   content: "";
   position: absolute;
   background-color: rgba(0,0,0,0);
-  border: 32px solid black;
+  border: 40px solid black;
 	position: fixed;
-	top: -32px;
-	left: -32px;
-	right: -32px;
-	bottom: -32px;
+	top: -38px;
+	left: -38px;
+	right: -38px;
+	bottom: -38px;
 	pointer-events: none;
 
 }

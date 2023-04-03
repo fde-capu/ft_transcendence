@@ -29,10 +29,10 @@
         </span>
       </span>
       <span *ngIf="isCurrentUserBlocked(room)"
-        >&nbsp;<b><- YOU ARE BLOCKED!</b></span
+        >&nbsp;<b>[ YOU ARE BLOCKED! ]</b></span
       >
       <span *ngIf="isCurrentUserMuted(room)"
-        >&nbsp;<b><- YOU ARE MUTED!</b></span
+        >&nbsp;<b>[ YOU ARE MUTED! ]</b></span
       >
         <button *ngIf="!room.password" routerLink="/chat/{{ room.id }}">
           ENTER

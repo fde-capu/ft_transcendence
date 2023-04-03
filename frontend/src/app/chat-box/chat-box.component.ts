@@ -41,18 +41,28 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUserAndStuff();
+		this.initChatRoom();
   }
 
   ngOnDestroy() {
     ChatBoxComponent.ignited = false;
   }
 
-  getUserAndStuff(): void {
+  async getUserAndStuff(): Promise<void> {
 		this.user = this.userService.getLoggedUser();
-		this.initChatRoom();
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 121));
+			return this.getUserAndStuff();
+		}
+		else
+			return ;
   }
 
-  async initChatRoom() {
+  async initChatRoom(): Promise<void> {
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 129));
+			return this.initChatRoom();
+		}
     //console.log("ChatBox Init");
     this.id = this.route.snapshot.paramMap.get('roomId');
     if (!this.id && this.user) {

@@ -9,8 +9,8 @@
 }
 .options
 {
-	background: var(--color-shadow);
 	padding: 0 16px;
+	margin: 0 auto;
 }
 
 .yourself::after {
@@ -56,18 +56,18 @@
 .window-options {
 	background: var(--color-sublow-transp);
 	z-index: 200;
-    justify-content: center;
+	justify-content: center;
 	flex-direction: column;
 	overflow: auto;
-	position: absolute;
 	top: var(--set-menu-bar);
 	left: 0;
-	bottom: 0;
+	bottom: 10em;
 	right: 0;
 }
 .list-of-users {
-    border: 0;
-    border-spacing: 0;
+	border: 0;
+	border-spacing: 0;
+	margin: 0 auto;
 }
 .list-of-users td {
 	padding-top: 0px;
@@ -87,4 +87,19 @@ button {
 .user-name {
 	max-width: 20em;
 	overflow: hidden;
+}
+.options-block {
+	top: 6em;
+	position: fixed;
+	overflow: auto;
+	margin: 0 auto;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--color-sublow);
+	z-index: 1000;
+}
+
+h2 {
+	text-align: center;
 }

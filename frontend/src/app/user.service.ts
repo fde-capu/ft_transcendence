@@ -42,25 +42,30 @@ export class UserService {
     private fun: HelperFunctionsService
   ) {
     console.log("User Service constructor.");
-    if (!UserService.currentIntraId) this.setCurrentIntraId();
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
+    this.setCurrentIntraId();
+		this.announceMe();
+		this.keepUpdating();
 		this.getAllUsersCycle(3333);
   }
 
-  setCurrentIntraId() {
+  async setCurrentIntraId() {
+		if (UserService.currentIntraId) 
+			return ;
     this.authService.getAuthContext().subscribe(_ => {
       UserService.isAuthorized = true;
-      if (_?.sub) UserService.currentIntraId = _?.sub;
-      this.announceMe();
-      this.keepUpdating();
+      if (_?.sub)
+				UserService.currentIntraId = _?.sub;
     });
+		await new Promise(resolve => setTimeout(resolve, 111));
+		this.setCurrentIntraId();
   }
 
   async announceMe(): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 10391));
-    if (!UserService.currentIntraId) return;
+    if (!UserService.currentIntraId) return this.announceMe();
     this.http
       .put(
         this.attendanceUrl + UserService.currentIntraId,
@@ -77,8 +82,11 @@ export class UserService {
     this.announceMe();
   }
 
-  async keepUpdating() {
-    if (!UserService.currentIntraId) return;
+  async keepUpdating(): Promise<void> {
+    if (!UserService.currentIntraId) {
+			await new Promise(resolve => setTimeout(resolve, 116));
+			return this.keepUpdating();
+		}
 		UserService.currentUser = this.getUser(UserService.currentIntraId);
     await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();

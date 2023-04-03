@@ -1,7 +1,7 @@
-<div *ngIf="!isMe" class='box'>
+<div *ngIf="!isMe" class='box' [ngClass]='{tinyForChat:tinyForChat}'>
   <h2 *ngIf="caption">Actions</h2>
   <div [ngClass]="{ singleline: singleline }">
-    <div class="status" *ngIf="user?.status">{{ user?.status }}</div>
+    <div class="status" *ngIf="user?.status && !tinyForChat">{{ user?.status }}</div>
     <span *ngIf="amIBlocked"><b><- BLOCKED YOU&nbsp;</b></span>
 	</div>
   <div [ngClass]="{ singleline: singleline }">
