@@ -17,6 +17,7 @@ export class UserService {
   public static currentIntraId?: string;
   public static currentUser?: User;
 	public static all: User[] = [];
+	public static running: boolean = false;
   static isAuthorized = false;
   private statsUrl = `${environment.backendOrigin}/user/stats/?of=`;
   private historyUrl = `${environment.backendOrigin}/user/history/?of=`;
@@ -40,7 +41,7 @@ export class UserService {
     private router: Router,
     private fun: HelperFunctionsService
   ) {
-    //console.log("User Service constructor.");
+    console.log("User Service constructor.");
     if (!UserService.currentIntraId) this.setCurrentIntraId();
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
@@ -101,6 +102,7 @@ export class UserService {
   }
 
   signOut(afterRoute = '/logout') {
+		UserService.running = false;
     UserService.isAuthorized = false;
     this.authService.signOut(afterRoute);
   }
@@ -141,9 +143,11 @@ export class UserService {
 	}
 
 	async getAllUsersCycle(deltaMs: number) {
-		this.getAllUsers().subscribe(_=>{
-			UserService.all = _;
-		});
+		if (UserService.running) {
+			this.getAllUsers().subscribe(_=>{
+				UserService.all = _;
+			});
+		}
 		await new Promise(resolve => setTimeout(resolve, deltaMs));
 		this.getAllUsersCycle(deltaMs);
 	}

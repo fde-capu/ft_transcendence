@@ -37,6 +37,7 @@ export class AppComponent implements OnInit {
 			let newRoute = this.router.url;
 			let newStatus = "";
 			if (newRoute != this.oldRoute) {
+				UserService.running = true;
 				this.oldRoute = newRoute;
 				if (newRoute.indexOf("/game/") == 0)
 					newStatus = "INGAME";

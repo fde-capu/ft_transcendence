@@ -10,6 +10,7 @@ import { UserService } from '../user.service';
 export class MenuBarComponent implements OnInit {
   user?: User;
   menuOpen = false;
+	waiting: boolean = true;
 
   constructor(private userService: UserService) {}
 
@@ -19,7 +20,8 @@ export class MenuBarComponent implements OnInit {
 
   async getUser(): Promise<void> {
     this.user = UserService.currentUser;
-    await new Promise(resolve => setTimeout(resolve, this.user ? 7989 : 42));
+		this.waiting = !!!this.user;
+    await new Promise(resolve => setTimeout(resolve, 143));
     this.getUser();
   }
 

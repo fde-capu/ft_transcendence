@@ -154,15 +154,15 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   emit() {
-    console.log(
-      'Noticed room changed.',
-      'users',
-      this.chatRoom.user,
-      'mutes',
-      this.chatRoom.muted,
-      'blocks',
-      this.chatRoom.blocked
-    );
+//    console.log(
+//      'Noticed room changed.',
+//      'users',
+//      this.chatRoom.user,
+//      'mutes',
+//      this.chatRoom.muted,
+//      'blocks',
+//      this.chatRoom.blocked
+//    );
     this.chatService.roomChanged(this.chatRoom);
   }
 
