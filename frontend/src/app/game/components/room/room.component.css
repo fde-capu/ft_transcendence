@@ -7,7 +7,7 @@
   width: auto;
   height: auto;
   box-sizing: border-box;
-  text-shadow: none;
+	white-space: normal;
 }
 
 .center {

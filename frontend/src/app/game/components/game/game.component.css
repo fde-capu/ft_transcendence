@@ -5,7 +5,7 @@
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
-  text-shadow: none;
+	white-space: normal;
 }
 
 .center {

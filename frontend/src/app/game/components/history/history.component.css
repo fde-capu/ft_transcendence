@@ -7,7 +7,7 @@
   width: auto;
   height: auto;
   box-sizing: border-box;
-  text-shadow: none;
+	white-space: normal;
 }
 
 .center {
@@ -19,7 +19,7 @@
 #container, #content {
   width: var(--base-normal-width);
 	min-width: var(--base-minimal-width);
-	margin: 0 auto 1em;
+	margin: 0 auto 2em;
 }
 
 fieldset {
@@ -43,6 +43,42 @@ th, td {
 	padding: 0;
 }
 
-.break-line {
-	border: var(--devx);
+.match-box {
+	display: flex;
+	padding: 0.25em;
+	line-height: 1em;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
+	max-width: var(--base-normal-width);
+	min-width: var(--base-minimal-width);
+	margin: 0.5em auto;
+	flex-wrap: wrap;
+}
+
+.team-box {
+	display: inline-flex;
+	max-width: 48%;
+	min-width: 48%;
+	width: 48%;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.player-box {
+	min-width: fit-content;
+	display: flex;
+  flex-direction: column;
+}
+
+.score-box {
+	font-size: var(--font-xx-large);
+	padding: 0 8px;
+	display: inline-table;
+}
+
+.match-box::after {
+  content: "x";
+	position: absolute;
+	font-size: var(--font-x-large);
 }

@@ -52,6 +52,10 @@ export class HistoryComponent {
         )
       );
   }
+  // ^ This function is currentl all matches, unregarding the mode.
+  //   Which I think is a good behavior - to always show all records.
+  //   TODO: Rename/refactor so we don't need to use this.mode as params.
+
 
   getPositionName(position: TeamPosition): string {
     switch (position) {
