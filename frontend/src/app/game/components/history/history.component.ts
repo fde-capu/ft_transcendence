@@ -8,6 +8,7 @@ import {
 } from './../../entity/match-history.entity';
 import { TeamPosition } from './../../entity/match-history.entity';
 import { User } from 'src/app/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-history',
@@ -16,13 +17,17 @@ import { User } from 'src/app/user';
 })
 export class HistoryComponent {
   @Input() user?: User;
-
+	routedNotInProfile?: boolean;
   mode: GameMode = GameMode.PONG;
 
   matches!: Observable<Array<MatchHistoryMap>>;
 
-  constructor(private readonly httpClient: HttpClient) {
+  constructor(
+    private router: Router,
+		private readonly httpClient: HttpClient,
+	) {
     this.setMode(this.mode);
+		this.routedNotInProfile = this.router.url.indexOf("/game") == 0;
   }
 
   setMode(mode: GameMode | string) {

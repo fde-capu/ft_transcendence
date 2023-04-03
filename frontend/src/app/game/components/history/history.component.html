@@ -1,5 +1,7 @@
-<app-menu-bar></app-menu-bar>
-<app-invitation-screen></app-invitation-screen>
+<div *ngIf="routedNotInProfile">
+	<app-menu-bar></app-menu-bar>
+	<app-invitation-screen></app-invitation-screen>
+</div>
 <app-ladder [userId]='user?.intraId'></app-ladder>
 <main id="container">
   <header>

@@ -117,8 +117,9 @@ a:hover,
 input:hover,
 button:hover,
 textarea:hover,
-textarea:active {
-	background: black;
+textarea:active,
+.inverted {
+	background: var(--color-low);
 }
 .hover_invert:hover,
 a:hover,
