@@ -21,8 +21,8 @@
 .title {
 	margin: auto;
 	margin-bottom: 1em;
-	min-width: 24em;
-	max-width: 41em;
+	width: 100%;
+	min-width: var(--base-minimal-width);
 }
 .box {
 	padding: 0 3em;

@@ -38,8 +38,6 @@ Bug notes:
 [X] Check if behavior is of with 2FA from 42 API + PONG!
 [X] Menu-bar blinking when updating.
 
-[ ] Even if user have blocked you, if you F5 the profile, you still can see everything.
-
 - When installing frontend packs
 npm WARN deprecated @npmcli/move-file@2.0.1: This functionality has been moved 
 to @npmcli/fs
@@ -58,3 +56,7 @@ npm WARN tar TAR_ENTRY_ERROR EINVAL: invalid argument, fchown
 frontend                    | Warning: /app/node_modules/angularx-qrcode/fesm2020/angularx-qrcode.mjs depends on 'qrcode'. CommonJS 
 or AMD dependencies can cause optimization bailouts.
 frontend                    | For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+[ ] Even if user have blocked you, if you F5 the profile, you still can see everything.
+[ ] On saving the game record, set the user scores (+ goals made by the team)
+

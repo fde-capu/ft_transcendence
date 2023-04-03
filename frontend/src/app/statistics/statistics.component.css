@@ -1,14 +1,17 @@
 table {
-	max-width: 800px;
+	min-width: var(--base-minimal-width);
+	max-width: var(--base-normal-width);
+	margin: auto;
+	font-size: var(--font-large);
 }
 
 td {
-	min-width: 128px;
+	padding: 0 0.50em;
+	width: 50%;
 }
 
-td:nth-child(1),
-td:nth-child(3),
-td:nth-child(5) {
+td:nth-child(1) {
 	text-align: right;
+	opacity: 0.7;
 }
 

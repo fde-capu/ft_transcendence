@@ -2,8 +2,8 @@
 {
 	display: inline-flex;
 	margin: 0.5em;
-	width: 21em;
-	max-width: 21em;
+	width: var(--base-minimal-width);
+	max-width: var(--base-minimal-width);
 	border: var(--border-thin);
 	line-height: 0.7em;
 	white-space: normal;

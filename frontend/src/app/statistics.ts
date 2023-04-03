@@ -3,5 +3,5 @@ export interface Statistics {
   wins: number;
   looses: number;
   winsPerLooses: number;
-  goalsMade: number;
+  totalScore: number;
 }
