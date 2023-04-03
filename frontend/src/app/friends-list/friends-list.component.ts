@@ -18,7 +18,7 @@ export class FriendsListComponent implements OnChanges {
   }
   async getFriends(): Promise<void> {
     if (!this.user) {
-      await new Promise(resolve => setTimeout(resolve, 539));
+      await new Promise(resolve => setTimeout(resolve, 123));
       return await this.getFriends();
     }
     this.userService.getFriends(this.user).subscribe(_ => {

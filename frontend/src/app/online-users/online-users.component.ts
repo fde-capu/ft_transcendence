@@ -28,6 +28,7 @@ export class OnlineUsersComponent implements OnInit {
       setTimeout(resolve, 3399 + Math.random() * 10234)
     );
     // ^ Lazy update so the pop-up don't keep disapearing too often.
-    await this.getOnlineUsers();
+//    await this.getOnlineUsers();
+// TODO ^ uncomment this line!
   }
 }

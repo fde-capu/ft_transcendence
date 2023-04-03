@@ -14,7 +14,6 @@ export class AvatarComponent implements OnChanges {
   isBlock = false;
   isMe = false;
   amIBlocked?: boolean;
-  @Input() positionbottom?: boolean;
 	@Input() dummy?: boolean;
 
   constructor(private userService: UserService) {}
@@ -31,17 +30,5 @@ export class AvatarComponent implements OnChanges {
   checkBlock() {
     this.isBlock = this.userService.isBlock(this.user);
     this.amIBlocked = this.userService.amIBlocked(this.user);
-  }
-
-  onClick(): void {
-    this.popUpOn = !this.popUpOn;
-  }
-
-  async onHover() {
-    this.popUpOn = true;
-  }
-
-  onHoverOut(): void {
-    this.popUpOn = false;
   }
 }

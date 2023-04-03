@@ -27,11 +27,11 @@
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
 	--font-huge: 256px;
-	--font-x-large: 48px;
 	--font-xx-large: 64px;
-	--font-large: 32px;
+	--font-x-large: 48px;
+	--font-large: 36px;
 	--font-medium: 24px;
-	--font-small: 20px;
+	--font-small: 22px;
 
 	--set-menu-bar: 64px;
 
@@ -74,12 +74,16 @@ pre {
 	font-size: var(--font-small);
 }
 h1 {
+	font-size: var(--font-xx-large);
 	font-variant-caps: all-petite-caps;
-	margin: 4px 24px 4px 24px;
+	margin: 0;
+	text-align: center;
 }
 h2 {
+	font-size: var(--font-x-large);
 	font-variant-caps: all-petite-caps;
-	margin: 1em 0 0.5em 0;
+	margin: 1em 0 0;
+	text-align: center;
 }
 h3 {
 	font-variant-caps: all-petite-caps;
@@ -302,6 +306,7 @@ svg {
 }
 .multi-pics {
 	display: inline-flex;
-    flex-wrap: wrap;
-    align-items: baseline;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	width: 100%;
 }
