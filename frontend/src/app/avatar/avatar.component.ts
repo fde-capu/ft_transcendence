@@ -15,6 +15,7 @@ export class AvatarComponent implements OnChanges {
   isMe = false;
   amIBlocked?: boolean;
   @Input() positionbottom?: boolean;
+	@Input() dummy?: boolean;
 
   constructor(private userService: UserService) {}
 

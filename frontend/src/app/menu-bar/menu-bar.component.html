@@ -8,7 +8,7 @@
       (click)="menuOff()">
       <app-main-menu></app-main-menu>
     </div>
-    <app-avatar [user]="user"></app-avatar>
+    <app-avatar [user]="user" [dummy]="true"></app-avatar>
     <a class="user-name" routerLink="/profile/{{ user.intraId }}">
       {{ user.intraId }} | {{ user.name }}
     </a>

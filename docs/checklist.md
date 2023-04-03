@@ -38,6 +38,7 @@ Bug notes:
 [X] Check if behavior is of with 2FA from 42 API + PONG!
 [X] Menu-bar blinking when updating.
 
+[ ] Even if user have blocked you, if you F5 the profile, you still can see everything.
 
 - When installing frontend packs
 npm WARN deprecated @npmcli/move-file@2.0.1: This functionality has been moved 

@@ -16,6 +16,7 @@ export class LoginComponent {
 	authOk: Boolean = false;
 	public challengeUri?: string;
   message?: string;
+  initialMessage?: string;
 
   constructor(
     private userService: UserService,
@@ -36,6 +37,8 @@ export class LoginComponent {
 				//console.log("Login authorized with MFA.");
 				if (this.router.url.indexOf("/login") == 0)
 					this.router.navigate(['/']);
+				else
+					this.router.navigate([this.router.url]);
 			}
 			this.step_two = true;
 		}
@@ -45,7 +48,8 @@ export class LoginComponent {
 	this.authService.getChallenge().subscribe({
 		next: secret => {
 			this.challengeUri = secret;
-			this.message = "Please open Google/Microsoft Authenticator and type in the code.";
+			this.initialMessage = "Please open Google/Microsoft Authenticator and type in the code.";
+			this.message = this.initialMessage;
 		},
 		error: () => {
 			console.log("Subscription went wrong!");
@@ -58,7 +62,6 @@ export class LoginComponent {
 			this.step_two = true;
 	}
 
-
   signIn() {
     this.authService.signIn();
   }
@@ -67,10 +70,10 @@ export class LoginComponent {
     this.authService.solveChallenge(form.value.code).subscribe({
       next: () => {
         this.message = 'Nicely done!';
-		this.authOk = true;
+				this.authOk = true;
       },
       error: () => {
-        this.message += ' [' + form.value.code + ']?? Yikes! Wrong code, bud!';
+        this.message = this.initialMessage + ' [' + form.value.code + ']?? Yikes! Wrong code, bud!';
       },
     });
   }
@@ -88,4 +91,8 @@ export class LoginComponent {
     this.step_two = false;
     this.step_one = true;
   }
+
+	cancel() {
+		this.router.navigate([this.router.url]);
+	}
 }

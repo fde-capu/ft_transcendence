@@ -1,7 +1,14 @@
-.score-big {
-    font-size: var(--font-x-large);
-	position: absolute;
-	right: 1em;
+@media (min-width: 770px) {
+	.score-big {
+			font-size: var(--font-x-large);
+		position: absolute;
+		right: 1em;
+	}
+}
+@media (max-width: 770px) {
+	.score-big {
+		display: none;
+	}
 }
 
 .menu-bar {

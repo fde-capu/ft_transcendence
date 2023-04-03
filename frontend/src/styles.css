@@ -21,7 +21,8 @@
 	--inner-padding-vertical: 3em;
 	--inner-padding-horizontal: 1em;
 	--border-thin: 4px solid var(--color-border);
-	--border-thick: 16px solid var(--color-dark);
+	--border-extra: 16px solid var(--color-light);
+	--border-thick: 32px solid var(--color-dark);
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
@@ -124,7 +125,8 @@ a:hover, .hover_invert:hover {
 .inline {
 	display: inline;
 }
-button
+button,
+::-webkit-file-upload-button
 {
 	display: block;
 	white-space: nowrap;
@@ -139,7 +141,8 @@ button
 	padding-top: 0;
 	padding-bottom: 0;
 }
-button:hover {
+button:hover
+{
 	background: var(--color-high);
 	color: var(--color-low);
 }
@@ -147,13 +150,16 @@ button:disabled:hover {
 	background: inherit;
 	color: var(--color-supmed);
 }
-button:active {
+button:active
+{
 	-webkit-filter: invert(100%);
 }
-button::before {
+button::before
+{
 	content: "[ ";
 }
-button::after {
+button::after
+{
 	content: " ]";
 }
 ul

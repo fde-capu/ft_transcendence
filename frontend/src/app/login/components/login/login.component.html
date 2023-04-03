@@ -6,11 +6,15 @@ PONG!
   <button (click)="signIn()">Sign In</button>
 </section>
 <section *ngIf="step_two && !authOk">
-  <p *ngIf="message">{{message}}</p>
+  <div *ngIf="message" class='loginMessage'>{{message}}</div>
+	<br>
   <form #challenge="ngForm" (ngSubmit)="solveChallenge(challenge)">
 	<qrcode *ngIf='stepActivate && challengeUri' [qrdata]="challengeUri" [width]="256"></qrcode>
+		<br>
     <input type="text" name="code" placeholder="<- TYPE CODE HERE." autofocus required ngModel/>
-    <button type="submit">Send</button>
+		<br><br>
+    <button style='float:right' type="submit">Send</button>
+    <button style='float:left' (click)='cancel()'>Cancel</button>
   </form>
   <button (click)="signOut()" *ngIf='!stepActivate'>Sign Out</button>
 </section>

@@ -35,6 +35,7 @@ export class ProfileComponent {
   lastName: string = '';
   lastPassword?: string;
   mfaOpened?: boolean;
+	imgPhase: number = 0;
 
   ngOnInit(): void {
     this.getUser();
@@ -127,7 +128,10 @@ export class ProfileComponent {
   }
 
   upload(file: HTMLInputElement) {
-    if (!file.files) return;
+    if (!file || !file.files || !file.files.length) {
+			this.fun.blink3('file');
+			return;
+		}
     const fd = new FormData();
     fd.append('file', file.files[0], file.files[0].name);
     this.httpClient

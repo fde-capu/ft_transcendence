@@ -1,9 +1,28 @@
 .opt-box {
-	padding: 2em;
+	margin-bottom: 1em;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 .options {
 	padding: 1em;
-	min-height: 3em;
+	min-height: 5em;
+	min-width: 14em;
+	max-width: 30vw;
+	border: var(--border-extra);
+	overflow: auto;
+	margin: 0.5em;
+	display: inline-grid;
+	align-content: space-between;
+}
+.options div {
+	display: block;
+}
+.title {
+	margin-bottom: 1em;
+}
+.box {
+	padding: 0 3em;
 }
 .left {
 	display: block;
@@ -15,10 +34,9 @@
 .right {
 }
 .big-user {
-	position: relative;
 	font-size:var(--font-x-large);
 	max-width: 100%;
-	padding-right: 1em;
+	white-space: normal;
 }
 .small-id {
 	font-size:var(--font-small);
@@ -38,20 +56,49 @@
 	margin-right: 1em;
 }
 .info {
-	padding-top: 2em;
-	height: 4em;
-	overflow: auto;
+	display: flex;
+	min-height: 6em;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-width: 400px;
 }
 .small-profile-image {
 	filter: grayscale(100%);
-	width: 3em;
+	width: 4em;
 	height: 3em;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 	display: -webkit-inline-box;
-	margin: 0;
+	margin: 1em auto;
 }
 .actions {
 	margin-left: 6em;
+}
+button {
+	max-width: fit-content;
+	margin: auto;
+	margin-right: 0;
+}
+input[type="file"] {
+	display: auto;
+}
+textarea {
+	height: 2em;
+	resize: none;
+	padding: 0.2em;
+	border: none;
+	width: 13em !important;
+	margin: 0 auto;
+}
+textarea: active {
+	border:none;
+}
+.file {
+	width: 100%;
+}
+.centered {
+	position: relative;
+	margin: auto;
+	width: fit-content;
 }

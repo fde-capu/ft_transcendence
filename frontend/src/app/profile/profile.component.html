@@ -1,17 +1,31 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
+
 <h1>{{ profileType }}<span *ngIf='!amIBlocked'> Profile</span></h1>
-<div *ngIf='!amIBlocked; else spying'>
-	<div *ngIf="displayUser; else user_unknown" style='margin-bottom: 0em;'>
+
+<div *ngIf='!amIBlocked; else spying' class='box'>
+	<div *ngIf="displayUser; else user_unknown">
+
+		<div class='title'>
+			<div class="profile-image hover_invert"
+				style="background-image:url('{{ displayUser.image }}');">
+			</div>
+			<div class='info'>
+				<div class='small-id'>{{displayUser.intraId}}</div>
+				<div class='big-user'>{{displayUser.name}}</div>
+			</div>
+		</div>
+
 		<div class='opt-box' *ngIf="owner">
 			<div class='options'>
-				<label class='left'>name
+				<label class='left'>
+			change name
 				</label>
-				<input id="name" [(ngModel)]="displayUser.name" class='middle'
+				<textarea id="name" [(ngModel)]="displayUser.name" class='middle hover_invert'
 					(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
 					(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
 					(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
-				/>
+				></textarea>
 				<div *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;
 				</div>
 				<button *ngIf='!invalidNameNotice' id="nameButton" type="button" class='right' (click)=
@@ -21,36 +35,40 @@
 			</div>
 
 			<div class='options'>
+				<label class='left'>
+			change image
+				</label>
 				<div class="small-profile-image hover_invert"
 					style="background-image:url('{{ displayUser.image }}');">
 				</div>
-        <input #file type="file" name="file" accept="image/*">
-				<button type="button" (click)="upload(file)">Change Image</button>
+        <input #file id="file" type="file" name="file" class="file" accept="image/*">
+				<button *ngIf='file' type="button" (click)="upload(file)">Upload Selected</button>
 			</div>
 
 			<div class='options'>
-				<label>2FA
+				<label>
+			2FA
 				</label>
-				<span>
 					<div *ngIf="displayUser.mfa_enabled">
-						ACTIVE<br><a (click)="switchMfa();">[ DEACTIVATE ]</a>
+						<div class='centered'>
+							ACTIVE
+						</div>
+						<br>
+						<div>
+							<button (click)="switchMfa();">Deactivate</button>
+						</div>
 					</div>
 					<div *ngIf="!displayUser.mfa_enabled">
-						OFF<br><a (click)="switchMfa();">[ ACTIVATE ]</a>
+						<div class='centered'>
+							OFF
+						</div>
+						<br>
+						<div>
+							<button (click)="switchMfa();">Activate</button>
+						</div>
 					</div>
-				</span>
-				<app-login *ngIf='mfaOpened' [stepActivate]='true'>
+				<app-login class='overall' *ngIf='mfaOpened' [stepActivate]='true'>
 				</app-login>
-			</div>
-		</div>
-
-		<div class='oneliner'>
-			<div class="profile-image hover_invert"
-				style="background-image:url('{{ displayUser.image }}');">
-			</div>
-			<div class='info'>
-				<span class='small-id'>{{displayUser.intraId}}</span>
-				<span class='big-user'>{{displayUser.name}}</span>
 			</div>
 		</div>
 
@@ -69,17 +87,19 @@
 	</div>
 </div>
 
-<ng-template #user_unknown> User: unknown.
+<ng-template #user_unknown>
+User: unknown.
 </ng-template>
 
 <ng-template #spying>
-  <div *ngIf="displayUser">
+  <div *ngIf="displayUser" class='info box'>
     <div
       class="profile-image hover_invert"
       style="background-image: url('{{ displayUser.image }}')">
 	</div>
-    <br />
+		<div>
     {{ displayUser.intraId }}
+		</div>
     <app-u2u-actions
       *ngIf="!owner"
       [isFriend]="isFriend"
