@@ -32,9 +32,7 @@ export class CreateMatchComponent implements OnInit {
   }
 
   getAvailableUsers() {
-    this.userService
-      .getAvailableUsers()
-      .subscribe(users => (this.availableUsers = users));
+		this.availableUsers = this.userService.getAvailableUsers();
   }
 
   submitMatch() {

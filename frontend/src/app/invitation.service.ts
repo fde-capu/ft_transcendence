@@ -35,9 +35,7 @@ export class InvitationService {
   }
 
   getUser(): void {
-    this.userService.getLoggedUser().subscribe(backUser => {
-      this.user = backUser;
-    });
+		this.user = this.userService.getLoggedUser();
   }
 
   doSubscription() {

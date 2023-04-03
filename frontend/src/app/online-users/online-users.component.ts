@@ -18,18 +18,10 @@ export class OnlineUsersComponent implements OnInit {
 
   async getOnlineUsers() {
     if (!this.userService.authorized() || !UserService.currentIntraId) return;
-    this.userService.getOnlineUsers().subscribe(users => {
-      const out = [];
-      for (const u of users)
-        if (u.intraId != UserService.currentIntraId) out.push(u);
-      this.users = out;
-    });
+		this.users = this.userService.getOnlineUsers();
     await new Promise(resolve =>
-      setTimeout(resolve, 3399 + Math.random() * 10234)
+      setTimeout(resolve, 3399 + Math.random() * 3234)
     );
-    // ^ Lazy update so the pop-up don't keep disapearing too often.
-//    await this.getOnlineUsers();
-// TODO ^ uncomment this line!
-// TODO check the timing
+    this.getOnlineUsers();
   }
 }

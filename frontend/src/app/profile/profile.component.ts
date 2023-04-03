@@ -42,11 +42,9 @@ export class ProfileComponent {
   }
 
   getUser(): void {
-    this.userService.getLoggedUser().subscribe(backUser => {
-      this.user = backUser;
-      this.userService.setStatus('ONLINE');
-      this.getIdRequest();
-    });
+		this.user = this.userService.getLoggedUser();
+		this.userService.setStatus('ONLINE');
+		this.getIdRequest();
   }
 
   getIdRequest() {
@@ -63,16 +61,9 @@ export class ProfileComponent {
       this.setOwnership();
       return;
     }
-    this.userService
-      .getUserById(this.idRequest)
-      .pipe(catchError(this.userService.handleError<any>('getDisplayUser')))
-      .subscribe(backUser => {
-        if (backUser) this.displayUser = backUser;
-        else this.displayUser = undefined;
-        // ^ Above seems redundant but condition is needed.
-        this.setOwnership();
-        this.amIBlocked = this.userService.amIBlocked(this.displayUser);
-      });
+    this.displayUser = this.userService.getUserById(this.idRequest);
+		this.setOwnership();
+		this.amIBlocked = this.userService.amIBlocked(this.displayUser);
   }
 
   async setOwnership() {

@@ -27,7 +27,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   windowExtras = '';
   optionsOn = false;
   usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
-  usersInChat: User[] = [];
+  usersInChat?: User[] = undefined;
   static ignited = false;
   user?: User;
   id?: string | null;
@@ -48,11 +48,9 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   getUserAndStuff(): void {
-    this.userService.getLoggedUser().subscribe(backUser => {
-      this.user = backUser;
-      this.userService.setStatus('INCHAT');
-      this.initChatRoom();
-    });
+		this.user = this.userService.getLoggedUser();
+		this.userService.setStatus('INCHAT');
+		this.initChatRoom();
   }
 
   async initChatRoom() {
@@ -120,14 +118,9 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   async getOutOfChatUsers() {
     if (!this.userService.authorized() || !ChatBoxComponent.ignited) {
     } else {
-      this.chatService
-        .getOutOfChatUsers(this.chatRoom.id)
-        .subscribe(outChat => {
-          //console.log(this.uniqueId, "Got out-of-chat users.", outChat);
-          this.usersOutOfChat = outChat;
-        });
-    }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 6447 : 653));
+			this.usersOutOfChat = this.chatService.getOutOfChatUsers(this.chatRoom.id);
+		}
+    await new Promise(resolve => setTimeout(resolve, this.id ? 2447 : 653));
     this.getOutOfChatUsers();
   }
 

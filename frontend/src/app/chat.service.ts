@@ -36,12 +36,8 @@ export class ChatService {
   }
 
   async getUser(): Promise<User> {
-    if (ChatService.user && Math.random() > 0.04) return ChatService.user;
-    if (this.userService.getQuickIntraId()) {
-      this.userService.getLoggedUser().subscribe(backUser => {
-        if (backUser) ChatService.user = backUser;
-      });
-    }
+    if (this.userService.getQuickIntraId())
+			ChatService.user = this.userService.getLoggedUser();
     await new Promise(resolve => setTimeout(resolve, 431));
     return this.getUser();
   }
@@ -204,18 +200,14 @@ export class ChatService {
     return this.fun.isStringInArray(intraId, room?.user);
   }
 
-  getOutOfChatUsers(roomId?: string): Observable<User[]> {
-    if (!roomId) return of([]);
-    const response = this.userService.getAvailableUsers().pipe(
-      map(result => {
-        const out: User[] = [];
-        for (const user of result)
-          if (!this.userIsInChat(roomId, user.intraId)) out.push(user);
-        result = out;
-        return result;
-      })
-    );
-    return response;
+  getOutOfChatUsers(roomId?: string): User[] {
+    if (!roomId) return [];
+    const avail = this.userService.getAvailableUsers()
+		let out: User[] = [];
+		for (const user of avail)
+			if (!this.userIsInChat(roomId, user.intraId))
+				out.push(user);
+    return out;
   }
 
   testPasswordLink(myPassword: string): string | null {

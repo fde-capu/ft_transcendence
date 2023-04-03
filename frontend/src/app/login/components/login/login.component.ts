@@ -79,11 +79,10 @@ export class LoginComponent {
   }
 
   saveAuth(intraId: string) {
-	this.userService.getUserById(intraId).subscribe(_=>{
-		if (!_ || (!!_ && !!_.mfa_enabled)) return;
-		_.mfa_enabled = true;
-		this.userService.saveUser(_).subscribe();
-	});
+		const u = this.userService.getUserById(intraId);
+		if (!u || (!!u && !!u.mfa_enabled)) return;
+		u.mfa_enabled = true;
+		this.userService.saveUser(u).subscribe();
   }
 
   signOut() {

@@ -20,12 +20,14 @@ export class BlocksListComponent implements OnChanges {
 
   async getBlocks(): Promise<void> {
     if (!this.user || this.oldId == this.user.intraId) {
-      await new Promise(resolve => setTimeout(resolve, 5239));
+      await new Promise(resolve => setTimeout(resolve, 239));
       return await this.getBlocks();
     }
     this.oldId = this.user.intraId;
-    this.userService.getBlocks(this.user).subscribe(_ => {
-      this.blocks = _;
-    });
+		const t = this.userService.getBlocks(this.user);
+		if (t)
+			this.blocks = t;
+    await new Promise(resolve => setTimeout(resolve, 6241));
+    this.getBlocks();
   }
 }

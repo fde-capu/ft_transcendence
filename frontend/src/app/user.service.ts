@@ -16,11 +16,13 @@ import { environment } from '../environments/environment';
 export class UserService {
   public static currentIntraId?: string;
   public static currentUser?: User;
+	public static all: User[] = [];
   static isAuthorized = false;
   private statsUrl = `${environment.backendOrigin}/user/stats/?of=`;
   private historyUrl = `${environment.backendOrigin}/user/history/?of=`;
   private friendsUrl = `${environment.backendOrigin}/user/friends/?with=`;
   private blocksUrl = `${environment.backendOrigin}/user/blocks/?them=`;
+  private allUsersUrl = `${environment.backendOrigin}/user/all`;
   private onlineUsersUrl = `${environment.backendOrigin}/user/online`;
   private availableUsersUrl = `${environment.backendOrigin}/user/available`;
   private userByLoginUrl = `${environment.backendOrigin}/user/userByLogin/?intraId=`;
@@ -43,6 +45,7 @@ export class UserService {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
+		this.getAllUsersCycle();
   }
 
   setCurrentIntraId() {
@@ -75,15 +78,8 @@ export class UserService {
 
   async keepUpdating() {
     if (!UserService.currentIntraId) return;
-    await new Promise(resolve => setTimeout(resolve, 321)); // Useful for first run.
-    this.getLoggedUser()
-      .pipe(catchError(this.handleError<any>('setCurrentIntraId')))
-      .subscribe(_ => {
-        if (_) {
-          UserService.currentUser = _;
-        }
-      });
-    await new Promise(resolve => setTimeout(resolve, 9369));
+		UserService.currentUser = this.getUserById(UserService.currentIntraId);
+    await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();
   }
 
@@ -91,29 +87,21 @@ export class UserService {
     return UserService.currentIntraId;
   }
 
-  getUserById(intraId: string): Observable<User | undefined> {
-    if (!UserService.currentIntraId) return of(undefined); // In case server disconnected.
-    return this.http
-      .get<User>(this.userByLoginUrl + intraId, { withCredentials: true })
-      .pipe(catchError(this.handleError<any>('getUserById')));
+  getUserById(intraId: string|undefined): User|undefined {
+		if (!intraId) return undefined;
+		for (const u of UserService.all)
+			if (u.intraId == intraId)
+				return u;
+		return undefined;
   }
 
-  getLoggedUser(): Observable<User> {
+  getLoggedUser(): User|undefined {
     //console.log("fUS getting logged user");
-    return this.http
-      .get<User>(this.userByLoginUrl + UserService.currentIntraId, {
-        withCredentials: true,
-      })
-      .pipe(
-        map(_ => {
-          return _;
-        }),
-        catchError(err => of({} as User))
-      );
+		return this.getUser(UserService.currentIntraId);
   }
 
-  getUser(id: string): Observable<User | undefined> {
-    return this.getUserById(id);
+  getUser(id: string|undefined): User|undefined {
+    return id ? this.getUserById(id) : undefined;
   }
 
   signOut(afterRoute = '/logout') {
@@ -145,11 +133,7 @@ export class UserService {
 			(
 				map(_=>{
 					if (u_user.intraId == UserService.currentIntraId) {
-						this.getLoggedUser()
-							.subscribe(_=>{
-								if(!!_){
-									UserService.currentUser=_;
-							}});
+						UserService.currentUser=this.getLoggedUser();
 					}
 					this.router.navigate([this.router.url])
 				}),
@@ -157,23 +141,40 @@ export class UserService {
 			);
 	}
 
-  getOnlineUsers(): Observable<User[]> {
+	async getAllUsersCycle() {
+		this.getAllUsers().subscribe(_=>{
+			console.log("All users in!", _.length);
+			UserService.all = _;
+		});
+		await new Promise(resolve => setTimeout(resolve, 10333));
+		this.getAllUsersCycle();
+	}
+
+  getAllUsers(): Observable<User[]> {
     return this.http
-      .get<User[]>(this.onlineUsersUrl, { withCredentials: true })
-      .pipe(catchError(this.handleError<User[]>('getOnlineUsers', [])));
+      .get<User[]>(this.allUsersUrl, { withCredentials: true })
+      .pipe(catchError(this.handleError<User[]>('getAllUsers', [])));
   }
 
-  getAvailableUsers(): Observable<User[]> {
-    return this.http
-      .get<User[]>(this.availableUsersUrl, { withCredentials: true })
-      .pipe(catchError(this.handleError<User[]>('getAvailableUsers', [])));
+  getOnlineUsers(): User[] {
+		let out: User[] = [];
+		for (const u of UserService.all)
+			if (u.status != "OFFLINE")
+				out.push(u);
+		return out;
   }
 
-  getFriends(u_user?: User): Observable<User[]> {
-    if (!u_user) return of([]);
-    return this.http
-      .get<User[]>(this.friendsUrl + u_user.intraId, { withCredentials: true })
-      .pipe(catchError(this.handleError<User[]>('getFriends', [])));
+  getAvailableUsers(): User[] {
+		let out: User[] = [];
+		for (const u of UserService.all)
+			if (u.status != "OFFLINE" && u.status != "INGAME")
+				out.push(u);
+		return out;
+  }
+
+  getFriends(u_user?: User): User[]|undefined {
+		if (!u_user) return undefined;
+		return this.intraIdsToUsers(u_user.friends);
   }
 
   isFriend(user_b: User | undefined): boolean {
@@ -193,27 +194,25 @@ export class UserService {
     return this.saveUser(UserService.currentUser);
   }
 
-  async mutualFriends(
+  mutualFriends(
     a: string | undefined,
     b: string | undefined
-  ): Promise<void> {
+  ) {
     if (!a || !b) return;
-    this.getUser(a).subscribe(u_a => {
-      this.getUser(b).subscribe(u_b => {
-        if (!u_a) return;
-        if (!u_a.friends) u_a.friends = [];
-        if (!this.fun.isStringInArray(b, u_a.friends)) {
-          u_a.friends.push(b);
-          this.saveUser(u_a).subscribe();
-        }
-        if (!u_b) return;
-        if (!u_b.friends) u_b.friends = [];
-        if (!this.fun.isStringInArray(a, u_b.friends)) {
-          u_b.friends.push(a);
-          this.saveUser(u_b).subscribe();
-        }
-      });
-    });
+		let u_a = this.getUser(a);
+		let u_b = this.getUser(b);
+		if (!u_a) return;
+		if (!u_a.friends) u_a.friends = [];
+		if (!this.fun.isStringInArray(b, u_a.friends)) {
+			u_a.friends.push(b);
+			this.saveUser(u_a).subscribe();
+		}
+		if (!u_b) return;
+		if (!u_b.friends) u_b.friends = [];
+		if (!this.fun.isStringInArray(a, u_b.friends)) {
+			u_b.friends.push(a);
+			this.saveUser(u_b).subscribe();
+		}
   }
 
   unFriend(user_b: User | undefined): Observable<any> {
@@ -234,13 +233,6 @@ export class UserService {
     return of(true);
   }
 
-  getBlocks(u_user?: User): Observable<User[]> {
-    if (!u_user) return of([]);
-    return this.http
-      .get<User[]>(this.blocksUrl + u_user.intraId, { withCredentials: true })
-      .pipe(catchError(this.handleError<User[]>('getBlocks', [])));
-  }
-
   amIBlocked(user_b: User | undefined): boolean {
     if (
       !UserService.currentUser ||
@@ -252,6 +244,11 @@ export class UserService {
       UserService.currentUser.intraId,
       user_b.blocks
     );
+  }
+
+  getBlocks(u_user?: User): User[]|undefined {
+		if (!u_user) return undefined;
+		return this.intraIdsToUsers(u_user.blocks);
   }
 
   isBlock(user_b: User | undefined): boolean {
@@ -293,17 +290,13 @@ export class UserService {
       .pipe(catchError(this.handleError<GameHistory[]>('getGameHistory')));
   }
 
-  async intraIdsToUsers(ulist: string[]): Promise<User[]> {
+  intraIdsToUsers(ulist: string[]|undefined): User[]|undefined {
+		if (!ulist) return undefined;
     const out: User[] = [];
     for (const one of ulist) {
-      await this.getUserById(one).subscribe({
-        next: _ => {
-          if (_) {
-            out.push(_);
-          }
-        },
-        error: () => ({}),
-      });
+			const u = this.getUser(one);
+			if (u)
+				out.push(u);
     }
     return out;
   }
