@@ -51,6 +51,7 @@ export class UserController {
     @Body() stat: any,
   ) {
     try {
+			console.log(intraId, ">", stat.stat);
       UserService.status.set(intraId, stat.stat);
       return response.status(200).json(stat);
     } catch (e) {

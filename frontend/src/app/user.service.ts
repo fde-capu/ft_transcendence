@@ -101,13 +101,16 @@ export class UserService {
   }
 
   signOut(afterRoute = '/logout') {
-    this.setStatus('OFFLINE');
     UserService.isAuthorized = false;
     this.authService.signOut(afterRoute);
   }
 
-  setStatus(stat: string) {
-    //console.log("fos setStatus:", u_user.intraId, stat);
+  async setStatus(stat: string): Promise<void> {
+		if (!UserService.currentIntraId) {
+			await new Promise(resolve => setTimeout(resolve, 101));
+			return this.setStatus(stat);
+		}
+    //console.log("fos setStatus:", UserService.currentIntraId, stat);
     this.http
       .put(
         this.updateUserStatus + UserService.currentIntraId,
@@ -139,7 +142,6 @@ export class UserService {
 
 	async getAllUsersCycle(deltaMs: number) {
 		this.getAllUsers().subscribe(_=>{
-			console.log("All users in!", _.length);
 			UserService.all = _;
 		});
 		await new Promise(resolve => setTimeout(resolve, deltaMs));

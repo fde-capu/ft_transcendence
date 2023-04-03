@@ -49,7 +49,6 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   getUserAndStuff(): void {
 		this.user = this.userService.getLoggedUser();
-		this.userService.setStatus('INCHAT');
 		this.initChatRoom();
   }
 

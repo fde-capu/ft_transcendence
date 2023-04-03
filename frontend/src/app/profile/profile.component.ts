@@ -44,7 +44,6 @@ export class ProfileComponent {
 
   getUser() {
 		this.user = this.userService.getLoggedUser();
-		this.userService.setStatus('ONLINE');
   }
 
   getIdRequest() {

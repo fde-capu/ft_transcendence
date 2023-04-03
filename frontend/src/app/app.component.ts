@@ -10,6 +10,8 @@ import { UserService } from './user.service';
 })
 export class AppComponent implements OnInit {
   cleanChat = false;
+	oldRoute = "";
+	oldStatus = "";
 
   constructor(
     public router: Router,
@@ -32,6 +34,23 @@ export class AppComponent implements OnInit {
           this.cleanChat = true;
         } else this.cleanChat = false;
       }
+			let newRoute = this.router.url;
+			let newStatus = "";
+			if (newRoute != this.oldRoute) {
+				this.oldRoute = newRoute;
+				if (newRoute.indexOf("/game/") == 0)
+					newStatus = "INGAME";
+				else if (newRoute.indexOf("/chat") == 0)
+					newStatus = "INCHAT";
+				else
+					newStatus = "ONLINE";
+				if (newStatus != this.oldStatus) {
+					this.oldStatus = newStatus;
+					this.userService.setStatus(newStatus);
+				}
+			}
+			// TODO: "/game/" will also filter out spectators,
+			// and it should not. Find a way to be sure user is paying or not.
     });
   }
 }

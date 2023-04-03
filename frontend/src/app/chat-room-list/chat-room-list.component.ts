@@ -43,7 +43,6 @@ export class ChatRoomListComponent implements OnInit {
 
 	getCurrentUser(): void {
 		this.user = this.userService.getLoggedUser();
-		this.userService.setStatus("ONLINE");
 		this.getChatRooms();
 	}
 

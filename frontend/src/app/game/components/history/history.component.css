@@ -74,6 +74,7 @@ th, td {
 	font-size: var(--font-xx-large);
 	padding: 0 8px;
 	display: inline-table;
+	min-width: fit-content;
 }
 
 .match-box::after {

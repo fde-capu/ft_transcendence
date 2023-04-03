@@ -27,13 +27,13 @@ export class ChatGateway {
 																 // responses. No fixed interface.
   ) {
     if (payload.room_gone) {
-      console.log('-> room_gone;');
+      //console.log('-> room_gone;');
       this.chatService.roomGone(payload.room_gone);
       this.broadcastChatRooms(client);
       return;
     }
     if (payload.room_changed) {
-      console.log('-> room_changed;');
+      //console.log('-> room_changed;');
       this.chatService.roomChanged(payload.room_changed);
       this.broadcastChatRooms(client);
       return;
@@ -42,7 +42,7 @@ export class ChatGateway {
       this.sendChatRoomsToSingleClient(client);
       return;
     }
-    console.log('-> copy of payload (individual messages);');
+    //console.log('-> copy of payload (individual messages);');
     this.server.emit('chat', {
       author: client['subject'],
       payload: payload,
@@ -51,7 +51,7 @@ export class ChatGateway {
   }
 
   broadcastChatRooms(client: Socket) {
-    console.log('-> allRooms broadcast;');
+    //console.log('-> allRooms broadcast;');
     this.server.emit('chat', {
       author: client['subject'],
       payload: {

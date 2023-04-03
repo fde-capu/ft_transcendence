@@ -218,7 +218,6 @@ export class ChatService {
 
   revokeAdmin(roomId: string | null | undefined, intraId: string) {
     if (!roomId) return;
-    console.log('C2');
     const theRoom = this.roomById(roomId);
     if (!theRoom) return;
     const newAdmin: string[] = [];
@@ -263,7 +262,6 @@ export class ChatService {
 
   isCurrentUserBlockedByRoomId(roomId: string): boolean {
     if (!ChatService.user) return false;
-    console.log('C4');
     const chatRoomTest = this.roomById(roomId);
     if (chatRoomTest)
       return this.isUserBlocked(ChatService.user.intraId, chatRoomTest);
