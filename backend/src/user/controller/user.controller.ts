@@ -98,6 +98,16 @@ export class UserController {
     }
   }
 
+  @Get('all')
+  async getAllUsers(@Res() response: Response = null): Promise<any> {
+    try {
+      const resp = await this.userService.getAllUsers();
+      return response.status(200).json(resp);
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+
   @Get('available')
   async getAvailableUsers(@Res() response: Response = null): Promise<any> {
     try {

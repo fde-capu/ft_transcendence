@@ -49,8 +49,7 @@ export class UserService {
     }
 
     await this.updateUser(existUser.intraId, { mfa_verified: false });
-    // Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
-    // Aliás pode desimplementar o registro do mfa_verified na db.
+    // TODO: pode desimplementar o registro do mfa_verified na db (não está em uso).
     return {
       intraId: existUser.intraId,
       mfa_enabled: existUser.mfa_enabled,
@@ -124,6 +123,14 @@ export class UserService {
       )
         out.push(u);
     return this.makeUserDto(out);
+  }
+
+  async getAllUsers(): Promise<UserDTO[]> {
+    const resp = await this.userRepository
+      .createQueryBuilder('allUsers')
+      .select()
+      .getMany();
+    return this.makeUserDto(resp);
   }
 
   async getFriends(intraId: string): Promise<UserDTO[]> {

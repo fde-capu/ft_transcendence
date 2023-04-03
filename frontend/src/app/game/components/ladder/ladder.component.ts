@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/auth/service/auth.service';
   styleUrls: ['./ladder.component.css'],
 })
 export class LadderComponent implements OnInit {
-  private allUsersUrl = `${environment.backendOrigin}/user/online`;
+  private allUsersUrl = `${environment.backendOrigin}/user/all`;
 	// TODO ^ Make endport for getting all users.
   maxScore = 0;
   ladder: any[] = [];
