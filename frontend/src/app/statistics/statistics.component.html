@@ -18,12 +18,14 @@
     <tr>
       <td>Looses</td>
       <td *ngIf='stat.looses'>{{ stat.looses | number : '2.0-0'}}</td>
-      <td *ngIf='!stat.looses'>Invict!</td>
+      <td *ngIf='!stat.looses && stat.matches'>Invict!</td>
+      <td *ngIf='!stat.looses && !stat.matches'>Never!</td>
     </tr>
     <tr>
       <td>Wins/Looses</td>
       <td *ngIf='stat.winsPerLooses && stat.winsPerLooses < 1'>{{ stat.winsPerLooses | number : '1.2-2' }}</td>
-			<td *ngIf='!stat.looses'>Perfect!</td>
-			<td *ngIf='!stat.winsPerLooses'>Terrible!</td>
+			<td *ngIf='!stat.looses && stat.matches'>Perfect!</td>
+			<td *ngIf='stat.looses && !stat.winsPerLooses'>Terrible!</td>
+			<td *ngIf='!stat.matches'>To Be Discovered...</td>
     </tr>
 </table>

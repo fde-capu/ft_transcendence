@@ -2,7 +2,7 @@ table {
 	min-width: var(--base-minimal-width);
 	max-width: var(--base-normal-width);
 	margin: auto;
-	font-size: var(--font-large);
+	font-size: var(--font-medium);
 }
 
 td {
