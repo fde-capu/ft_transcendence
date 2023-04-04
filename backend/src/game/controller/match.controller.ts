@@ -6,22 +6,29 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { RequestHistory } from '../dto/history.dto';
 import { MatchHistory } from '../entity/match-history.entity';
 import { MatchHistoryService } from '../service/match-history.service';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('game')
 export class MatchController {
   public constructor(private readonly historyService: MatchHistoryService) {}
 
-  @Get('history')
+  @Get('history/bymode')
   public async getMatchHistories(
-    @Query('user') user?: string,
-    @Query('mode') mode?: string,
+    @Query() history: RequestHistory
   ): Promise<Array<MatchHistory>> {
     return await this.historyService.getMatchHistoriesByOptions(
-      user,
-      parseInt(mode) || undefined,
+      history.user,
+      parseInt(history.mode) || undefined,
     );
+  }
+  @Get('history')
+  public async getMatchHistoriesByUser(
+    @Query() history: RequestHistory
+  ): Promise<Array<MatchHistory>> {
+    return await this.historyService.getMatchHistoriesByOptions(
+      history.user);
   }
 }

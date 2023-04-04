@@ -46,6 +46,9 @@ export class AuthController {
         error,
         errorDescription,
       );
+    if (!code) {
+        return res.status(400).json('code should not be empty');
+    }
     const [token, options] = await this.authService.createSessionToken(
       code,
       state,

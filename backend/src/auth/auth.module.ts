@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/user/entity/user.entity';
 import { UserService } from 'src/user/service/user.service';
 import { ConfigService } from '@nestjs/config';
-import { QRSecret } from './qrsecret-entity';
+import { QRSecret } from './entity/qrsecret-entity';
 
 @Module({
   providers: [
