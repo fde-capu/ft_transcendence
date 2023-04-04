@@ -46,4 +46,17 @@ caption, h1, h2, h3, h4 {
 
 table td {
 	border: var(--border-thin);
+	text-align: center;
+}
+
+table th {
+	opacity: 0.7;
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+	text-align: left;
+}
+table td:nth-child(5) {
+	display: grid;
 }
