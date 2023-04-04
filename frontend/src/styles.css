@@ -297,7 +297,7 @@ label::after {
 	bottom: 0;
 	text-align: center;
 	background: var(--color-sublow-transp);
-	z-index: 9000;
+	z-index: 510;
 	display: flex;
 	flex-direction: column;
 	align-content: center;
@@ -309,24 +309,20 @@ label::after {
 	filter:
 		drop-shadow(0px 0px 190px #00000055)
 		drop-shadow(0px 0px 90px #00000055);
-}
-.overall::before {
 	border-radius: 5.2em;
 	border: var(--border-thick);
-	z-index: 11000;
 }
 .overall::after {
   content: "";
   position: absolute;
-  border-color: var(--color-dark);
-  border: 48px solid black;
+  border: 48px solid var(--color-dark);
 	position: fixed;
 	top: -48px;
 	left: -48px;
 	right: -48px;
 	bottom: -48px;
 	pointer-events: none;
-	z-index: 11000;
+	border-radius: 3em;
 }
 .high-noise {
 	filter: url(#highnoise);
