@@ -67,7 +67,9 @@ frontend                    | For more info see: https://angular.io/guide/build#
 [ ] Check all "localhost" mentions, make it configService;
 [ ] Main menu is behind avatars...
 [X] Re-check layout of chat options screen. Fixed identification by url.
-[ ] Some page refreshment cancels profile edition. Maybe this happens also in chat-options.
-[ ] ^ This case is strange because the change name input accepts and rejects alternatively.
-[ ] Profile is not accepting F5.
+[X] Some page refreshment cancels profile edition. (Implemented ProfileCompoenent.editing:boolean.)
+[ ] ^ Maybe this happens also in chat-options.
+[X] Profile was buggy when accessing directly through the URL.
 [X] Invitation has broken during the process and was cleared.
+[ ] Need longer time fot game room expiration, because of invites.
+... [ ] Or -- make the invite only create the room when accepted.

@@ -4,6 +4,7 @@ import { ChatService } from '../chat.service';
 import { ChatRoom } from '../chat-room';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat-text',
@@ -18,6 +19,7 @@ export class ChatTextComponent implements OnInit {
   constructor(
 		public chatService: ChatService,
 		public userService: UserService,
+		public router: Router,
 	) {}
 
   ngOnInit() {
@@ -38,6 +40,10 @@ export class ChatTextComponent implements OnInit {
 
 	amIBlocked(u: User) {
     return this.userService.amIBlocked(u);
+	}
+
+	goToProfile(u: string) {
+		this.router.navigate(['/profile/' + u]);
 	}
 
 }

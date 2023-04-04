@@ -36,14 +36,16 @@ export class ProfileComponent {
   lastPassword?: string;
   mfaOpened?: boolean;
 	imgPhase: number = 0;
+	static editing: boolean = false;
 
   ngOnInit(): void {
     this.getUser();
 		this.getIdRequest();
+		this.getDisplayUser();
   }
 
   async getUser() {
-		this.user = this.userService.getLoggedUser();
+		this.user = UserService.currentUser;
     await new Promise(resolve => setTimeout(resolve, 111));
 		this.getUser();
   }
@@ -51,22 +53,23 @@ export class ProfileComponent {
   async getIdRequest() {
     this.route.params.subscribe((params: Params) => {
       this.idRequest = params['intraId'];
-      this.getDisplayUser();
     });
     await new Promise(resolve => setTimeout(resolve, 111));
 		this.getIdRequest();
   }
 
   async getDisplayUser() {
-    if (this.owner || !this.userService.authorized()) return;
-    if (!this.idRequest) {
-      this.displayUser = this.user;
-      this.setOwnership();
-      return;
-    }
-    this.displayUser = this.userService.getUser(this.idRequest);
-		this.setOwnership();
-		this.amIBlocked = this.userService.amIBlocked(this.displayUser);
+		if (!this.idRequest) {
+			this.displayUser = this.user;
+			this.setOwnership();
+		} else {
+			if (!ProfileComponent.editing)
+				this.displayUser = this.userService.getUser(this.idRequest);
+			this.setOwnership();
+			this.amIBlocked = this.userService.amIBlocked(this.displayUser);
+		}
+    await new Promise(resolve => setTimeout(resolve, 222));
+		this.getDisplayUser();
   }
 
   async setOwnership() {
@@ -93,15 +96,11 @@ export class ProfileComponent {
 
   async validateAndSaveUser() {
     if (!this.displayUser) return;
-    if (this.fun.validateString(this.displayUser.name)) this.saveUser();
-    else {
+    if (this.fun.validateString(this.displayUser.name)) {
+			this.saveUser();
+    } else {
       this.invalidNameNotice = true;
-      this.fun.blink('invalidNameNotice');
-      await new Promise(resolve => setTimeout(resolve, 342));
-      this.fun.blink('invalidNameNotice');
-      await new Promise(resolve => setTimeout(resolve, 342));
-      this.fun.blink('invalidNameNotice');
-      await new Promise(resolve => setTimeout(resolve, 342));
+      await this.fun.blink3('invalidNameNotice');
       this.invalidNameNotice = false;
       this.displayUser.name = this.lastName;
       this.fun.focus('invalidNameNotice');
@@ -114,10 +113,11 @@ export class ProfileComponent {
   }
 
   saveUser() {
+		ProfileComponent.editing = true;
     if (this.displayUser) {
       this.userService
         .saveUser(this.displayUser)
-        .subscribe({ next: () => ({}) });
+        .subscribe(_=>{this.unsetEditing();});
     }
   }
 
@@ -137,4 +137,14 @@ export class ProfileComponent {
         error: err => console.error(err),
       });
   }
+
+	setEditing() {
+		ProfileComponent.editing = true;
+	}
+
+	unsetEditing() {
+		setTimeout(() => {
+			ProfileComponent.editing = false;
+		}, 2555);
+	}
 }

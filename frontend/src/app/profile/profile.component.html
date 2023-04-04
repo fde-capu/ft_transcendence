@@ -22,7 +22,7 @@
 			change name
 				</label>
 				<textarea id="name" [(ngModel)]="displayUser.name" class='middle hover_invert'
-					(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
+					(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName(); setEditing();"
 					(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
 					(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
 				></textarea>

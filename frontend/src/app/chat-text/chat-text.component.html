@@ -2,7 +2,9 @@
   <ul>
     <li *ngFor="let chatLine of chatMessage" class="chat-line">
       <app-avatar [user]="chatLine.user" [dummy]="true" class="avatar-float"></app-avatar>
-      <a *ngIf="chatLine.user" class="user-name-small hover_invert">
+      <a *ngIf="chatLine.user" class="user-name-small hover_invert"
+				(click)='goToProfile(chatLine.user.intraId)'
+			>
         {{ chatLine.user.intraId }} | {{ chatLine.user.name }}</a
       >
 			<app-u2u-actions

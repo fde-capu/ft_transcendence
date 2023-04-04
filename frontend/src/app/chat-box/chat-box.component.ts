@@ -127,7 +127,9 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   async getOutOfChatUsers() {
     if (!this.userService.authorized() || !ChatBoxComponent.ignited) {
     } else {
-			this.usersOutOfChat = this.chatService.getOutOfChatUsers(this.chatRoom.id);
+			let t = this.chatService.getOutOfChatUsers(this.chatRoom.id);
+			if(!this.fun.equalUserArray(t, this.usersOutOfChat))
+				this.usersOutOfChat = t;
 		}
     await new Promise(resolve => setTimeout(resolve, this.id ? 2447 : 653));
     this.getOutOfChatUsers();

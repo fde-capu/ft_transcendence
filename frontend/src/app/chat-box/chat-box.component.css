@@ -75,6 +75,8 @@
 }
 .list-of-users a {
 	padding: 0px 0.25em;
+	width: fit-content;
+	display: inline-block;
 }
 button {
 	position: relative;
@@ -85,7 +87,6 @@ button {
 	margin-left: -0.5em;
 }
 .user-name {
-	max-width: 20em;
 	overflow: hidden;
 }
 .options-block {

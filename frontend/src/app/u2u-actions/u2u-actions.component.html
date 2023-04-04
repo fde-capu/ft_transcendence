@@ -5,7 +5,7 @@
     <span *ngIf="amIBlocked"><b><- BLOCKED YOU&nbsp;</b></span>
 	</div>
   <div [ngClass]="{ singleline: singleline }">
-    <button (click)="goToProfile()">Profile</button>
+    <button (click)="goToProfile()" *ngIf='!singleline'>Profile</button>
     <button *ngIf="!amIBlocked && availability" (click)="inviteToChat()">Message</button>
     <button *ngIf="!isFriend && availability" (click)="makeFriend()">Friend</button>
     <button *ngIf="isFriend" (click)="unFriend()">Unfriend</button>

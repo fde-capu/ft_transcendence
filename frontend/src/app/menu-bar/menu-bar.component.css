@@ -38,7 +38,7 @@
 	border-left: none;
 	background: var(--color-popup-background);
 	padding: 32px;
-	z-index: 100;
+	z-index: 1111;
 	position:absolute;
 }
 .user-name {

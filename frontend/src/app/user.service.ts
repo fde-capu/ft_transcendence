@@ -144,7 +144,7 @@ export class UserService {
 					if (u_user.intraId == UserService.currentIntraId) {
 						UserService.currentUser=this.getLoggedUser();
 					}
-					this.router.navigate([this.router.url])
+					//this.router.navigate([this.router.url])
 				}),
 				catchError(this.handleError<any>('saveUser'))
 			);
