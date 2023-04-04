@@ -145,6 +145,7 @@ textarea:active {
 legend {
 	color: var(--color-supmed);
 	margin: auto;
+	text-align: center;
 }
 button,
 ::-webkit-file-upload-button
