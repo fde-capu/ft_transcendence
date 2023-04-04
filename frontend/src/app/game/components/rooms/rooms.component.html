@@ -3,7 +3,7 @@
 <main id="container">
   <section id="content">
     <header>
-      <h2>Lobby</h2>
+      <h2>Game Lobby</h2>
     </header>
     <article>
       <fieldset>
@@ -14,7 +14,7 @@
     <article>
       <table id="rooms">
         <caption>
-          Game rooms
+          <h3>Open Rooms</h3>
         </caption>
         <thead>
           <tr>
@@ -27,15 +27,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let room of rooms">
-            <th>{{ room.id }}</th>
-            <th>
+            <td>{{ room.id }}</td>
+            <td>
               <span *ngIf="room.mode === 0">PONG</span>
               <span *ngIf="room.mode === 1">PONGDOUBLE</span>
               <span *ngIf="room.mode === 2">QUADRAPONG</span>
-            </th>
-            <th>{{ room.host.name }}</th>
-            <th>{{ room.inGame ? 'In game' : 'Waiting' }}</th>
-            <th><button routerLink="./{{ room.id }}">Join</button></th>
+            </td>
+            <td>{{ room.host.name }}</td>
+            <td>{{ room.inGame ? 'In game' : 'Waiting' }}</td>
+            <td><button routerLink="./{{ room.id }}">Join</button></td>
           </tr>
         </tbody>
       </table>

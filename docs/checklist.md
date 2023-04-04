@@ -81,4 +81,4 @@ frontend                    | For more info see: https://angular.io/guide/build#
 [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
 [ ] Backend reports status out of order..?
 [ ] Score only counts if the match is won? I though all goal score could count.
-
+[ ] When user leaves a room, the room list returns empty on lobby.
