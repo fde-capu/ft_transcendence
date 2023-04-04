@@ -35,7 +35,8 @@
             </td>
             <td>{{ room.host.name }}</td>
             <td>{{ room.inGame ? 'In game' : 'Waiting' }}</td>
-            <td><button routerLink="./{{ room.id }}">Join</button></td>
+            <td><a routerLink="./{{ room.id }}">
+						[ {{ room.inGame? 'Watch' : 'Join' }} ]</a></td>
           </tr>
         </tbody>
       </table>

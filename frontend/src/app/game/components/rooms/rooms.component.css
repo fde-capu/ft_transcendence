@@ -46,6 +46,8 @@ caption, h1, h2, h3, h4 {
 
 table td {
 	border: var(--border-thin);
+	width: 5em;
+	text-align: center;
 }
 
 table th {
@@ -55,6 +57,6 @@ table th {
 table th:nth-child(3),
 table td:nth-child(3) {
 	text-align: left;
-}
-table td:nth-child(5) {
+	width: auto;
+	padding-left: 0.5em;
 }
