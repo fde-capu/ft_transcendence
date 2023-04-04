@@ -17,7 +17,7 @@
 	padding: 0;
 	border-bottom: var(--border-thin);
 	top: 0;
-	z-index: 2000;
+	z-index: 100; /* Usefull if sticky. */
 	box-sizing:border-box;
 }
 
@@ -41,7 +41,7 @@
 	border-left: none;
 	background: var(--color-popup-background);
 	padding: 32px;
-	z-index: 1111;
+	z-index: 300;
 	position:absolute;
 }
 

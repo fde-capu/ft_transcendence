@@ -19,14 +19,14 @@
 .aliasing {
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAACXBIWXMAAAsSAAALEgHS3X78AAAAEElEQVQIHWNgYGD4BMQMDAAFtgDzhcd9ZwAAAABJRU5ErkJggg==');
 	opacity:.55;
-    z-index: 999998;
+    z-index: 1000;
 	pointer-events: none;
 }
 
 .reflexes {
 	opacity:.15;
 	background-image: url('#reflexes');
-    z-index: 999999;
+    z-index: 1001;
 	pointer-events: none;
 }
 

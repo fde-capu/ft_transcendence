@@ -9,7 +9,7 @@
 }
 
 #container {
-  z-index: 9999999;
+  z-index: 500;
 
   position: absolute;
   top: 0;

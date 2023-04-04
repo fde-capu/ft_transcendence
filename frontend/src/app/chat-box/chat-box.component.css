@@ -55,7 +55,6 @@
 }
 .window-options {
 	background: var(--color-sublow-transp);
-	z-index: 200;
 	justify-content: center;
 	flex-direction: column;
 	overflow: auto;
@@ -98,7 +97,7 @@ button {
 	right: 0;
 	left: 0;
 	background: var(--color-sublow);
-	z-index: 1000;
+	z-index: 200;
 }
 
 h2 {

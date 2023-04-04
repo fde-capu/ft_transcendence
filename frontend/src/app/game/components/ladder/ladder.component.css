@@ -37,7 +37,7 @@
 }
 
 .score {
-	z-index: 97;
+/*	z-index: 97; // why? */
 }
 
 .yourself {

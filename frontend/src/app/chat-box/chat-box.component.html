@@ -1,13 +1,16 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<div *ngIf="!this.chatRoom.id" class="overall">Please hold on...</div>
+<div *ngIf="!this.chatRoom.id" class="overall">Please hold on...
+</div>
 <div *ngIf="this.chatRoom.id" class="window-full">
   <div class="window-title" (click)="onMenu()">
     {{ windowExtras }} {{ windowName }}
   </div>
-  <div class="window-close" (click)="onClose()"></div>
-  <div class="window-menu-burger" (click)="onMenu()"></div>
-		<div class='options-block' *ngIf="optionsOn">	
+  <div class="window-close" (click)="onClose()">
+	</div>
+  <div class="window-menu-burger" (click)="onMenu()">
+	</div>
+	<div class='options-block' *ngIf="optionsOn">	
 		<div class="window-options">
 			<table class="options" *ngIf="iAmAdmin">
 				<tr>
@@ -94,11 +97,10 @@
 				<tr>
 					<td colspan="3">
 						<button (click)="onMenu()">Ok</button>
+						<hr />
 					</td>
 				</tr>
 			</table>
-
-			<hr />
 
 			<h3 *ngIf='usersInChat && usersInChat.length'>In-Chat</h3>
 			<table class="list-of-users" *ngIf='usersInChat && usersInChat.length'>
@@ -172,7 +174,7 @@
 				</tr>
 			</table>
 		</div>
-  </div>
+	</div>
   <app-chat-text [room]="chatRoom"></app-chat-text>
   <app-chat-input [room]="chatRoom"></app-chat-input>
 </div>
