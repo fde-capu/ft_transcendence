@@ -77,3 +77,8 @@ frontend                    | For more info see: https://angular.io/guide/build#
 [ ] Need longer time fot game room expiration, because of invites:
 		Invitation to Match sometimes does not create the room.
 ... [ ] Or -- make the invite only create the room when accepted.
+... [ ] Same thing for Private messages on chat
+[ ] On Chat: disable Private Messaging from u2u when user is already on chat.
+[ ] Backend reports status out of order..?
+[ ] Score only counts if the match is won? I though all goal score could count.
+
