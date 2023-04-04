@@ -11,7 +11,7 @@
         <button (click)="createRoom()">Create new room</button>
       </fieldset>
     </article>
-    <article>
+    <article *ngIf='rooms.length'>
       <table id="rooms">
         <caption>
           <h3>Open Rooms</h3>

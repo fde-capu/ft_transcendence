@@ -32,10 +32,6 @@ fieldset {
 	margin: 0 auto;
 }
 
-fieldset > *:not(:last-child) {
-  margin-right: .5rem;
-}
-
 #rooms {
   width: 100%;
 }
@@ -48,10 +44,6 @@ table td {
 	border: var(--border-thin);
 	width: 5em;
 	text-align: center;
-}
-
-table th {
-	opacity: 0.7;
 }
 
 table th:nth-child(3),
