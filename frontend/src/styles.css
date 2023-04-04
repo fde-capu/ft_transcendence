@@ -6,17 +6,16 @@
 	--color-high:#eee;
 	--color-subhigh:#aaa;
 	--color-supmed:#888;
-	--color-light:#444;
+	--color-light:#555;
 	--color-border:#333;
 	--color-low:#222;
 	--color-sublow:#101010;
-	--color-dark:#000000;
+	--color-dark:#050505;
 	--color-high-transp:#a0a0a087;
 	--color-medium-transp:#77777747;
 	--color-low-transp:#222222f6;
 	--color-sublow-transp:#101010eb;
 	--color-shadow:#0000003d;
-
 	--body-margin: 40px;
 	--body-border-width: 8px;
 	--inner-padding-vertical: 3em;
@@ -24,6 +23,7 @@
 	--border-thin: 4px solid var(--color-border);
 	--border-extra: 16px solid var(--color-light);
 	--border-thick: 32px solid var(--color-dark);
+	--border-dashed: 2px dashed var(--color-border);
 	--color-popup-background: var(--color-sublow-transp);
 	--color-menu-bar: var(--color-shadow);
 	--screen-color: var(--color-sublow);
@@ -42,6 +42,7 @@
 	--inner-height: calc(100vh - (2 * (var(--margin-plus-border))));
 	--inner-below-menu-height: calc(var(--inner-height) - 3em);
 	--inner-minimum: 512px;
+	--vga-blur: 0px 0px 10px var(--color-light);
 
 	--dev1: 2px solid red;
 	--dev1: 2px solid yellow;
@@ -52,7 +53,7 @@ body
 	background: var(--screen-color);
 	font-family: 'VT323', monospace;
 	font-size: var(--font-medium);
-	text-shadow: 0px 0px 10px var(--color-light);
+	text-shadow: var(--vga-blur);
 	-webkit-user-select: none; /* Safari */
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+/Edge */
@@ -62,13 +63,6 @@ body
 	padding: 0;
 	border: 0;
 	margin: 0;
-	/* Removed due to Firefox rendering problems.
-	filter:
-		grayscale(100%)
-		url(#noise)
-		;
-	color-interpolation-filters: srgb;
-	*/
 	word-break: break-word;
 	white-space: nowrap;
 }
@@ -136,8 +130,12 @@ input:active,
 button:hover,
 textarea:hover,
 textarea:active {
-	-webkit-filter: grayscale(100%) invert(100%) !important;
-	filter: grayscale(100%) invert(100%) !important;
+	-webkit-filter:
+		grayscale(100%) invert(100%) !important,
+		drop-shadow(0 0 10px #555);
+	filter:
+		grayscale(100%) invert(100%) !important
+		drop-shadow(0 0 10px #555);
 }
 .inline {
 	display: inline;
@@ -207,8 +205,8 @@ li
 	align-items: center;
 }
 hr {
-	border: 2px dashed var(--color-border);
-	min-width: 16em;
+	border: var(--border-dashed);
+	min-width: 8em;
 }
 label
 {
@@ -218,7 +216,7 @@ label
 }
 label::after {
 	font-weight: normal;
-	content: " :";
+	content: ": ";
 }
 *::-webkit-scrollbar {
   width: 8px;
@@ -230,7 +228,7 @@ label::after {
 }
 *::-webkit-scrollbar-thumb {
   border-radius: 0px;
-  background-color: var(--color-border);
+  background-color: var(--color-light);
 
 }
 *::-webkit-scrollbar-thumb:hover {
@@ -292,7 +290,6 @@ label::after {
 	*/
 }
 .overall {
-	border-radius: 5em;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -300,8 +297,7 @@ label::after {
 	bottom: 0;
 	text-align: center;
 	background: var(--color-sublow-transp);
-	z-index: 3000;
-	border: var(--border-thick);
+	z-index: 9000;
 	display: flex;
 	flex-direction: column;
 	align-content: center;
@@ -314,18 +310,23 @@ label::after {
 		drop-shadow(0px 0px 190px #00000055)
 		drop-shadow(0px 0px 90px #00000055);
 }
+.overall::before {
+	border-radius: 5.2em;
+	border: var(--border-thick);
+	z-index: 11000;
+}
 .overall::after {
   content: "";
   position: absolute;
-  background-color: rgba(0,0,0,0);
-  border: 40px solid black;
+  border-color: var(--color-dark);
+  border: 48px solid black;
 	position: fixed;
-	top: -38px;
-	left: -38px;
-	right: -38px;
-	bottom: -38px;
+	top: -48px;
+	left: -48px;
+	right: -48px;
+	bottom: -48px;
 	pointer-events: none;
-
+	z-index: 11000;
 }
 .high-noise {
 	filter: url(#highnoise);
@@ -343,4 +344,10 @@ svg {
 table th {
 	opacity: 0.7;
 	font-variant: all-small-caps;
+}
+.vga-bow {
+  background-color: var(--color-high);
+  color: var(--color-dark);
+	text-shadow: none;
+	filter: drop-shadow(0 0 10px #555);
 }

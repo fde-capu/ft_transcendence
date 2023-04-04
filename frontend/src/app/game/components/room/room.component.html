@@ -24,7 +24,7 @@
         </select>
 
         <button *ngIf="isPlayer()" (click)="ready()">Ready</button>
-        <button (click)="leave()">Leave</button>
+        <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
       </fieldset>
     </article>
     <article>
@@ -36,19 +36,22 @@
           <article class="team center">
             <header>
               <h3>
-                {{ team.id }} ({{ team.players.length }}/{{ team.capacity }})
+                {{ team.id }}
+								<br>({{ team.players.length }}/{{ team.capacity }})
               </h3>
             </header>
-            <ul>
-              <li *ngFor="let player of team.players">
-                <span>{{ player.name }}</span>
-                <span class="flag" *ngIf="player.ready">READY</span>
-                <span class="flag" *ngIf="room.host.id === player.id"
-                  >HOST</span
-                >
-                <span class="flag" *ngIf="userId === player.id">YOU</span>
-              </li>
-            </ul>
+						<section *ngFor="let player of team.players">
+							<div class='player_name'>
+								{{ player.name }}
+								<!-- <br> {{ player.full_name? }} // TODO -->
+								<!-- {{ player.image when ready }} // TODO -->
+							</div>
+							<div class='flags'>
+								<span class="flag" *ngIf="player.ready">READY</span>
+								<span class="flag" *ngIf="room.host.id === player.id">HOST</span>
+								<span class="flag" *ngIf="userId === player.id">YOU</span>
+							</div>
+						</section>
           </article>
         </li>
       </ul>

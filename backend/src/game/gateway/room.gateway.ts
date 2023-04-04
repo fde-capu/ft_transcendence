@@ -44,7 +44,7 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       client['roomId'] = client.nsp.name.match(/rooms\/(?<id>.+)/).groups['id'];
       if (!this.roomsService.rooms[client['roomId']]) {
-        client.emit('game:error', 'Room does not exist');
+        client.emit('game:error', 'Room does not exist.');
         client.disconnect();
         return;
       }
