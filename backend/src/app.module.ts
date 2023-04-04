@@ -15,6 +15,8 @@ import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware
 import { FortyTwoModule } from './forty-two/forty-two.module';
 import { InvitationGateway } from './invite/invite.gateway';
 import { ChatGateway } from './chat/chat.gateway';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -39,6 +41,15 @@ import { ChatGateway } from './chat/chat.gateway';
     AuthModule,
     FortyTwoModule,
     GameModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+      serveStaticOptions: {
+        setHeaders: (res, path, stat) => {
+          res.set('Access-Control-Allow-Origin', 'http://localhost:4200');
+        },
+      },
+    }),
   ],
   controllers: [PingController, ChatController],
   providers: [InvitationGateway, ChatGateway, ChatService],

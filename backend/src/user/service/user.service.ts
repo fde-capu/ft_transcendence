@@ -40,7 +40,7 @@ export class UserService {
         intraId: codeFrom42.login,
         email: codeFrom42.email,
         name: codeFrom42.displayname,
-        image: codeFrom42.image['micro'],
+        image: codeFrom42.image.versions.medium,
         friends: [],
         blocks: [],
         score: 0,
@@ -195,5 +195,12 @@ export class UserService {
 
   presence(intraId: string) {
     UserService.attendance.set(intraId, Date.now());
+  }
+
+  async updateProfileImage(intraId: string, imagePath: string) {
+    return await this.userRepository.update(
+      { intraId },
+      { image: `http://localhost:3000/${imagePath}` },
+    );
   }
 }
