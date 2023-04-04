@@ -82,3 +82,4 @@ frontend                    | For more info see: https://angular.io/guide/build#
 [ ] Backend reports status out of order..?
 [ ] Score only counts if the match is won? I though all goal score could count.
 [ ] When user leaves a room, the room list returns empty on lobby.
+[ ] Solve all TODOs all around.
