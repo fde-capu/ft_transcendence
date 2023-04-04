@@ -6,15 +6,15 @@ Checklist based on sub. 12.1
 [?]	HASHEAMENTO: Any password stored in your database must be hashed. (Não armazenamos nenhum password na DB.) (...) Please make sure you use a strong password hashing algorithm.
 [?] INJEÇÃO: Your website must be protected against SQL injections. (nativo no Angular).
 [?] VALIDAÇÃO: Server-side validation for forms and any user input. (Feito apenas 4 <= string.length <= 42)
-[ ] IMAGEM: The user should be able to upload an avatar. If the user doesn’t upload an avatar, a default one must be set.
+[X] IMAGEM: The user should be able to upload an avatar. If the user doesn’t upload an avatar, a default one must be set.
 [X] FINALIZAR ISSO: current status: (online, offline, in a game, and so forth).
 [X] LADDER
 [X] ESTATÍSTICAS, FALTAM ITENS: Stats (such as: wins and losses, ladder level, achievements, and so forth) have to be displayed on the user profile.
 [X] HISTORIES: Adaptar para PONG2 e PONG4. Each user should have a Match History including 1v1 games, ladder, and anything else useful. Anyone who is logged in should be able to consult it.
 [X] DEIXAR MAIS EXPLÍCITO: (pois atualmente seria só pelo avatarzinho) The user should be able to invite other users to play a Pong game through the chat interface. -- Not done, because invitation is in avatar, which is part of the chat interface.
 [ ] MATCHMAKING SYSTEM: (automática/aleatória): the user can join a queue until they get automatically matched with someone else.
-[ ] RESPONSIVO: The game must be responsive! (Não tenho certeza do que está implícito aqui, afinal...)
-[ ] GAMEPLAY
+[?] RESPONSIVO: The game must be responsive! (Não tenho certeza do que está implícito aqui, afinal...)
+[X] GAMEPLAY
 [ ] DEPLOY: docker-compose up --build
 ... [ ] Cors?
 
@@ -62,14 +62,14 @@ frontend                    | For more info see: https://angular.io/guide/build#
 [ ] On match history, choosing the exibition game mode does not filter properly.
     ...This behavior has been exploited to always show all games histories (no need to select the game mode).
 	...So, TODO would really be: [ ] Refactor GET /game/history for no need of using params {'mode': this.mode}.
-[ ] Invitation to Match sometimes does not create the room.
 [ ] Quadrapong and PongDouble failed (frozen) with "ERROR TypeError: p.setVelocity is not a function"@game.component.ts:68
 [ ] Check all "localhost" mentions, make it configService;
-[ ] Main menu is behind avatars...
+[X] Main menu is behind avatars... (solved)
 [X] Re-check layout of chat options screen. Fixed identification by url.
 [X] Some page refreshment cancels profile edition. (Implemented ProfileCompoenent.editing:boolean.)
 [ ] ^ Maybe this happens also in chat-options.
 [X] Profile was buggy when accessing directly through the URL.
 [X] Invitation has broken during the process and was cleared.
-[ ] Need longer time fot game room expiration, because of invites.
+[ ] Need longer time fot game room expiration, because of invites:
+		Invitation to Match sometimes does not create the room.
 ... [ ] Or -- make the invite only create the room when accepted.
