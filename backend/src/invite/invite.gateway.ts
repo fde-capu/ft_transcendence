@@ -6,6 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { environment } from 'src/environment';
 
 export interface Invitation {
   from: string;
@@ -16,7 +17,7 @@ export interface Invitation {
 }
 
 @WebSocketGateway({
-  cors: { origin: 'http://localhost:4200', credentials: true },
+  cors: { origin: environment.FRONTEND_ORIGIN, credentials: true },
   cookie: true,
   namespace: 'invite',
 })

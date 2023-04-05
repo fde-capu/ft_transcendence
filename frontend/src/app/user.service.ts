@@ -17,16 +17,16 @@ export class UserService {
   public static currentIntraId?: string;
   public static currentUser?: User;
   static isAuthorized = false;
-  private statsUrl = `${environment.backendOrigin}/user/stats/?of=`;
-  private historyUrl = `${environment.backendOrigin}/user/history/?of=`;
-  private friendsUrl = `${environment.backendOrigin}/user/friends/?with=`;
-  private blocksUrl = `${environment.backendOrigin}/user/blocks/?them=`;
-  private onlineUsersUrl = `${environment.backendOrigin}/user/online`;
-  private availableUsersUrl = `${environment.backendOrigin}/user/available`;
-  private userByLoginUrl = `${environment.backendOrigin}/user/userByLogin/?intraId=`;
-  private updateUserUrl = `${environment.backendOrigin}/user/update/`;
-  private updateUserStatus = `${environment.backendOrigin}/user/status/`;
-  private attendanceUrl = `${environment.backendOrigin}/user/hi/`;
+  private statsUrl = `${environment.BACKEND_ORIGIN}/user/stats/?of=`;
+  private historyUrl = `${environment.BACKEND_ORIGIN}/user/history/?of=`;
+  private friendsUrl = `${environment.BACKEND_ORIGIN}/user/friends/?with=`;
+  private blocksUrl = `${environment.BACKEND_ORIGIN}/user/blocks/?them=`;
+  private onlineUsersUrl = `${environment.BACKEND_ORIGIN}/user/online`;
+  private availableUsersUrl = `${environment.BACKEND_ORIGIN}/user/available`;
+  private userByLoginUrl = `${environment.BACKEND_ORIGIN}/user/userByLogin/?intraId=`;
+  private updateUserUrl = `${environment.BACKEND_ORIGIN}/user/update/`;
+  private updateUserStatus = `${environment.BACKEND_ORIGIN}/user/status/`;
+  private attendanceUrl = `${environment.BACKEND_ORIGIN}/user/hi/`;
   private saveHttpOptions = {
     withCredentials: true,
     'Content-Type': 'application/json',
@@ -134,28 +134,24 @@ export class UserService {
       .subscribe();
   }
 
-	saveUser(u_user: User): Observable<any> {
-		//console.log("fos saving:", u_user.intraId, UserService.currentIntraId);
-		return this.http.put(
-				this.updateUserUrl + u_user.intraId,
-				u_user,
-				this.saveHttpOptions
-			)
-			.pipe
-			(
-				map(_=>{
-					if (u_user.intraId == UserService.currentIntraId) {
-						this.getLoggedUser()
-							.subscribe(_=>{
-								if(!!_){
-									UserService.currentUser=_;
-							}});
-					}
-					this.router.navigate([this.router.url])
-				}),
-				catchError(this.handleError<any>('saveUser'))
-			);
-	}
+  saveUser(u_user: User): Observable<any> {
+    //console.log("fos saving:", u_user.intraId, UserService.currentIntraId);
+    return this.http
+      .put(this.updateUserUrl + u_user.intraId, u_user, this.saveHttpOptions)
+      .pipe(
+        map(_ => {
+          if (u_user.intraId == UserService.currentIntraId) {
+            this.getLoggedUser().subscribe(_ => {
+              if (!!_) {
+                UserService.currentUser = _;
+              }
+            });
+          }
+          this.router.navigate([this.router.url]);
+        }),
+        catchError(this.handleError<any>('saveUser'))
+      );
+  }
 
   getOnlineUsers(): Observable<User[]> {
     return this.http

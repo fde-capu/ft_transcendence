@@ -14,9 +14,10 @@ import { Dictionary } from '../entity/game.entity';
 import { UserService } from 'src/user/service/user.service';
 import { RoomsService } from '../service/rooms.service';
 import { ClientSocket, GameMode, User } from '../entity/room.entity';
+import { environment } from 'src/environment';
 
 @WebSocketGateway({
-  cors: { origin: 'http://localhost:4200', credentials: true },
+  cors: { origin: environment.FRONTEND_ORIGIN, credentials: true },
   cookie: true,
   namespace: /rooms\/.+/,
 })

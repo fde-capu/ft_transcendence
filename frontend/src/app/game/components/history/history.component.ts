@@ -8,6 +8,7 @@ import {
 } from './../../entity/match-history.entity';
 import { TeamPosition } from './../../entity/match-history.entity';
 import { User } from 'src/app/user';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-history',
@@ -31,7 +32,7 @@ export class HistoryComponent {
     params.append('mode', this.mode);
     if (this.user) params.append('', this.user.intraId);
     this.matches = this.httpClient
-      .get<Array<MatchHistory>>(`http://localhost:3000/game/history`, {
+      .get<Array<MatchHistory>>(`${environment.BACKEND_ORIGIN}/game/history`, {
         params,
         withCredentials: true,
       })

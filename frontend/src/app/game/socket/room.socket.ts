@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 export class RoomSocket extends Socket {
   constructor(roomId: string) {
     super({
-      url: `${environment.backendOrigin}/rooms/${roomId}`,
+      url: `${environment.BACKEND_ORIGIN}/rooms/${roomId}`,
       options: { withCredentials: true },
     });
   }
