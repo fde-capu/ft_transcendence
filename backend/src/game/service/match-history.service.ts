@@ -22,7 +22,7 @@ export class MatchHistoryService {
   }
 
   async getMatchHistoriesByOptions(
-    userId: string,
+    userId?: string,
     mode?: GameMode,
   ): Promise<MatchHistory[]> {
     let where = undefined;
@@ -37,17 +37,4 @@ export class MatchHistoryService {
     });
   }
 
-  async getMatchHistoriesByUser(userId: string): Promise<MatchHistory[]> {
-    return await this.matchRepository.find({
-      where: { teams: { players: { intraId: userId } } },
-      order: { createdDate: 'DESC' },
-    });
-  }
-
-  async getMatchHistoriesByMode(mode: GameMode): Promise<MatchHistory[]> {
-    return await this.matchRepository.find({
-      where: { mode: mode },
-      order: { createdDate: 'DESC' },
-    });
-  }
 }
