@@ -16,6 +16,11 @@
   justify-content: center;
 }
 
+.center.row {
+  justify-content: left;
+  flex-direction: row;
+}
+
 #container, #content {
   width: 100%;
   height: 100%;

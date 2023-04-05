@@ -31,7 +31,10 @@
               <span *ngIf="room.mode === 1">PONGDOUBLE</span>
               <span *ngIf="room.mode === 2">QUADRAPONG</span>
             </th>
-            <th>{{ room.host.name }}</th>
+            <th class="center">
+              <span><app-avatar [user]="users[room.host.id]"></app-avatar>
+              </span><span>{{ room.host.name }}</span>
+            </th>
             <th>{{ room.inGame ? 'In game' : 'Waiting' }}</th>
             <th><button routerLink="./{{ room.id }}">Join</button></th>
           </tr>

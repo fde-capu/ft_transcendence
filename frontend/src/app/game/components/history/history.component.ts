@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, firstValueFrom, map, tap } from 'rxjs';
 import { GameMode } from '../../entity/room.entity';
 import {
   MatchHistory,
@@ -8,6 +8,8 @@ import {
 } from './../../entity/match-history.entity';
 import { TeamPosition } from './../../entity/match-history.entity';
 import { User } from 'src/app/user';
+import { Dictionary } from '../../entity/game.entity';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-history',
@@ -21,7 +23,12 @@ export class HistoryComponent {
 
   matches!: Observable<Array<MatchHistoryMap>>;
 
-  constructor(private readonly httpClient: HttpClient) {
+  users: Dictionary<User> = {};
+
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly userService: UserService
+  ) {
     this.setMode(this.mode);
   }
 
@@ -36,6 +43,12 @@ export class HistoryComponent {
         withCredentials: true,
       })
       .pipe(
+        tap(matches =>
+          matches
+            .flatMap(match => match.teams)
+            .flatMap(team => team.players)
+            .forEach(player => this.getUser(player.intraId))
+        ),
         map(matches =>
           matches.map(match => ({
             ...match,
@@ -59,5 +72,11 @@ export class HistoryComponent {
       case TeamPosition.BOTTOM:
         return 'bottom';
     }
+  }
+
+  async getUser(intraId: string): Promise<void> {
+    const user = await firstValueFrom(this.userService.getUserById(intraId));
+    if (!user) return;
+    this.users[user.intraId] = user;
   }
 }

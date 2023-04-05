@@ -39,6 +39,7 @@
             </header>
             <ul>
               <li *ngFor="let player of team.players">
+                <span><app-avatar [user]="users[player.id]"></app-avatar></span>
                 <span>{{ player.name }}</span>
                 <span class="flag" *ngIf="player.ready">READY</span>
                 <span class="flag" *ngIf="room.host.id === player.id"

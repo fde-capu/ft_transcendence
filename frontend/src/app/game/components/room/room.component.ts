@@ -3,6 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
+import { Dictionary } from '../../entity/game.entity';
+import { User } from 'src/app/user';
+import { firstValueFrom, tap } from 'rxjs';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-room',
@@ -16,10 +20,13 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   roomSocket!: RoomSocket;
 
+  users: Dictionary<User> = {};
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly userService: UserService
   ) {
     this.authService
       .getAuthContext()
@@ -47,6 +54,11 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     this.roomSocket
       .fromEvent<Room>('game:room:status')
+      .pipe(
+        tap(r =>
+          r.teams.flatMap(t => t.players).forEach(p => this.getUser(p.id))
+        )
+      )
       .subscribe({ next: r => (this.room = r) });
 
     this.roomSocket.emit('game:room:status');
@@ -72,5 +84,11 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   leave() {
     this.roomSocket.emit('game:room:leave');
+  }
+
+  async getUser(intraId: string): Promise<void> {
+    const user = await firstValueFrom(this.userService.getUserById(intraId));
+    if (!user) return;
+    this.users[user.intraId] = user;
   }
 }
