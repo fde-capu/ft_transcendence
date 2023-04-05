@@ -2,8 +2,6 @@
   border: 0;
   padding: 0;
   width: auto;
-  height: auto;
-  box-sizing: border-box;
 	white-space: normal;
 	max-width: var(--base-normal-width);
 }
@@ -15,7 +13,6 @@
 
 #container, #content {
   width: 100%;
-  height: 100%;
 	margin: 0 auto;
 	min-width: var(--base-minimal-width);
 }
@@ -31,36 +28,43 @@
 }
 
 .team {
+	display: flex;
   flex-direction: column;
+	justify-content: center;
 	border: var(--border-extra);
 	margin: 1em;
 	width: 16em;
-	height: 8em;
 	position: relative;
 }
 
 .flags {
 	position: absolute;
-	right: 0;
-	bottom: 0;
 }
 
 .flag {
-  padding: .1rem 1em;
-	margin: 0 0 0 .1em;
-	width: 5em;
+  padding: .1em 1em;
+	margin: 0;
+	white-space: nowrap;
+}
+
+.flag-audience {
+	position: absolute;
+	font-size: var(--font-x-small);
+	left: 0;
+	right: 0;
+	padding: 0;
+	bottom: 1em;
+	text-align: center;
 }
 
 #audience {
-  width: 100%;
+	font-size: var(--font-x-small);
+	max-width: var(--base-normal-width);
+	display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: start;
-}
-
-#audience > li {
-  width: 25%;
-  flex-shrink: 0;
+  justify-content: center;
+	margin: 0 auto;
 }
 
 fieldset {
@@ -94,10 +98,14 @@ caption, h1, h2, h3, h4 {
 
 table td {
 	border: var(--border-thin);
+	white-space: nowrap;
+	min-width: 5em;
+	overflow: auto;
 }
 
 h3 {
 	line-height: 0.8em;
+	position: absolute;
 }
 
 select {
@@ -107,23 +115,78 @@ select {
 
 .player_name {
 	text-align: center;
-	margin: 0 auto;
+	margin: 0.5em 0;
 	padding: 0 1em;
+	font-size: var(--font-large);
+	line-height: 0.7em;
 }
 
 fieldset button {
 	margin: 0 auto;
 }
 
-.game-image {
+.game-avatar {
 	filter: grayscale(100%);
 	border: none;
-	min-width: 4em;
-	min-height: 4em;
-	max-width: 4em;
-	max-height: 4em;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
-	border: var(--dev1);
+	z-index: 99;
+}
+
+.player-image {
+	position: absolute;
+	min-width: 5em;
+	min-height: 5em;
+	max-width: 5em;
+	max-height: 5em;
+}
+
+.user-image {
+	min-width: 2em;
+	min-height: 2em;
+	max-width: 2em;
+	max-height: 2em;
+	margin-left: 0.2em;
+}
+
+.queue-li {
+	margin: 1em 1em -1em;
+	display: flex;
+	width: 11em;
+	position: relative;
+	align-items: flex-start;
+}
+
+.audience-name {
+}
+
+.ready-blinker {
+	animation: shock 2.323s step-end infinite;
+}
+
+@keyframes shock {
+  0%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+  2%	{ background-color: var(--color-burn); 
+		filter: drop-shadow(0 0 15px #ddddddaa);}
+  4%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+  6%	{ background-color: var(--color-burn); 
+		filter: drop-shadow(0 0 15px #ddddddaa);}
+  8%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+  10%	{ background-color: var(--color-burn); 
+		filter: drop-shadow(0 0 15px #ddddddaa);}
+  12%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+}
+
+.versus {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -0.5em;
+	margin-top: 0.25em;
+	font-size: var(--font-large);
 }

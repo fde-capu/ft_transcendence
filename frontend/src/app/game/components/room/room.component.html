@@ -2,13 +2,13 @@
 <app-invitation-screen></app-invitation-screen>
 <main id="container">
   <section id="content" *ngIf="!room">
-    <p>Loading...</p>
+    <p class='blinker'>Loading...</p>
   </section>
   <section id="content" *ngIf="!!room && !room.inGame">
     <header>
       <h2>Room {{ room.id }}</h2>
     </header>
-    <article>
+    <article *ngIf='userId == room.host.id || isPlayer()'>
       <fieldset>
         <legend>Get Set</legend>
         <label *ngIf="userId === room.host.id" for="mode">Mode</label>
@@ -24,34 +24,78 @@
         </select>
 
         <button *ngIf="isPlayer()" (click)="ready()">Ready</button>
+				
         <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
       </fieldset>
     </article>
-    <article>
+    <article style='position:relative;'>
       <header>
         <h2>Teams</h2>
       </header>
+			<div class='versus'>
+			vs.</div>
       <ul id="teams" class="center">
         <li *ngFor="let team of room.teams">
-          <article class="team center">
+          <article class="team center" style="
+						height: {{room.mode!=1?'8em':'12em'}}
+					">
             <header>
-              <h3>
+              <h3 style="
+								{{team.id=='LEFT'||team.id=='TOP'?'left:0;':''}}
+								{{team.id=='RIGHT'||team.id=='BOTTOM'?'right:0;':''}}
+								{{team.id=='LEFT'||team.id=='RIGHT'?'top:0;':''}}
+								{{team.id=='TOP'||team.id=='BOTTOM'?'bottom:0;':''}}
+							">
                 {{ team.id }}
 								<br>({{ team.players.length }}/{{ team.capacity }})
               </h3>
             </header>
-						<section *ngFor="let player of team.players">
+						<section *ngFor="let player of team.players; let i = index;">
+							<div class="game-avatar player-image"
+								style="
+									background-image:url('{{player.image}}');
+
+									{{room.mode==0&&team.id=='LEFT'?'right:-3em;top:-2em;':''}}
+									{{room.mode==0&&team.id=='RIGHT'?'left:-3em;bottom:-2em;':''}}
+
+									{{room.mode==1&&team.id=='LEFT'&&!i?'right:-3em;top:-2em;':''}}
+									{{room.mode==1&&team.id=='LEFT'&&i?'right:2em;top:-2em;':''}}
+									{{room.mode==1&&team.id=='RIGHT'&&!i?'left:-3em;bottom:-2em;':''}}
+									{{room.mode==1&&team.id=='RIGHT'&&i?'left:2em;bottom:-2em;':''}}
+
+									{{room.mode==2&&team.id=='LEFT'?'right:-1.5em;bottom:-1.5em;':''}}
+									{{room.mode==2&&team.id=='RIGHT'?'left:-1.5em;bottom:-1.5em':''}}
+									{{room.mode==2&&team.id=='TOP'?'right:-1.5em;top:-1.5em;':''}}
+									{{room.mode==2&&team.id=='BOTTOM'?'left:-1.5em;top:-1.5em;':''}}
+								"
+							></div>
 							<div class='player_name'>
 								{{ player.name }}
-								<div class="game-image hover_invert"
-									style="background-image:url('{{player.image}}');"
-								></div>
-								<!-- {{ player.image when ready }} // TODO -->
 							</div>
-							<div class='flags'>
+							<div class='flags' style="
+								{{team.id=='LEFT'||team.id=='TOP'?'left:0;':''}}
+								{{team.id=='RIGHT'||team.id=='BOTTOM'?'right:0;':''}}
+								{{team.id=='LEFT'||team.id=='RIGHT'?'bottom:0;':''}}
+								{{team.id=='TOP'||team.id=='BOTTOM'?'top:0;':''}}
+							">
 								<span class="flag vga-bow" *ngIf="userId === player.id">YOU</span>
 								<span class="flag vga-bow" *ngIf="room.host.id === player.id">HOST</span>
-								<span class="flag vga-bow" *ngIf="player.ready">READY</span>
+							</div>
+							<div class="flags" style="
+								{{room.mode==0&&team.id=='LEFT'?'right:2em;top:0;':''}}
+								{{room.mode==0&&team.id=='RIGHT'?'left:2em;bottom:0;':''}}
+
+								{{room.mode==1&&team.id=='LEFT'&&!i?'right:-2.5em;top:3em;':''}}
+								{{room.mode==1&&team.id=='LEFT'&&i?'right:7em;top:0;':''}}
+								{{room.mode==1&&team.id=='RIGHT'&&!i?'left:-2.5em;bottom:3em;':''}}
+								{{room.mode==1&&team.id=='RIGHT'&&i?'left:7em;bottom:0;':''}}
+
+								{{room.mode==2&&team.id=='LEFT'?'right:0;top:0;':''}}
+								{{room.mode==2&&team.id=='RIGHT'?'left:0;top:0':''}}
+								{{room.mode==2&&team.id=='TOP'?'right:0;bottom:0;':''}}
+								{{room.mode==2&&team.id=='BOTTOM'?'left:0;bottom:0;':''}}
+							" *ngIf="player.ready">
+								<span class="flag vga-bow ready-blinker">READY</span>
 							</div>
 						</section>
           </article>
@@ -63,9 +107,10 @@
         <h2>Audience</h2>
       </header>
       <ul id="audience" class="center">
-        <li class="center" *ngFor="let user of room.audience">
-          <span>{{ user.name }}</span>
-          <span class="flag vga-bow" *ngIf="userId === user.id">YOU</span>
+        <li class="queue-li" *ngFor="let user of room.audience">
+					<div class='game-avatar user-image' style="background-image:url('{{user.image}}')"></div>
+          <div class='audience-name'>{{ user.name }}</div>
+          <div class="flag-audience vga-bow" *ngIf="userId === user.id">YOU</div>
         </li>
       </ul>
     </article>

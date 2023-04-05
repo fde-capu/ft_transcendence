@@ -19,6 +19,7 @@
 	top: 0;
 	z-index: 100; /* Usefull if sticky. */
 	box-sizing:border-box;
+	min-width: var(--base-minimal-width);
 }
 
 .burger {

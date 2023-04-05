@@ -11,6 +11,10 @@
 	max-width: var(--base-normal-width);
 }
 
+a {
+	white-space: nowrap;
+}
+
 .center {
   display: flex;
   align-items: center;
@@ -19,6 +23,7 @@
 
 #container, #content {
 	margin: 0 auto;
+	min-width: var(--base-minimal-width);
 }
 
 #content > article, #content > header {
@@ -40,6 +45,10 @@ caption, h1, h2, h3, h4 {
   margin-bottom: 1rem;
 }
 
+table {
+	min-width: var(--base-minimal-width);
+}
+
 table td {
 	border: var(--border-thin);
 	width: 5em;
@@ -51,4 +60,5 @@ table td:nth-child(3) {
 	text-align: left;
 	width: auto;
 	padding-left: 0.5em;
+	min-width: 5em;
 }

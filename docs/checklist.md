@@ -85,3 +85,4 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [ ] Solve all TODOs all around.
  - [ ] Graphic options screen?
  - [ ] Login gets 404 on first encounter?
+ - [ ] If both players leave the game, the game continues?
