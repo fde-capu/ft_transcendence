@@ -17,6 +17,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   roomSocket!: RoomSocket;
 
 	scene: string = 'off';
+	alternateReady: boolean = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -72,6 +73,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   ready() {
+		this.alternateReady = !this.alternateReady;
     this.roomSocket.emit('game:player:ready');
   }
 
@@ -112,6 +114,9 @@ export class RoomComponent implements OnInit, OnDestroy {
 		if (this.scene == 'off' || this.scene == 'game') {
 			return ;
 		}
+
+		if (this.scene == 'outro')
+			console.log("This is res:", res);
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 

@@ -69,7 +69,7 @@
 
 fieldset {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
   border: var(--border-extra);
   padding: 1rem;
@@ -125,6 +125,8 @@ fieldset button {
 	margin: 0 auto;
 }
 
+
+
 .game-avatar {
 	filter: grayscale(100%);
 	border: none;
@@ -161,8 +163,21 @@ fieldset button {
 .audience-name {
 }
 
+.ready-button {
+	padding: 2em;
+}
+
 .ready-blinker {
 	animation: shock 2.323s step-end infinite;
+}
+
+.readyOn {
+	animation: shock 2.323s step-end infinite;
+	background: var(--color-low);
+	-webkit-filter:
+		drop-shadow(0 0 10px #a0a0a087);
+	filter:
+		drop-shadow(0 0 10px #a0a0a087);
 }
 
 @keyframes shock {

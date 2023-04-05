@@ -23,7 +23,7 @@
           <option value="2">QUADRAPONG</option>
         </select>
 
-        <button *ngIf="isPlayer()" (click)="ready()">Ready</button>
+        <button class='ready-button' *ngIf="isPlayer()" (click)="ready()" [ngClass]="{'vga-bow ready-blinker':alternateReady}">Ready</button>
 				
         <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
       </fieldset>
@@ -123,20 +123,20 @@
 <div *ngIf="scene=='intro'">
 		<div class="cut-scene" [ngClass]="{'intro':scene=='intro'}">
 			<div *ngIf='room.mode == 0'>
-				<div class='p-anim p1' style="top: 48vh; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim p2' style="top: 48vh; background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim p1' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
+				<div class='p-anim p2' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
 			</div>
 			<div *ngIf='room.mode == 1'>
-				<div class='p-anim p1' style="top: 30vh; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim p1' style="bottom: 30vh; background-image:url('{{room.teams[0].players[1].image}}');"></div>
-				<div class='p-anim p2' style="top: 30vh; background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim p2' style="bottom: 30vh; background-image:url('{{room.teams[1].players[1].image}}');"></div>
+				<div class='p-anim p1' style="top: calc(50vh - 6em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
+				<div class='p-anim p1' style="bottom: calc(50vh - 6em); background-image:url('{{room.teams[0].players[1].image}}');"></div>
+				<div class='p-anim p2' style="top: calc(50vh - 6em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim p2' style="bottom: calc(50vh - 6em); background-image:url('{{room.teams[1].players[1].image}}');"></div>
 			</div>
 			<div *ngIf='room.mode == 2'>
-				<div class='p-anim p1' style="top: 48vh; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim p2' style="top: 48vh; background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim pt' style="left: 47vw; background-image:url('{{room.teams[2].players[0].image}}');"></div>
-				<div class='p-anim pb' style="left: 47vw; background-image:url('{{room.teams[3].players[0].image}}');"></div>
+				<div class='p-anim p1' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
+				<div class='p-anim p2' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim pt' style="left: calc(50vw - 2.5em); background-image:url('{{room.teams[2].players[0].image}}');"></div>
+				<div class='p-anim pb' style="left: calc(50vw - 2.5em); background-image:url('{{room.teams[3].players[0].image}}');"></div>
 			</div>
 		</div>
 </div>
@@ -144,20 +144,20 @@
 <div *ngIf="scene=='outro'">
 		<div class="cut-scene" [ngClass]="{'outro':scene=='outro'}">
 			<div *ngIf='room.mode == 0'>
-				<div class='p-anim win'   style="left: 40vw; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: 60vw; background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim win'   style="left: calc(50vw - 6em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
+				<div class='p-anim loose' style="left: calc(50vw + 1em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
 			</div>
 			<div *ngIf='room.mode == 1'>
-				<div class='p-anim win'   style="left: 20vw; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: 40vw; background-image:url('{{room.teams[0].players[1].image}}');"></div>
-				<div class='p-anim win'   style="left: 60vw; background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: 80vw; background-image:url('{{room.teams[1].players[1].image}}');"></div>
+				<div class='p-anim win'   style="left: calc(50vw - 13em; background-image:url('{{room.teams[0].players[0].image}}');"></div>
+				<div class='p-anim loose' style="left: calc(50vw - 6em); background-image:url('{{room.teams[0].players[1].image}}');"></div>
+				<div class='p-anim win'   style="left: calc(50vw + 1em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim loose' style="left: calc(50vw + 7em); background-image:url('{{room.teams[1].players[1].image}}');"></div>
 			</div>
 			<div *ngIf='room.mode == 2'>
-				<div class='p-anim win'   style="left: 20vw; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: 40vw; background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim win'   style="left: 60vw; background-image:url('{{room.teams[2].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: 80vw; background-image:url('{{room.teams[3].players[0].image}}');"></div>
+				<div class='p-anim win'   style="left: calc(50vw - 13em; background-image:url('{{room.teams[0].players[0].image}}');"></div>
+				<div class='p-anim loose' style="left: calc(50vw - 6em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim win'   style="left: calc(50vw + 1em); background-image:url('{{room.teams[2].players[0].image}}');"></div>
+				<div class='p-anim loose' style="left: calc(50vw + 8em); background-image:url('{{room.teams[3].players[0].image}}');"></div>
 			</div>
 		</div>
 </div>
