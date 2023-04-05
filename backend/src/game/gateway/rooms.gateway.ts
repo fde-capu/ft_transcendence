@@ -35,8 +35,9 @@ export class RoomsGateway implements OnGatewayInit, OnGatewayConnection {
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
 
-      const { name } = await this.userService.getUserByIntraId(subject);
+      const { name, image } = await this.userService.getUserByIntraId(subject);
       client['name'] = name;
+      client['image'] = image;
     } catch (error) {
       client.emit('game:error', 'You are not authenticated!');
       client.disconnect(true);

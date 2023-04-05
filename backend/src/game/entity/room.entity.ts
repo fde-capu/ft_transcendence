@@ -5,7 +5,7 @@ import { RoomsService } from '../service/rooms.service';
 import { Game, Pong, PongDouble, Quadrapong } from './game.entity';
 import { createMatchHistory } from '../util/game-data-to-match-history.converter';
 
-export type ClientSocket = Socket & { subject: string; name: string };
+export type ClientSocket = Socket & { subject: string; name: string, image: string };
 
 export enum GameMode {
   PONG = 0,
@@ -19,10 +19,11 @@ export class User {
   public constructor(
     public readonly id: string,
     public readonly name: string,
+		public readonly image: string,
   ) {}
 
   public static from(client: ClientSocket): User {
-    return new User(client['subject'], client['name']);
+    return new User(client['subject'], client['name'], client['image']);
   }
 }
 
@@ -30,7 +31,7 @@ export class Player extends User {
   public ready = false;
 
   public static from(user: User): Player {
-    return new Player(user.id, user.name);
+    return new Player(user.id, user.name, user.image);
   }
 }
 
@@ -158,7 +159,7 @@ export class Room {
       () => {
         if (!found.connected) this.leave(user);
       },
-      this.inGame ? 5000 : 1000,
+      this.inGame ? 1000 * 60 * 2 : 1000,
     );
   }
 

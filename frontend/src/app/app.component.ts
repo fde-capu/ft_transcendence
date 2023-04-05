@@ -48,7 +48,6 @@ export class AppComponent implements OnInit {
 				if (newStatus != this.oldStatus) {
 					this.oldStatus = newStatus;
 					this.userService.setStatus(newStatus);
-					console.log("set", newStatus, newRoute);
 				}
 			}
 			// TODO: "/game/" will also filter out spectators,

@@ -43,13 +43,15 @@
 						<section *ngFor="let player of team.players">
 							<div class='player_name'>
 								{{ player.name }}
-								<!-- <br> {{ player.full_name? }} // TODO -->
+								<div class="game-image hover_invert"
+									style="background-image:url('{{player.image}}');"
+								></div>
 								<!-- {{ player.image when ready }} // TODO -->
 							</div>
 							<div class='flags'>
-								<span class="flag" *ngIf="player.ready">READY</span>
-								<span class="flag" *ngIf="room.host.id === player.id">HOST</span>
-								<span class="flag" *ngIf="userId === player.id">YOU</span>
+								<span class="flag vga-bow" *ngIf="userId === player.id">YOU</span>
+								<span class="flag vga-bow" *ngIf="room.host.id === player.id">HOST</span>
+								<span class="flag vga-bow" *ngIf="player.ready">READY</span>
 							</div>
 						</section>
           </article>
@@ -63,7 +65,7 @@
       <ul id="audience" class="center">
         <li class="center" *ngFor="let user of room.audience">
           <span>{{ user.name }}</span>
-          <span class="flag" *ngIf="userId === user.id">YOU</span>
+          <span class="flag vga-bow" *ngIf="userId === user.id">YOU</span>
         </li>
       </ul>
     </article>

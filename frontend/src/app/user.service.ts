@@ -41,7 +41,6 @@ export class UserService {
     private router: Router,
     private fun: HelperFunctionsService
   ) {
-    console.log("User Service constructor.");
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };

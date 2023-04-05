@@ -83,3 +83,5 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [ ] Score only counts if the match is won? I though all goal score could count.
  - [ ] When user leaves a room, the room list returns empty on lobby.
  - [ ] Solve all TODOs all around.
+ - [ ] Graphic options screen?
+ - [ ] Login gets 404 on first encounter?

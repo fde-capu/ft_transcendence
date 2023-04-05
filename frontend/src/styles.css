@@ -131,11 +131,11 @@ button:hover,
 textarea:hover,
 textarea:active {
 	-webkit-filter:
-		grayscale(100%) invert(100%) !important,
-		drop-shadow(0 0 10px #555);
+		grayscale(100%) invert(100%)
+		drop-shadow(0 0 10px #a0a0a087);
 	filter:
-		grayscale(100%) invert(100%) !important
-		drop-shadow(0 0 10px #555);
+		grayscale(100%) invert(100%)
+		drop-shadow(0 0 10px #a0a0a087);
 }
 .inline {
 	display: inline;
@@ -143,6 +143,7 @@ textarea:active {
 legend {
 	color: var(--color-supmed);
 	text-align: center;
+	filter: none;
 }
 button,
 ::-webkit-file-upload-button
@@ -345,5 +346,5 @@ table th {
   background-color: var(--color-high);
   color: var(--color-dark);
 	text-shadow: none;
-	filter: drop-shadow(0 0 10px #555);
+	filter: drop-shadow(0 0 10px #a0a0a087);
 }

@@ -1,9 +1,6 @@
 * {
-  margin: 0;
   border: 0;
   padding: 0;
-  min-width: 0;
-  min-height: 0;
   width: auto;
   height: auto;
   box-sizing: border-box;
@@ -50,9 +47,8 @@
 
 .flag {
   padding: .1rem 1em;
+	margin: 0 0 0 .1em;
 	width: 5em;
-  color: #000;
-  background-color: #fff;
 }
 
 #audience {
@@ -97,7 +93,7 @@ caption, h1, h2, h3, h4 {
 }
 
 table td {
-	boder: var(--border-thin);
+	border: var(--border-thin);
 }
 
 h3 {
@@ -110,6 +106,24 @@ select {
 }
 
 .player_name {
+	text-align: center;
 	margin: 0 auto;
 	padding: 0 1em;
+}
+
+fieldset button {
+	margin: 0 auto;
+}
+
+.game-image {
+	filter: grayscale(100%);
+	border: none;
+	min-width: 4em;
+	min-height: 4em;
+	max-width: 4em;
+	max-height: 4em;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: var(--dev1);
 }

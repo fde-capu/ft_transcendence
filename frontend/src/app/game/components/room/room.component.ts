@@ -63,6 +63,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   seMode(mode: string) {
+		console.log(">>", this.room);
     this.roomSocket.emit('game:room:mode', parseInt(mode));
   }
 
