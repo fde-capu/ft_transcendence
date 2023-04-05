@@ -88,3 +88,8 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [ ] If both players leave the game, the game continues?
  - [ ] Does Game History record the timestamp?
  - [ ] Ready/Unready button.
+
+
+... when entering a game, got once:
+	TypeError: p.setVelocity is not a function
+			at game.entity.ts:341:28

@@ -99,24 +99,22 @@ export class RoomComponent implements OnInit, OnDestroy {
 			ready_c += room.teams[2].players[0]?.ready ? 1 : 0;
 			ready_c += room.teams[3].players[0]?.ready ? 1 : 0;
 		};
-		console.log("Ready x/x", ready_c, "/", total_c, this.scene, room.inGame);
 		return ready_c == total_c;
 	}
 
 	async cutScene(res: Room): Promise<void> {
 		let allPlayers = this.allIn(res);
+		this.room = res;
 
 		this.scene = this.scene == 'off' && allPlayers ? 'intro' :
 			this.scene == 'game' && !res.inGame ? 'outro' : this.scene;
 
 		if (this.scene == 'off' || this.scene == 'game') {
-			this.room = res;
 			return ;
 		}
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 
 		this.scene = this.scene == 'intro' || this.scene == 'game' ? 'game' : 'off';
-		this.room = res;
 	}
 }
