@@ -32,7 +32,7 @@ export class AuthService {
     private readonly router: Router
   ) {
     this.httpClient
-      .get<TokenInfoResponse>(`${environment.backendOrigin}/auth/info`, {
+      .get<TokenInfoResponse>(`${environment.BACKEND_ORIGIN}/auth/info`, {
         withCredentials: true,
       })
       .subscribe({
@@ -50,12 +50,12 @@ export class AuthService {
   }
 
   public signIn(): void {
-    this.document.location.href = `${environment.backendOrigin}/auth/authorize`;
+    this.document.location.href = `${environment.BACKEND_ORIGIN}/auth/authorize`;
   }
 
   public signOut(afterRoute = '/logout'): void {
     this.httpClient
-      .get(`${environment.backendOrigin}/auth/logout`, {
+      .get(`${environment.BACKEND_ORIGIN}/auth/logout`, {
         withCredentials: true,
       })
       .pipe(
@@ -70,7 +70,7 @@ export class AuthService {
 
   public getChallenge(): Observable<string> {
     return this.httpClient
-      .get<ChallengeResponse>(`${environment.backendOrigin}/auth/challenge`, {
+      .get<ChallengeResponse>(`${environment.BACKEND_ORIGIN}/auth/challenge`, {
         withCredentials: true,
       })
       .pipe(
@@ -84,7 +84,7 @@ export class AuthService {
   public solveChallenge(token: string): Observable<boolean> {
     return this.httpClient
       .post<TokenInfoResponse>(
-        `${environment.backendOrigin}/auth/challenge`,
+        `${environment.BACKEND_ORIGIN}/auth/challenge`,
         {
           token,
         },
@@ -104,7 +104,7 @@ export class AuthService {
   public disableChallenge(): Observable<boolean> {
     return this.httpClient
       .delete<TokenInfoResponse>(
-        `${environment.backendOrigin}/auth/challenge`,
+        `${environment.BACKEND_ORIGIN}/auth/challenge`,
         {
           withCredentials: true,
         }

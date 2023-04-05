@@ -7,9 +7,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
+import { environment } from 'src/environment';
 
 @WebSocketGateway({
-  cors: { origin: 'http://localhost:4200', credentials: true },
+  cors: { origin: environment.FRONTEND_ORIGIN, credentials: true },
   cookie: true,
   namespace: 'chat',
 })

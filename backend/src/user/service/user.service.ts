@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { Users, UserDTO } from '../entity/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 export interface TokenDTO {
   access_token: string;
@@ -27,6 +28,7 @@ export class UserService {
 
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
+    private readonly configService: ConfigService,
   ) {
     if (!UserService.attOnce) this.checkOnStudents();
   }
@@ -200,7 +202,7 @@ export class UserService {
   async updateProfileImage(intraId: string, imagePath: string) {
     return await this.userRepository.update(
       { intraId },
-      { image: `http://localhost:3000/${imagePath}` },
+      { image: `${this.configService.get('FRONTEND_ORIGIN')}/${imagePath}` },
     );
   }
 }

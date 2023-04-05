@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { LoginComponent } from '../login/components/login/login.component';
 import { LoginModule } from '../login/login.module';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -134,7 +135,7 @@ export class ProfileComponent {
     const fd = new FormData();
     fd.append('file', file.files[0], file.files[0].name);
     this.httpClient
-      .post<void>('http://localhost:3000/user/profile/image', fd, {
+      .post<void>(`${environment.BACKEND_ORIGIN}/user/profile/image`, fd, {
         withCredentials: true,
       })
       .subscribe({
