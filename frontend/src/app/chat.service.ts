@@ -174,7 +174,9 @@ export class ChatService {
   roomById(roomId?: string): ChatRoom | undefined {
     if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length)
       undefined;
-    for (const room of ChatService.allRooms) if (room.id == roomId) return room;
+    for (const room of ChatService.allRooms)
+			if (room.id == roomId)
+				return room;
     return undefined;
   }
 

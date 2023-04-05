@@ -91,14 +91,15 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     this.imprintRecursive();
   }
 
-  async keepTryingToIdentify(id: string | null) {
+  async keepTryingToIdentify(id: string | null): Promise<void> {
     //console.log("keepTryingToIdentify");
     if (id) {
       const chatRoomTest = this.chatService.roomById(id);
       if (chatRoomTest) {
         this.chatRoom = chatRoomTest;
         this.chatRoom.user = chatRoomTest.user;
-        await new Promise(resolve => setTimeout(resolve, 5234));
+				return ;
+        //await new Promise(resolve => setTimeout(resolve, 1034)); // Not heavy after all.
       }
     }
     await new Promise(resolve => setTimeout(resolve, 234));
@@ -112,15 +113,15 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         this.chatRoom.user
       );
     }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 5357 : 123));
+    await new Promise(resolve => setTimeout(resolve, this.id ? 1657 : 123));
     this.updateRoomRecursive();
   }
+
   async checkAdminRecursive() {
-    if (!this.user) {
-    } else {
+    if (!!this.user) {
       this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
     }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 5075 : 135));
+    await new Promise(resolve => setTimeout(resolve, this.id ? 1075 : 135));
     this.checkAdminRecursive();
   }
 
@@ -131,7 +132,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 			if(!this.fun.equalUserArray(t, this.usersOutOfChat))
 				this.usersOutOfChat = t;
 		}
-    await new Promise(resolve => setTimeout(resolve, this.id ? 2447 : 653));
+    await new Promise(resolve => setTimeout(resolve, this.id ? 2047 : 653));
     this.getOutOfChatUsers();
   }
 
