@@ -20,7 +20,7 @@
 
 			<div class='options'>
 				<div class="small-profile-image hover_invert"
-					style="background-image:url('{{ displayUser.image }}');">
+					style="background-image:url('{{ displayUser.image }}'); background-size: cover; overflow: hidden;">
 				</div>
         <input #file type="file" name="file" accept="image/*">
 				<button type="button" (click)="upload(file)">Change Image</button>
@@ -44,7 +44,7 @@
 
 		<div class='oneliner'>
 			<div class="profile-image hover_invert"
-				style="background-image:url('{{ displayUser.image }}');">
+				style="background-image:url('{{ displayUser.image }}'); background-size: cover; overflow: hidden;">
 			</div>
 			<div class='info'>
 				<span class='small-id'>{{displayUser.intraId}}</span>
@@ -74,7 +74,7 @@
   <div *ngIf="displayUser">
     <div
       class="profile-image hover_invert"
-      style="background-image: url('{{ displayUser.image }}')">
+      style="background-image: url('{{ displayUser.image }};'); background-size: cover; overflow: hidden;">
 	</div>
     <br />
     {{ displayUser.intraId }}
