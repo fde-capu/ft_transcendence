@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 import { RoomsService } from '../service/rooms.service';
 import { Game, Pong, PongDouble, Quadrapong } from './game.entity';
 import { createMatchHistory } from '../util/game-data-to-match-history.converter';
+import { UserService } from 'src/user/service/user.service';
 
 export type ClientSocket = Socket & { subject: string; name: string };
 
@@ -68,6 +69,7 @@ export class Room {
 
   public gameTimeout?: NodeJS.Timeout;
 
+  private readonly userService: UserService
   public constructor(
     public readonly id: string,
     public server: Server,
@@ -301,7 +303,8 @@ export class Room {
 
     match = await this.service.historyService.saveMatchHistory(match);
     this.logger.log(`Match finished: ${match.id}`);
-
+    const user = await this.userService.getAllUsers();
+      console.log(user);
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
