@@ -24,6 +24,7 @@
 				</div>
         <input #file type="file" name="file" accept="image/*">
 				<button type="button" (click)="upload(file)">Change Image</button>
+        <span *ngIf="imageError">{{ imageError }}</span>
 			</div>
 
 			<div class='options'>
