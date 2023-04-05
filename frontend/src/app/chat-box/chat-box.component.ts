@@ -118,9 +118,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   async checkAdminRecursive() {
-    if (!!this.user) {
-      this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
-    }
+		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
     await new Promise(resolve => setTimeout(resolve, this.id ? 1075 : 135));
     this.checkAdminRecursive();
   }
