@@ -90,6 +90,7 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [ ] Does Game History record the timestamp?
  - [ ] Ready/Unready button.
  - [ ] Frontend could be more elegant treating requests when firuring backend is down.
+ - [ ] Automatic matchmaking system?
 
 
 ... when entering a game, got once:
