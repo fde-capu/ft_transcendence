@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
-import { ChatService } from './chat.service';
+import { ChatService } from '../service/chat.service';
 
 @Controller('chatrooms')
 export class ChatController {

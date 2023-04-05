@@ -22,7 +22,7 @@ export class MatchHistoryService {
   }
 
   async getMatchHistoriesByOptions(
-    userId?: string,
+    userId: string,
     mode?: GameMode,
   ): Promise<MatchHistory[]> {
     let where = undefined;

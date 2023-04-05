@@ -13,7 +13,7 @@ import { UserService } from 'src/user/service/user.service';
 import { UserFortyTwoApi, Versions } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QRSecret } from '../qrsecret-entity';
+import { QRSecret } from '../entity/qrsecret-entity';
 
 export interface qrSecret {
 	id: string;

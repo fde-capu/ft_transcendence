@@ -2,22 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
-import { Users, UserDTO } from '../entity/user.entity';
-
-export interface TokenDTO {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  refresh_token: string;
-  scope: string;
-  created_at: number;
-}
-
-export interface registerResp {
-  intraId?: string;
-  mfa_enabled?: boolean;
-  mfa_verified?: boolean;
-}
+import { registerResp, UserDTO } from '../dto/user.dto';
+import { Users } from '../entity/user.entity';
 
 @Injectable()
 export class UserService {
