@@ -36,8 +36,8 @@ export class ProfileComponent {
   lastName: string = '';
   lastPassword?: string;
   mfaOpened?: boolean;
-	imgPhase: number = 0;
 	static editing: boolean = false;
+  imageError?: string;
 
   ngOnInit(): void {
     this.getUser();
@@ -134,8 +134,11 @@ export class ProfileComponent {
         withCredentials: true,
       })
       .subscribe({
-        next: () => window.location.reload(),
-        error: err => console.error(err),
+        next: () => {
+          this.imageError = undefined;
+          window.location.reload(); // How can I update the user without reload the page? this.getUser() is not working....
+        },
+        error: err => (this.imageError = err.error['message']),
       });
   }
 

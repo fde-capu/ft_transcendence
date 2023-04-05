@@ -39,10 +39,11 @@
 			change image
 				</label>
 				<div class="small-profile-image hover_invert"
-					style="background-image:url('{{ displayUser.image }}');">
+					style="background-image:url('{{ displayUser.image }}'); background-size: cover; overflow: hidden;">
 				</div>
-        <input #file id="file" type="file" name="file" class="file" accept="image/*">
-				<button *ngIf='file' type="button" (click)="upload(file)">Upload Selected</button>
+        <input #file type="file" name="file" accept="image/*">
+				<button type="button" (click)="upload(file)">Change Image</button>
+        <span *ngIf="imageError">{{ imageError }}</span>
 			</div>
 
 			<div class='options'>
@@ -72,6 +73,16 @@
 			</div>
 		</div>
 
+		<div class='oneliner'>
+			<div class="profile-image hover_invert"
+				style="background-image:url('{{ displayUser.image }}'); background-size: cover; overflow: hidden;">
+			</div>
+			<div class='info'>
+				<span class='small-id'>{{displayUser.intraId}}</span>
+				<span class='big-user'>{{displayUser.name}}</span>
+			</div>
+		</div>
+
 		<div class='actions'>
 		<app-u2u-actions *ngIf='!owner'
 			[isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser'
@@ -94,7 +105,7 @@ User: unknown.
   <div *ngIf="displayUser" class='info box'>
     <div
       class="profile-image hover_invert"
-      style="background-image: url('{{ displayUser.image }}')">
+      style="background-image: url('{{ displayUser.image }};'); background-size: cover; overflow: hidden;">
 	</div>
 		<div>
     {{ displayUser.intraId }}

@@ -4,7 +4,7 @@
 	>
   <div
     class="avatar-image hover_invert"
-    style="background-image:url('{{ user.image }}');"
+    style="background-image:url('{{ user.image }}'); background-size: cover; overflow: hidden;"
 		(click)='goToProfile()'
 	></div>
   <div
@@ -34,7 +34,7 @@
 <ng-template #plain>
   <div
     class="avatar-image hover_invert dummy"
-    style="background-image:url('{{ user.image }}');"
+    style="background-image:url('{{ user.image }}'); background-size: cover; overflow: hidden;"
 		(click)='goToProfile()'
 	></div>
 </ng-template>
