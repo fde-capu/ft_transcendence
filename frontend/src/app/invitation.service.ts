@@ -6,7 +6,7 @@ import { ChatService } from './chat.service';
 import { UserService } from './user.service';
 import { User } from './user';
 import { BehaviorSubject } from 'rxjs';
-import { RoomsComponent } from './game/components/rooms/rooms.component';
+import { RoomsService } from './game/components/rooms/rooms.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +28,7 @@ export class InvitationService {
     private readonly socket: InviteSocket,
     private readonly chatService: ChatService,
     private readonly userService: UserService,
-	private readonly roomsComponent: RoomsComponent,
+		private readonly roomsService: RoomsService,
   ) {
     this.getUser();
     this.doSubscription();
@@ -151,7 +151,7 @@ export class InvitationService {
   }
 
   async invitePrivateMatch(from: string, to: string) {
-    let link = await this.roomsComponent.getLastLink();
+    let link = await this.roomsService.getLastLink();
     this.invite({
       from: from,
       to: to,
