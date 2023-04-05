@@ -157,10 +157,7 @@ export class UserController {
     )
     file: Express.Multer.File,
   ) {
-    console.log(file);
-    console.log(payload);
-    const p = await this.userService.updateProfileImage(payload.sub, file.path);
-    console.log(p);
+    await this.userService.updateProfileImage(payload.sub, file.path);
     return file;
   }
 }
