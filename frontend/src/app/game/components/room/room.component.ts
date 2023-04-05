@@ -51,7 +51,9 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.roomSocket
       .fromEvent<Room>('game:room:status')
       .subscribe(async res => {
-				this.cutScene(res);
+				this.room = res;
+				this.alternateReady = this.thePlayer(this.userId)?.ready;
+				this.cutScene();
 			});
 
     this.roomSocket.emit('game:room:status');
@@ -67,13 +69,17 @@ export class RoomComponent implements OnInit, OnDestroy {
       .find(p => p.id === this.userId);
   }
 
+	thePlayer(intraId: string): any {
+    return this.room.teams
+      .flatMap(t => t.players)
+      .find(p => p.id === intraId);
+	}
+
   seMode(mode: string) {
-		console.log(">>", this.room);
     this.roomSocket.emit('game:room:mode', parseInt(mode));
   }
 
   ready() {
-		this.alternateReady = !this.alternateReady;
     this.roomSocket.emit('game:player:ready');
   }
 
@@ -104,19 +110,18 @@ export class RoomComponent implements OnInit, OnDestroy {
 		return ready_c == total_c;
 	}
 
-	async cutScene(res: Room): Promise<void> {
-		let allPlayers = this.allIn(res);
-		this.room = res;
+	async cutScene(): Promise<void> {
+		let allPlayers = this.allIn(this.room);
 
 		this.scene = this.scene == 'off' && allPlayers ? 'intro' :
-			this.scene == 'game' && !res.inGame ? 'outro' : this.scene;
+			this.scene == 'game' && !this.room.inGame ? 'outro' : this.scene;
 
 		if (this.scene == 'off' || this.scene == 'game') {
 			return ;
 		}
 
 		if (this.scene == 'outro')
-			console.log("This is res:", res);
+			console.log("This is this.room:", this.room);
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 
