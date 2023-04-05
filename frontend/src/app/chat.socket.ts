@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
 export class ChatSocket extends Socket {
   constructor() {
     super({
-      url: `${environment.backendOrigin}/chat`,
+      url: `${environment.BACKEND_ORIGIN}/chat`,
       options: { withCredentials: true },
     });
   }

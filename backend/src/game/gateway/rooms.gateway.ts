@@ -11,9 +11,10 @@ import { TokenService } from 'src/auth/service/token.service';
 import { RoomsService } from '../service/rooms.service';
 import { ClientSocket } from '../entity/room.entity';
 import { UserService } from 'src/user/service/user.service';
+import { environment } from 'src/environment';
 
 @WebSocketGateway({
-  cors: { origin: 'http://localhost:4200', credentials: true },
+  cors: { origin: environment.FRONTEND_ORIGIN, credentials: true },
   cookie: true,
   namespace: 'rooms',
 })

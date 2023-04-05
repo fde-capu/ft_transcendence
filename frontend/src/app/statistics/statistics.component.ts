@@ -4,6 +4,7 @@ import { Statistics } from '../statistics';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatchHistory } from '../game/entity/match-history.entity';
 import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-statistics',
@@ -35,7 +36,7 @@ export class StatisticsComponent implements OnChanges {
 
     const matches = await firstValueFrom(
       this.httpClient.get<Array<MatchHistory>>(
-        `http://localhost:3000/game/history`,
+        `${environment.BACKEND_ORIGIN}/game/history`,
         {
           params,
           withCredentials: true,

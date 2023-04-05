@@ -4,6 +4,16 @@ import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { registerResp, UserDTO } from '../dto/user.dto';
 import { Users } from '../entity/user.entity';
+import { ConfigService } from '@nestjs/config';
+
+export interface TokenDTO {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+  created_at: number;
+}
 
 @Injectable()
 export class UserService {
@@ -14,6 +24,7 @@ export class UserService {
 
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
+    private readonly configService: ConfigService,
   ) {
     if (!UserService.attOnce) this.checkOnStudents();
   }
@@ -195,7 +206,7 @@ export class UserService {
   async updateProfileImage(intraId: string, imagePath: string) {
     return await this.userRepository.update(
       { intraId },
-      { image: `http://localhost:3000/${imagePath}` },
+      { image: `${this.configService.get('FRONTEND_ORIGIN')}/${imagePath}` },
     );
   }
 }

@@ -19,17 +19,17 @@ export class UserService {
 	public static all: User[] = [];
 	public static running: boolean = false;
   static isAuthorized = false;
-  private statsUrl = `${environment.backendOrigin}/user/stats/?of=`;
-  private historyUrl = `${environment.backendOrigin}/user/history/?of=`;
-  private friendsUrl = `${environment.backendOrigin}/user/friends/?with=`;
-  private blocksUrl = `${environment.backendOrigin}/user/blocks/?them=`;
-  private allUsersUrl = `${environment.backendOrigin}/user/all`;
-  private onlineUsersUrl = `${environment.backendOrigin}/user/online`;
-  private availableUsersUrl = `${environment.backendOrigin}/user/available`;
-  private userByLoginUrl = `${environment.backendOrigin}/user/userByLogin/?intraId=`;
-  private updateUserUrl = `${environment.backendOrigin}/user/update/`;
-  private updateUserStatus = `${environment.backendOrigin}/user/status/`;
-  private attendanceUrl = `${environment.backendOrigin}/user/hi/`;
+  private statsUrl = `${environment.BACKEND_ORIGIN}/user/stats/?of=`;
+  private historyUrl = `${environment.BACKEND_ORIGIN}/user/history/?of=`;
+  private friendsUrl = `${environment.BACKEND_ORIGIN}/user/friends/?with=`;
+  private blocksUrl = `${environment.BACKEND_ORIGIN}/user/blocks/?them=`;
+  private onlineUsersUrl = `${environment.BACKEND_ORIGIN}/user/online`;
+  private allUsersUrl = `${environment.BACKEND_ORIGIN}/user/all`;
+  private availableUsersUrl = `${environment.BACKEND_ORIGIN}/user/available`;
+  private userByLoginUrl = `${environment.BACKEND_ORIGIN}/user/userByLogin/?intraId=`;
+  private updateUserUrl = `${environment.BACKEND_ORIGIN}/user/update/`;
+  private updateUserStatus = `${environment.BACKEND_ORIGIN}/user/status/`;
+  private attendanceUrl = `${environment.BACKEND_ORIGIN}/user/hi/`;
   private saveHttpOptions = {
     withCredentials: true,
     'Content-Type': 'application/json',

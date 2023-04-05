@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
 export class InviteSocket extends Socket {
   constructor() {
     super({
-      url: `${environment.backendOrigin}/invite`,
+      url: `${environment.BACKEND_ORIGIN}/invite`,
       options: { withCredentials: true },
     });
   }
