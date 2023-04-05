@@ -87,3 +87,4 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [ ] Login gets 404 on first encounter?
  - [ ] If both players leave the game, the game continues?
  - [ ] Does Game History record the timestamp?
+ - [ ] Ready/Unready button.

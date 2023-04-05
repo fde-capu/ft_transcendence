@@ -119,3 +119,6 @@
     <app-game [roomSocket]="roomSocket" [room]="room"></app-game>
   </section>
 </main>
+
+<div *ngIf="scene=='intro'" class='overall'>INTRO!</div>
+<div *ngIf="scene=='outro'" class='overall'>OUTRO!</div>

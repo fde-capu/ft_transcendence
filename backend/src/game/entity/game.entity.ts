@@ -506,7 +506,7 @@ export class Pong extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
-      sounds: [GameSound.SCORE],
+      sounds: [],
       running: true,
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
@@ -543,7 +543,7 @@ export class PongDouble extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
-      sounds: [GameSound.SCORE],
+      sounds: [],
       running: true,
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());
@@ -587,7 +587,7 @@ export class Quadrapong extends Game {
         top: new Wall(-5, -5, Game.w + 10, 5),
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
-      sounds: [GameSound.SCORE],
+      sounds: [],
       running: true,
     };
     Object.values(this.elements.balls).forEach((b) => b.reset());

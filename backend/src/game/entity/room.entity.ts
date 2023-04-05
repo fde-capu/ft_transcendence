@@ -49,6 +49,9 @@ export class Team {
 }
 
 export class Room {
+
+	private static matchDuration: number = 1000 * 5; // TODO: back to * 100
+
   private readonly logger: Logger;
 
   public teams: Array<Team> = [];
@@ -214,7 +217,7 @@ export class Room {
     }
   }
 
-  public start(): void {
+  public async start() {
     switch (this.mode) {
       case GameMode.PONG:
         this.game = new Pong();
@@ -242,16 +245,16 @@ export class Room {
         };
         break;
     }
+
     this.game.reset();
-
-    setTimeout(() => {
-      this.resume();
-    }, 1000);
-
     this.inGame = true;
-
+		this.pause();
     this.server.emit('game:room:status', hideCircular(this));
+
     this.service.listNonEmptyRooms();
+
+    await new Promise(resolve => setTimeout(resolve, 3000));
+		this.resume();
   }
 
   private pause(): void {
@@ -272,7 +275,7 @@ export class Room {
     if (!this.gameTimeout)
       setTimeout(() => {
         this.finish();
-      }, 100000);
+      }, Room.matchDuration);
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
@@ -302,6 +305,8 @@ export class Room {
 
     match = await this.service.historyService.saveMatchHistory(match);
     this.logger.log(`Match finished: ${match.id}`);
+
+		console.log("finish():", match);
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
