@@ -15,15 +15,6 @@ import { MatchHistoryService } from '../service/match-history.service';
 export class MatchController {
   public constructor(private readonly historyService: MatchHistoryService) {}
 
-  @Get('history/bymode')
-  public async getMatchHistories(
-    @Query() history: RequestHistory
-  ): Promise<Array<MatchHistory>> {
-    return await this.historyService.getMatchHistoriesByOptions(
-      history.user,
-      parseInt(history.mode) || undefined,
-    );
-  }
   @Get('history')
   public async getMatchHistoriesByUser(
     @Query() history: RequestHistory
