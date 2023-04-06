@@ -4,6 +4,7 @@ Checklist based on sub. 12.1
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] MATCHMAKING SYSTEM: (automática/aleatória): the user can join a queue until they get automatically matched with someone else.
  - [ ] RESPONSIVO: The game must be responsive! (Não tenho certeza do que está implícito aqui, afinal...)
+ - [ ] Login is kindda slow, is it some wrong timer?
  - [ ] On saving the game record, set the user scores (+ goals made by the team)
  - [ ] Score only counts if the match is won? I though all goal score could count.
  - [ ] Check if updates are not messing up form editions.
