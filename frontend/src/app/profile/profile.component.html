@@ -6,16 +6,6 @@
 <div *ngIf='!amIBlocked; else spying' class='box'>
 	<div *ngIf="displayUser; else user_unknown">
 
-		<div class='title'>
-			<div class="profile-image hover_invert"
-				style="background-image:url('{{ displayUser.image }}');">
-			</div>
-			<div class='info'>
-				<div class='small-id'>{{displayUser.intraId}}</div>
-				<div class='big-user'>{{displayUser.name}}</div>
-			</div>
-		</div>
-
 		<div class='opt-box' *ngIf="owner">
 			<div class='options'>
 				<label class='left'>
