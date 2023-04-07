@@ -10,6 +10,7 @@ import { MenuBarModule } from '../menu-bar/menu-bar.module';
 import { InviteModule } from '../invitation.module';
 import { ModalComponent } from './components/modal/modal.component';
 import { HistoryComponent } from './components/history/history.component';
+import { GameNotificationComponent } from './components/game-notification/game-notification.component';
 
 @NgModule({
   declarations: [
@@ -18,9 +19,10 @@ import { HistoryComponent } from './components/history/history.component';
     RoomComponent,
     ModalComponent,
     HistoryComponent,
+    GameNotificationComponent,
   ],
   imports: [CommonModule, GameRoutingModule, MenuBarModule, InviteModule],
   providers: [GameSocket],
-  exports: [HistoryComponent],
+  exports: [HistoryComponent, GameNotificationComponent],
 })
 export class GameModule {}
