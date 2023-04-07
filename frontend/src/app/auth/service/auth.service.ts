@@ -37,7 +37,8 @@ export class AuthService {
       })
       .subscribe({
         next: res => {
-          this.authContext.next(res);
+          if (res.error) this.authContext.next(undefined);
+          else this.authContext.next(res);
         },
         error: () => {
           this.authContext.next(undefined);
