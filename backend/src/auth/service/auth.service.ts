@@ -107,7 +107,7 @@ export class AuthService {
       {
         httpOnly: true,
         sameSite: 'strict',
-        maxAge: expiresIn * this.thousand,
+        maxAge: 86400 * this.thousand,
       },
     ];
   }
@@ -215,7 +215,7 @@ export class AuthService {
     } as UserFortyTwoApi);
     const payload = {
       sub: subject,
-      exp: Math.floor(Date.now() / this.thousand) + 7200,
+      exp: Math.floor(Date.now() / this.thousand) + 86400,
       mfa: { enabled: true, verified: true },
     };
     const token = await this.tokenService.sign(payload);
