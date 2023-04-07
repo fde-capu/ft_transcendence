@@ -202,7 +202,7 @@ export class UserService {
   async updateProfileImage(intraId: string, imagePath: string) {
     return await this.userRepository.update(
       { intraId },
-      { image: `${this.configService.get('FRONTEND_ORIGIN')}/${imagePath}` },
+      { image: `${this.configService.get('BACKEND_ORIGIN')}/${imagePath}` },
     );
   }
 }
