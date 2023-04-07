@@ -113,7 +113,7 @@ export class AuthService {
   }
 
   public getSessionTokenPublicInfo(payload?: JWTPayload) {
-    if (!payload) throw new UnauthorizedException();
+    if (!payload) return { error: "You are not logged in" };
     return { sub: payload.sub, exp: payload.exp, mfa: payload['mfa'] };
   }
 
