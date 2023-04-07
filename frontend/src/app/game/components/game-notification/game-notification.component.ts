@@ -2,15 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { GameSocket } from '../../socket/rooms.socket';
-import {
-  debounce,
-  distinctUntilChanged,
-  filter,
-  interval,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { debounce, filter, interval, map, switchMap, tap } from 'rxjs';
 import { Room } from '../../entity/room.entity';
 
 @Component({
@@ -54,10 +46,8 @@ export class GameNotificationComponent implements OnInit {
       .subscribe({
         next: room => {
           this.roomId = room.id;
-          if (this.router.url !== `/game/${this.roomId}`) {
-            console.log(this.router.url, `/game/${this.roomId}`);
+          if (this.router.url !== `/game/${this.roomId}`)
             this.displayNotification = room.inGame;
-          }
         },
       });
   }
