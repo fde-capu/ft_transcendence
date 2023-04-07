@@ -34,8 +34,8 @@ ec instead
 
 > ng serve --host 0.0.0.0 --disable-host-check --watch --configuration development
 Warning: Running a server with --disable-host-check is a security risk. See 
-
 https://medium.com/webpack/webpack-dev-server-middleware-security-issues-1489d950874a for more information
+
 - On install backend pack
 npm WARN deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-cod
 ec instead
