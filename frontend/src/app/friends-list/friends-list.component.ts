@@ -24,7 +24,7 @@ export class FriendsListComponent implements OnChanges {
 		const t =  this.userService.getFriends(this.user);
 		if (t)
 			this.friends = t;
-    await new Promise(resolve => setTimeout(resolve, 5239));
+    await new Promise(resolve => setTimeout(resolve, 3238));
     this.getFriends();
   }
 }
