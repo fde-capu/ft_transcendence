@@ -5,4 +5,5 @@ export interface TokenInfoResponse {
     enabled: boolean;
     verified: boolean;
   };
+  error?: string;
 }

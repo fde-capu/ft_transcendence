@@ -10,6 +10,7 @@ import { InviteModule } from '../invitation.module';
 import { ModalComponent } from './components/modal/modal.component';
 import { HistoryComponent } from './components/history/history.component';
 import { LadderComponent } from './components/ladder/ladder.component';
+import { GameNotificationComponent } from './components/game-notification/game-notification.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { LadderComponent } from './components/ladder/ladder.component';
     ModalComponent,
     HistoryComponent,
 		LadderComponent,
+    GameNotificationComponent,
   ],
   imports: [
 		CommonModule,
@@ -30,6 +32,7 @@ import { LadderComponent } from './components/ladder/ladder.component';
   exports: [
 		HistoryComponent,
 		LadderComponent,
+		GameNotificationComponent,
 	],
 })
 export class GameModule {}
