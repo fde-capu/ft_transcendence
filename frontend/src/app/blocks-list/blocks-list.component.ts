@@ -27,7 +27,7 @@ export class BlocksListComponent implements OnChanges {
 		const t = this.userService.getBlocks(this.user);
 		if (t)
 			this.blocks = t;
-    await new Promise(resolve => setTimeout(resolve, 6241));
+    await new Promise(resolve => setTimeout(resolve, 3241));
     this.getBlocks();
   }
 }
