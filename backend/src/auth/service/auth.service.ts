@@ -71,9 +71,10 @@ export class AuthService {
   public async createSessionToken(
     code: string,
     state?: string,
-  ): Promise<[string, CookieOptions]> {
+  ): Promise<[string, CookieOptions, string]> {
     let fortyTwo: TokenFortyTwoApi;
     let expiresIn = 0;
+    let newUser = false;
     const token = await firstValueFrom(
       // Obtain Token from 42 api
       this.fortyTwoService.getTokenWithAuthorizationCode(code, state).pipe(
@@ -89,6 +90,7 @@ export class AuthService {
         //exp: Math.floor(Date.now() / this.thousand) + expiresIn,
         // ^ this was before, expiresIn is about 25 minutes
         // v Our token expires in 86400, equals 24h.
+        tap((r) => (newUser = r.newUser)),
         map((r) =>
           this.tokenService.sign({
             sub: r.intraId,
@@ -109,6 +111,9 @@ export class AuthService {
         sameSite: 'strict',
         maxAge: expiresIn * this.thousand,
       },
+      newUser
+        ? `${this.frontendOrigin}/profile`
+        : `${this.frontendOrigin}/login`,
     ];
   }
 
