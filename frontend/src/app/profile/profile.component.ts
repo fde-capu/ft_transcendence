@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { User } from '../user';
 import { UserService } from '../user.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Route, Router } from '@angular/router';
 import { HelperFunctionsService } from '../helper-functions.service';
 import { catchError } from 'rxjs/operators';
 import { LoginComponent } from '../login/components/login/login.component';
@@ -21,7 +21,8 @@ export class ProfileComponent {
     public fun: HelperFunctionsService,
     private route: ActivatedRoute,
     private loginComponent: LoginComponent,
-    private readonly httpClient: HttpClient
+    private readonly httpClient: HttpClient,
+    private readonly router: Router
   ) {}
 
   user: User | undefined = undefined;
@@ -136,7 +137,7 @@ export class ProfileComponent {
       .subscribe({
         next: () => {
           this.imageError = undefined;
-          window.location.reload(); // How can I update the user without reload the page? this.getUser() is not working....
+          this.router.navigateByUrl(this.router.url);
         },
         error: err => (this.imageError = err.error['message']),
       });

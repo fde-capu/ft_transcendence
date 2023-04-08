@@ -15,6 +15,13 @@ export interface TokenDTO {
   created_at: number;
 }
 
+export interface registerResp {
+  intraId?: string;
+  mfa_enabled?: boolean;
+  mfa_verified?: boolean;
+  newUser?: boolean;
+}
+
 @Injectable()
 export class UserService {
   public static status: Map<string, string> = new Map<string, string>();
@@ -33,7 +40,9 @@ export class UserService {
     let existUser = await this.userRepository.findOneBy({
       intraId: codeFrom42.login,
     });
+    let newUser = false;
     if (existUser === null) {
+      newUser = true;
       const createdUser = this.userRepository.create({
         intraId: codeFrom42.login,
         email: codeFrom42.email,
@@ -52,6 +61,7 @@ export class UserService {
       intraId: existUser.intraId,
       mfa_enabled: existUser.mfa_enabled,
       mfa_verified: false,
+      newUser,
     };
   }
 
@@ -206,7 +216,7 @@ export class UserService {
   async updateProfileImage(intraId: string, imagePath: string) {
     return await this.userRepository.update(
       { intraId },
-      { image: `${this.configService.get('FRONTEND_ORIGIN')}/${imagePath}` },
+      { image: `${this.configService.get('BACKEND_ORIGIN')}/${imagePath}` },
     );
   }
 }

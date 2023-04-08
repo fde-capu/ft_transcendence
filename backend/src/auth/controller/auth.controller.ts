@@ -46,16 +46,11 @@ export class AuthController {
         error,
         errorDescription,
       );
-    if (!code) {
-        return res.status(400).json('code should not be empty');
-    }
-    const [token, options] = await this.authService.createSessionToken(
+    const [token, options, url] = await this.authService.createSessionToken(
       code,
       state,
     );
-    return res
-      .cookie('authorization', token, options)
-      .redirect(`${this.frontendOrigin}/login`);
+    return res.cookie('authorization', token, options).redirect(url);
   }
 
   @Get('logout')
