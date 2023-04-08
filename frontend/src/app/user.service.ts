@@ -44,15 +44,25 @@ export class UserService {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
-    this.setCurrentIntraId();
+    this.setCurrentIntraId(); // <- First thing being done.
 		this.announceMe();
 		this.keepUpdating();
-		this.getAllUsersCycle(3333);
+		this.getAllUsersCycle(3333); // Will update UserService.all
+																 // on every ~3s.
   }
 
   async setCurrentIntraId() {
-		if (UserService.currentIntraId) 
+		if (UserService.currentIntraId) {
+			this.getSingleUser(UserService.currentIntraId).subscribe(_=>{
+				UserService.currentUser = _;
+			});
+			// ^ SOLUTION: ASAP, make a singleUserRequest to backed.
+			//   So we don't have to wait for UserService.all to complete.
+			//   RESULT: The "waiting" screen  time gets much better,
+			//	 but still depends on the agility of the backend
+			//   response.
 			return ;
+		}
     this.authService.getAuthContext().subscribe(_ => {
       UserService.isAuthorized = true;
       if (_?.sub)
@@ -60,6 +70,8 @@ export class UserService {
     });
 		await new Promise(resolve => setTimeout(resolve, 111));
 		this.setCurrentIntraId();
+		// ^ Event though this loop for safety, it finds the
+		//   currentIntraId very quickly, of first call.
   }
 
   async announceMe(): Promise<void> {
@@ -86,7 +98,16 @@ export class UserService {
 			await new Promise(resolve => setTimeout(resolve, 116));
 			return this.keepUpdating();
 		}
-		UserService.currentUser = this.getUser(UserService.currentIntraId);
+		let u =  this.getUser(UserService.currentIntraId);
+		if (!!u)
+			UserService.currentUser = u;
+		// ^ As soons as we know the currentIntraId,
+		//   we get the currentUser.
+		//   Problem is: on the first trials, UserService.all is
+		//   still waiting the reponse from backend.
+		// ^ SOLUTION: make a test on "u", so currentUser is not
+		//   set to undefined in case UserService.all is not yet
+		//   populated.
     await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();
   }
@@ -96,7 +117,7 @@ export class UserService {
   }
 
   getUser(id: string|undefined): User|undefined {
-		if (!id) return undefined;
+		if (!id || !UserService.all.length) return undefined;
 		for (const u of UserService.all)
 			if (u.intraId == id)
 				return u;
@@ -153,6 +174,9 @@ export class UserService {
 		if (UserService.running) {
 			this.getAllUsers().subscribe(_=>{
 				UserService.all = _;
+				// ^ As soon as the first subscription completes,
+				//   the "keepUpdating()" loop will find the currentUser.
+				//   This is where is taking ~2s for "waiting" on login screen.
 			});
 		}
 		await new Promise(resolve => setTimeout(resolve, deltaMs));
@@ -163,6 +187,12 @@ export class UserService {
     return this.http
       .get<User[]>(this.allUsersUrl, { withCredentials: true })
       .pipe(catchError(this.handleError<User[]>('getAllUsers', [])));
+  }
+
+  getSingleUser(intraId: string): Observable<User> {
+    return this.http
+      .get<User>(this.userByLoginUrl + intraId, { withCredentials: true })
+      .pipe(catchError(this.handleError<User>('getSingleUser')));
   }
 
   getOnlineUsers(): User[] {
