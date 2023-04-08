@@ -24,6 +24,8 @@ export class MenuBarComponent implements OnInit {
     await new Promise(resolve => setTimeout(resolve, 143));
     this.getUser();
   }
+	// ^ The "waiting" screen will be up until
+	//	 menu-bar knows the current User.
 
   onClickBurger(): void {
     this.menuOpen = !this.menuOpen;

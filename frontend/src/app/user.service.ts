@@ -44,10 +44,11 @@ export class UserService {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
-    this.setCurrentIntraId();
+    this.setCurrentIntraId(); // <- First thing being done.
 		this.announceMe();
 		this.keepUpdating();
-		this.getAllUsersCycle(3333);
+		this.getAllUsersCycle(3333); // Will update UserService.all
+																 // on every ~3s.
   }
 
   async setCurrentIntraId() {
@@ -60,6 +61,8 @@ export class UserService {
     });
 		await new Promise(resolve => setTimeout(resolve, 111));
 		this.setCurrentIntraId();
+		// ^ Event though this loop for safety, it finds the
+		//   currentIntraId very quickly, of first call.
   }
 
   async announceMe(): Promise<void> {
@@ -87,6 +90,10 @@ export class UserService {
 			return this.keepUpdating();
 		}
 		UserService.currentUser = this.getUser(UserService.currentIntraId);
+		// ^ As soons as we know the currentIntraId,
+		//   we get the currentUser.
+		//   Problem is: on the first trials, UserService.all is
+		//   still waiting the reponse from backend.
     await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();
   }
@@ -96,7 +103,7 @@ export class UserService {
   }
 
   getUser(id: string|undefined): User|undefined {
-		if (!id) return undefined;
+		if (!id || !UserService.all.length) return undefined;
 		for (const u of UserService.all)
 			if (u.intraId == id)
 				return u;
@@ -153,6 +160,9 @@ export class UserService {
 		if (UserService.running) {
 			this.getAllUsers().subscribe(_=>{
 				UserService.all = _;
+				// ^ As soon as the first subscription completes,
+				//   the "keepUpdating()" loop will find the currentUser.
+				//   This is where is taking ~2s for "waiting" on login screen.
 			});
 		}
 		await new Promise(resolve => setTimeout(resolve, deltaMs));
