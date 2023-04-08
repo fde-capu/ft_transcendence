@@ -24,7 +24,7 @@ export class RoomsService {
     this.rooms[id] = new Room(id, this.server, this, User.from(client));
 
     client.emit('game:room:create', id);
-    setTimeout(() => this.deleteIfEmpty(id), 5000);
+    setTimeout(() => this.deleteIfEmpty(id), 300000);
   }
 
   public deleteIfEmpty(id: string): void {
