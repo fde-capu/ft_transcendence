@@ -50,8 +50,10 @@ export class AppComponent implements OnInit {
 					this.userService.setStatus(newStatus);
 				}
 			}
-			// TODO: "/game/" will also filter out spectators,
-			// and it should not. Find a way to be sure user is paying or not.
+			// TODO: Currently, all users that are in game room, even
+			// the expectators, are set as INGAME. Therefore, they will
+			// not be shown as Available to get a game invitation.
+			// Find a way to be sure user is paying or not.
     });
   }
 }
