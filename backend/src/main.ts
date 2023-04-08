@@ -11,6 +11,6 @@ async function bootstrap() {
     helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false }),
   );
   app.use(cookieParser());
-  await app.listen(3000);
+  await app.listen(3000); // TODO: change to BACKEND_PORT or alike. Verify all references to 3000, 4200 or 5432 if are not hardcoded.
 }
 bootstrap();
