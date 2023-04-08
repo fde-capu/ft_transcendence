@@ -2,27 +2,13 @@ ft_transcendence
 Checklist based on sub. 12.1
 
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
- - [ ] MATCHMAKING SYSTEM: (automática/aleatória): the user can join a queue until they get automatically matched with someone else.
- - [ ] RESPONSIVO: The game must be responsive! (Não tenho certeza do que está implícito aqui, afinal...)
  - [ ] Login is kindda slow, is it some wrong timer?
- - [ ] On saving the game record, set the user scores (+ goals made by the team)
- - [ ] Score only counts if the match is won? I though all goal score could count.
  - [ ] Check if updates are not messing up form editions.
- - [ ] make the invite only create the room when accepted. - Same thing for Private messages on chat
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
- - [ ] Backend reports status out of order..?
- - [ ] When user leaves a room, the room list returns empty on lobby.
  - [ ] Solve all TODOs all around.
  - [ ] Graphic options screen?
- - [ ] Login gets 404 on first encounter?
- - [ ] If both players leave the game, the game continues?
  - [ ] Does Game History record the timestamp? If so, show it on game history html.
  - [ ] Ready/Unready button.
- - [ ] Frontend could be more elegant treating requests when finding backend is down.
- - [ ] DEPLOY: docker-compose up --build
- - [ ] ...Cors?
- - [?] Quadrapong and PongDouble failed (frozen) with "ERROR TypeError: p.setVelocity is not a function"@game.component.ts:68
-		...I believe this happens due to malfunctioning of fake users.
 
 --- Warning found: ---
 
@@ -91,3 +77,5 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [X] Profile was buggy when accessing directly through the URL.
  - [X] Invitation has broken during the process and was cleared.
  - [X] On match history, choosing the exibition game mode does not filter properly.
+ - [?] Quadrapong and PongDouble failed (frozen) with "ERROR TypeError: p.setVelocity is not a function"@game.component.ts:68
+		...I believe this happens due to malfunctioning of fake users.
