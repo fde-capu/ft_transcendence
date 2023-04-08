@@ -52,8 +52,17 @@ export class UserService {
   }
 
   async setCurrentIntraId() {
-		if (UserService.currentIntraId) 
+		if (UserService.currentIntraId) {
+			this.getSingleUser(UserService.currentIntraId).subscribe(_=>{
+				UserService.currentUser = _;
+			});
+			// ^ SOLUTION: ASAP, make a singleUserRequest to backed.
+			//   So we don't have to wait for UserService.all to complete.
+			//   RESULT: The "waiting" screen  time gets much better,
+			//	 but still depends on the agility of the backend
+			//   response.
 			return ;
+		}
     this.authService.getAuthContext().subscribe(_ => {
       UserService.isAuthorized = true;
       if (_?.sub)
@@ -89,11 +98,16 @@ export class UserService {
 			await new Promise(resolve => setTimeout(resolve, 116));
 			return this.keepUpdating();
 		}
-		UserService.currentUser = this.getUser(UserService.currentIntraId);
+		let u =  this.getUser(UserService.currentIntraId);
+		if (!!u)
+			UserService.currentUser = u;
 		// ^ As soons as we know the currentIntraId,
 		//   we get the currentUser.
 		//   Problem is: on the first trials, UserService.all is
 		//   still waiting the reponse from backend.
+		// ^ SOLUTION: make a test on "u", so currentUser is not
+		//   set to undefined in case UserService.all is not yet
+		//   populated.
     await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();
   }
@@ -173,6 +187,12 @@ export class UserService {
     return this.http
       .get<User[]>(this.allUsersUrl, { withCredentials: true })
       .pipe(catchError(this.handleError<User[]>('getAllUsers', [])));
+  }
+
+  getSingleUser(intraId: string): Observable<User> {
+    return this.http
+      .get<User>(this.userByLoginUrl + intraId, { withCredentials: true })
+      .pipe(catchError(this.handleError<User>('getSingleUser')));
   }
 
   getOnlineUsers(): User[] {
