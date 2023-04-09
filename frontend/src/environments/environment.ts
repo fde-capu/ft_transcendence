@@ -1,3 +1,3 @@
 export const environment = {
-  BACKEND_ORIGIN: 'http://localhost:3000',
+  BACKEND_ORIGIN: '${BACKEND_ORIGIN}',
 };
