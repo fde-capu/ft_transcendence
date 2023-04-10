@@ -35,4 +35,5 @@ export interface registerResp {
     intraId?: string;
     mfa_enabled?: boolean;
     mfa_verified?: boolean;
+		newUser?: boolean;
 }
