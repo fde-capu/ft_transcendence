@@ -42,7 +42,7 @@ import { join } from 'path';
     FortyTwoModule,
     GameModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: '/var/tmp/uploads',
       serveRoot: '/uploads',
     }),
   ],

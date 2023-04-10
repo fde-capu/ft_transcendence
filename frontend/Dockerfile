@@ -5,7 +5,7 @@ RUN apt-get update && \
 ENTRYPOINT ["bash", "-c", "envsubst < ./src/environments/environment.ts > ./src/environments/environment.development.ts && npm run start:dev"]
 
 FROM node:lts-slim AS build
-ARG BACKEND_URL
+ARG BACKEND_ORIGIN
 COPY . /build
 WORKDIR /build
 RUN apt-get update && \
