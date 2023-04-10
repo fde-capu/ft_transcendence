@@ -309,10 +309,10 @@ export class Room {
 
 		console.log("finish():", match);
 
-    const user = await this.userService.getAllUsers();
-      console.log(user);
+//	Not working:
+//    const user = await this.userService.getAllUsers();
+//      console.log(user);
 		// GREAT, THANKS!
-
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
