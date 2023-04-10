@@ -5,5 +5,15 @@ button {
 	display: inline-block;
 }
 .room-line {
-	margin-bottom: 1em;
+	border: var(--border-extra);
+	min-width: var(--base-minimal-width);
+	max-width: var(--base-normal-width);
+	margin: 1em auto;
+	display: table;
+	padding: 1em;
+	line-height: 1.5em;
+}
+
+.button-line {
+	text-align: right;
 }

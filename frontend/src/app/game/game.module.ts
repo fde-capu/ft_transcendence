@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './components/game/game.component';
 import { GameSocket } from './socket/rooms.socket';
@@ -10,6 +9,7 @@ import { MenuBarModule } from '../menu-bar/menu-bar.module';
 import { InviteModule } from '../invitation.module';
 import { ModalComponent } from './components/modal/modal.component';
 import { HistoryComponent } from './components/history/history.component';
+import { LadderComponent } from './components/ladder/ladder.component';
 import { GameNotificationComponent } from './components/game-notification/game-notification.component';
 
 @NgModule({
@@ -19,10 +19,20 @@ import { GameNotificationComponent } from './components/game-notification/game-n
     RoomComponent,
     ModalComponent,
     HistoryComponent,
+		LadderComponent,
     GameNotificationComponent,
   ],
-  imports: [CommonModule, GameRoutingModule, MenuBarModule, InviteModule],
+  imports: [
+		CommonModule,
+		GameRoutingModule,
+		MenuBarModule,
+		InviteModule,
+	],
   providers: [GameSocket],
-  exports: [HistoryComponent, GameNotificationComponent],
+  exports: [
+		HistoryComponent,
+		LadderComponent,
+		GameNotificationComponent,
+	],
 })
 export class GameModule {}

@@ -10,6 +10,8 @@ import { UserService } from './user.service';
 })
 export class AppComponent implements OnInit {
   cleanChat = false;
+	oldRoute = "";
+	oldStatus = "";
 
   constructor(
     public router: Router,
@@ -32,6 +34,26 @@ export class AppComponent implements OnInit {
           this.cleanChat = true;
         } else this.cleanChat = false;
       }
+			let newRoute = this.router.url;
+			let newStatus = "";
+			if (newRoute != this.oldRoute) {
+				this.oldRoute = newRoute;
+				UserService.running = newRoute.indexOf("/log") != 0;
+				if (newRoute.indexOf("/game/") == 0)
+					newStatus = "INGAME";
+				else if (newRoute.indexOf("/chat") == 0)
+					newStatus = "INCHAT";
+				else
+					newStatus = "ONLINE";
+				if (newStatus != this.oldStatus) {
+					this.oldStatus = newStatus;
+					this.userService.setStatus(newStatus);
+				}
+			}
+			// TODO: Currently, all users that are in game room, even
+			// the expectators, are set as INGAME. Therefore, they will
+			// not be shown as Available to get a game invitation.
+			// Find a way to be sure user is paying or not.
     });
   }
 }

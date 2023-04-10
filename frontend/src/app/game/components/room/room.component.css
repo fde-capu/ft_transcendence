@@ -1,24 +1,20 @@
 * {
-  margin: 0;
   border: 0;
   padding: 0;
-  min-width: 0;
-  min-height: 0;
   width: auto;
-  height: auto;
-  box-sizing: border-box;
-  text-shadow: none;
+	white-space: normal;
+	max-width: var(--base-normal-width);
 }
 
 .center {
   display: flex;
-  align-items: center;
-  justify-content: center;
+	flex-wrap: wrap;
 }
 
 #container, #content {
   width: 100%;
-  height: 100%;
+	margin: 0 auto;
+	min-width: var(--base-minimal-width);
 }
 
 #content > article, #content > header {
@@ -32,40 +28,297 @@
 }
 
 .team {
+	display: flex;
   flex-direction: column;
+	justify-content: center;
+	border: var(--border-extra);
+	margin: 1em;
+	width: 16em;
+	position: relative;
+}
+
+.flags {
+	position: absolute;
 }
 
 .flag {
-  margin-left: .5rem;
-  padding: .1rem;
-  color: #000;
-  background-color: #fff;
+  padding: .1em 1em;
+	margin: 0;
+	white-space: nowrap;
+}
+
+.flag-audience {
+	position: absolute;
+	font-size: var(--font-x-small);
+	left: 0;
+	right: 0;
+	padding: 0;
+	bottom: 1em;
+	text-align: center;
 }
 
 #audience {
-  width: 100%;
+	font-size: var(--font-x-small);
+	max-width: var(--base-normal-width);
+	display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: start;
-}
-
-#audience > li {
-  width: 25%;
-  flex-shrink: 0;
+  justify-content: center;
+	margin: 0 auto;
 }
 
 fieldset {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
-  border: solid 2px gray;
+  border: var(--border-extra);
   padding: 1rem;
-}
-
-fieldset > *:not(:last-child) {
-  margin-right: .5rem;
+	width: fit-content;
+	margin: 0 auto;
 }
 
 caption, h1, h2, h3, h4 {
   margin-bottom: 1rem;
+}
+
+@media (min-width: 770px) {
+	.take-me-out {
+		position: absolute;
+		left: 1em;
+		top: 3.6em;
+		opacity: 0.7;
+	}
+}
+
+@media (max-width: 770px) {
+	.take-me-out {
+		display: none;
+	}
+}
+
+table td {
+	border: var(--border-thin);
+	white-space: nowrap;
+	min-width: 5em;
+	overflow: auto;
+}
+
+h3 {
+	line-height: 0.8em;
+	position: absolute;
+}
+
+select {
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+
+.player_name {
+	text-align: center;
+	margin: 0.5em 0;
+	padding: 0 1em;
+	font-size: var(--font-large);
+	line-height: 0.7em;
+}
+
+fieldset button {
+	margin: 0 auto;
+}
+
+
+
+.game-avatar {
+	filter: grayscale(100%);
+	border: none;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	z-index: 99;
+}
+
+.player-image {
+	position: absolute;
+	min-width: 5em;
+	min-height: 5em;
+	max-width: 5em;
+	max-height: 5em;
+}
+
+.user-image {
+	min-width: 2em;
+	min-height: 2em;
+	max-width: 2em;
+	max-height: 2em;
+	margin-left: 0.2em;
+}
+
+.queue-li {
+	margin: 1em 1em -1em;
+	display: flex;
+	width: 11em;
+	position: relative;
+	align-items: flex-start;
+}
+
+.audience-name {
+}
+
+.ready-button {
+	padding: 2em;
+}
+
+.ready-blinker {
+	animation: shock 2.323s step-end infinite;
+}
+
+.readyOn {
+	animation: shock 2.323s step-end infinite;
+	background: var(--color-low);
+	-webkit-filter:
+		drop-shadow(0 0 10px #a0a0a087);
+	filter:
+		drop-shadow(0 0 10px #a0a0a087);
+}
+
+@keyframes shock {
+  0%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+  2%	{ background-color: var(--color-burn); 
+		filter: drop-shadow(0 0 15px #ddddddaa);}
+  4%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+  6%	{ background-color: var(--color-burn); 
+		filter: drop-shadow(0 0 15px #ddddddaa);}
+  8%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+  10%	{ background-color: var(--color-burn); 
+		filter: drop-shadow(0 0 15px #ddddddaa);}
+  12%	{ background-color: var(--color-high); 
+		filter: drop-shadow(0 0 10px #a0a0a087);}
+}
+
+.versus {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -0.5em;
+	margin-top: 0.25em;
+	font-size: var(--font-large);
+}
+
+.cut-scene {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 500;
+	max-width: 100vw;
+	max-height: 100vh;
+	pointer-events: none;
+}
+
+.intro {
+	animation: flash 3s;
+}
+
+.outro {
+	animation: flash 3s;
+}
+
+@keyframes flash {
+	0% {
+		background-color: rgba(255,255,255,255);
+		opacity: 1;
+	}
+	20% {
+		background-color: rgba(10,10,10,255);
+	}
+	80% {
+		background-color: rgba(10,10,10,255);
+		opacity: 1;
+	}
+	100% {
+		background-color: rgba(10,10,10,255);
+		opacity: 0;
+	}
+}
+
+.p-anim {
+	filter: grayscale(100%);
+	border: none;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 5em;
+	min-height: 5em;
+	max-width: 5em;
+	max-height: 5em;
+	position: absolute;
+}
+
+.p1 {
+	animation: anim-pl-in;
+	animation-duration: 3.2s;
+}
+.p2 {
+	animation: anim-pr-in;
+	animation-duration: 3.2s;
+}
+.pt {
+	animation: anim-pt-in;
+	animation-duration: 3.2s;
+}
+.pb {
+	animation: anim-pb-in;
+	animation-duration: 3.2s;
+}
+.win {
+	animation: anim-win;
+	animation-duration: 3.2s;
+}
+.loose {
+	animation: anim-loose;
+	animation-duration: 3.2s;
+}
+
+@keyframes anim-pl-in {
+	0% { left: 20%; opacity: 0; }
+	30% { opacity: 1; }
+	70% { opacity: 1; }
+	100% { left: 30%; opacity: 0;}
+}
+
+@keyframes anim-pr-in {
+	0% { right: 20%; opacity: 0; }
+	30% { opacity: 1; }
+	70% { opacity: 1; }
+	100% { right: 30%; opacity: 0;}
+}
+
+@keyframes anim-pt-in {
+	0% { top: 20%; opacity: 0; }
+	30% { opacity: 1; }
+	70% { opacity: 1; }
+	100% { top: 30%; opacity: 0;}
+}
+
+@keyframes anim-pb-in {
+	0% { bottom: 20%; opacity: 0; }
+	30% { opacity: 1; }
+	70% { opacity: 1; }
+	100% { bottom: 30%; opacity: 0;}
+}
+
+@keyframes anim-win {
+	0% { bottom: 50%; opacity: 0;}
+	30% { opacity: 1; }
+	70% { opacity: 1; }
+	100% { bottom: 55%; opacity: 0;}
+}
+@keyframes anim-loose {
+	0% { bottom: 50%; opacity: 0;}
+	30% { opacity: 1; }
+	70% { opacity: 1; }
+	100% { bottom: 45%; opacity: 0;}
 }

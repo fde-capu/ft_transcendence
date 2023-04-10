@@ -8,11 +8,17 @@
       (click)="menuOff()">
       <app-main-menu></app-main-menu>
     </div>
-    <app-avatar [user]="user"></app-avatar>
+    <app-avatar [user]="user" [dummy]="true"></app-avatar>
     <a class="user-name" routerLink="/profile/{{ user.intraId }}">
       {{ user.intraId }} | {{ user.name }}
     </a>
-    <div class="score-big">{{ user.score | number : '6.0-0' }}</div>
+    <div class="score-big">{{ user.score | number : '2.0-0' }}</div>
   </div>
   <div *ngIf="!user" class="loading blinker"></div>
+</div>
+
+<div *ngIf='waiting' class='overall'>
+<span class='blinker'>
+Please wait...
+</span>
 </div>

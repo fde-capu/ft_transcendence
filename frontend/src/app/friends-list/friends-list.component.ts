@@ -18,13 +18,13 @@ export class FriendsListComponent implements OnChanges {
   }
   async getFriends(): Promise<void> {
     if (!this.user) {
-      await new Promise(resolve => setTimeout(resolve, 539));
+      await new Promise(resolve => setTimeout(resolve, 123));
       return await this.getFriends();
     }
-    this.userService.getFriends(this.user).subscribe(_ => {
-      this.friends = _;
-    });
-    await new Promise(resolve => setTimeout(resolve, 5239));
+		const t =  this.userService.getFriends(this.user);
+		if (t)
+			this.friends = t;
+    await new Promise(resolve => setTimeout(resolve, 3238));
     this.getFriends();
   }
 }

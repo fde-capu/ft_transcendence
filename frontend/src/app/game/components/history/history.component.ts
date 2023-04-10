@@ -8,6 +8,7 @@ import {
 } from './../../entity/match-history.entity';
 import { TeamPosition } from './../../entity/match-history.entity';
 import { User } from 'src/app/user';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,13 +18,17 @@ import { environment } from 'src/environments/environment';
 })
 export class HistoryComponent {
   @Input() user?: User;
-
+	routedNotInProfile?: boolean;
   mode: GameMode = GameMode.PONG;
 
   matches!: Observable<Array<MatchHistoryMap>>;
 
-  constructor(private readonly httpClient: HttpClient) {
+  constructor(
+    private router: Router,
+		private readonly httpClient: HttpClient,
+	) {
     this.setMode(this.mode);
+		this.routedNotInProfile = this.router.url.indexOf("/game") == 0;
   }
 
   setMode(mode: GameMode | string) {
@@ -48,6 +53,10 @@ export class HistoryComponent {
         )
       );
   }
+  // ^ This function is currentl all matches, unregarding the mode.
+  //   Which I think is a good behavior - to always show all records.
+  //   TODO: Rename/refactor so we don't need to use this.mode as params.
+
 
   getPositionName(position: TeamPosition): string {
     switch (position) {

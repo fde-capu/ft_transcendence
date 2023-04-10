@@ -37,44 +37,41 @@ export class ProfileComponent {
   lastName: string = '';
   lastPassword?: string;
   mfaOpened?: boolean;
+	static editing: boolean = false;
   imageError?: string;
 
   ngOnInit(): void {
     this.getUser();
+		this.getIdRequest();
+		this.getDisplayUser();
   }
 
-  getUser(): void {
-    this.userService.getLoggedUser().subscribe(backUser => {
-      this.user = backUser;
-      this.userService.setStatus('ONLINE');
-      this.getIdRequest();
-    });
+  async getUser() {
+		this.user = UserService.currentUser;
+    await new Promise(resolve => setTimeout(resolve, 111));
+		this.getUser();
   }
 
-  getIdRequest() {
+  async getIdRequest() {
     this.route.params.subscribe((params: Params) => {
       this.idRequest = params['intraId'];
-      this.getDisplayUser();
     });
+    await new Promise(resolve => setTimeout(resolve, 111));
+		this.getIdRequest();
   }
 
   async getDisplayUser() {
-    if (this.owner || !this.userService.authorized()) return;
-    if (!this.idRequest) {
-      this.displayUser = this.user;
-      this.setOwnership();
-      return;
-    }
-    this.userService
-      .getUserById(this.idRequest)
-      .pipe(catchError(this.userService.handleError<any>('getDisplayUser')))
-      .subscribe(backUser => {
-        if (backUser) this.displayUser = backUser;
-        else this.displayUser = undefined;
-        // ^ Above seems redundant but condition is needed.
-        this.setOwnership();
-        this.amIBlocked = this.userService.amIBlocked(this.displayUser);
-      });
+		if (!this.idRequest) {
+			this.displayUser = this.user;
+			this.setOwnership();
+		} else {
+			if (!ProfileComponent.editing)
+				this.displayUser = this.userService.getUser(this.idRequest);
+			this.setOwnership();
+			this.amIBlocked = this.userService.amIBlocked(this.displayUser);
+		}
+    await new Promise(resolve => setTimeout(resolve, 222));
+		this.getDisplayUser();
   }
 
   async setOwnership() {
@@ -95,23 +92,17 @@ export class ProfileComponent {
     }
   }
 
-  cancelMfa() {} // TODO What the?
-
-  solveChallenge(form: NgForm) {
-    this.loginComponent.solveChallenge(form);
-  }
+	solveChallenge(form: NgForm) {
+		this.loginComponent.solveChallenge(form);
+	}
 
   async validateAndSaveUser() {
     if (!this.displayUser) return;
-    if (this.fun.validateString(this.displayUser.name)) this.saveUser();
-    else {
+    if (this.fun.validateString(this.displayUser.name)) {
+			this.saveUser();
+    } else {
       this.invalidNameNotice = true;
-      this.fun.blink('invalidNameNotice');
-      await new Promise(resolve => setTimeout(resolve, 342));
-      this.fun.blink('invalidNameNotice');
-      await new Promise(resolve => setTimeout(resolve, 342));
-      this.fun.blink('invalidNameNotice');
-      await new Promise(resolve => setTimeout(resolve, 342));
+      await this.fun.blink3('invalidNameNotice');
       this.invalidNameNotice = false;
       this.displayUser.name = this.lastName;
       this.fun.focus('invalidNameNotice');
@@ -124,15 +115,19 @@ export class ProfileComponent {
   }
 
   saveUser() {
+		ProfileComponent.editing = true;
     if (this.displayUser) {
       this.userService
         .saveUser(this.displayUser)
-        .subscribe({ next: () => ({}) });
+        .subscribe(_=>{this.unsetEditing();});
     }
   }
 
   upload(file: HTMLInputElement) {
-    if (!file.files) return;
+    if (!file || !file.files || !file.files.length) {
+			this.fun.blink3('file');
+			return;
+		}
     const fd = new FormData();
     fd.append('file', file.files[0], file.files[0].name);
     this.httpClient
@@ -147,4 +142,14 @@ export class ProfileComponent {
         error: err => (this.imageError = err.error['message']),
       });
   }
+
+	setEditing() {
+		ProfileComponent.editing = true;
+	}
+
+	unsetEditing() {
+		setTimeout(() => {
+			ProfileComponent.editing = false;
+		}, 2555);
+	}
 }

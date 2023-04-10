@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-avatar',
@@ -14,11 +15,15 @@ export class AvatarComponent implements OnChanges {
   isBlock = false;
   isMe = false;
   amIBlocked?: boolean;
-  @Input() positionbottom?: boolean;
+	@Input() dummy?: boolean;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private router: Router,
+		private userService: UserService,
+	) {}
 
   ngOnChanges() {
+		if (this.dummy) return;
     this.checkFriendship();
     this.checkBlock();
   }
@@ -32,15 +37,7 @@ export class AvatarComponent implements OnChanges {
     this.amIBlocked = this.userService.amIBlocked(this.user);
   }
 
-  onClick(): void {
-    this.popUpOn = !this.popUpOn;
-  }
-
-  async onHover() {
-    this.popUpOn = true;
-  }
-
-  onHoverOut(): void {
-    this.popUpOn = false;
-  }
+	goToProfile() {
+		this.router.navigate(['/profile/' + this.user?.intraId]);
+	}
 }

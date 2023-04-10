@@ -19,7 +19,7 @@ export class StatisticsComponent implements OnChanges {
     wins: 0,
     looses: 0,
     winsPerLooses: 0,
-    goalsMade: 0,
+    totalScore: 0,
   };
 
   constructor(private readonly httpClient: HttpClient) {}
@@ -46,7 +46,7 @@ export class StatisticsComponent implements OnChanges {
 
     this.stat.matches = matches.length;
 
-    this.stat.goalsMade = matches
+    this.stat.totalScore = matches
       .flatMap(m => m.teams)
       .filter(t => t.score > 0)
       .filter(t => t.players.find(u => u.intraId === this.user!.intraId))

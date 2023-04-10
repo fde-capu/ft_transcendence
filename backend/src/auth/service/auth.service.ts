@@ -13,7 +13,7 @@ import { UserService } from 'src/user/service/user.service';
 import { UserFortyTwoApi, Versions } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QRSecret } from '../qrsecret-entity';
+import { QRSecret } from '../entity/qrsecret-entity';
 
 export interface qrSecret {
 	id: string;
@@ -175,7 +175,6 @@ export class AuthService {
   public async disableChallenge(
     payload?: JWTPayload,
   ): Promise<[string, CookieOptions, JWTPayload]> {
-    // TODO: disable challenge for the user on the database
     const token = await this.tokenService.sign({
       ...payload,
       mfa: { enabled: false, verified: false },

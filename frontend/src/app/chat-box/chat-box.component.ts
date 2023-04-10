@@ -27,7 +27,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   windowExtras = '';
   optionsOn = false;
   usersOutOfChat: User[] = []; // Everyone online minus PC minus who is already in.
-  usersInChat: User[] = [];
+  usersInChat?: User[] = undefined;
   static ignited = false;
   user?: User;
   id?: string | null;
@@ -41,21 +41,28 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUserAndStuff();
+		this.initChatRoom();
   }
 
   ngOnDestroy() {
     ChatBoxComponent.ignited = false;
   }
 
-  getUserAndStuff(): void {
-    this.userService.getLoggedUser().subscribe(backUser => {
-      this.user = backUser;
-      this.userService.setStatus('INCHAT');
-      this.initChatRoom();
-    });
+  async getUserAndStuff(): Promise<void> {
+		this.user = this.userService.getLoggedUser();
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 121));
+			return this.getUserAndStuff();
+		}
+		else
+			return ;
   }
 
-  async initChatRoom() {
+  async initChatRoom(): Promise<void> {
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 129));
+			return this.initChatRoom();
+		}
     //console.log("ChatBox Init");
     this.id = this.route.snapshot.paramMap.get('roomId');
     if (!this.id && this.user) {
@@ -84,14 +91,15 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     this.imprintRecursive();
   }
 
-  async keepTryingToIdentify(id: string | null) {
+  async keepTryingToIdentify(id: string | null): Promise<void> {
     //console.log("keepTryingToIdentify");
     if (id) {
       const chatRoomTest = this.chatService.roomById(id);
       if (chatRoomTest) {
         this.chatRoom = chatRoomTest;
         this.chatRoom.user = chatRoomTest.user;
-        await new Promise(resolve => setTimeout(resolve, 5234));
+				return ;
+        //await new Promise(resolve => setTimeout(resolve, 1034)); // Not heavy after all.
       }
     }
     await new Promise(resolve => setTimeout(resolve, 234));
@@ -105,29 +113,24 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         this.chatRoom.user
       );
     }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 5357 : 123));
+    await new Promise(resolve => setTimeout(resolve, this.id ? 1657 : 123));
     this.updateRoomRecursive();
   }
+
   async checkAdminRecursive() {
-    if (!this.user) {
-    } else {
-      this.iAmAdmin = this.chatService.isAdmin(this.id, this.user.intraId);
-    }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 5075 : 135));
+		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
+    await new Promise(resolve => setTimeout(resolve, this.id ? 1075 : 135));
     this.checkAdminRecursive();
   }
 
   async getOutOfChatUsers() {
     if (!this.userService.authorized() || !ChatBoxComponent.ignited) {
     } else {
-      this.chatService
-        .getOutOfChatUsers(this.chatRoom.id)
-        .subscribe(outChat => {
-          //console.log(this.uniqueId, "Got out-of-chat users.", outChat);
-          this.usersOutOfChat = outChat;
-        });
-    }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 6447 : 653));
+			let t = this.chatService.getOutOfChatUsers(this.chatRoom.id);
+			if(!this.fun.equalUserArray(t, this.usersOutOfChat))
+				this.usersOutOfChat = t;
+		}
+    await new Promise(resolve => setTimeout(resolve, this.id ? 2047 : 653));
     this.getOutOfChatUsers();
   }
 
@@ -162,15 +165,15 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   emit() {
-    console.log(
-      'Noticed room changed.',
-      'users',
-      this.chatRoom.user,
-      'mutes',
-      this.chatRoom.muted,
-      'blocks',
-      this.chatRoom.blocked
-    );
+//    console.log(
+//      'Noticed room changed.',
+//      'users',
+//      this.chatRoom.user,
+//      'mutes',
+//      this.chatRoom.muted,
+//      'blocks',
+//      this.chatRoom.blocked
+//    );
     this.chatService.roomChanged(this.chatRoom);
   }
 

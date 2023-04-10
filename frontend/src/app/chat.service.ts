@@ -36,12 +36,8 @@ export class ChatService {
   }
 
   async getUser(): Promise<User> {
-    if (ChatService.user && Math.random() > 0.04) return ChatService.user;
-    if (this.userService.getQuickIntraId()) {
-      this.userService.getLoggedUser().subscribe(backUser => {
-        if (backUser) ChatService.user = backUser;
-      });
-    }
+    if (this.userService.getQuickIntraId())
+			ChatService.user = this.userService.getLoggedUser();
     await new Promise(resolve => setTimeout(resolve, 431));
     return this.getUser();
   }
@@ -178,7 +174,9 @@ export class ChatService {
   roomById(roomId?: string): ChatRoom | undefined {
     if (!roomId || !ChatService.allRooms || !ChatService.allRooms.length)
       undefined;
-    for (const room of ChatService.allRooms) if (room.id == roomId) return room;
+    for (const room of ChatService.allRooms)
+			if (room.id == roomId)
+				return room;
     return undefined;
   }
 
@@ -204,18 +202,14 @@ export class ChatService {
     return this.fun.isStringInArray(intraId, room?.user);
   }
 
-  getOutOfChatUsers(roomId?: string): Observable<User[]> {
-    if (!roomId) return of([]);
-    const response = this.userService.getAvailableUsers().pipe(
-      map(result => {
-        const out: User[] = [];
-        for (const user of result)
-          if (!this.userIsInChat(roomId, user.intraId)) out.push(user);
-        result = out;
-        return result;
-      })
-    );
-    return response;
+  getOutOfChatUsers(roomId?: string): User[] {
+    if (!roomId) return [];
+    const avail = this.userService.getAvailableUsers()
+		let out: User[] = [];
+		for (const user of avail)
+			if (!this.userIsInChat(roomId, user.intraId))
+				out.push(user);
+    return out;
   }
 
   testPasswordLink(myPassword: string): string | null {
@@ -226,7 +220,6 @@ export class ChatService {
 
   revokeAdmin(roomId: string | null | undefined, intraId: string) {
     if (!roomId) return;
-    console.log('C2');
     const theRoom = this.roomById(roomId);
     if (!theRoom) return;
     const newAdmin: string[] = [];
@@ -249,12 +242,14 @@ export class ChatService {
   }
 
   isAdmin(roomId?: string | null, intraId?: string): boolean {
-    if (!roomId || !intraId) return false;
-    const room = this.roomById(roomId);
-    if (!room || !room.admin || !room.admin.length) return false;
-    for (const roomIntraId of room.admin)
-      if (intraId == roomIntraId) return true;
-    return false;
+//    if (!roomId || !intraId) return false;
+//    const room = this.roomById(roomId);
+//    if (!room || !room.admin || !room.admin.length) return false;
+//    for (const roomIntraId of room.admin)
+//      if (intraId == roomIntraId) return true;
+//    return false;
+		if (!intraId || !roomId) return false;
+		return this.fun.isStringInArray(intraId, this.roomById(roomId)?.admin);
   }
 
   getMessages() {
@@ -271,7 +266,6 @@ export class ChatService {
 
   isCurrentUserBlockedByRoomId(roomId: string): boolean {
     if (!ChatService.user) return false;
-    console.log('C4');
     const chatRoomTest = this.roomById(roomId);
     if (chatRoomTest)
       return this.isUserBlocked(ChatService.user.intraId, chatRoomTest);

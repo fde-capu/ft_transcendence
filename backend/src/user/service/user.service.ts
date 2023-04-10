@@ -2,30 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
-import { Users, UserDTO } from '../entity/user.entity';
+import { registerResp, UserDTO, TokenDTO } from '../dto/user.dto';
+import { Users } from '../entity/user.entity';
 import { ConfigService } from '@nestjs/config';
-
-export interface TokenDTO {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  refresh_token: string;
-  scope: string;
-  created_at: number;
-}
-
-export interface registerResp {
-  intraId?: string;
-  mfa_enabled?: boolean;
-  mfa_verified?: boolean;
-  newUser?: boolean;
-}
 
 @Injectable()
 export class UserService {
   public static status: Map<string, string> = new Map<string, string>();
   static attendance: Map<string, number> = new Map<string, number>();
   static attOnce?: boolean;
+	private static logOffTimeOut: number = 1000 * 60 * 20; // 20 minutes
 
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
@@ -54,8 +40,7 @@ export class UserService {
     }
 
     await this.updateUser(existUser.intraId, { mfa_verified: false });
-    // Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
-    // Aliás pode desimplementar o registro do mfa_verified na db.
+    // TODO: pode desimplementar o registro do mfa_verified na db (não está em uso).
     return {
       intraId: existUser.intraId,
       mfa_enabled: existUser.mfa_enabled,
@@ -81,8 +66,10 @@ export class UserService {
       .where('intraId = :intraId', { intraId: intraId })
       .execute();
     if (resp.affected === 0) {
-      throw new NotFoundException(); // SomethingWrongException() ..?
+      throw new NotFoundException();
       // TODO: this exception is not been handled and is crashing the server
+			// This happens only if a malicious user tries to update an
+			// unexisten user.
     }
     return resp;
   }
@@ -111,9 +98,9 @@ export class UserService {
       .getMany();
     const out = [];
     for (const u of resp)
-      if (UserService.status.get(u.intraId) != 'OFFLINE') out.push(u);
+      if (UserService.status.get(u.intraId) != 'OFFLINE')
+				out.push(u);
     return this.makeUserDto(out);
-    // TODO: remove main-user from this list.
   }
 
   async getAvailableUsers(): Promise<UserDTO[]> {
@@ -129,7 +116,14 @@ export class UserService {
       )
         out.push(u);
     return this.makeUserDto(out);
-    // TODO: remove main-user from this list.
+  }
+
+  async getAllUsers(): Promise<UserDTO[]> {
+    const resp = await this.userRepository
+      .createQueryBuilder('allUsers')
+      .select()
+      .getMany();
+    return this.makeUserDto(resp);
   }
 
   async getFriends(intraId: string): Promise<UserDTO[]> {
@@ -191,7 +185,7 @@ export class UserService {
     if (!UserService.attendance) return this.checkOnStudents();
     for (const [u, d] of UserService.attendance.entries()) {
       const elapsed = Date.now() - d;
-      if (elapsed > 14999) {
+      if (elapsed > UserService.logOffTimeOut) {
         UserService.attendance.delete(u);
         UserService.status.set(u, 'OFFLINE');
       }

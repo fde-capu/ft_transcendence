@@ -51,6 +51,7 @@ export class UserController {
     @Body() stat: any,
   ) {
     try {
+			console.log(intraId, ">", stat.stat);
       UserService.status.set(intraId, stat.stat);
       return response.status(200).json(stat);
     } catch (e) {
@@ -92,6 +93,16 @@ export class UserController {
   async getOnlineUsers(@Res() response: Response = null): Promise<any> {
     try {
       const resp = await this.userService.getOnlineUsers();
+      return response.status(200).json(resp);
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+
+  @Get('all')
+  async getAllUsers(@Res() response: Response = null): Promise<any> {
+    try {
+      const resp = await this.userService.getAllUsers();
       return response.status(200).json(resp);
     } catch (e) {
       response.status(e.status).json(e.data);
