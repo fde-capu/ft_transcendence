@@ -75,7 +75,6 @@ export class Room {
   public gameTimeout?: NodeJS.Timeout;
   private readonly userService: UserService;
 
-  private readonly userService: UserService
   public constructor(
     public readonly id: string,
     public server: Server,
