@@ -6,7 +6,6 @@ import {
   TeamMatchHistory,
 } from '../entity/match-history.entity';
 import { Users } from 'src/user/entity/user.entity';
-import { UserService } from 'src/user/service/user.service';
 
 export function createMatchHistory(
   mode: GameMode,
@@ -34,7 +33,6 @@ export function createMatchHistory(
     team.score = teamsScore[t.id];
     team.players = t.players.map((p) => {
       const user = new Users();
-      user.score = team.score;
       user.intraId = p.id;
       return user;
     });
