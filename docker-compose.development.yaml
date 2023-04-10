@@ -3,11 +3,8 @@ version: "3.8"
 networks:
   samsara_net:
 
-volumes:
-  database_data:
-  backend_uploads_data:
-
 services:
+
   database:
     container_name: database
     image: postgres:latest
@@ -23,7 +20,7 @@ services:
     networks:
       - samsara_net
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - ./database/pgdata:/var/lib/postgresql/data
     env_file:
       - ./.env
 
@@ -42,14 +39,14 @@ services:
     container_name: backend
     build:
       context: ./backend
-      target: production
+      target: development
     restart: unless-stopped
     networks:
       - samsara_net
+    volumes:
+      - ./backend:/app
     ports:
       - 3000:3000
-    volumes:
-      - backend_uploads_data:/var/tmp/uploads
     env_file:
       - ./.env
     depends_on:
@@ -60,14 +57,13 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-      target: production
-      args:
-        BACKEND_ORIGIN: ${BACKEND_ORIGIN}
+      target: development
     restart: unless-stopped
+    volumes:
+      - ./frontend:/app
     ports:
       - 4200:4200
     env_file:
       - ./.env
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend

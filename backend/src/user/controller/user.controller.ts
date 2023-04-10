@@ -138,7 +138,7 @@ export class UserController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: '/var/tmp/uploads',
         filename(req, file, callback) {
           callback(null, `${randomUUID()}${extname(file.originalname)}`);
         },
@@ -157,7 +157,8 @@ export class UserController {
     )
     file: Express.Multer.File,
   ) {
-    await this.userService.updateProfileImage(payload.sub, file.path);
+    console.log(file);
+    await this.userService.updateProfileImage(payload.sub, file.filename);
     return file;
   }
 }
