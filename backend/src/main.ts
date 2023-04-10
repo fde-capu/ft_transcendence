@@ -1,14 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
-import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
+import * as helmet from 'helmet';
 import { environment } from './environment';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({ origin: environment.FRONTEND_ORIGIN, credentials: true });
   app.use(
+    // @ts-ignore
     helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false }),
   );
   app.use(cookieParser());

@@ -197,10 +197,14 @@ export class UserService {
     UserService.attendance.set(intraId, Date.now());
   }
 
-  async updateProfileImage(intraId: string, imagePath: string) {
+  async updateProfileImage(intraId: string, filename: string) {
     return await this.userRepository.update(
       { intraId },
-      { image: `${this.configService.get('BACKEND_ORIGIN')}/${imagePath}` },
+      {
+        image: `${this.configService.get(
+          'BACKEND_ORIGIN',
+        )}/uploads/${filename}`,
+      },
     );
   }
 }
