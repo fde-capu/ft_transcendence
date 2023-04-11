@@ -42,8 +42,8 @@ import {
     public async handleConnection(client: Socket): Promise<void> {
         console.log("Connected", client.id );
       try {
+        
         const { authorization } = parse(client.handshake.headers.cookie);
-  
         const { sub: subject } = await this.tokenService.inspect(authorization);
         const { name, image } = await this.userService.getUserByIntraId(subject);
         this.queue.push({
@@ -58,13 +58,14 @@ import {
       }
     }
   
-    public handleDisconnect(client: Socket): void {
-        console.log("Disconnected", client.id );
+    public async handleDisconnect(client: Socket): Promise<void> {
+        console.log("Disconnected");
       this.queue = this.queue.filter((user) => user.socket.id !== client.id);
     }
   
     private matchUsers(): void {
       if (this.queue.length >= 2) {
+        console.log("Two users at the queue");
         const user1 = this.queue.shift();
         const user2 = this.queue.shift();
         /* Criar a sala. 

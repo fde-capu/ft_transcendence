@@ -1,24 +1,28 @@
-import { Component } from '@angular/core';
 import { io } from 'socket.io-client';
+import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-find-game',
   templateUrl: './find-game.component.html',
   styleUrls: ['./find-game.component.css']
 })
-export class FindGameComponent {
-  constructor() {
-  }
+export class FindGameComponent implements OnInit {
+  socket: any;
+
   ngOnInit() {
-    const socket = io('ws://localhost:3000/queue'); // Replace with the URL of your queue WebSocket server
-    socket.on('connect', () => {
-      console.log('Connected to queue WebSocket server');
-      // Send a message to the server to join the queue
-      socket.emit('joinQueue', { message: 'Joined the queue' });
+    const socketOptions = {
+      withCredentials: true
+    };
+    this.socket = io('ws://localhost:3000/queue', socketOptions);
+    this.socket.on('connect', () => {
+      console.log('Socket connected');
     });
-    socket.on('disconnect', () => {
-      console.log('Disconnected from queue WebSocket server');
-      // Handle disconnection
+    this.socket.on('disconnect', () => {
+      console.log('Socket disconnected');
     });
+   
   }
 }
+
