@@ -83,7 +83,12 @@ export class AuthService {
           fortyTwo = r;
         }),
         // Get user intraId (called login on 42 api)
-        switchMap((r) => this.fortyTwoService.getUserInfo(r.access_token)),
+        switchMap((r) => {
+          const resp = this.fortyTwoService.getUserInfo(r.access_token);
+          return resp.pipe(re =>{
+            return re
+          })
+        }),
         //store infos in DB
         switchMap((r) => this.userService.registerUserOk42(r)),
         // Create Session Token for the ft_transcendence
