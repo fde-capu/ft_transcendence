@@ -18,7 +18,8 @@ export class FindGameComponent implements OnInit, OnDestroy {
     const socketOptions = {
       withCredentials: true
     };
-    this.socket = io('ws://localhost:3000/queue', socketOptions);
+    const envBackUrl = environment.BACKEND_ORIGIN;
+    this.socket = io(envBackUrl + '/queue', socketOptions);
     this.socket.on('connect', () => {
       console.log('Socket connected');
     });
