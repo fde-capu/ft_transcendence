@@ -16,11 +16,6 @@ import {
   import { ClientSocket, GameMode, User } from '../entity/room.entity';
   import { environment } from 'src/environment';
   
-  interface QueueUser {
-    socket: Socket;
-    username: string;
-    image: string;
-  }
   
   @WebSocketGateway({
     cors: { origin: environment.FRONTEND_ORIGIN, credentials: true },
@@ -31,7 +26,7 @@ import {
     @WebSocketServer()
     server: Server;
   
-    queue: QueueUser[] = [];
+    queue: ClientSocket[] = [];
   
     public constructor(
       private readonly tokenService: TokenService,
@@ -39,18 +34,16 @@ import {
       private readonly roomsService: RoomsService,
     ) {}
   
-    public async handleConnection(client: Socket): Promise<void> {
-        console.log("Connected", client.id );
+    public async handleConnection(client: ClientSocket): Promise<void> {
       try {
         
         const { authorization } = parse(client.handshake.headers.cookie);
         const { sub: subject } = await this.tokenService.inspect(authorization);
         const { name, image } = await this.userService.getUserByIntraId(subject);
-        this.queue.push({
-          socket: client,
-          username: name,
-          image: image,
-        });
+        client.name = name;
+        client.subject = subject;
+        client.image = image;
+        this.queue.push(client);
         this.matchUsers();
       } catch (error) {
         client.emit('game:error', 'You are not authenticated!');
@@ -59,8 +52,9 @@ import {
     }
   
     public async handleDisconnect(client: Socket): Promise<void> {
-        console.log("Disconnected");
-      this.queue = this.queue.filter((user) => user.socket.id !== client.id);
+      this.queue = this.queue.filter((user) => user.id !== client.id);
+      console.log('Remaining users:',  this.queue.map(user => user.id));
+    
     }
   
     private matchUsers(): void {
@@ -68,15 +62,7 @@ import {
         console.log("Two users at the queue");
         const user1 = this.queue.shift();
         const user2 = this.queue.shift();
-        /* Criar a sala. 
-        const roomId = this.roomsService.createRoom(user1.socket.nsp.name, [
-          user1,
-          user2,
-        ]);
-        */
-       //Fazer os usuários entrarem na sala. 
-        //user1.socket.emit('game:room:join', roomId);
-        //user2.socket.emit('game:room:join', roomId);
+        this.roomsService.roomQueueCreate(user1, user2);
       }
     }
   }
