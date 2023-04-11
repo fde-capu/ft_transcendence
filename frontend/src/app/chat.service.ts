@@ -142,11 +142,9 @@ export class ChatService {
   logOutAllRooms(intraId: string) {
     for (const newRoom of ChatService.allRooms) {
       const newUsers: string[] = [];
-			console.log('Revoking', newRoom.id, intraId);
 			this.revokeAdmin(newRoom.id, intraId);
       for (const user of newRoom.user) if (user != intraId) newUsers.push(user);
       if (newUsers.length != newRoom.user.length) {
-				console.log('Got out of', newRoom.id, intraId);
         newRoom.user = newUsers;
 				this.roomChanged(newRoom);
       }
@@ -228,7 +226,7 @@ export class ChatService {
     for (const adminId of theRoom.admin)
       if (adminId != intraId) newAdmin.push(adminId);
     if (!newAdmin.length) {
-      if (theRoom.user && theRoom.user.length <= 0) {
+      if (theRoom.user && theRoom.user.length <= 1) {
         this.removeRoom(roomId);
         this.router.navigate(['/rooms']);
         return;

@@ -99,11 +99,9 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       if (chatRoomTest) {
         this.chatRoom = chatRoomTest;
         this.chatRoom.user = chatRoomTest.user;
-				return ;
-        //await new Promise(resolve => setTimeout(resolve, 1034)); // Not heavy after all.
       }
     }
-    await new Promise(resolve => setTimeout(resolve, 234));
+    await new Promise(resolve => setTimeout(resolve, 1234));
     this.keepTryingToIdentify(id);
   }
 
@@ -309,8 +307,9 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
 	isOwner(intraId?: string): boolean {
+		if (!this.chatRoom.admin) this.chatRoom.admin = [];
 		if (intraId)
-			return this.chatRoom.admin[0] == intraId;
+			return this.chatRoom.admin.length > 0  && this.chatRoom.admin[0] == intraId;
 		return false;
 	}
 
