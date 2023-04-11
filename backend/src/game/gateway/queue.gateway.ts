@@ -56,6 +56,14 @@ import {
       console.log('Remaining users:',  this.queue.map(user => user.id));
     
     }
+
+    @SubscribeMessage('leave:queue')
+    public leaveQueue(@ConnectedSocket() client: ClientSocket): void {
+        console.log("Saiu da fila");
+        this.queue = this.queue.filter((user) => user.id !== client.id);
+        console.log('Remaining users:',  this.queue.map(user => user.id));
+    }
+  
   
     private matchUsers(): void {
       if (this.queue.length >= 2) {

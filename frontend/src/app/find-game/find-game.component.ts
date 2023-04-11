@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 
@@ -9,13 +9,10 @@ import { Router } from '@angular/router';
   templateUrl: './find-game.component.html',
   styleUrls: ['./find-game.component.css']
 })
-export class FindGameComponent implements OnInit {
+export class FindGameComponent implements OnInit, OnDestroy {
   socket: any;
 
-  constructor(
-    private router: Router,
-  )
-  {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     const socketOptions = {
@@ -28,14 +25,19 @@ export class FindGameComponent implements OnInit {
     this.socket.on('game:room:create', (id: string) => {
       console.log(`Room ${id} created!`);
      
-			const link = "/game/" + id;
-			this.router.navigate([link]);
+      const link = "/game/" + id;
+      this.router.navigate([link]);
 
     });
+
     this.socket.on('disconnect', () => {
       console.log('Socket disconnected');
     });
    
   }
-}
 
+  ngOnDestroy() {
+    console.log('Leaving the queue');
+    this.socket.emit('leave:queue');
+  }
+}
