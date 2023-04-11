@@ -1,6 +1,6 @@
 <app-modal [(closed)]="!displayNotification" title="Player found!">
   <div>
-    <span>You are a player in a game that is running</span>
-    <button (click)="roomId && redirectToGameRoom(roomId)">Click here to go to the game room</button>
+    <span>You are playing a game...</span>
+    <button (click)="roomId && redirectToGameRoom(roomId)">Get back to your game!</button>
   </div>
 </app-modal>
