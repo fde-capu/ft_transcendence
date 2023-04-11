@@ -54,18 +54,18 @@ export class RoomComponent implements OnInit, OnDestroy {
       .subscribe(async res => {
 				this.room = res;
 				this.alternateReady = this.thePlayer(this.userId)?.ready;
+				this.pauseCheck();
 				this.cutScene();
 			});
 
     this.roomSocket.emit('game:room:status');
 
-		this.pauseRecursive();
   }
 
-	async pauseRecursive() {
+	pauseCheck() {
+		console.log(this.scene);
+		if (this.room && this.room.inGame && this.room.running) this.scene = "game";
 		this.paused = this.scene == "game" && this.room && this.room.inGame && !this.room.running;
-    await new Promise(resolve => setTimeout(resolve, 333));
-		this.pauseRecursive();
 	}
 
   ngOnDestroy() {
