@@ -74,7 +74,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     // ^ If it is a new room (roomId is null), the route will actualy
     // be deceipt by the ChatService, by consequence the component will
     // reload, and the param roomId will be present.
-    this.keepTryingToIdentify(this.id);
+    this.updateRoomUsers(this.id);
     this.chatRoom = await this.chatService.putUserInRoom(this.chatRoom);
     if (
       this.chatRoom.user &&
@@ -92,8 +92,8 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     this.imprintRecursive();
   }
 
-  async keepTryingToIdentify(id: string | null): Promise<void> {
-    //console.log("keepTryingToIdentify");
+  async updateRoomUsers(id: string | null): Promise<void> {
+    //console.log("updateRoomUsers");
     if (id) {
       const chatRoomTest = this.chatService.roomById(id);
       if (chatRoomTest) {
@@ -102,7 +102,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       }
     }
     await new Promise(resolve => setTimeout(resolve, 1234));
-    this.keepTryingToIdentify(id);
+    this.updateRoomUsers(id);
   }
 
   async updateRoomRecursive(): Promise<void> {

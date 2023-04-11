@@ -160,8 +160,6 @@
 						</a>
 					</td>
 					<td class="button-box">
-						<span *ngIf="isOwner(user.intraId)"><-[ Owner ]</span>
-						<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
 						<button
 							*ngIf="!isBlocked(user) && !isMe(user.intraId)"
 							style="margin-left: 0"
