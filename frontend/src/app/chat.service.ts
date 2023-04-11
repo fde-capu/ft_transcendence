@@ -143,10 +143,12 @@ export class ChatService {
     for (const i in ChatService.allRooms) {
       const newRoom: ChatRoom = ChatService.allRooms[i];
       const newUsers: string[] = [];
+			let changed: boolean = false;
       for (const user of newRoom.user) if (user != intraId) newUsers.push(user);
       if (newUsers.length != newRoom.user.length) {
         newRoom.user = newUsers;
-        this.roomChanged(newRoom);
+				this.roomChanged(newRoom);
+				this.revokeAdmin(newRoom.id, intraId);
       }
     }
   }
@@ -226,7 +228,7 @@ export class ChatService {
     for (const adminId of theRoom.admin)
       if (adminId != intraId) newAdmin.push(adminId);
     if (!newAdmin.length) {
-      if (theRoom.user && theRoom.user.length <= 1) {
+      if (theRoom.user && theRoom.user.length <= 0) {
         this.removeRoom(roomId);
         this.router.navigate(['/rooms']);
         return;
