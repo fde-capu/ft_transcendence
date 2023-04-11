@@ -26,6 +26,7 @@ import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
 import { InviteModule } from './invitation.module';
 import { GameModule } from './game/game.module';
+import { FindGameComponent } from './find-game/find-game.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { GameModule } from './game/game.module';
     BlocksListComponent,
     UserBarComponent,
     StatisticsComponent,
+    FindGameComponent,
   ],
   imports: [
     BrowserModule,
