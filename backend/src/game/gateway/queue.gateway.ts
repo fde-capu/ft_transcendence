@@ -40,6 +40,7 @@ import {
     ) {}
   
     public async handleConnection(client: Socket): Promise<void> {
+        console.log("Connected", client.id );
       try {
         const { authorization } = parse(client.handshake.headers.cookie);
   
@@ -58,6 +59,7 @@ import {
     }
   
     public handleDisconnect(client: Socket): void {
+        console.log("Disconnected", client.id );
       this.queue = this.queue.filter((user) => user.socket.id !== client.id);
     }
   
