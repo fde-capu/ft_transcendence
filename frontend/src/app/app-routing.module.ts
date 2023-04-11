@@ -10,6 +10,7 @@ import { ChatRoomListComponent } from './chat-room-list/chat-room-list.component
 import { AvatarComponent } from './avatar/avatar.component';
 import { CreateMatchComponent } from './create-match/create-match.component';
 import { LogOutComponent } from './log-out/log-out.component';
+import { FindGameComponent } from './find-game/find-game.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
     path: 'profile',
     canActivate: [AuthGuard],
     component: ProfileComponent,
+  },
+  {
+    path: 'findgame',
+    canActivate: [AuthGuard],
+    component: FindGameComponent,
   },
   {
     path: 'online',
