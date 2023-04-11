@@ -127,7 +127,7 @@
 								Mute
 							</button>
 							<button *ngIf="isMuted(user)" disabled>MUTED</button>
-							<button (click)="promoteThem(user)" *ngIf="!isAdmin(user.intraId)">Promote</button>
+							<button (click)="promoteThem(user)" *ngIf="iAmOwner && !isAdmin(user.intraId)">Promote</button>
 						</span>
 						<span *ngIf="isOwner(user.intraId)" class='flag vga-bow'>[ Owner ]</span>
 						<span *ngIf="isAdmin(user.intraId)" class='flag vga-bow'>[ Administrator ]</span>
