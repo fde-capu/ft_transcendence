@@ -1,0 +1,11 @@
+div
+{
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+p{
+
+    margin-top: 200px;
+    text-align: center;
+}
