@@ -22,7 +22,7 @@ export class FortyTwoService {
     private readonly httpService: HttpService,
   ) {
     this.clientId = configService.get<string>('API42_CLIENT_ID');
-    this.redirectUrl = configService.get<string>('API42_REDIRECT_URL');
+    this.redirectUrl = `${configService.get<string>('BACKEND_ORIGIN')}/auth/callback`;
     this.clientSecret = configService.get<string>('API42_CLIENT_SECRET');
   }
 

@@ -8,6 +8,7 @@ export interface User {
   connected: boolean;
   id: string;
   name: string;
+	image: string;
 }
 
 export type Player = User & { ready: boolean };

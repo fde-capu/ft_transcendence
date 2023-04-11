@@ -1,23 +1,24 @@
-FROM node:lts-slim AS development
-RUN apt-get update && apt-get install -y curl
-HEALTHCHECK --interval=15s --timeout=2s --retries=2 --start-period=30s \
-    CMD curl http://localhost:4200 || exit 1
+FROM node:lts AS development
 WORKDIR /app
-ENTRYPOINT ["bash", "-c", "npm ci && npm run start:dev"]
+RUN apt-get update && \
+    apt-get install -y gettext-base
+ENTRYPOINT ["bash", "-c", "envsubst < ./src/environments/environment.ts > ./src/environments/environment.development.ts && npm run start:dev"]
 
 FROM node:lts-slim AS build
+ARG BACKEND_ORIGIN
 COPY . /build
 WORKDIR /build
-RUN npm ci
-RUN npm run build
-RUN npm prune --omit=dev
-RUN npm run start:prod
+RUN apt-get update && \
+    apt-get install -y gettext-base && \
+    envsubst \
+    < ./src/environments/environment.ts \
+    > ./src/environments/environment.production.ts && \
+    npm i && npm run build && npm prune --omit=dev
 
 FROM nginx:stable-alpine AS production
-RUN apt-get update && apt-get install -y curl
+RUN apk update && \
+    apk add curl
 COPY --from=build ./build/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build ./build/dist/frontend /usr/share/nginx/html
-HEALTHCHECK --interval=15s --timeout=2s --retries=2 --start-period=5s \
+HEALTHCHECK --interval=15s --timeout=5s --retries=2 --start-period=10s \
     CMD curl http://localhost:4200 || exit 1
-
-#EXPOSE 4200

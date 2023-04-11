@@ -9,9 +9,12 @@
 	white-space: normal;
 	min-width: unset;
 	list-style-type: none;
-	margin: 0px 0px 2px -16px;
+	margin: 0 auto;
 	display: inline-block;
+	border: none;
 	border-bottom: 4px dashed var(--color-border);
+	max-width: var(--base-normal-width);
+	width: 100%;
 }
 .user-name-small {
 	font-size: var(--font-small);
@@ -23,6 +26,5 @@
 }
 .avatar-float {
 	float: left;
-	margin-bottom: -1em;
-	margin-right: 8px;
+	margin: 0.5em 1em 1em 0em;
 }

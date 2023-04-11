@@ -37,9 +37,7 @@ export class ChatInputComponent implements OnInit, OnChanges {
   }
 
   getUser(): void {
-    this.userService.getLoggedUser().subscribe(user => {
-      this.user = user;
-    });
+		this.user = this.userService.getLoggedUser();
   }
 
   send(event: Event) {

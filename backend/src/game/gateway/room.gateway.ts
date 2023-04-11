@@ -40,12 +40,12 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const { sub: subject } = await this.tokenService.inspect(authorization);
       client['subject'] = subject;
 
-      const { name } = await this.userService.getUserByIntraId(subject);
+      const { name, image } = await this.userService.getUserByIntraId(subject);
       client['name'] = name;
-
+			client['image'] = image;
       client['roomId'] = client.nsp.name.match(/rooms\/(?<id>.+)/).groups['id'];
       if (!this.roomsService.rooms[client['roomId']]) {
-        client.emit('game:error', 'Room does not exist');
+        client.emit('game:error', 'Room does not exist.');
         client.disconnect();
         return;
       }

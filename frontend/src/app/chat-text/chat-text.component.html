@@ -1,12 +1,24 @@
 <div *ngIf="chatMessage && chatMessage.length" class="chat-text scroller">
   <ul>
     <li *ngFor="let chatLine of chatMessage" class="chat-line">
-      <app-avatar [user]="chatLine.user" class="avatar-float"></app-avatar>
-      <span *ngIf="chatLine.user" class="user-name-small hover_invert">
-        {{ chatLine.user.intraId }} | {{ chatLine.user.name }}</span
+      <app-avatar [user]="chatLine.user" [dummy]="true" class="avatar-float"></app-avatar>
+      <a *ngIf="chatLine.user" class="user-name-small hover_invert"
+				(click)='goToProfile(chatLine.user.intraId)'
+			>
+        {{ chatLine.user.intraId }} | {{ chatLine.user.name }}</a
       >
-      <span class="small">:</span>
-      {{ chatLine.message }}
+			<app-u2u-actions
+				[user]='chatLine.user'
+				[isFriend]='isFriend(chatLine.user)'
+				[isBlock]='isBlock(chatLine.user)'
+				[amIBlocked]='amIBlocked(chatLine.user)'
+				[singleline]='true'
+				[tinyForChat]='true'
+			></app-u2u-actions>
+
+      <div class="small">
+				{{ chatLine.message }}
+			</div>
     </li>
   </ul>
 </div>

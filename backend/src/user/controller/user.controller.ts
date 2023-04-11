@@ -51,6 +51,7 @@ export class UserController {
     @Body() stat: any,
   ) {
     try {
+			console.log(intraId, ">", stat.stat);
       UserService.status.set(intraId, stat.stat);
       return response.status(200).json(stat);
     } catch (e) {
@@ -98,6 +99,16 @@ export class UserController {
     }
   }
 
+  @Get('all')
+  async getAllUsers(@Res() response: Response = null): Promise<any> {
+    try {
+      const resp = await this.userService.getAllUsers();
+      return response.status(200).json(resp);
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+
   @Get('available')
   async getAvailableUsers(@Res() response: Response = null): Promise<any> {
     try {
@@ -138,7 +149,7 @@ export class UserController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: '/var/tmp/uploads',
         filename(req, file, callback) {
           callback(null, `${randomUUID()}${extname(file.originalname)}`);
         },
@@ -157,7 +168,8 @@ export class UserController {
     )
     file: Express.Multer.File,
   ) {
-    await this.userService.updateProfileImage(payload.sub, file.path);
+    console.log(file);
+    await this.userService.updateProfileImage(payload.sub, file.filename);
     return file;
   }
 }

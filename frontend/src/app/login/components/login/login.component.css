@@ -1,3 +1,8 @@
 input {
 	width: 255px;
 }
+.loginMessage {
+	max-width: 255px;
+	white-space: break-spaces;
+	text-align: left;
+}

@@ -14,12 +14,9 @@ export class LoginComponent {
 	step_one: Boolean = false;
 	step_two: Boolean = false;
 	authOk: Boolean = false;
-
-  // TODO: Remove it. It is only here for tests proposes.
-  // If you want to generate the code use this.authService.getChallenge()
-  public challengeUri?: string;
-
+	public challengeUri?: string;
   message?: string;
+  initialMessage?: string;
 
   constructor(
     private userService: UserService,
@@ -40,16 +37,19 @@ export class LoginComponent {
 				//console.log("Login authorized with MFA.");
 				if (this.router.url.indexOf("/login") == 0)
 					this.router.navigate(['/']);
+				else
+					this.router.navigate([this.router.url]);
 			}
 			this.step_two = true;
 		}
-    },
+	  },
     });
 
 	this.authService.getChallenge().subscribe({
 		next: secret => {
 			this.challengeUri = secret;
-			this.message = "Please open Google/Microsoft Authenticator and type in the code.";
+			this.initialMessage = "Please open Google/Microsoft Authenticator and type in the code.";
+			this.message = this.initialMessage;
 		},
 		error: () => {
 			console.log("Subscription went wrong!");
@@ -62,7 +62,6 @@ export class LoginComponent {
 			this.step_two = true;
 	}
 
-
   signIn() {
     this.authService.signIn();
   }
@@ -71,20 +70,19 @@ export class LoginComponent {
     this.authService.solveChallenge(form.value.code).subscribe({
       next: () => {
         this.message = 'Nicely done!';
-		this.authOk = true;
+				this.authOk = true;
       },
       error: () => {
-        this.message += ' [' + form.value.code + ']?? Yikes! Wrong code, bud!';
+        this.message = this.initialMessage + ' [' + form.value.code + ']?? Yikes! Wrong code, bud!';
       },
     });
   }
 
   saveAuth(intraId: string) {
-	this.userService.getUserById(intraId).subscribe(_=>{
-		if (!_ || (!!_ && !!_.mfa_enabled)) return;
-		_.mfa_enabled = true;
-		this.userService.saveUser(_).subscribe();
-	});
+		const u = this.userService.getUser(intraId);
+		if (!u || (!!u && !!u.mfa_enabled)) return;
+		u.mfa_enabled = true;
+		this.userService.saveUser(u).subscribe();
   }
 
   signOut() {
@@ -92,4 +90,8 @@ export class LoginComponent {
     this.step_two = false;
     this.step_one = true;
   }
+
+	cancel() {
+		this.router.navigate([this.router.url]);
+	}
 }

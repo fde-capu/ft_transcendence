@@ -16,6 +16,7 @@ export class U2uActionsComponent implements OnChanges {
   @Input() caption?: boolean;
   @Input() singleline?: boolean;
   @Input() amIBlocked?: boolean;
+	@Input() tinyForChat?: boolean;
   isMe?: boolean;
   availability?: boolean;
 

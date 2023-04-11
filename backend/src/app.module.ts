@@ -4,17 +4,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PingController } from './ping/ping.controller';
 import { Users } from './user/entity/user.entity';
 import { MatchHistory } from './game/entity/match-history.entity';
-import { QRSecret } from './auth/qrsecret-entity';
+import { QRSecret } from './auth/entity/qrsecret-entity';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
-import { ChatService } from './chat/chat.service';
-import { ChatController } from './chat/chat.controller';
+import { ChatService } from './chat/service/chat.service';
+import { ChatController } from './chat/controller/chat.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { TokenParserMiddleware } from './auth/middleware/token-parser.middleware';
 import { FortyTwoModule } from './forty-two/forty-two.module';
 import { InvitationGateway } from './invite/invite.gateway';
-import { ChatGateway } from './chat/chat.gateway';
+import { ChatGateway } from './chat/gateway/chat.gateway';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -27,11 +27,11 @@ import { join } from 'path';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: +configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
+        host: configService.get('POSTGRES_HOST'),
+        port: +configService.get<number>('POSTGRES_PORT'),
+        username: configService.get('POSTGRES_USER'),
+        password: configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('POSTGRES_DB'),
         entities: [Users, MatchHistory, QRSecret],
         autoLoadEntities: true,
         synchronize: true,
@@ -42,7 +42,7 @@ import { join } from 'path';
     FortyTwoModule,
     GameModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: '/var/tmp/uploads',
       serveRoot: '/uploads',
     }),
   ],

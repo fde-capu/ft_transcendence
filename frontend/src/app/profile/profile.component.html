@@ -1,17 +1,21 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
+
 <h1>{{ profileType }}<span *ngIf='!amIBlocked'> Profile</span></h1>
-<div *ngIf='!amIBlocked; else spying'>
-	<div *ngIf="displayUser; else user_unknown" style='margin-bottom: 0em;'>
+
+<div *ngIf='!amIBlocked; else spying' class='box'>
+	<div *ngIf="displayUser; else user_unknown">
+
 		<div class='opt-box' *ngIf="owner">
 			<div class='options'>
-				<label class='left'>name
+				<label class='left'>
+			change name
 				</label>
-				<input id="name" [(ngModel)]="displayUser.name" class='middle'
-					(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName();"
+				<textarea id="name" [(ngModel)]="displayUser.name" class='middle hover_invert'
+					(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName(); setEditing();"
 					(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
 					(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
-				/>
+				></textarea>
 				<div *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;
 				</div>
 				<button *ngIf='!invalidNameNotice' id="nameButton" type="button" class='right' (click)=
@@ -21,6 +25,9 @@
 			</div>
 
 			<div class='options'>
+				<label class='left'>
+			change image
+				</label>
 				<div class="small-profile-image hover_invert"
 					style="background-image:url('{{ displayUser.image }}'); background-size: cover; overflow: hidden;">
 				</div>
@@ -30,17 +37,28 @@
 			</div>
 
 			<div class='options'>
-				<label>2FA
+				<label>
+			2FA
 				</label>
-				<span>
 					<div *ngIf="displayUser.mfa_enabled">
-						ACTIVE<br><a (click)="switchMfa();">[ DEACTIVATE ]</a>
+						<div class='centered'>
+							ACTIVE
+						</div>
+						<br>
+						<div>
+							<button (click)="switchMfa();">Deactivate</button>
+						</div>
 					</div>
 					<div *ngIf="!displayUser.mfa_enabled">
-						OFF<br><a (click)="switchMfa();">[ ACTIVATE ]</a>
+						<div class='centered'>
+							OFF
+						</div>
+						<br>
+						<div>
+							<button (click)="switchMfa();">Activate</button>
+						</div>
 					</div>
-				</span>
-				<app-login *ngIf='mfaOpened' [stepActivate]='true'>
+				<app-login class='overall' *ngIf='mfaOpened' [stepActivate]='true'>
 				</app-login>
 			</div>
 		</div>
@@ -65,22 +83,23 @@
 		<app-friends-list [user]="displayUser"></app-friends-list>
 		<app-blocks-list *ngIf="owner" [user]="displayUser"></app-blocks-list>
 		<app-statistics [user]="displayUser"></app-statistics>
-		<app-ladder [user]="user" [them]="displayUser"></app-ladder>
 		<app-history [user]="displayUser"></app-history>
 	</div>
 </div>
 
-<ng-template #user_unknown> User: unknown.
+<ng-template #user_unknown>
+User: unknown.
 </ng-template>
 
 <ng-template #spying>
-  <div *ngIf="displayUser">
+  <div *ngIf="displayUser" class='info box'>
     <div
       class="profile-image hover_invert"
       style="background-image: url('{{ displayUser.image }};'); background-size: cover; overflow: hidden;">
 	</div>
-    <br />
+		<div>
     {{ displayUser.intraId }}
+		</div>
     <app-u2u-actions
       *ngIf="!owner"
       [isFriend]="isFriend"

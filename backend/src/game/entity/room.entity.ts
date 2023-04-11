@@ -7,7 +7,7 @@ import { createMatchHistory } from '../util/game-data-to-match-history.converter
 import { UserService } from 'src/user/service/user.service';
 import { Users } from 'src/user/entity/user.entity';
 
-export type ClientSocket = Socket & { subject: string; name: string };
+export type ClientSocket = Socket & { subject: string; name: string, image: string };
 
 export enum GameMode {
   PONG = 0,
@@ -21,10 +21,11 @@ export class User {
   public constructor(
     public readonly id: string,
     public readonly name: string,
+		public readonly image: string,
   ) {}
 
   public static from(client: ClientSocket): User {
-    return new User(client['subject'], client['name']);
+    return new User(client['subject'], client['name'], client['image']);
   }
 }
 
@@ -32,7 +33,7 @@ export class Player extends User {
   public ready = false;
 
   public static from(user: User): Player {
-    return new Player(user.id, user.name);
+    return new Player(user.id, user.name, user.image);
   }
 }
 
@@ -50,6 +51,9 @@ export class Team {
 }
 
 export class Room {
+
+	private static matchDuration: number = 1000 * 100;
+
   private readonly logger: Logger;
 
   public teams: Array<Team> = [];
@@ -161,7 +165,7 @@ export class Room {
       () => {
         if (!found.connected) this.leave(user);
       },
-      this.inGame ? 5000 : 1000,
+      this.inGame ? 1000 * 60 * 2 : 1000,
     );
   }
 
@@ -216,7 +220,7 @@ export class Room {
     }
   }
 
-  public start(): void {
+  public async start() {
     switch (this.mode) {
       case GameMode.PONG:
         this.game = new Pong();
@@ -244,16 +248,16 @@ export class Room {
         };
         break;
     }
+
     this.game.reset();
-
-    setTimeout(() => {
-      this.resume();
-    }, 1000);
-
     this.inGame = true;
-
+		this.pause();
     this.server.emit('game:room:status', hideCircular(this));
+
     this.service.listNonEmptyRooms();
+
+    await new Promise(resolve => setTimeout(resolve, 3000));
+		this.resume();
   }
 
   private pause(): void {
@@ -274,7 +278,7 @@ export class Room {
     if (!this.gameTimeout)
       setTimeout(() => {
         this.finish();
-      }, 100000);
+      }, Room.matchDuration);
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
@@ -314,6 +318,13 @@ export class Room {
 
     match = await this.service.historyService.saveMatchHistory(match);
     this.logger.log(`Match finished: ${match.id}`);
+
+		console.log("finish():", match);
+
+//	Not working:
+//    const user = await this.userService.getAllUsers();
+//      console.log(user);
+		// GREAT, THANKS!
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();

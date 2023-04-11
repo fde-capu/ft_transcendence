@@ -1,0 +1,33 @@
+<section *ngIf='maxScore'>
+<h2>
+  Ladder
+</h2>
+  <button (click)="showMyself()">
+    Check <span *ngIf='isMe'>Your </span>Position
+  </button>
+<div class="podium" id="ladderView">
+  <div class="tower" *ngFor="let u of ladder"
+		style="height:{{myHeight(u.score)}}px;">
+    <div style="height: 2em; text-align: center">
+      <span *ngIf="u.intraId === userId" id="focusMe">
+				<span *ngIf='isMe'>YOU</span>
+				<span *ngIf='!isMe'>USER</span>
+			</span>
+      <br />
+      {{ u.position }}
+    </div>
+    <app-avatar
+      [user]="u"
+			[dummy]="true"
+			></app-avatar>
+    <span class="score">{{ u.score | number : '2.0-0' }}</span>
+    <div class="pit">
+      <div class="vertical">
+        {{ u.intraId }}
+        <br />
+        {{ u.name }}
+      </div>
+    </div>
+  </div>
+</div>
+</section>

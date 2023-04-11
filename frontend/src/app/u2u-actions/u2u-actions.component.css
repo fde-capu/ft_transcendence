@@ -1,8 +1,8 @@
-.singleline {
-display: inline-flex;
-    flex-wrap: wrap;
-    align-items: baseline;
+.box {
 }
+.singleline {
+}
+
 .singleline button {
 	display: inline-flex;
 }
@@ -11,8 +11,22 @@ display: inline-flex;
 	width: fit-content;
 	max-width: fit-content;
 	min-width: fit-content;
-	margin: 0;
 	padding: 0 0.5em;
-	display: block;
-	break-after: always;
+	display: inline-flex;
+	margin-right: 0.5em;
 }
+button {
+	margin-left: -0.5em;
+}
+
+.tinyForChat {
+	font-size: var(--font-small);
+	display: inline-flex;
+	flex-direction: row;
+	align-items: baseline;
+}
+
+.tyleForChat button {
+	display: inline;
+}
+

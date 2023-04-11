@@ -1,0 +1,69 @@
+version: "3.8"
+
+networks:
+  samsara_net:
+
+services:
+
+  database:
+    container_name: database
+    image: postgres:latest
+    restart: unless-stopped
+    healthcheck:
+      test: 
+        - "CMD-SHELL"
+        - "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - samsara_net
+    volumes:
+      - ./database/pgdata:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    networks:
+      - samsara_net
+    depends_on:
+      database:
+        condition: service_healthy
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      target: development
+    restart: unless-stopped
+    networks:
+      - samsara_net
+    volumes:
+      - ./backend:/app
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
+    depends_on:
+      database:
+        condition: service_healthy
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      target: development
+    restart: unless-stopped
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 4200:4200
+    env_file:
+      - ./.env
+    depends_on:
+      - backend

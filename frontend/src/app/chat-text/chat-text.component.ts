@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ChatMessage } from '../chat-message';
 import { ChatService } from '../chat.service';
 import { ChatRoom } from '../chat-room';
+import { User } from '../user';
+import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat-text',
@@ -13,7 +16,11 @@ export class ChatTextComponent implements OnInit {
 
   @Input() room: ChatRoom = {} as ChatRoom;
 
-  constructor(public chatService: ChatService) {}
+  constructor(
+		public chatService: ChatService,
+		public userService: UserService,
+		public router: Router,
+	) {}
 
   ngOnInit() {
     this.chatService.messageList.subscribe(msg => {
@@ -22,4 +29,21 @@ export class ChatTextComponent implements OnInit {
       }
     });
   }
+
+	isFriend(u: User) {
+    return this.userService.isFriend(u);
+	}
+
+	isBlock(u: User) {
+    return this.userService.isBlock(u);
+	}
+
+	amIBlocked(u: User) {
+    return this.userService.amIBlocked(u);
+	}
+
+	goToProfile(u: string) {
+		this.router.navigate(['/profile/' + u]);
+	}
+
 }

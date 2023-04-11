@@ -41,13 +41,13 @@ export class ChatRoomListComponent implements OnInit {
     this.getChatRooms();
   }
 
-	getCurrentUser(): void {
-		this.userService.getLoggedUser()
-			.subscribe(user => {
-				this.user = user;
-				this.userService.setStatus("ONLINE");
-				this.getChatRooms();
-			});
+	async getCurrentUser() {
+		this.user = this.userService.getLoggedUser();
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 101));
+			this.getCurrentUser();
+		}
+		this.getChatRooms();
 	}
 
   isCurrentUserBlocked(room: ChatRoom): boolean {
@@ -67,15 +67,8 @@ export class ChatRoomListComponent implements OnInit {
           ? ' [ !!! YOU ARE BLOCKED !!! ] '
           : ' [ !!! WRONG !!! ]';
         this.password.set(room.id, message);
-        this.fun.blink('pass' + room.id);
-        this.fun.blink('btn' + room.id);
-        await new Promise(resolve => setTimeout(resolve, 342));
-        this.fun.blink('pass' + room.id);
-        this.fun.blink('btn' + room.id);
-        await new Promise(resolve => setTimeout(resolve, 342));
-        this.fun.blink('pass' + room.id);
-        this.fun.blink('btn' + room.id);
-        await new Promise(resolve => setTimeout(resolve, 342));
+        this.fun.blink3('pass' + room.id);
+        await this.fun.blink3('btn' + room.id);
         this.password.set(room.id, '');
         this.fun.focus('pass' + room.id);
         return;

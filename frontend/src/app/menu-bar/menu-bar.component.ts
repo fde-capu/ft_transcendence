@@ -10,6 +10,7 @@ import { UserService } from '../user.service';
 export class MenuBarComponent implements OnInit {
   user?: User;
   menuOpen = false;
+	waiting: boolean = true;
 
   constructor(private userService: UserService) {}
 
@@ -19,9 +20,15 @@ export class MenuBarComponent implements OnInit {
 
   async getUser(): Promise<void> {
     this.user = UserService.currentUser;
-    await new Promise(resolve => setTimeout(resolve, this.user ? 7989 : 42));
+		this.waiting = !this.waiting ? false : !!!this.user;
+		// ^ SOLUTION: Because UserService.currentUser arrives
+		//	 quickly before UserService.all, we can open the
+		//	 screen much faster, and leave it opened.
+    await new Promise(resolve => setTimeout(resolve, 143));
     this.getUser();
   }
+	// ^ The "waiting" screen will be up until
+	//	 menu-bar knows the current User.
 
   onClickBurger(): void {
     this.menuOpen = !this.menuOpen;

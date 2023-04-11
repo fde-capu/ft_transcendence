@@ -3,39 +3,41 @@
 	overflow-x: auto;
 	overflow-y: auto;
 	flex-direction: row;
-	justify-content: flex-start;
+	justify-content: left;
+	margin: auto;
 	margin-bottom: 1em;
 	align-items: flex-end;
 	background: rgb(73,73,73);
 	background: linear-gradient(0deg, rgba(73,73,73,1) 0%, rgba(65,65,65,0) 100%);
-	width: fit-content;
 	max-width: var(--base-normal-width);
+	min-width: var(--base-minimal-width);
 	padding: 0 0 1em 0;
 	border-radius: 0.25em;
+	font-size: var(--font-medium);
+	position: relative;
+	height: 500px;
 }
 
 .tower {
-	width: 72px;
+	margin-right: 4px;
 	display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+	flex-direction: column;
+	justify-content: flex-end;
 	align-items: center;
-	margin: 0 0 0 .5em;
 }
 
 .pit {
 	background: #666666;
 	background: #666666;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 	overflow: hidden;
+	height: 100%;
 }
 
 .score {
-	z-index: 97;
-	font-size: 66.666%;
+/*	z-index: 97; // why? */
 }
 
 .yourself {
@@ -45,8 +47,14 @@
 }
 
 .vertical {
-    transform: rotate(-90deg);
-    transform-origin: bottom left;
-    margin-left: 2em;
-    margin-bottom: 0.25em;
+	transform-origin: bottom left;
+	position: relative;
+	margin-bottom: 0.25em;
+	font-size: var(--font-x-small);
+	width: 56px;
+	position: relative;
+}
+
+button {
+	margin: auto;
 }

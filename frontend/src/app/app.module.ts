@@ -21,7 +21,6 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
 import { BlocksListComponent } from './blocks-list/blocks-list.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { StatisticsComponent } from './statistics/statistics.component';
-import { LadderComponent } from './ladder/ladder.component';
 import { MenuBarModule } from './menu-bar/menu-bar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
@@ -47,14 +46,13 @@ import { GameModule } from './game/game.module';
     BlocksListComponent,
     UserBarComponent,
     StatisticsComponent,
-    LadderComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     AuthModule,
-	LoginModule,
+		LoginModule,
     FormsModule,
     MenuBarModule,
     AvatarModule,

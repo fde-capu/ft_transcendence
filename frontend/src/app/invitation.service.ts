@@ -12,7 +12,6 @@ import { RoomsService } from './game/components/rooms/rooms.service';
   providedIn: 'root',
 })
 export class InvitationService {
-  user?: User;
   receiveScreen = false;
   friendScreen = false;
   declineScreen = false;
@@ -30,52 +29,45 @@ export class InvitationService {
     private readonly userService: UserService,
 		private readonly roomsService: RoomsService,
   ) {
-    this.getUser();
     this.doSubscription();
-  }
-
-  getUser(): void {
-    this.userService.getLoggedUser().subscribe(backUser => {
-      this.user = backUser;
-    });
   }
 
   doSubscription() {
     this.getInvitation().subscribe(_ => {
       if (
-        _.payload.to == this.user?.intraId ||
-        _.payload.from == this.user?.intraId
+        _.payload.to == UserService.currentIntraId ||
+        _.payload.from == UserService.currentIntraId
       ) {
         this.sentScreen =
-          _.payload.from == this.user?.intraId && !_.payload.isReply;
+          _.payload.from == UserService.currentIntraId && !_.payload.isReply;
 
         this.receiveScreen =
-          _.payload.to == this.user?.intraId &&
+          _.payload.to == UserService.currentIntraId &&
           !_.payload.isReply &&
           !_.payload.note &&
           _.payload.type != this.friendshipRequestString;
 
         this.friendScreen =
-          _.payload.to == this.user?.intraId &&
+          _.payload.to == UserService.currentIntraId &&
           !_.payload.isReply &&
           !_.payload.note &&
           _.payload.type == this.friendshipRequestString;
 
         this.declineScreen =
-          _.payload.from == this.user?.intraId &&
+          _.payload.from == UserService.currentIntraId &&
           _.payload.isReply &&
           !_.payload.answer &&
           !_.payload.note;
 
         this.acceptScreen =
-          _.payload.from == this.user?.intraId &&
+          _.payload.from == UserService.currentIntraId &&
           _.payload.isReply &&
           _.payload.answer &&
           !_.payload.instantaneous &&
           !_.payload.note;
 
         if (
-          _.payload.from == this.user?.intraId &&
+          _.payload.from == UserService.currentIntraId &&
           _.payload.isReply &&
           _.payload.answer &&
           _.payload.instantaneous &&
@@ -84,7 +76,7 @@ export class InvitationService {
           return this.go(_.payload.route);
 
         this.notificationScreen =
-          _.payload.to == this.user?.intraId && !!_.payload.note;
+          _.payload.to == UserService.currentIntraId && !!_.payload.note;
 
         InvitationService.inviteState.next({
           receiveScreen: this.receiveScreen,
