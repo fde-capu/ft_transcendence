@@ -1,8 +1,4 @@
 * {
-  border: 0;
-  padding: 0;
-  width: auto;
-	white-space: normal;
 	max-width: var(--base-normal-width);
 }
 
@@ -70,7 +66,6 @@
 fieldset {
   display: flex;
   flex-direction: column;
-
   border: var(--border-extra);
   padding: 1rem;
 	width: fit-content;
@@ -81,19 +76,11 @@ caption, h1, h2, h3, h4 {
   margin-bottom: 1rem;
 }
 
-@media (min-width: 770px) {
-	.take-me-out {
-		position: absolute;
-		left: 1em;
-		top: 3.6em;
-		opacity: 0.7;
-	}
-}
-
-@media (max-width: 770px) {
-	.take-me-out {
-		display: none;
-	}
+.take-me-out {
+	position: absolute;
+	left: 1em;
+	top: 3.6em;
+	opacity: 0.7;
 }
 
 table td {
@@ -111,6 +98,11 @@ h3 {
 select {
 	margin-left: 0.5em;
 	margin-right: 0.5em;
+	width: 200px;
+}
+
+hr {
+	width: 50px;
 }
 
 .player_name {
@@ -120,12 +112,6 @@ select {
 	font-size: var(--font-large);
 	line-height: 0.7em;
 }
-
-fieldset button {
-	margin: 0 auto;
-}
-
-
 
 .game-avatar {
 	filter: grayscale(100%);
@@ -165,6 +151,7 @@ fieldset button {
 
 .ready-button {
 	padding: 2em;
+	margin: 0.5em;
 }
 
 .ready-blinker {

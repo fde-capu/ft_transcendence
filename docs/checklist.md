@@ -1,6 +1,11 @@
 ft_transcendence
 Checklist based on sub. 12.1
 
+Issue #83 notes:
+ - [ ] Lack of PAUSE screen.
+ - [ ] When the first user leaves game, they don't leave the room.. (?)
+
+
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] Login is kindda slow, is it some wrong timer?
  - [ ] Check if updates are not messing up form editions.

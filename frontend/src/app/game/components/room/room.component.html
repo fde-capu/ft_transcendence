@@ -1,8 +1,15 @@
-<app-menu-bar></app-menu-bar>
-<app-invitation-screen></app-invitation-screen>
+<app-menu-bar *ngIf="!!room && !room.inGame"></app-menu-bar>
+<app-invitation-screen *ngIf="!!room && !room.inGame"></app-invitation-screen>
+
 <main id="container">
   <section id="content" *ngIf="!room">
     <p class='blinker'>Loading...</p>
+  </section>
+  <section class="overall" *ngIf="paused">
+    <span class='blinker'>PAUSED</span>
+		<hr>
+		Someone is away.<br>
+		Wait until they come back.
   </section>
   <section id="content" *ngIf="!!room && !room.inGame">
     <header>
@@ -11,18 +18,19 @@
     <article *ngIf='userId == room.host.id || isPlayer()'>
       <fieldset>
         <legend>Get Set</legend>
-        <label *ngIf="userId === room.host.id" for="mode">Mode</label>
-        <select
-          *ngIf="userId === room.host.id"
-          #gamemode
-          (change)="seMode(gamemode.value)"
-          name="mode"
-          id="mode">
-          <option value="0">PONG</option>
-          <option value="1">PONGDOUBLE</option>
-          <option value="2">QUADRAPONG</option>
-        </select>
-
+				<div *ngIf="userId === room.host.id" style="display:contents;">
+					<label for="mode">Mode</label>
+					<select
+						#gamemode
+						(change)="seMode(gamemode.value)"
+						name="mode"
+						id="mode">
+						<option value="0">PONG</option>
+						<option value="1">PONGDOUBLE</option>
+						<option value="2">QUADRAPONG</option>
+					</select>
+					<hr>
+				</div>
         <button class='ready-button' *ngIf="isPlayer()" (click)="ready()" [ngClass]="{'vga-bow ready-blinker':alternateReady}">Ready</button>
 				
         <a (click)="leave()" class='take-me-out'><- Game Lobby</a>

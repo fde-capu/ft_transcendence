@@ -18,6 +18,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
 	scene: string = 'off';
 	alternateReady: boolean = false;
+	paused: boolean = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -57,7 +58,15 @@ export class RoomComponent implements OnInit, OnDestroy {
 			});
 
     this.roomSocket.emit('game:room:status');
+
+		this.pauseRecursive();
   }
+
+	async pauseRecursive() {
+		this.paused = this.scene == "game" && this.room && this.room.inGame && !this.room.running;
+    await new Promise(resolve => setTimeout(resolve, 333));
+		this.pauseRecursive();
+	}
 
   ngOnDestroy() {
     this.roomSocket?.disconnect();
@@ -119,9 +128,6 @@ export class RoomComponent implements OnInit, OnDestroy {
 		if (this.scene == 'off' || this.scene == 'game') {
 			return ;
 		}
-
-		if (this.scene == 'outro')
-			console.log("This is this.room:", this.room);
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 
