@@ -6,7 +6,7 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { Game, GameData, Pong, Dictionary } from '../../entity/game.entity';
+import { Game, GameData, Pong, Dictionary, PongDouble, Quadrapong } from '../../entity/game.entity';
 import { GameMode, Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
 
@@ -32,17 +32,17 @@ export class GameComponent implements AfterViewInit {
     new Audio('/assets/sounds/wall.mp3'),
     new Audio('/assets/sounds/score.mp3'),
   ];
-
+  
   ngAfterViewInit(): void {
     switch (this.room.mode) {
       case GameMode.PONG:
         this.game = new Pong(this.canvas.nativeElement);
         break;
       case GameMode.PONGDOUBLE:
-        this.game = new Pong(this.canvas.nativeElement);
+        this.game = new PongDouble(this.canvas.nativeElement);
         break;
       case GameMode.QUADRAPONG:
-        this.game = new Pong(this.canvas.nativeElement);
+        this.game = new Quadrapong(this.canvas.nativeElement);
         break;
     }
     this.game.reset();
