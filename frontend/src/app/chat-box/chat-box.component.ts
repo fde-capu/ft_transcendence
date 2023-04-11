@@ -114,7 +114,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         this.chatRoom.user
       );
     }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 1657 : 123));
+    await new Promise(resolve => setTimeout(resolve, this.id ? 2657 : 123));
     this.updateRoomRecursive();
   }
 

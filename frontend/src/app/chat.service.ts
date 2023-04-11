@@ -140,15 +140,15 @@ export class ChatService {
   }
 
   logOutAllRooms(intraId: string) {
-    for (const i in ChatService.allRooms) {
-      const newRoom: ChatRoom = ChatService.allRooms[i];
+    for (const newRoom of ChatService.allRooms) {
       const newUsers: string[] = [];
-			let changed: boolean = false;
+			console.log('Revoking', newRoom.id, intraId);
+			this.revokeAdmin(newRoom.id, intraId);
       for (const user of newRoom.user) if (user != intraId) newUsers.push(user);
       if (newUsers.length != newRoom.user.length) {
+				console.log('Got out of', newRoom.id, intraId);
         newRoom.user = newUsers;
 				this.roomChanged(newRoom);
-				this.revokeAdmin(newRoom.id, intraId);
       }
     }
   }
