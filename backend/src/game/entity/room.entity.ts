@@ -73,7 +73,6 @@ export class Room {
   public lastUpdate?: number;
 
   public gameTimeout?: NodeJS.Timeout;
-  private readonly userService: UserService;
 
   public constructor(
     public readonly id: string,
@@ -291,13 +290,7 @@ export class Room {
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
-  
-  private async updateScore(user: Users){
-    const userDB = await this.userService.getUserByIntraId(user.intraId);
-    user.score = user.score + userDB.score;
-    this.userService.updateUser(user.intraId, user);
-  }
-
+ 
   private async finish(): Promise<void> {
     if (this.inGame === false) return;
     this.inGame = false;
@@ -312,19 +305,8 @@ export class Room {
       structuredClone(this.game?.elements.teams),
     );
 
-    match.teams.forEach((t) => t.players.forEach((p) => {
-      this.updateScore(p);
-    }));
-
     match = await this.service.historyService.saveMatchHistory(match);
     this.logger.log(`Match finished: ${match.id}`);
-
-		console.log("finish():", match);
-
-//	Not working:
-//    const user = await this.userService.getAllUsers();
-//      console.log(user);
-		// GREAT, THANKS!
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
