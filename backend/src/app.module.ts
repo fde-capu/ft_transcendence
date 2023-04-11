@@ -16,6 +16,7 @@ import { FortyTwoModule } from './forty-two/forty-two.module';
 import { InvitationGateway } from './invite/invite.gateway';
 import { ChatGateway } from './chat/gateway/chat.gateway';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { QueueGateway } from './game/gateway/queue.gateway';
 import { join } from 'path';
 
 @Module({
