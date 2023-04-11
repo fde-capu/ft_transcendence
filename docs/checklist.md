@@ -2,8 +2,10 @@ ft_transcendence
 Checklist based on sub. 12.1
 
 Issue #83 notes:
- - [ ] Lack of PAUSE screen.
- - [ ] When the first user leaves game, they don't leave the room.. (?)
+ - [X] Lack of PAUSE screen.
+ - [X] Good behavior when waiting for another person to come back.
+ - [ ] Winner is not correctly showing on cut-scene.
+ - [ ] Entering a paused game does not show the paused screen.
 
 
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.

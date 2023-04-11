@@ -188,8 +188,7 @@ hr {
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin-left: -0.5em;
-	margin-top: 0.25em;
+	margin-top: 0.5em;
 	font-size: var(--font-large);
 }
 
@@ -210,6 +209,10 @@ hr {
 }
 
 .outro {
+	animation: flash 3s;
+}
+
+.justFlash {
 	animation: flash 3s;
 }
 

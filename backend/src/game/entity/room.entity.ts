@@ -73,6 +73,8 @@ export class Room {
 
   public gameTimeout?: NodeJS.Timeout;
 
+	public waitingFor: string[] = [];
+
   public constructor(
     public readonly id: string,
     public server: Server,
@@ -105,8 +107,20 @@ export class Room {
         this.inGame &&
         !this.running &&
         this.getPlayers().reduce((s, p) => p.connected && s, true)
-      )
+      ) {
+				let newWaiting: string[] = [];
+				for (const u of this.waitingFor) {
+					if (u != user.id)
+						newWaiting.push(u);
+					else {
+						const player = this.getPlayers().find((p) => p.id == user.id);
+						if (player)
+							player.ready = true;
+					}
+				}
+				this.waitingFor = newWaiting;
         this.resume();
+			}
       this.server.emit('game:room:status', hideCircular(this));
       this.service.listNonEmptyRooms();
       return;
@@ -156,15 +170,11 @@ export class Room {
     const player = this.getPlayers().find((p) => p.id == user.id);
     if (player) {
       player.ready = false;
-      if (this.inGame) this.pause();
+      if (this.inGame) {
+				this.waitingFor.push(player.id);
+				this.pause();
+			}
     }
-
-    setTimeout(
-      () => {
-        if (!found.connected) this.leave(user);
-      },
-      this.inGame ? 1000 * 60 * 2 : 1000,
-    );
   }
 
   private rebalance(): void {
@@ -295,7 +305,10 @@ export class Room {
     this.inGame = false;
 
     this.pause();
-    this.teams.forEach((t) => t.players.forEach((p) => (p.ready = false)));
+    this.teams.forEach((t) => t.players.forEach((p) => {
+			if (!p.connected) this.leave(p);
+			p.ready = false;
+		}));
     if (this.gameTimeout) clearTimeout(this.gameTimeout);
 
     let match = createMatchHistory(

@@ -63,7 +63,6 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
 	pauseCheck() {
-		console.log(this.scene);
 		if (this.room && this.room.inGame && this.room.running) this.scene = "game";
 		this.paused = this.scene == "game" && this.room && this.room.inGame && !this.room.running;
 	}
@@ -123,11 +122,11 @@ export class RoomComponent implements OnInit, OnDestroy {
 		let allPlayers = this.allIn(this.room);
 
 		this.scene = this.scene == 'off' && allPlayers ? 'intro' :
-			this.scene == 'game' && !this.room.inGame ? 'outro' : this.scene;
+			this.scene == 'game' && !this.room.inGame && allPlayers ? 'outro' :
+			this.scene == 'game' && !this.room.inGame && !allPlayers ? 'justFlash' :
+			this.scene;
 
-		if (this.scene == 'off' || this.scene == 'game') {
-			return ;
-		}
+		if (this.scene == 'off' || this.scene == 'game') return ;
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 
