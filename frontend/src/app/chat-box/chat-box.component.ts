@@ -32,6 +32,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   user?: User;
   id?: string | null;
   iAmAdmin = false;
+	iAmOwner = false;
   invalidNameNotice = false;
   invalidPasswordNotice = false;
   lastRoomName = '';
@@ -40,7 +41,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   static umap: Map<string, number> = new Map<string, number>();
 
   ngOnInit() {
-    this.getUserAndStuff();
+    this.getUser();
 		this.initChatRoom();
   }
 
@@ -48,11 +49,11 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     ChatBoxComponent.ignited = false;
   }
 
-  async getUserAndStuff(): Promise<void> {
+  async getUser(): Promise<void> {
 		this.user = this.userService.getLoggedUser();
 		if (!this.user) {
 			await new Promise(resolve => setTimeout(resolve, 121));
-			return this.getUserAndStuff();
+			return this.getUser();
 		}
 		else
 			return ;
@@ -119,6 +120,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   async checkAdminRecursive() {
 		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
+		this.iAmOwner = this.isOwner(this.user?.intraId);
     await new Promise(resolve => setTimeout(resolve, this.id ? 1075 : 135));
     this.checkAdminRecursive();
   }
@@ -305,6 +307,12 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     if (intraId) return this.fun.isStringInArray(intraId, this.chatRoom.admin);
     return false;
   }
+
+	isOwner(intraId?: string): boolean {
+		if (intraId)
+			return this.chatRoom.admin[0] == intraId;
+		return false;
+	}
 
   revokeAdmin() {
     if (!this.user) return;

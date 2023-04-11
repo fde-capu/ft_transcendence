@@ -1,6 +1,6 @@
 <app-menu-bar></app-menu-bar>
 <app-invitation-screen></app-invitation-screen>
-<div *ngIf="!this.chatRoom.id" class="overall">Please hold on...
+<div *ngIf="!this.chatRoom.id" class="overall"><span class='blinker'>Please hold on...</span>
 </div>
 <div *ngIf="this.chatRoom.id" class="window-full">
   <div class="window-title" (click)="onMenu()">
@@ -12,7 +12,7 @@
 	</div>
 	<div class='options-block' *ngIf="optionsOn">	
 		<div class="window-options">
-			<table class="options" *ngIf="iAmAdmin">
+			<table class="options" *ngIf="iAmOwner">
 				<tr>
 					<td>
 						<label>Room Name</label>
@@ -108,7 +108,6 @@
 					*ngFor="let user of usersInChat"
 					[ngClass]="{ yourself: isMe(user.intraId) }">
 					<td *ngIf="!isMe(user.intraId)">&nbsp;</td>
-					<!-- Interesting, element yourself::before takes a place in the first column. -->
 					<td class="user-name">
 						<a routerLink="/profile/{{ user.intraId }}">
 							{{ user.intraId }} | {{ user.name }}
@@ -116,7 +115,7 @@
 					</td>
 					<td class="button-box">
 						<span
-							*ngIf="iAmAdmin && !isAdmin(user.intraId) && !isMe(user.intraId)">
+							*ngIf="iAmAdmin && !isOwner(user.intraId) && !isMe(user.intraId)">
 							<button style="margin-left: 0" (click)="kickThem(user)">
 								Kick
 							</button>
@@ -128,9 +127,10 @@
 								Mute
 							</button>
 							<button *ngIf="isMuted(user)" disabled>MUTED</button>
-							<button (click)="promoteThem(user)">Promote</button>
+							<button (click)="promoteThem(user)" *ngIf="!isAdmin(user.intraId)">Promote</button>
 						</span>
-						<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
+						<span *ngIf="isOwner(user.intraId)" class='flag vga-bow'>[ Owner ]</span>
+						<span *ngIf="isAdmin(user.intraId)" class='flag vga-bow'>[ Administrator ]</span>
 						<button
 							*ngIf="iAmAdmin && isMe(user.intraId)"
 							type="button"
@@ -154,13 +154,13 @@
 					*ngFor="let user of usersOutOfChat"
 					[ngClass]="{ yourself: isMe(user.intraId) }">
 					<td *ngIf="!isMe(user.intraId)">&nbsp;</td>
-					<!-- Interesting, element yourself::before takes a place in the first column. -->
 					<td class="user-name">
 						<a routerLink="/profile/{{ user.intraId }}">
 							{{ user.intraId }} | {{ user.name }}
 						</a>
 					</td>
 					<td class="button-box">
+						<span *ngIf="isOwner(user.intraId)"><-[ Owner ]</span>
 						<span *ngIf="isAdmin(user.intraId)"><-[ Administrator ]</span>
 						<button
 							*ngIf="!isBlocked(user) && !isMe(user.intraId)"
