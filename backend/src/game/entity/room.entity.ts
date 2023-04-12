@@ -51,7 +51,7 @@ export class Team {
 
 export class Room {
 
-	private static matchDuration: number = 1000 * 15; // TODO: revert to * 100 seconds.
+	private static matchDuration: number = 1000 * 100; // TODO: revert to * 100 seconds.
 
   private readonly logger: Logger;
 
