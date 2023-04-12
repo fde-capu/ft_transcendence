@@ -509,7 +509,7 @@ export class Quadrapong extends Game {
         top: 0,
         bottom: 0,
       },
-      balls: { a: new Ball() },
+      balls: { a: new Ball(), b: new Ball() },
       paddles: {
         left: new LeftPaddle(1 * VerticalPaddle.w),
         right: new RightPaddle(Game.w - 2 * VerticalPaddle.w),

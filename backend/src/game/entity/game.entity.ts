@@ -574,7 +574,7 @@ export class Quadrapong extends Game {
         TOP: 0,
         BOTTOM: 0,
       },
-      balls: { a: new Ball() },
+      balls: { a: new Ball(), b: new Ball() },
       paddles: {
         left: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
         right: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
@@ -585,7 +585,10 @@ export class Quadrapong extends Game {
       sounds: [],
       running: true,
     };
-    Object.values(this.elements.balls).forEach((b) => b.reset());
+    this.elements.balls['a'].reset();
+    setTimeout(() => {
+      this.elements.balls['b'].reset();
+    }, 2000);
   }
 
   protected override applyScore(b: Ball): void {
