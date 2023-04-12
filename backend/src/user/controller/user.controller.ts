@@ -112,6 +112,7 @@ export class UserController {
   @Get('rankingAll')
   async getRanking(@Res() response: Response): Promise<void> {
     try {
+      console.log("ranking all");
       const users = await this.userService.getAllUsers(); 
       const ladder = users.sort((a, b) => b.score - a.score); 
       let i = 0;
