@@ -20,6 +20,7 @@ export class StatisticsComponent implements OnChanges {
     looses: 0,
     winsPerLooses: 0,
     totalScore: 0,
+    position: 0,
   };
 
   constructor(private readonly httpClient: HttpClient) {}
@@ -43,6 +44,28 @@ export class StatisticsComponent implements OnChanges {
         }
       )
     );
+
+    //tem que arrumar aqui...
+    const leaderboard = await firstValueFrom(
+      this.httpClient.get<Array<User>>(
+        `${environment.BACKEND_ORIGIN}/user/rankingAll`,
+        {
+          withCredentials: true,
+        }
+      )
+    );
+
+    const rankingPosition = await firstValueFrom(
+      this.httpClient.get<number>(
+        `${environment.BACKEND_ORIGIN}/user/ranking/` + this.user!.intraId,
+        {
+          withCredentials: true,
+        }
+      )
+    );
+  
+   
+    this.stat.position = rankingPosition;
 
     this.stat.matches = matches.length;
 

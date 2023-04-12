@@ -1,6 +1,10 @@
 <h2 *ngIf="stat">Statistics</h2>
 <table *ngIf="stat">
     <tr>
+      <td>Ranking Position</td>
+      <td>{{ stat.position }}</td>
+    </tr>
+    <tr>
       <td>Score</td>
       <td *ngIf='stat.totalScore'>{{ stat.totalScore | number : '2.0-0'}}</td>
       <td *ngIf='!stat.totalScore'>Zero!</td>
