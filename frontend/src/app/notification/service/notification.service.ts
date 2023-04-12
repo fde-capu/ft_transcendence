@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NotificationSocket } from '../socket/notification.socket';
 import { Notification } from '../entity/notification.entity';
-import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,12 @@ export class NotificationService {
 
   private readonly notificationAnswered$ = new Subject<Notification>();
 
-  public constructor(private readonly notificationSocket: NotificationSocket) {
+  public constructor(
+    private readonly notificationSocket: NotificationSocket,
+    private readonly router: Router
+  ) {
     this.subscribeToNotifications();
+    this.subscribeToRedirectRequest();
   }
 
   public getCurrentNotification(): Observable<Notification | null> {
@@ -70,5 +75,17 @@ export class NotificationService {
           this.nextNotification();
         },
       });
+  }
+
+  private subscribeToRedirectRequest() {
+    this.notificationSocket
+      .fromEvent<string>('notification:redirect')
+      .subscribe({
+        next: path => this.redirectToPath(path),
+      });
+  }
+
+  private redirectToPath(path: string) {
+    if (this.router.url !== path) this.router.navigate([path]);
   }
 }

@@ -6,11 +6,17 @@ export class Notification {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ nullable: true })
+  fromSocketId?: string;
+
   @ManyToOne(() => User, { nullable: true, eager: true })
   from?: User;
 
   @ManyToOne(() => User, { eager: true })
   to: User;
+
+  @Column({ nullable: true })
+  toSocketId?: string;
 
   @Column()
   template: string;

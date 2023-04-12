@@ -57,6 +57,7 @@ export class NotificationGateway
       this.notificationService.createNotification({
         ...request,
         from: { intraId: client['subject'] },
+        fromSocketId: client.id,
       });
     } catch (error) {
       client.emit('notification:error', error.message);
@@ -69,7 +70,10 @@ export class NotificationGateway
     @MessageBody() request: Pick<Notification, 'id' | 'answer'>,
   ): void {
     try {
-      this.notificationService.answerNotification(request);
+      this.notificationService.answerNotification({
+        ...request,
+        toSocketId: client.id,
+      });
     } catch (error) {
       client.emit('notification:error', error.message);
     }

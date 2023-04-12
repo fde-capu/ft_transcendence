@@ -50,7 +50,7 @@ export class NotificationService {
   }
 
   public async answerNotification(
-    request: Pick<Notification, 'id' | 'answer'>,
+    request: Pick<Notification, 'id' | 'answer' | 'toSocketId'>,
   ): Promise<Notification> {
     const notification = await this.getNotificationById(request.id);
 
@@ -98,6 +98,10 @@ export class NotificationService {
     this.getSocketsByUser(intraId).forEach((s) =>
       s.emit('notification:list', notifications),
     );
+  }
+
+  public requestRedirect(socketId: string, path: string): void {
+    this.sockets[socketId]?.emit('notification:redirect', path);
   }
 
   public async getNotificationById(id: string): Promise<Notification> {
