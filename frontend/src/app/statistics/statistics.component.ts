@@ -74,6 +74,7 @@ export class StatisticsComponent implements OnChanges {
       .reduce((agg, t) => agg + t.score, 0);
 		// ^ Are we sure the totalScore will be the same that is registeres on DB?
 
+		// v Yes, a function inside a function!
 		function isDrawn(teams: Array<TeamMatchHistory>): boolean {
 			let testScore: number = -1;
 			for (const team of teams) {
@@ -100,9 +101,7 @@ export class StatisticsComponent implements OnChanges {
 		this.stat.draws = localDraws;
 		this.stat.wins = localWins;
 		this.stat.looses = localLooses;
-
     this.stat.matches = this.stat.wins + this.stat.looses + this.stat.draws;
-
     this.stat.winsPerLooses = this.stat.wins / this.stat.looses || 0;
   }
 
