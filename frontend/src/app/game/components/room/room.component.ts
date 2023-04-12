@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
+import { GameData, Dictionary } from '../../entity/game.entity';
 
 @Component({
   selector: 'app-room',
@@ -19,6 +20,11 @@ export class RoomComponent implements OnInit, OnDestroy {
 	scene: string = 'off';
 	alternateReady: boolean = false;
 	paused: boolean = false;
+  score: Dictionary<number> = {};
+	leftWin: boolean = false;
+	rightWin: boolean = false;
+	topWin: boolean = false;
+	bottomWin: boolean = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -60,6 +66,11 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     this.roomSocket.emit('game:room:status');
 
+    this.roomSocket.fromEvent<GameData>('game:status').subscribe({
+      next: status => {
+        this.score = status.teams;
+      },
+    });
   }
 
 	amIAudience() {
@@ -133,10 +144,24 @@ export class RoomComponent implements OnInit, OnDestroy {
 	async cutScene(): Promise<void> {
 		let allPlayers = this.allIn();
 
-		this.scene = this.scene == 'off' && allPlayers ? 'intro' :
+		let prevScene = this.scene;
+		let newScene = this.scene == 'off' && allPlayers ? 'intro' :
 			this.scene == 'game' && !this.room.inGame && allPlayers ? 'outro' :
 			this.scene == 'game' && !this.room.inGame && !allPlayers ? 'justFlash' :
 			this.scene;
+		if (prevScene == 'game' && newScene == 'outro') {
+			console.log(this.score);
+			if (this.room.mode == 0 || this.room.mode == 1) {
+				this.leftWin = this.score['LEFT'] > this.score['RIGHT'];
+				this.rightWin = this.score['RIGHT'] > this.score['LEFT'];
+			} else if (this.room.mode == 2) {
+				this.leftWin = this.score['LEFT'] > this.score['RIGHT'] && this.score['LEFT'] > this.score['TOP'] && this.score['LEFT'] > this.score['BOTTOM'];
+				this.rightWin = this.score['RIGHT'] > this.score['LEFT'] && this.score['RIGHT'] > this.score['TOP'] && this.score['RIGHT'] > this.score['BOTTOM'];
+				this.topWin = this.score['TOP'] > this.score['RIGHT'] && this.score['TOP'] > this.score['LEFT'] && this.score['TOP'] > this.score['BOTTOM'];
+				this.bottomWin = this.score['BOTTOM'] > this.score['RIGHT'] && this.score['BOTTOM'] > this.score['TOP'] && this.score['BOTTOM'] > this.score['LEFT'];
+			};
+		}
+		this.scene = newScene;
 
 		if (this.scene == 'off' || this.scene == 'game') return ;
 

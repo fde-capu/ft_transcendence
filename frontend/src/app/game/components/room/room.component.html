@@ -152,20 +152,50 @@
 <div *ngIf="scene=='outro'">
 		<div class="cut-scene" [ngClass]="{'outro':scene=='outro'}">
 			<div *ngIf='room.mode == 0'>
-				<div class='p-anim win'   style="left: calc(50vw - 6em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw + 1em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
 			</div>
 			<div *ngIf='room.mode == 1'>
-				<div class='p-anim win'   style="left: calc(50vw - 13em; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw - 6em); background-image:url('{{room.teams[0].players[1].image}}');"></div>
-				<div class='p-anim win'   style="left: calc(50vw + 1em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw + 7em); background-image:url('{{room.teams[1].players[1].image}}');"></div>
+				<div class='p-anim' style="left: calc(50vw - 13em;" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[1].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 7em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[1].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
 			</div>
 			<div *ngIf='room.mode == 2'>
-				<div class='p-anim win'   style="left: calc(50vw - 13em; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw - 6em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim win'   style="left: calc(50vw + 1em); background-image:url('{{room.teams[2].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw + 8em); background-image:url('{{room.teams[3].players[0].image}}');"></div>
+				<div class='p-anim' style="left: calc(50vw - 13em;" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="topWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[2].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['TOP']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 8em);" [ngClass]="bottomWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[3].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['BOTTOM']}}</div>
+				</div>
 			</div>
 		</div>
 </div>

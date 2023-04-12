@@ -234,7 +234,7 @@ hr {
 	}
 }
 
-.p-anim {
+.p-anim, .p-anim div {
 	filter: grayscale(100%);
 	border: none;
 	background-size: contain;
@@ -271,7 +271,12 @@ hr {
 	animation: anim-loose;
 	animation-duration: 3.2s;
 }
-
+.outro-score {
+	position: relative;
+	font-size: var(--font-xx-large);
+	display: flex;
+	align-items: center;
+}
 @keyframes anim-pl-in {
 	0% { left: 20%; opacity: 0; }
 	30% { opacity: 1; }

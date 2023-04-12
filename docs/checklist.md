@@ -6,6 +6,8 @@ Issue #83 notes:
  - [X] Good behavior when waiting for another person to come back.
  - [ ] Winner is not correctly showing on cut-scene.
  - [X] Entering a paused game does not show the paused screen.
+ - [ ] Game mode reverts to PONG after any match (even if it was another mode).
+ - [ ] QUADPONG is bouncing all walls ...?
 
 
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
