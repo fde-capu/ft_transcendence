@@ -63,8 +63,13 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
 	pauseCheck() {
-		if (this.room && this.room.inGame && this.room.running) this.scene = "game";
-		this.paused = this.scene == "game" && this.room && this.room.inGame && !this.room.running;
+		if (this.room && this.room.inGame && this.room.running)
+			this.scene = "game";
+		this.paused = this.scene == "game"
+			&& this.room
+			&& this.room.inGame
+			&& !this.room.running;
+			console.log(this.scene, this.room);
 	}
 
   ngOnDestroy() {
@@ -95,31 +100,31 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.roomSocket.emit('game:room:leave');
   }
 
-	allIn(room: Room): boolean {
+	allIn(): boolean {
 		let ready_c: number = 0;
 		let total_c: number = -1;
-		if (room.mode == 0) {
+		if (this.room.mode == 0) {
 			total_c = 2;
-			ready_c += room.teams[0].players[0]?.ready ? 1 : 0;
-			ready_c += room.teams[1].players[0]?.ready ? 1 : 0;
-		} else if (room.mode == 1) {
+			ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
+			ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
+		} else if (this.room.mode == 1) {
 			total_c = 4;
-			ready_c += room.teams[0].players[0]?.ready ? 1 : 0;
-			ready_c += room.teams[0].players[1]?.ready ? 1 : 0;
-			ready_c += room.teams[1].players[0]?.ready ? 1 : 0;
-			ready_c += room.teams[1].players[1]?.ready ? 1 : 0;
-		} else if (room.mode == 2) {
+			ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
+			ready_c += this.room.teams[0].players[1]?.ready ? 1 : 0;
+			ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
+			ready_c += this.room.teams[1].players[1]?.ready ? 1 : 0;
+		} else if (this.room.mode == 2) {
 			total_c = 4;
-			ready_c += room.teams[0].players[0]?.ready ? 1 : 0;
-			ready_c += room.teams[1].players[0]?.ready ? 1 : 0;
-			ready_c += room.teams[2].players[0]?.ready ? 1 : 0;
-			ready_c += room.teams[3].players[0]?.ready ? 1 : 0;
+			ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
+			ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
+			ready_c += this.room.teams[2].players[0]?.ready ? 1 : 0;
+			ready_c += this.room.teams[3].players[0]?.ready ? 1 : 0;
 		};
 		return ready_c == total_c;
 	}
 
 	async cutScene(): Promise<void> {
-		let allPlayers = this.allIn(this.room);
+		let allPlayers = this.allIn();
 
 		this.scene = this.scene == 'off' && allPlayers ? 'intro' :
 			this.scene == 'game' && !this.room.inGame && allPlayers ? 'outro' :

@@ -258,6 +258,7 @@ export class Room {
     }
 
     this.game.reset();
+		this.waitingFor = [];
     this.inGame = true;
 		this.pause();
     this.server.emit('game:room:status', hideCircular(this));
@@ -265,7 +266,8 @@ export class Room {
     this.service.listNonEmptyRooms();
 
     await new Promise(resolve => setTimeout(resolve, 3000));
-		this.resume();
+		if (!this.waitingFor.length)
+			this.resume();
   }
 
   private pause(): void {
