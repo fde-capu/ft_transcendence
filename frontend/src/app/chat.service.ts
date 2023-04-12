@@ -233,9 +233,14 @@ export class ChatService {
       }
       // ^ If there is no one left to be administrator,
       //   the room is destroyed.
-      for (const user of theRoom.user) if (user != intraId) newAdmin.push(user);
-      // ^ If the only admin revokes, everyone in the room
-      //   becomes admin!
+			let newOwner: string = "";
+      for (const user of theRoom.user)
+				if (user != intraId) {
+					newOwner = user;
+					break ;
+				}
+			newAdmin.push(newOwner);
+			// ^ If last admin revokes, the first user in list is promoted.
     }
     theRoom.admin = newAdmin;
     this.roomChanged(theRoom);
