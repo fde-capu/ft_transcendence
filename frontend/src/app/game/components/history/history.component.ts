@@ -58,7 +58,6 @@ export class HistoryComponent {
   //   TODO (if so): Rename/refactor so we don't need to use this.mode as params.
 
 	doesThisShow(match: MatchHistoryMap) {
-//		console.log(match.teams['left'].players[0].intraId);
 		if (!this.user) return true;
 		if (match.mode == 0) {
 			return this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['right'].players[0].intraId;
