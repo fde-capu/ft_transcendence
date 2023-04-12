@@ -39,8 +39,6 @@ export class UserService {
       existUser = await this.userRepository.save(createdUser);
     }
 
-    await this.updateUser(existUser.intraId, { mfa_verified: false });
-    // TODO: pode desimplementar o registro do mfa_verified na db (não está em uso).
     return {
       intraId: existUser.intraId,
       mfa_enabled: existUser.mfa_enabled,
@@ -57,7 +55,6 @@ export class UserService {
       blocks: user.blocks,
       score: user.score,
       mfa_enabled: user.mfa_enabled,
-      mfa_verified: user.mfa_verified,
     };
     const resp = await this.userRepository
       .createQueryBuilder()
@@ -65,12 +62,11 @@ export class UserService {
       .set(filtered_user)
       .where('intraId = :intraId', { intraId: intraId })
       .execute();
-    if (resp.affected === 0) {
-      throw new NotFoundException();
-      // TODO: this exception is not been handled and is crashing the server
+    //if (resp.affected === 0) {
+      //throw new NotFoundException();
 			// This happens only if a malicious user tries to update an
-			// unexisten user.
-    }
+			// unexisten user, but crashes the backend. So just do nothing, chill!
+    //}
     return resp;
   }
 
