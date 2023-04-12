@@ -516,12 +516,7 @@ export class Quadrapong extends Game {
         top: new TopPaddle(HorizontalPaddle.h),
         bottom: new BottomPaddle(Game.h - 2 * HorizontalPaddle.h),
       },
-      walls: {
-        left: new Wall(-5, -5, 5, Game.h + 10),
-        right: new Wall(Game.w, -1, 5, Game.h + 10),
-        top: new Wall(-5, -5, Game.w + 10, 5),
-        bottom: new Wall(-5, Game.h, Game.w + 10, 5),
-      },
+      walls: {},
       sounds: [],
       running: true,
     };
