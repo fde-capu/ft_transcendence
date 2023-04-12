@@ -2,7 +2,7 @@
 	<app-menu-bar></app-menu-bar>
 	<app-invitation-screen></app-invitation-screen>
 </div>
-<app-ladder [userId]='user?.intraId'></app-ladder>
+<app-ladder [userId]='user?.intraId' *ngIf="routedNotInProfile"></app-ladder>
 <main id="container">
   <header>
     <h2>Match History</h2>
