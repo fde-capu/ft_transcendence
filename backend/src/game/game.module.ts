@@ -8,6 +8,7 @@ import { RoomGateway } from './gateway/room.gateway';
 import { RoomsGateway } from './gateway/rooms.gateway';
 import { MatchHistoryService } from './service/match-history.service';
 import { RoomsService } from './service/rooms.service';
+import { QueueGateway } from './gateway/queue.gateway';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { RoomsService } from './service/rooms.service';
     TypeOrmModule.forFeature([MatchHistory, TeamMatchHistory]),
   ],
   controllers: [MatchController],
-  providers: [RoomsService, RoomsGateway, RoomGateway, MatchHistoryService],
+  providers: [RoomsService, RoomsGateway, QueueGateway, RoomGateway, MatchHistoryService],
 })
 export class GameModule {}

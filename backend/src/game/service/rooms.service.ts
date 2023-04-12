@@ -27,6 +27,18 @@ export class RoomsService {
     setTimeout(() => this.deleteIfEmpty(id), 300000);
   }
 
+  public roomQueueCreate(client: ClientSocket, client2 : ClientSocket): void {
+    let id: string;
+    do {
+      id = randomBytes(10).toString('hex').substring(0, 6);
+    } while (this.rooms[id]);
+
+    this.rooms[id] = new Room(id, this.server, this, User.from(client));
+    client.emit('game:room:create', id);
+    client2.emit('game:room:create', id);
+    setTimeout(() => this.deleteIfEmpty(id), 300000);
+  }
+
   public deleteIfEmpty(id: string): void {
     if (this.rooms[id]?.isEmpty()) delete this.rooms[id];
   }

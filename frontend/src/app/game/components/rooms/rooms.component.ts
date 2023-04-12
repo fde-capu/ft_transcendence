@@ -27,6 +27,10 @@ export class RoomsComponent {
 		this.roomsService.createRoom();
   }
 
+  findGame() {
+		this.router.navigate(['/findgame']);
+  }
+
   async getLastLink(): Promise<string> {
 		return this.roomsService.getLastLink();
 	}
