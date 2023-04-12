@@ -391,8 +391,8 @@ export abstract class Game {
 
       if (target instanceof Wall) this.elements.sounds.push(GameSound.WALL);
 
-      subject.sx += target.vx / 2;
-      subject.sy += target.vy / 2;
+      subject.sx += target.sx + 10;
+      subject.sy += target.sy + 10;
 
       balls.forEach((b) => b.move(collision.entryTime));
       paddles.forEach((p) => p.move(collision.entryTime));
