@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NotificationSocket } from '../socket/notification.socket';
 import { Notification } from '../entity/notification.entity';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,18 +11,22 @@ export class NotificationService {
 
   private notificationsQueue: Array<Notification> = [];
 
-  private currentNotification = new BehaviorSubject<Notification | null>(null);
+  private readonly currentNotification$ =
+    new BehaviorSubject<Notification | null>(null);
+
+  private readonly notificationAnswered$ = new Subject<Notification>();
 
   public constructor(private readonly notificationSocket: NotificationSocket) {
     this.subscribeToNotifications();
   }
 
   public getCurrentNotification(): Observable<Notification | null> {
-    return this.currentNotification.asObservable();
+    return this.currentNotification$.asObservable();
   }
 
-  public answerNotification(notification: Pick<Notification, 'id' | 'answer'>) {
+  public answerNotification(notification: Notification) {
     this.notificationSocket.emit('notification:answer', notification);
+    this.notificationAnswered$.next(notification);
     this.nextNotification();
   }
 
@@ -38,19 +42,23 @@ export class NotificationService {
 
     this.nonDisturbMode = nonDisturbMode;
 
-    if (nonDisturbMode && this.currentNotification.value) {
+    if (nonDisturbMode && this.currentNotification$.value) {
       this.notificationsQueue = [
-        this.currentNotification.value,
+        this.currentNotification$.value,
         ...this.notificationsQueue,
       ];
-      this.currentNotification.next(null);
+      this.currentNotification$.next(null);
     } else this.nextNotification();
+  }
+
+  public subscribeToNotificationAnswered(): Observable<Notification> {
+    return this.notificationAnswered$.asObservable();
   }
 
   private nextNotification() {
     const [head, ...tail] = this.notificationsQueue;
     this.notificationsQueue = tail;
-    this.currentNotification.next(head);
+    this.currentNotification$.next(head);
   }
 
   private subscribeToNotifications() {

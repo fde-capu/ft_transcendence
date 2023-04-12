@@ -25,7 +25,7 @@ export class NotificationComponent implements OnInit {
     if (!this.notification) return;
 
     this.notificationService.answerNotification({
-      id: this.notification.id,
+      ...this.notification,
       answer,
     });
   }
