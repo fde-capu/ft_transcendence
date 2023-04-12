@@ -23,6 +23,7 @@ import { randomUUID } from 'crypto';
 import { extname } from 'path';
 import { TokenPayload } from 'src/auth/decorator/token-payload.decorator';
 import { JWTPayload } from 'jose';
+import { ParamsTokenFactory } from '@nestjs/core/pipes';
 
 @Controller('user')
 @UseGuards(AuthGuard)
@@ -109,6 +110,38 @@ export class UserController {
     }
   }
 
+  @Get('rankingAll')
+  async getRanking(@Res() response: Response): Promise<void> {
+    try {
+      const users = await this.userService.getAllUsers(); 
+      const ladder = users.sort((a, b) => b.score - a.score); 
+      let i = 0;
+      for (const s of ladder) {
+        s.position = ++i; 
+      }
+      response.status(200).json(ladder); 
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+
+  @Get('ranking/:id')
+  async getUserRanking(@Res() response: Response, @Param('id') id : string): Promise<void> {
+    try {
+      const users = await this.userService.getAllUsers(); 
+      const ladder = users.sort((a, b) => b.score - a.score); 
+      let i = 0;
+      for (const s of ladder) {
+        s.position = ++i; 
+      }
+      const user = users.find((user) => user.intraId === id);
+      response.status(200).json(user.position); 
+    } catch (e) {
+      response.status(e.status).json(e.data);
+    }
+  }
+  
+  
   @Get('available')
   async getAvailableUsers(@Res() response: Response = null): Promise<any> {
     try {
