@@ -12,6 +12,7 @@ Checklist based on sub. 12.1
  - [ ] Graphic options screen?
  - [ ] Does Game History record the timestamp? If so, show it on game history html.
  - [ ] Ready/Unready button.
+ - [ ] Gameplay screen could also show the audience.
 
 --- Warning found: ---
 

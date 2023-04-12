@@ -81,3 +81,9 @@ th, td {
 	position: absolute;
 	font-size: var(--font-x-large);
 }
+
+.date {
+	font-size: var(--font-small);
+	width: 100%;
+	text-align: center;
+}
