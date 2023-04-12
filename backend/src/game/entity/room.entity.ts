@@ -5,6 +5,7 @@ import { RoomsService } from '../service/rooms.service';
 import { Game, Pong, PongDouble, Quadrapong } from './game.entity';
 import { createMatchHistory } from '../util/game-data-to-match-history.converter';
 import { UserService } from 'src/user/service/user.service';
+import { Users } from 'src/user/entity/user.entity';
 
 export type ClientSocket = Socket & { subject: string; name: string, image: string };
 
@@ -284,12 +285,12 @@ export class Room {
       this.lastUpdate = currentTimestamp;
       this.server.emit('game:status', this.game?.elements);
     }, 1000 / 25);
-
+    
     this.running = true;
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
-
+ 
   private async finish(): Promise<void> {
     if (this.inGame === false) return;
     this.inGame = false;
@@ -306,13 +307,6 @@ export class Room {
 
     match = await this.service.historyService.saveMatchHistory(match);
     this.logger.log(`Match finished: ${match.id}`);
-
-		console.log("finish():", match);
-
-//	Not working:
-//    const user = await this.userService.getAllUsers();
-//      console.log(user);
-		// GREAT, THANKS!
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
