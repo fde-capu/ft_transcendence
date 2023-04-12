@@ -44,7 +44,7 @@ export class NotificationService {
         id: notification.id,
         answerable: false,
       });
-    }, request.expiresAt.getTime() - Date.now());
+    }, new Date(request.expiresAt).getTime() - Date.now());
 
     return notification;
   }
@@ -76,8 +76,11 @@ export class NotificationService {
     notification: Partial<Notification> & Pick<Notification, 'id'>,
   ): Promise<Notification> {
     this.logger.log(`update notification ${notification.id}`);
-    const n = await this.notificationRepository.save(notification);
-    await this.sendNotificationToUser(notification.to.intraId);
+    let n = await this.notificationRepository.findOne({
+      where: { id: notification.id },
+    });
+    n = await this.notificationRepository.save({ ...n, ...notification });
+    await this.sendNotificationToUser(n.to.intraId);
     this.notificationObservable.next(n);
     return n;
   }
