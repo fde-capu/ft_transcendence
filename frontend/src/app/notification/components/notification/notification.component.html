@@ -1,7 +1,9 @@
-<ng-container *ngIf="notification" [ngSwitch]="notification.template">
-  <div *ngSwitchDefault="">{{ notification | json }}</div>
-  <button (click)="answer('dummy')">answer</button>
-</ng-container>
+<app-notification-modal *ngIf="notification" [ngSwitch]="notification.template">
+  <ng-container *ngSwitchDefault>
+    <span>Unknown notification from {{ notification.from?.intraId }}</span>
+    <button (click)="answer('unknown')">Close</button>
+  </ng-container>
+</app-notification-modal>
 <div>
   <input #user type="text" placeholder="user">
   <input #template type="text" placeholder="template">
