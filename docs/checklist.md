@@ -2,8 +2,8 @@ ft_transcendence
 Checklist based on sub. 12.1
 
 #Issue 99 related marks:
- - [ ] Match history to show partial/individual matches on Profile page.
- - [ ] Match history could show the date when the match occurred.
+ - [X] Match history to show partial/individual matches on Profile page.
+ - [X] Match history could show the date when the match occurred.
 
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] Check if updates are not messing up form editions.
