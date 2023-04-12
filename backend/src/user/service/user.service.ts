@@ -173,6 +173,7 @@ export class UserService {
         status: UserService.status.get(u.intraId)
           ? UserService.status.get(u.intraId)
           : 'OFFLINE',
+        position: 0,
       };
       out.push(dto);
     });
