@@ -7,6 +7,7 @@ export interface UserDTO {
     friends?: string[];
     blocks?: string[];
     status?: string;
+    position: number;
 }
 
 export interface StatisticsDTO {
