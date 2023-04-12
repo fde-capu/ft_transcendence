@@ -6,6 +6,7 @@
 <main id="container">
   <header>
     <h2>{{routedNotInProfile?'Global':'Personal'}} Match History</h2>
+		<h3 *ngIf="routedNotInProfile">Total matches: {{(matches|async)?.length}}</h3>
   </header>
   <section *ngIf="!(matches | async)?.length" id="content" class="center">
     <p>No matches found.</p>
