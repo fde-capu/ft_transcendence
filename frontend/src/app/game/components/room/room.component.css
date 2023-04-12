@@ -213,7 +213,7 @@ hr {
 }
 
 .justFlash {
-	animation: flash 3s;
+	animation: flash 1.5s;
 }
 
 @keyframes flash {

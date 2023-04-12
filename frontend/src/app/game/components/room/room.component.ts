@@ -62,14 +62,21 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   }
 
+	amIAudience() {
+		for (const aud of this.room.audience)
+			if (aud.id == this.userId)
+				return true;
+		return false;
+	}
+
 	pauseCheck() {
-		if (this.room && this.room.inGame && this.room.running)
+		if ((this.room && this.room.inGame && this.room.running) 
+				|| (this.scene == "off" && this.room && this.room.inGame && !this.room.running && this.amIAudience()))
 			this.scene = "game";
-		this.paused = this.scene == "game"
+		this.paused = (this.scene == "game"
 			&& this.room
 			&& this.room.inGame
-			&& !this.room.running;
-			console.log(this.scene, this.room);
+			&& !this.room.running)
 	}
 
   ngOnDestroy() {

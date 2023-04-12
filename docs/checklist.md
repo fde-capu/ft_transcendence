@@ -5,7 +5,7 @@ Issue #83 notes:
  - [X] Lack of PAUSE screen.
  - [X] Good behavior when waiting for another person to come back.
  - [ ] Winner is not correctly showing on cut-scene.
- - [ ] Entering a paused game does not show the paused screen.
+ - [X] Entering a paused game does not show the paused screen.
 
 
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
