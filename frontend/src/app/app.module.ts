@@ -26,6 +26,7 @@ import { AvatarModule } from './avatar/avatar.module';
 import { MainMenuModule } from './main-menu/main-menu.module';
 import { InviteModule } from './invitation.module';
 import { GameModule } from './game/game.module';
+import { NotificationModule } from './notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -52,13 +53,14 @@ import { GameModule } from './game/game.module';
     AppRoutingModule,
     HttpClientModule,
     AuthModule,
-		LoginModule,
+    LoginModule,
     FormsModule,
     MenuBarModule,
     AvatarModule,
     MainMenuModule,
     InviteModule,
     GameModule,
+    NotificationModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

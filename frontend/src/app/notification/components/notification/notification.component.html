@@ -1,0 +1,13 @@
+<ng-container *ngIf="notification" [ngSwitch]="notification.template">
+  <div *ngSwitchDefault="">{{ notification | json }}</div>
+  <button (click)="answer('dummy')">answer</button>
+</ng-container>
+<div>
+  <input #user type="text" placeholder="user">
+  <input #template type="text" placeholder="template">
+  <button (click)="create(user.value, template.value)">Enviar</button>
+  <label >
+    <input #nonDisturbMode type="checkbox" (change)="setNonDisturbeMode(nonDisturbMode.checked)">
+    <span>Non disturb mode</span>
+  </label>
+</div>

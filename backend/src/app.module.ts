@@ -17,6 +17,7 @@ import { InvitationGateway } from './invite/invite.gateway';
 import { ChatGateway } from './chat/gateway/chat.gateway';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { join } from 'path';
       rootPath: '/var/tmp/uploads',
       serveRoot: '/uploads',
     }),
+    NotificationModule,
   ],
   controllers: [PingController, ChatController],
   providers: [InvitationGateway, ChatGateway, ChatService],
