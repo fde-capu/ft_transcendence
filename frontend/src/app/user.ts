@@ -8,4 +8,5 @@ export interface User {
 	friends?: string[];
 	blocks?: string[];
 	status?: string;
+	position?: number;
 }
