@@ -117,6 +117,7 @@ export class UserController {
       const ladder = users.sort((a, b) => b.score - a.score); 
       let i = 0;
       for (const s of ladder) {
+        console.log(s.score);
         s.position = ++i; 
       }
       response.status(200).json(ladder); 
