@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
+import { NotificationService } from 'src/app/notification/service/notification.service';
 import { GameData, Dictionary } from '../../entity/game.entity';
 
 @Component({
@@ -17,8 +18,8 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   roomSocket!: RoomSocket;
 
-	scene: string = 'off';
-	alternateReady: boolean = false;
+  scene: string = 'off';
+  alternateReady: boolean = false;
 	paused: boolean = false;
   score: Dictionary<number> = {};
 	leftWin: boolean = false;
@@ -29,7 +30,8 @@ export class RoomComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly notificationService: NotificationService
   ) {
     this.authService
       .getAuthContext()
@@ -55,14 +57,13 @@ export class RoomComponent implements OnInit, OnDestroy {
         }),
     });
 
-    this.roomSocket
-      .fromEvent<Room>('game:room:status')
-      .subscribe(async res => {
-				this.room = res;
-				this.alternateReady = this.thePlayer(this.userId)?.ready;
-				this.pauseCheck();
-				this.cutScene();
-			});
+    this.roomSocket.fromEvent<Room>('game:room:status').subscribe(async res => {
+      this.room = res;
+      this.alternateReady = this.thePlayer(this.userId)?.ready;
+      this.notificationService.setNonDisturbMode(res.inGame);
+      this.pauseCheck();
+      this.cutScene();
+    });
 
     this.roomSocket.emit('game:room:status');
 
@@ -81,7 +82,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 	}
 
 	pauseCheck() {
-		if ((this.room && this.room.inGame && this.room.running) 
+		if ((this.room && this.room.inGame && this.room.running)
 				|| (this.scene == "off" && this.room && this.room.inGame && !this.room.running && this.amIAudience()))
 			this.scene = "game";
 		this.paused = (this.scene == "game"
@@ -100,11 +101,9 @@ export class RoomComponent implements OnInit, OnDestroy {
       .find(p => p.id === this.userId);
   }
 
-	thePlayer(intraId: string): any {
-    return this.room.teams
-      .flatMap(t => t.players)
-      .find(p => p.id === intraId);
-	}
+  thePlayer(intraId: string): any {
+    return this.room.teams.flatMap(t => t.players).find(p => p.id === intraId);
+  }
 
   seMode(mode: string) {
     this.roomSocket.emit('game:room:mode', parseInt(mode));
@@ -167,6 +166,6 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 
-		this.scene = this.scene == 'intro' || this.scene == 'game' ? 'game' : 'off';
-	}
+    this.scene = this.scene == 'intro' || this.scene == 'game' ? 'game' : 'off';
+  }
 }

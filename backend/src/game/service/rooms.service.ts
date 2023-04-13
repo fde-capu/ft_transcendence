@@ -15,19 +15,25 @@ export class RoomsService {
 
   public constructor(public readonly historyService: MatchHistoryService) {}
 
-  public roomCreate(client: ClientSocket): void {
+  public roomCreate(client: ClientSocket): string {
+    const id = this.roomCreateWithUser(User.from(client));
+    client.emit('game:room:create', id);
+    return id;
+  }
+
+  public roomCreateWithUser(host: User): string {
     let id: string;
     do {
       id = randomBytes(10).toString('hex').substring(0, 6);
     } while (this.rooms[id]);
 
-    this.rooms[id] = new Room(id, this.server, this, User.from(client));
-    
-    client.emit('game:room:create', id);
+    this.rooms[id] = new Room(id, this.server, this, host);
+
     setTimeout(() => this.deleteIfEmpty(id), 300000);
+    return id;
   }
 
-  public roomQueueCreate(client: ClientSocket, client2 : ClientSocket): void {
+  public roomQueueCreate(client: ClientSocket, client2: ClientSocket): void {
     let id: string;
     do {
       id = randomBytes(10).toString('hex').substring(0, 6);

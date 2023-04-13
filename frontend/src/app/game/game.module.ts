@@ -11,6 +11,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { HistoryComponent } from './components/history/history.component';
 import { LadderComponent } from './components/ladder/ladder.component';
 import { GameNotificationComponent } from './components/game-notification/game-notification.component';
+import { NotificationModule } from '../notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -19,20 +20,17 @@ import { GameNotificationComponent } from './components/game-notification/game-n
     RoomComponent,
     ModalComponent,
     HistoryComponent,
-		LadderComponent,
+    LadderComponent,
     GameNotificationComponent,
   ],
   imports: [
-		CommonModule,
-		GameRoutingModule,
-		MenuBarModule,
-		InviteModule,
-	],
+    CommonModule,
+    GameRoutingModule,
+    MenuBarModule,
+    InviteModule,
+    NotificationModule,
+  ],
   providers: [GameSocket],
-  exports: [
-		HistoryComponent,
-		LadderComponent,
-		GameNotificationComponent,
-	],
+  exports: [HistoryComponent, LadderComponent, GameNotificationComponent],
 })
 export class GameModule {}

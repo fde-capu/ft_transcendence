@@ -15,7 +15,7 @@
 	display: inline-flex;
 	margin-right: 0.5em;
 }
-button {
+button, app-notification-button {
 	margin-left: -0.5em;
 }
 
