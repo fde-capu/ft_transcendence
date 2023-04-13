@@ -84,6 +84,7 @@ export class LadderComponent implements OnInit {
       exist.classList.remove('inverted');
     }, 200);
   }
+
   async blink3(el: string) {
     this.blink(el);
     await new Promise(resolve => setTimeout(resolve, 355));

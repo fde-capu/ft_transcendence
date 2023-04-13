@@ -80,4 +80,11 @@ th, td {
   content: "x";
 	position: absolute;
 	font-size: var(--font-x-large);
+			 margin-top: 0.5em;
+}
+.date {
+       font-size: var(--font-small);
+       width: 100%;
+       text-align: center;
+			 margin-bottom: 0.5em;
 }

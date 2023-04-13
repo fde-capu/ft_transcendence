@@ -2,31 +2,37 @@
 	<app-menu-bar></app-menu-bar>
 	<app-invitation-screen></app-invitation-screen>
 </div>
-<app-ladder [userId]='user?.intraId'></app-ladder>
+<app-ladder [userId]='user?.intraId' *ngIf="routedNotInProfile"></app-ladder>
 <main id="container">
   <header>
-    <h2>Match History</h2>
+    <h2>{{routedNotInProfile?'Global':'Personal'}} Match History</h2>
+		<h3 *ngIf="routedNotInProfile">Total matches: {{(matches|async)?.length}}</h3>
   </header>
   <section *ngIf="!(matches | async)?.length" id="content" class="center">
     <p>No matches found.</p>
   </section>
 
-        <div *ngFor="let match of matches | async" class='match-box'>
-          <div *ngFor="let team of match.teams | keyvalue; let i = index;"
-			class='team-box' style="justify-content:{{(i+1)%2?'right':'left'}};">
-            <div *ngIf="team.value" class='player-box'
-				style="order:{{(i+1)%2?0:4}};text-align:{{(i+1)%2?'right':'left'}};"
-			>
-				<div *ngFor="let player of team.value.players">
-					{{ player.name }}
-				</div>
-            </div>
-            <div *ngIf="team.value" class='score-box'
-				style="order:{{(i+1)%2?1:3}};padding-right:{{(i+1)%3?'':'0.5em'}};padding-left:{{(i+1)%4?'':'0.5em'}};"
-			>
-				{{ team.value.score }}
-			</div>
-          </div>
-        </div>
+
+
+       <section *ngFor="let match of matches | async; let i = index;">
+               <div class='match-box' *ngIf="doesThisShow(match)">
+                       <div class='date'>{{match.createdDate}}</div>
+                       <div *ngFor="let team of match.teams | keyvalue; let i = index;"
+                               class='team-box' style="justify-content:{{(i+1)%2?'right':'left'}};">
+                                       <div *ngIf="team.value" class='player-box'
+                                               style="order:{{(i+1)%2?0:4}};text-align:{{(i+1)%2?'right':'left'}};">
+                                               <div *ngFor="let player of team.value.players">
+                                                       {{ player.name }}
+                                               </div>
+                                       </div>
+                                       <div *ngIf="team.value" class='score-box'
+                                               style="order:{{(i+1)%2?1:3}};padding-right:{{(i+1)%3?'':'0.5em'}};padding-left:{{(i+1)%4?'':'0.5em'}};">
+                                               {{ team.value.score }}
+                                       </div>
+                       </div>
+               </div>
+       </section>
+
+
 
 </main>

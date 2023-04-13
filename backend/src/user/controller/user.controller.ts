@@ -112,7 +112,6 @@ export class UserController {
   @Get('rankingAll')
   async getRanking(@Res() response: Response): Promise<void> {
     try {
-      console.log("ranking all");
       const users = await this.userService.getAllUsers(); 
       const ladder = users.sort((a, b) => b.score - a.score); 
       let i = 0;
@@ -201,7 +200,7 @@ export class UserController {
     )
     file: Express.Multer.File,
   ) {
-    console.log(file);
+    console.log(payload.sub, "> image >", file);
     await this.userService.updateProfileImage(payload.sub, file.filename);
     return file;
   }

@@ -2,7 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { User } from '../user';
 import { Statistics } from '../statistics';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { MatchHistory } from '../game/entity/match-history.entity';
+import { MatchHistory, TeamMatchHistory } from '../game/entity/match-history.entity';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -17,6 +17,7 @@ export class StatisticsComponent implements OnChanges {
   stat: Statistics = {
     matches: 0,
     wins: 0,
+    draws: 0,
     looses: 0,
     winsPerLooses: 0,
     totalScore: 0,
@@ -63,34 +64,58 @@ export class StatisticsComponent implements OnChanges {
         }
       )
     );
-  
    
     this.stat.position = rankingPosition;
-
-    this.stat.matches = matches.length;
 
     this.stat.totalScore = matches
       .flatMap(m => m.teams)
       .filter(t => t.score > 0)
       .filter(t => t.players.find(u => u.intraId === this.user!.intraId))
       .reduce((agg, t) => agg + t.score, 0);
+		// ^ Are we sure the totalScore will be the same that is registeres on DB?
 
-    this.stat.wins = matches.reduce((agg, m) => {
+		// v Yes, a function inside a function!
+		function isDrawn(teams: Array<TeamMatchHistory>): boolean {
+			let testScore: number = -1;
+			for (const team of teams) {
+				if (testScore == -1) testScore = team.score;
+				if (team.score != testScore) return false;
+			}
+			return true;
+		}
+
+		let localWins: number = 0;
+		let localDraws: number = 0;
+		let localLooses: number = 0;
+		for (const m of matches) {
       const winner = m.teams.sort((a, b) => b.score - a.score)[0];
-      return (
-        agg +
-        (winner.players.find(u => u.intraId === this.user!.intraId) ? 1 : 0)
-      );
-    }, 0);
-
-    this.stat.looses = matches.reduce((agg, m) => {
-      const winner = m.teams.sort((a, b) => b.score - a.score)[0];
-      return (
-        agg +
-        (winner.players.find(u => u.intraId === this.user!.intraId) ? 0 : 1)
-      );
-    }, 0);
-
+			if (this.doesThisShow(m)) {
+				if (isDrawn(m.teams))
+					localDraws++;
+				else if (winner.players.find(u => u.intraId === this.user!.intraId))
+					localWins++;
+				else
+					localLooses++;
+			}
+		}
+		this.stat.draws = localDraws;
+		this.stat.wins = localWins;
+		this.stat.looses = localLooses;
+    this.stat.matches = this.stat.wins + this.stat.looses + this.stat.draws;
     this.stat.winsPerLooses = this.stat.wins / this.stat.looses || 0;
   }
+
+	doesThisShow(match: MatchHistory) {
+			if (!this.user) return true;
+			if (match.mode == 0) {
+				return this.user.intraId == match.teams[0].players[0].intraId || this.user.intraId == match.teams[1].players[0].intraId;
+			} else if (match.mode == 1) {
+				return	this.user.intraId == match.teams[0].players[0].intraId || this.user.intraId == match.teams[0].players[1].intraId
+					||		this.user.intraId == match.teams[1].players[0].intraId || this.user.intraId == match.teams[1].players[1].intraId;
+			} else if (match.mode == 2) {
+				return	this.user.intraId == match.teams[0].players[0].intraId || this.user.intraId == match.teams[1].players[0].intraId
+					||		this.user.intraId == match.teams[2].players[0].intraId || this.user.intraId == match.teams[3].players[0].intraId;
+			}
+			return false;
+		}
 }
