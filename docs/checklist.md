@@ -1,9 +1,6 @@
 ft_transcendence
 Checklist based on sub. 12.1
 
- Issue #108
- - [ ] Check if updates are not messing up form editions.
-
 Other stuff:
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
@@ -92,3 +89,7 @@ Issue #83 notes:
  - [X] Does Game History record the timestamp? If so, show it on game history html.
  - [X] BUG Game mode reverts to PONG after any match (even if it was another mode).
  - [X] BIG QUADPONG is bouncing all walls ...?
+ Issue #108
+ - [X] Check if updates are not messing up form editions.
+ ---
+ - [X] Rethink upload-image routine for UX.
