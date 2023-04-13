@@ -164,30 +164,16 @@ class Ball extends Rectangle {
     this.x = Game.w / 2 - Ball.s / 2;
     this.y = Game.h / 2 - Ball.s / 2;
 
-    const a000 = 0;
-    const a030 = (Math.PI * 1) / 6;
-
-    const a060 = (Math.PI * 1) / 3;
-    const a120 = (Math.PI * 2) / 3;
-
-    const a150 = (Math.PI * 5) / 6;
-    const a210 = (Math.PI * 7) / 6;
-
-    const a240 = (Math.PI * 4) / 3;
-    const a300 = (Math.PI * 5) / 3;
-
-    const a330 = (Math.PI * 11) / 6;
-    const a360 = Math.PI * 2;
+    const rad = (n) => (Math.PI * n) / 180;
 
     let alpha: number;
     do {
       alpha = Math.PI * 2 * Math.random();
     } while (
-      (a000 <= alpha && alpha <= a030) ||
-      (a060 <= alpha && alpha <= a120) ||
-      (a150 <= alpha && alpha <= a210) ||
-      (a240 <= alpha && alpha <= a300) ||
-      (a330 <= alpha && alpha <= a360)
+      (rad(-10) <= alpha && alpha <= rad(10)) ||
+      (rad(80) <= alpha && alpha <= rad(100)) ||
+      (rad(170) <= alpha && alpha <= rad(190)) ||
+      (rad(260) <= alpha && alpha <= rad(280))
     );
 
     this.sx = 200 * Math.cos(alpha);
@@ -211,6 +197,8 @@ abstract class Paddle extends Rectangle {
   public abstract moveForward(): void;
 
   public abstract moveBackward(): void;
+
+  public abstract getOutputAngle(ball: Ball): number;
 }
 
 abstract class VerticalPaddle extends Paddle {
@@ -241,6 +229,13 @@ abstract class VerticalPaddle extends Paddle {
   public override moveBackward(): void {
     this.sy = -300;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (
+      (ball.y + ball.h / 2 - this.y - VerticalPaddle.h / 2) /
+      (VerticalPaddle.h / 2)
+    );
+  }
 }
 
 class LeftPaddle extends VerticalPaddle {
@@ -249,6 +244,10 @@ class LeftPaddle extends VerticalPaddle {
     if (!c || b.vx > 0) return;
     return c;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball);
+  }
 }
 
 class RightPaddle extends VerticalPaddle {
@@ -256,6 +255,10 @@ class RightPaddle extends VerticalPaddle {
     const c = super.collision(b);
     if (!c || b.vx < 0) return;
     return c;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) - Math.PI;
   }
 }
 
@@ -287,6 +290,13 @@ abstract class HorizontalPaddle extends Paddle {
   public override moveBackward(): void {
     this.sx = -300;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (
+      (ball.x + ball.w / 2 - this.x - HorizontalPaddle.w / 2) /
+      (HorizontalPaddle.w / 2)
+    );
+  }
 }
 
 class TopPaddle extends HorizontalPaddle {
@@ -295,6 +305,10 @@ class TopPaddle extends HorizontalPaddle {
     if (!c || b.vy > 0) return;
     return c;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) - Math.PI / 2;
+  }
 }
 
 class BottomPaddle extends HorizontalPaddle {
@@ -302,6 +316,10 @@ class BottomPaddle extends HorizontalPaddle {
     const c = super.collision(b);
     if (!c || b.vy < 0) return;
     return c;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) + Math.PI / 2;
   }
 }
 
@@ -391,21 +409,40 @@ export abstract class Game {
 
       if (target instanceof Wall) this.elements.sounds.push(GameSound.WALL);
 
-      subject.sx += target.vx / 2;
-      subject.sy += target.vy / 2;
-
       balls.forEach((b) => b.move(collision.entryTime));
       paddles.forEach((p) => p.move(collision.entryTime));
 
-      if (collision.xnormal != 0) {
-        subject.vx *= -1;
-        subject.sx *= -1;
+      if (target instanceof Paddle) {
+        const angle = target.getOutputAngle(subject);
+
+        const speed = Math.sqrt(subject.sx ** 2 + subject.sy ** 2);
+        subject.sx = speed * Math.cos(angle);
+        subject.sy = speed * Math.sin(angle);
+
+        const velocity = Math.sqrt(subject.vx ** 2 + subject.vy ** 2);
+        subject.vx = velocity * Math.cos(angle);
+        subject.vy = velocity * Math.sin(angle);
+      } else {
+        if (collision.xnormal != 0) {
+          subject.vx *= -1;
+          subject.sx *= -1;
+        }
+
+        if (collision.ynormal != 0) {
+          subject.vy *= -1;
+          subject.sy *= -1;
+        }
       }
 
-      if (collision.ynormal != 0) {
-        subject.vy *= -1;
-        subject.sy *= -1;
-      }
+      subject.sx +=
+        subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
+      subject.sy +=
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
+
+      subject.sx +=
+        subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
+      subject.sy +=
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
     }
 
     this.clear();
@@ -574,19 +611,14 @@ export class Quadrapong extends Game {
         TOP: 0,
         BOTTOM: 0,
       },
-      balls: { a: new Ball() },
+      balls: { a: new Ball(), b: new Ball() },
       paddles: {
         left: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
         right: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
         top: new TopPaddle('TOP', HorizontalPaddle.h),
         bottom: new BottomPaddle('BOTTOM', Game.h - 2 * HorizontalPaddle.h),
       },
-      walls: {
-        left: new Wall(-5, -5, 5, Game.h + 10),
-        right: new Wall(Game.w, -1, 5, Game.h + 10),
-        top: new Wall(-5, -5, Game.w + 10, 5),
-        bottom: new Wall(-5, Game.h, Game.w + 10, 5),
-      },
+      walls: {},
       sounds: [],
       running: true,
     };

@@ -11,6 +11,6 @@
     <button *ngIf="isFriend" (click)="unFriend()">Unfriend</button>
     <button *ngIf="!isBlock" (click)="makeBlock()">Block</button>
     <button *ngIf="isBlock" (click)="unBlock()">Unblock</button>
-    <button *ngIf="!amIBlocked && availability" (click)="inviteToMatch()">Match!</button>
+    <app-notification-button *ngIf="!amIBlocked && availability" template="game:invite" [to]="user!.intraId" alternativeText="Challenge sent!" [timeoutSeconds]="30">MATCH!</app-notification-button>
   </div>
 </div>

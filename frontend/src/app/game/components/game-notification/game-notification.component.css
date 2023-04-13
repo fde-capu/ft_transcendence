@@ -1,0 +1,9 @@
+* {
+  color: var(--color-dark);
+}
+
+button:hover {
+	filter: none;
+	color: var(--color-high);
+	background-color: var(--color-border);
+}

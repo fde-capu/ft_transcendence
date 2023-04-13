@@ -1,0 +1,24 @@
+<app-notification-modal *ngIf="notification" [ngSwitch]="notification.template">
+  <!-- Game notification -->
+
+  <ng-container *ngSwitchCase="'game:invite'">
+    <span>"{{ notification.from?.intraId }}" invites you to a game room</span>
+    <button (click)="answer('game:invite:accept')">Accept</button>
+    <button (click)="answer('game:invite:decline')">Decline</button>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'game:invite:decline'">
+    <span
+      >"{{ notification.from?.intraId }}" declined your invitation to a game
+      room</span
+    >
+    <button (click)="answer('game:invite:decline:acknowledge')">Ok</button>
+  </ng-container>
+
+  <!-- Unknown notification -->
+
+  <ng-container *ngSwitchDefault>
+    <span>Unknown notification from "{{ notification.from?.intraId }}"</span>
+    <button (click)="answer('notification:acknowledge')">Close</button>
+  </ng-container>
+</app-notification-modal>
