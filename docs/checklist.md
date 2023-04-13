@@ -8,6 +8,10 @@ Issue #83 notes:
  - [X] Entering a paused game does not show the paused screen.
 
 
+#Issue 99 related marks:
+ - [X] Match history to show partial/individual matches on Profile page.
+ - [X] Match history could show the date when the match occurred.
+
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] Check if updates are not messing up form editions.
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
