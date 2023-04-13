@@ -22,7 +22,6 @@
         <select
           *ngIf="userId === room.host.id"
           #gamemode
-					[(ngModel)]="room.mode"
           (change)="seMode(gamemode.value)"
           name="mode"
           id="mode">
