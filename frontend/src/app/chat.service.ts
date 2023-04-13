@@ -140,13 +140,13 @@ export class ChatService {
   }
 
   logOutAllRooms(intraId: string) {
-    for (const i in ChatService.allRooms) {
-      const newRoom: ChatRoom = ChatService.allRooms[i];
+    for (const newRoom of ChatService.allRooms) {
       const newUsers: string[] = [];
+			this.revokeAdmin(newRoom.id, intraId);
       for (const user of newRoom.user) if (user != intraId) newUsers.push(user);
       if (newUsers.length != newRoom.user.length) {
         newRoom.user = newUsers;
-        this.roomChanged(newRoom);
+				this.roomChanged(newRoom);
       }
     }
   }
@@ -233,9 +233,14 @@ export class ChatService {
       }
       // ^ If there is no one left to be administrator,
       //   the room is destroyed.
-      for (const user of theRoom.user) if (user != intraId) newAdmin.push(user);
-      // ^ If the only admin revokes, everyone in the room
-      //   becomes admin!
+			let newOwner: string = "";
+      for (const user of theRoom.user)
+				if (user != intraId) {
+					newOwner = user;
+					break ;
+				}
+			newAdmin.push(newOwner);
+			// ^ If last admin revokes, the first user in list is promoted.
     }
     theRoom.admin = newAdmin;
     this.roomChanged(theRoom);
