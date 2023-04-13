@@ -96,7 +96,7 @@ textarea {
 	width: 13em !important;
 	margin: 0 auto;
 }
-textarea: active {
+textarea:active {
 	border:none;
 }
 .file {
