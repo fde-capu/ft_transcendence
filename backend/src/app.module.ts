@@ -45,6 +45,7 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: '/var/tmp/uploads',
       serveRoot: '/uploads',
+      serveStaticOptions: { index: false },
     }),
   ],
   controllers: [PingController, ChatController],
