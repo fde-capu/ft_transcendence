@@ -46,6 +46,7 @@ import { NotificationModule } from './notification/notification.module';
     ServeStaticModule.forRoot({
       rootPath: '/var/tmp/uploads',
       serveRoot: '/uploads',
+      serveStaticOptions: { index: false },
     }),
     NotificationModule,
   ],
