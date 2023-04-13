@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../service/notification.service';
 import { Notification } from '../../entity/notification.entity';
-import { User } from 'src/app/user';
 
 @Component({
   selector: 'app-notification',
@@ -19,27 +18,5 @@ export class NotificationComponent implements OnInit {
         this.notification = notification || undefined;
       },
     });
-  }
-
-  answer(answer?: string) {
-    if (!this.notification) return;
-
-    this.notificationService.answerNotification({
-      ...this.notification,
-      answer,
-    });
-  }
-
-  create(intraId: string, template: string) {
-    const user = { intraId } as User;
-    this.notificationService.createNotification({
-      to: user,
-      template,
-      extra: {},
-    });
-  }
-
-  setNonDisturbeMode(status: boolean) {
-    this.notificationService.setNonDisturbMode(status);
   }
 }

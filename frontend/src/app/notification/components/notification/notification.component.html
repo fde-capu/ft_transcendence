@@ -22,15 +22,3 @@
     <button (click)="answer('notification:acknowledge')">Close</button>
   </ng-container>
 </app-notification-modal>
-<div>
-  <input #user type="text" placeholder="user" />
-  <input #template type="text" placeholder="template" />
-  <button (click)="create(user.value, template.value)">Enviar</button>
-  <label>
-    <input
-      #nonDisturbMode
-      type="checkbox"
-      (change)="setNonDisturbeMode(nonDisturbMode.checked)" />
-    <span>Non disturb mode</span>
-  </label>
-</div>

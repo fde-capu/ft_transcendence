@@ -6,7 +6,6 @@ import { HelperFunctionsService } from '../helper-functions.service';
 import { User } from '../user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvitationService } from '../invitation.service';
-import { NotificationService } from '../notification/service/notification.service';
 
 @Component({
   selector: 'app-chat-box',
@@ -20,8 +19,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     public fun: HelperFunctionsService,
     public route: ActivatedRoute,
     public invitationService: InvitationService,
-    private readonly router: Router,
-    private readonly notificationService: NotificationService
+    private readonly router: Router
   ) {}
   chatRoom: ChatRoom = {} as ChatRoom;
   windowTitle = 'CHAT';
@@ -43,7 +41,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUserAndStuff();
-    this.initChatRoom();
+		this.initChatRoom();
   }
 
   ngOnDestroy() {
@@ -51,18 +49,20 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   async getUserAndStuff(): Promise<void> {
-    this.user = this.userService.getLoggedUser();
-    if (!this.user) {
-      await new Promise(resolve => setTimeout(resolve, 121));
-      return this.getUserAndStuff();
-    } else return;
+		this.user = this.userService.getLoggedUser();
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 121));
+			return this.getUserAndStuff();
+		}
+		else
+			return ;
   }
 
   async initChatRoom(): Promise<void> {
-    if (!this.user) {
-      await new Promise(resolve => setTimeout(resolve, 129));
-      return this.initChatRoom();
-    }
+		if (!this.user) {
+			await new Promise(resolve => setTimeout(resolve, 129));
+			return this.initChatRoom();
+		}
     //console.log("ChatBox Init");
     this.id = this.route.snapshot.paramMap.get('roomId');
     if (!this.id && this.user) {
@@ -98,7 +98,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       if (chatRoomTest) {
         this.chatRoom = chatRoomTest;
         this.chatRoom.user = chatRoomTest.user;
-        return;
+				return ;
         //await new Promise(resolve => setTimeout(resolve, 1034)); // Not heavy after all.
       }
     }
@@ -118,7 +118,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   async checkAdminRecursive() {
-    this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
+		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
     await new Promise(resolve => setTimeout(resolve, this.id ? 1075 : 135));
     this.checkAdminRecursive();
   }
@@ -126,10 +126,10 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   async getOutOfChatUsers() {
     if (!this.userService.authorized() || !ChatBoxComponent.ignited) {
     } else {
-      let t = this.chatService.getOutOfChatUsers(this.chatRoom.id);
-      if (!this.fun.equalUserArray(t, this.usersOutOfChat))
-        this.usersOutOfChat = t;
-    }
+			let t = this.chatService.getOutOfChatUsers(this.chatRoom.id);
+			if(!this.fun.equalUserArray(t, this.usersOutOfChat))
+				this.usersOutOfChat = t;
+		}
     await new Promise(resolve => setTimeout(resolve, this.id ? 2047 : 653));
     this.getOutOfChatUsers();
   }
@@ -165,15 +165,15 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   emit() {
-    //    console.log(
-    //      'Noticed room changed.',
-    //      'users',
-    //      this.chatRoom.user,
-    //      'mutes',
-    //      this.chatRoom.muted,
-    //      'blocks',
-    //      this.chatRoom.blocked
-    //    );
+//    console.log(
+//      'Noticed room changed.',
+//      'users',
+//      this.chatRoom.user,
+//      'mutes',
+//      this.chatRoom.muted,
+//      'blocks',
+//      this.chatRoom.blocked
+//    );
     this.chatService.roomChanged(this.chatRoom);
   }
 
@@ -206,11 +206,12 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   doInvitationToThisRoom(toUser: User) {
     if (!this.user) return;
     if (this.iAmAdmin) this.chatService.unTIG(toUser.intraId, this.chatRoom);
-    this.notificationService.createNotification({
-      to: { intraId: toUser.intraId },
-      template: 'chat:invite',
-      extra: { route: `/chat/${this.chatRoom.id}` },
-      expiresAt: new Date(Date.now() + 1000 * 5),
+    this.invitationService.invite({
+      from: this.user.intraId,
+      to: toUser.intraId,
+      type: this.windowName,
+      route: '/chat/' + this.chatRoom.id,
+      isReply: false,
     });
   }
 
