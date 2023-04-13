@@ -158,36 +158,26 @@ class Ball extends Rectangle {
   }
 
   public reset() {
-    const a000 = 0;
-    const a030 = (Math.PI * 1) / 6;
+    this.team = undefined;
+    this.outside = false;
 
-    const a060 = (Math.PI * 1) / 3;
-    const a120 = (Math.PI * 2) / 3;
+    this.x = Game.w / 2 - Ball.s / 2;
+    this.y = Game.h / 2 - Ball.s / 2;
 
-    const a150 = (Math.PI * 5) / 6;
-    const a210 = (Math.PI * 7) / 6;
-
-    const a240 = (Math.PI * 4) / 3;
-    const a300 = (Math.PI * 5) / 3;
-
-    const a330 = (Math.PI * 11) / 6;
-    const a360 = Math.PI * 2;
+    const rad = (n: number) => (Math.PI * n) / 180;
 
     let alpha: number;
     do {
       alpha = Math.PI * 2 * Math.random();
     } while (
-      (a000 <= alpha && alpha <= a030) ||
-      (a060 <= alpha && alpha <= a120) ||
-      (a150 <= alpha && alpha <= a210) ||
-      (a240 <= alpha && alpha <= a300) ||
-      (a330 <= alpha && alpha <= a360)
+      (rad(-10) <= alpha && alpha <= rad(10)) ||
+      (rad(80) <= alpha && alpha <= rad(100)) ||
+      (rad(170) <= alpha && alpha <= rad(190)) ||
+      (rad(260) <= alpha && alpha <= rad(280))
     );
 
-    this.sx = 300 * Math.cos(alpha);
-    this.sy = 300 * Math.sin(alpha);
-
-    console.log(alpha * (180 / Math.PI));
+    this.sx = 200 * Math.cos(alpha);
+    this.sy = 200 * Math.sin(alpha);
   }
 }
 
@@ -195,17 +185,29 @@ abstract class Paddle extends Rectangle {
   static shortSide = 15;
   static longSide = 50;
 
-  public constructor(x = 0, y = 0, w = 0, h = 0) {
+  public constructor(public readonly team: string, x = 0, y = 0, w = 0, h = 0) {
     super(x, y, w, h);
   }
+
+  public stopMovement(): void {
+    this.sx = 0;
+    this.sy = 0;
+  }
+
+  public abstract moveForward(): void;
+
+  public abstract moveBackward(): void;
+
+  public abstract getOutputAngle(ball: Ball): number;
 }
 
 abstract class VerticalPaddle extends Paddle {
   static w = Paddle.shortSide;
   static h = Paddle.longSide;
 
-  public constructor(x = 0) {
+  public constructor(team: string, x = 0) {
     super(
+      team,
       x,
       Game.h / 2 - Paddle.longSide / 2,
       Paddle.shortSide,
@@ -219,29 +221,44 @@ abstract class VerticalPaddle extends Paddle {
     const d = Game.h - this.y - this.h;
     if (this.vy > d) this.vy = d;
   }
+
+  public override moveForward(): void {
+    this.sy = 300;
+  }
+
+  public override moveBackward(): void {
+    this.sy = -300;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (
+      (ball.y + ball.h / 2 - this.y - VerticalPaddle.h / 2) /
+      (VerticalPaddle.h / 2)
+    );
+  }
 }
 
 class LeftPaddle extends VerticalPaddle {
-  public constructor(x = 0) {
-    super(x);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vx > 0) return;
     return c;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball);
+  }
 }
 
 class RightPaddle extends VerticalPaddle {
-  public constructor(x = 0) {
-    super(x);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vx < 0) return;
     return c;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) - Math.PI;
   }
 }
 
@@ -249,8 +266,9 @@ abstract class HorizontalPaddle extends Paddle {
   static w = Paddle.longSide;
   static h = Paddle.shortSide;
 
-  public constructor(y = 0) {
+  public constructor(team: string, y = 0) {
     super(
+      team,
       Game.w / 2 - Paddle.longSide / 2,
       y,
       Paddle.longSide,
@@ -264,29 +282,44 @@ abstract class HorizontalPaddle extends Paddle {
     const d = Game.w - this.x - this.w;
     if (this.vx > d) this.vx = d;
   }
+
+  public override moveForward(): void {
+    this.sx = 300;
+  }
+
+  public override moveBackward(): void {
+    this.sx = -300;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (
+      (ball.x + ball.w / 2 - this.x - HorizontalPaddle.w / 2) /
+      (HorizontalPaddle.w / 2)
+    );
+  }
 }
 
 class TopPaddle extends HorizontalPaddle {
-  public constructor(y = 0) {
-    super(y);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vy > 0) return;
     return c;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) - Math.PI / 2;
+  }
 }
 
 class BottomPaddle extends HorizontalPaddle {
-  public constructor(y = 0) {
-    super(y);
-  }
-
   public override collision(b: Rectangle) {
     const c = super.collision(b);
     if (!c || b.vy < 0) return;
     return c;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) + Math.PI / 2;
   }
 }
 
@@ -305,11 +338,17 @@ export interface GameData {
   running: boolean;
 }
 
+interface CollisionData {
+  collision: Collision;
+  subject: Ball;
+  target: Rectangle;
+}
+
 export abstract class Game {
   static w = 500;
   static h = 500;
 
-  protected context: CanvasRenderingContext2D;
+  protected context?: CanvasRenderingContext2D;
 
   public elements: GameData = {
     teams: {},
@@ -320,20 +359,26 @@ export abstract class Game {
     running: false,
   };
 
-  constructor(canvas: HTMLCanvasElement) {
-    canvas.width = Game.w;
-    canvas.height = Game.h;
+  public playerPaddle: Dictionary<string> = {};
 
-    this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
-    if (!this.context) throw new Error('Canvas is not supported!');
+  constructor(canvas?: HTMLCanvasElement) {
+    if (canvas) {
+      canvas.width = Game.w;
+      canvas.height = Game.h;
 
-    this.context.fillStyle = 'white';
+      this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
+      if (!this.context) throw new Error('Canvas is not supported!');
+
+      this.context.fillStyle = 'white';
+    }
   }
 
   update(t = 1) {
     if (!this.elements.running) return;
 
-    const balls = Object.values(this.elements.balls);
+    this.elements.sounds = [];
+
+    const balls = Object.values(this.elements.balls).filter(b => !b.outside);
     const paddles = Object.values(this.elements.paddles);
     const walls = Object.values(this.elements.walls);
 
@@ -342,7 +387,7 @@ export abstract class Game {
 
     const collisionables: Array<Rectangle> = [...paddles, ...walls];
 
-    let data;
+    let data: CollisionData | undefined;
 
     while (
       (data = this.nextCollision(
@@ -352,21 +397,52 @@ export abstract class Game {
     ) {
       const { collision, subject, target } = data;
 
-      subject.sx += target.vx / 2;
-      subject.sy += target.vy / 2;
+      if (target instanceof VerticalPaddle && collision.ynormal === 0) {
+        subject.team = target.team;
+        this.elements.sounds.push(GameSound.PADDLE);
+      }
+
+      if (target instanceof HorizontalPaddle && collision.xnormal === 0) {
+        subject.team = target.team;
+        this.elements.sounds.push(GameSound.PADDLE);
+      }
+
+      if (target instanceof Wall) this.elements.sounds.push(GameSound.WALL);
 
       balls.forEach(b => b.move(collision.entryTime));
       paddles.forEach(p => p.move(collision.entryTime));
 
-      if (collision.xnormal != 0) {
-        subject.vx *= -1;
-        subject.sx *= -1;
+      if (target instanceof Paddle) {
+        const angle = target.getOutputAngle(subject);
+
+        const speed = Math.sqrt(subject.sx ** 2 + subject.sy ** 2);
+        subject.sx = speed * Math.cos(angle);
+        subject.sy = speed * Math.sin(angle);
+
+        const velocity = Math.sqrt(subject.vx ** 2 + subject.vy ** 2);
+        subject.vx = velocity * Math.cos(angle);
+        subject.vy = velocity * Math.sin(angle);
+      } else {
+        if (collision.xnormal != 0) {
+          subject.vx *= -1;
+          subject.sx *= -1;
+        }
+
+        if (collision.ynormal != 0) {
+          subject.vy *= -1;
+          subject.sy *= -1;
+        }
       }
 
-      if (collision.ynormal != 0) {
-        subject.vy *= -1;
-        subject.sy *= -1;
-      }
+      subject.sx +=
+        subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
+      subject.sy +=
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
+
+      subject.sx +=
+        subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
+      subject.sy +=
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
     }
 
     this.clear();
@@ -379,21 +455,13 @@ export abstract class Game {
       this.draw(p);
     });
 
-    Object.values(this.elements.balls).forEach(b => {
-      if (
-        !b.outside &&
-        (b.x + b.w < 0 || b.x > Game.w || b.y + b.h < 0 || b.y > Game.h)
-      ) {
-        b.outside = true;
-        if (b.team) {
-          this.elements.teams[b.team]++;
-          b.team = undefined;
-        }
-      }
-    });
+    Object.values(this.elements.balls).forEach(b => this.applyScore(b));
   }
 
-  private nextCollision(subjects: Array<Ball>, targets: Array<Rectangle>) {
+  private nextCollision(
+    subjects: Array<Ball>,
+    targets: Array<Rectangle>
+  ): CollisionData | undefined {
     let data:
       | { collision: Collision; subject: Ball; target: Rectangle }
       | undefined;
@@ -411,12 +479,14 @@ export abstract class Game {
     return data;
   }
 
+  protected abstract applyScore(b: Ball): void;
+
   private draw(r: Rectangle) {
-    this.context.fillRect(r.x, r.y, r.w, r.h);
+    this.context?.fillRect(r.x, r.y, r.w, r.h);
   }
 
   private clear() {
-    this.context.clearRect(0, 0, Game.w, Game.h);
+    this.context?.clearRect(0, 0, Game.w, Game.h);
   }
 
   public from(gameData: DeepPartial<GameData>) {
@@ -445,21 +515,29 @@ export abstract class Game {
     return item && typeof item === 'object' && !Array.isArray(item);
   }
 
+  public moveForward(player: string): void {
+    this.elements.paddles[this.playerPaddle[player]]?.moveForward();
+  }
+
+  public moveBackward(player: string): void {
+    this.elements.paddles[this.playerPaddle[player]]?.moveBackward();
+  }
+
+  public stopMovement(player: string): void {
+    this.elements.paddles[this.playerPaddle[player]]?.stopMovement();
+  }
+
   public abstract reset(): void;
 }
 
 export class Pong extends Game {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
   public override reset(): void {
     this.elements = {
-      teams: { left: 0, right: 0 },
+      teams: { LEFT: 0, RIGHT: 0 },
       balls: { a: new Ball() },
       paddles: {
-        left: new LeftPaddle(1 * VerticalPaddle.w),
-        right: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+        left: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
+        right: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
       },
       walls: {
         top: new Wall(-5, -5, Game.w + 10, 5),
@@ -468,23 +546,35 @@ export class Pong extends Game {
       sounds: [],
       running: true,
     };
+    Object.values(this.elements.balls).forEach(b => b.reset());
+  }
+
+  protected override applyScore(b: Ball): void {
+    if (!b.outside && (b.x + b.w < 0 || b.x > Game.w)) {
+      b.outside = true;
+      this.elements.sounds.push(GameSound.SCORE);
+
+      if (b.x + b.w < 0) this.elements.teams['RIGHT']++;
+
+      if (b.x > Game.w) this.elements.teams['LEFT']++;
+
+      setTimeout(() => {
+        b?.reset();
+      }, 2000);
+    }
   }
 }
 
 export class PongDouble extends Game {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
   public override reset(): void {
     this.elements = {
-      teams: { left: 0, right: 0 },
+      teams: { LEFT: 0, RIGHT: 0 },
       balls: { a: new Ball() },
       paddles: {
-        left1: new LeftPaddle(1 * VerticalPaddle.w),
-        left2: new LeftPaddle(3 * VerticalPaddle.w),
-        right1: new RightPaddle(Game.w - 4 * VerticalPaddle.w),
-        right2: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
+        left1: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
+        left2: new LeftPaddle('LEFT', 3 * VerticalPaddle.w),
+        right1: new RightPaddle('RIGHT', Game.w - 4 * VerticalPaddle.w),
+        right2: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
       },
       walls: {
         top: new Wall(-5, -5, Game.w + 10, 5),
@@ -493,32 +583,75 @@ export class PongDouble extends Game {
       sounds: [],
       running: true,
     };
+    Object.values(this.elements.balls).forEach(b => b.reset());
+  }
+
+  protected override applyScore(b: Ball): void {
+    if (!b.outside && (b.x + b.w < 0 || b.x > Game.w)) {
+      b.outside = true;
+      this.elements.sounds.push(GameSound.SCORE);
+
+      if (b.x + b.w < 0) this.elements.teams['RIGHT']++;
+
+      if (b.x > Game.w) this.elements.teams['LEFT']++;
+
+      setTimeout(() => {
+        b?.reset();
+      }, 2000);
+    }
   }
 }
 
 export class Quadrapong extends Game {
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
   public override reset(): void {
     this.elements = {
       teams: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+        LEFT: 0,
+        RIGHT: 0,
+        TOP: 0,
+        BOTTOM: 0,
       },
       balls: { a: new Ball(), b: new Ball() },
       paddles: {
-        left: new LeftPaddle(1 * VerticalPaddle.w),
-        right: new RightPaddle(Game.w - 2 * VerticalPaddle.w),
-        top: new TopPaddle(HorizontalPaddle.h),
-        bottom: new BottomPaddle(Game.h - 2 * HorizontalPaddle.h),
+        left: new LeftPaddle('LEFT', 1 * VerticalPaddle.w),
+        right: new RightPaddle('RIGHT', Game.w - 2 * VerticalPaddle.w),
+        top: new TopPaddle('TOP', HorizontalPaddle.h),
+        bottom: new BottomPaddle('BOTTOM', Game.h - 2 * HorizontalPaddle.h),
       },
       walls: {},
       sounds: [],
       running: true,
     };
+    this.elements.balls['a'].reset();
+    setTimeout(() => {
+      this.elements.balls['b'].reset();
+    }, 2000);
+  }
+
+  protected override applyScore(b: Ball): void {
+    if (
+      !b.outside &&
+      (b.x + b.w < 0 || b.x > Game.w || b.y + b.h < 0 || b.y > Game.h)
+    ) {
+      b.outside = true;
+      this.elements.sounds.push(GameSound.SCORE);
+
+      if (b.team) {
+        this.elements.teams[b.team]++;
+        b.team = undefined;
+      }
+
+      if (b.x + b.w < 0) this.elements.teams['LEFT']--;
+
+      if (b.x > Game.w) this.elements.teams['RIGHT']--;
+
+      if (b.y + b.h < 0) this.elements.teams['TOP']--;
+
+      if (b.y > Game.h) this.elements.teams['BOTTOM']--;
+
+      setTimeout(() => {
+        b?.reset();
+      }, 2000);
+    }
   }
 }
