@@ -1,8 +1,15 @@
-<app-menu-bar></app-menu-bar>
-<app-invitation-screen></app-invitation-screen>
+<app-menu-bar *ngIf="!!room && !room.inGame"></app-menu-bar>
+<app-invitation-screen *ngIf="!!room && !room.inGame"></app-invitation-screen>
+
 <main id="container">
   <section id="content" *ngIf="!room">
     <p class='blinker'>Loading...</p>
+  </section>
+  <section class="overall" *ngIf="paused">
+    <span class='blinker'>PAUSED</span>
+		<hr>
+		Someone is away.<br>
+		Wait until they come back.
   </section>
   <section id="content" *ngIf="!!room && !room.inGame">
     <header>
@@ -11,23 +18,24 @@
     <article *ngIf='userId == room.host.id || isPlayer()'>
       <fieldset>
         <legend>Get Set</legend>
-        <label *ngIf="userId === room.host.id" for="mode">Mode</label>
-        <select
-          *ngIf="userId === room.host.id"
-          #gamemode
-          (change)="seMode(gamemode.value)"
-          name="mode"
-          id="mode">
-          <option value="0">PONG</option>
-          <option value="1">PONGDOUBLE</option>
-          <option value="2">QUADRAPONG</option>
-        </select>
-
+				<div *ngIf="userId === room.host.id" style="display:contents;">
+					<label for="mode">Mode</label>
+					<select
+						#gamemode
+						(change)="seMode(gamemode.value)"
+						name="mode"
+						id="mode">
+						<option value="0">PONG</option>
+						<option value="1">PONGDOUBLE</option>
+						<option value="2">QUADRAPONG</option>
+					</select>
+					<hr>
+				</div>
         <button class='ready-button' *ngIf="isPlayer()" (click)="ready()" [ngClass]="{'vga-bow ready-blinker':alternateReady}">Ready</button>
 				
-        <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
       </fieldset>
     </article>
+        <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
     <article style='position:relative;'>
       <header>
         <h2>Teams</h2>
@@ -144,20 +152,55 @@
 <div *ngIf="scene=='outro'">
 		<div class="cut-scene" [ngClass]="{'outro':scene=='outro'}">
 			<div *ngIf='room.mode == 0'>
-				<div class='p-anim win'   style="left: calc(50vw - 6em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw + 1em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
+				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
 			</div>
 			<div *ngIf='room.mode == 1'>
-				<div class='p-anim win'   style="left: calc(50vw - 13em; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw - 6em); background-image:url('{{room.teams[0].players[1].image}}');"></div>
-				<div class='p-anim win'   style="left: calc(50vw + 1em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw + 7em); background-image:url('{{room.teams[1].players[1].image}}');"></div>
+				<div class='p-anim' style="left: calc(50vw - 13em;" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[1].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 7em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[1].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
 			</div>
 			<div *ngIf='room.mode == 2'>
-				<div class='p-anim win'   style="left: calc(50vw - 13em; background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw - 6em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim win'   style="left: calc(50vw + 1em); background-image:url('{{room.teams[2].players[0].image}}');"></div>
-				<div class='p-anim loose' style="left: calc(50vw + 8em); background-image:url('{{room.teams[3].players[0].image}}');"></div>
+				<div class='p-anim' style="left: calc(50vw - 13em;" [ngClass]="leftWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['LEFT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="rightWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['RIGHT']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="topWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[2].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['TOP']}}</div>
+				</div>
+				<div class='p-anim' style="left: calc(50vw + 8em);" [ngClass]="bottomWin ? 'win' : 'loose'">
+					<div style="background-image:url('{{room.teams[3].players[0].image}}');"></div>
+					<div class='outro-score'>{{this.score['BOTTOM']}}</div>
+				</div>
 			</div>
+		</div>
+</div>
+
+<div *ngIf="scene=='justFlash'">
+		<div class="cut-scene" [ngClass]="{'justFlash':scene=='justFlash'}">
 		</div>
 </div>

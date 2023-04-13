@@ -1,6 +1,13 @@
 ft_transcendence
 Checklist based on sub. 12.1
 
+Issue #83 notes:
+ - [X] Lack of PAUSE screen.
+ - [X] Good behavior when waiting for another person to come back.
+ - [X] Winner is not correctly showing on cut-scene.
+ - [X] Entering a paused game does not show the paused screen.
+
+
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] Check if updates are not messing up form editions.
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
@@ -8,6 +15,8 @@ Checklist based on sub. 12.1
  - [ ] Graphic options screen?
  - [ ] Does Game History record the timestamp? If so, show it on game history html.
  - [ ] Ready/Unready button.
+ - [ ] BUG Game mode reverts to PONG after any match (even if it was another mode).
+ - [ ] BIG QUADPONG is bouncing all walls ...?
 
 --- Warning found: ---
 
