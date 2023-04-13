@@ -2,6 +2,19 @@ ft_transcendence
 Checklist based on sub. 12.1
 
 Other stuff:
+Issue #83 notes:
+ - [X] Lack of PAUSE screen.
+ - [X] Good behavior when waiting for another person to come back.
+ - [X] Winner is not correctly showing on cut-scene.
+ - [X] Entering a paused game does not show the paused screen.
+
+Issue #103:
+ - [ ] Game mode should stay the same after match.
+
+#Issue 99 related marks:
+ - [X] Match history to show partial/individual matches on Profile page.
+ - [X] Match history could show the date when the match occurred.
+
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
  - [ ] Solve all TODOs all around.
