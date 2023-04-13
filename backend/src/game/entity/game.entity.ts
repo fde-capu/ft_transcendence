@@ -211,6 +211,8 @@ abstract class Paddle extends Rectangle {
   public abstract moveForward(): void;
 
   public abstract moveBackward(): void;
+
+  public abstract getOutputAngle(ball: Ball): number;
 }
 
 abstract class VerticalPaddle extends Paddle {
@@ -241,6 +243,13 @@ abstract class VerticalPaddle extends Paddle {
   public override moveBackward(): void {
     this.sy = -300;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (
+      (ball.y + ball.h / 2 - this.y - VerticalPaddle.h / 2) /
+      (VerticalPaddle.h / 2)
+    );
+  }
 }
 
 class LeftPaddle extends VerticalPaddle {
@@ -249,6 +258,10 @@ class LeftPaddle extends VerticalPaddle {
     if (!c || b.vx > 0) return;
     return c;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball);
+  }
 }
 
 class RightPaddle extends VerticalPaddle {
@@ -256,6 +269,10 @@ class RightPaddle extends VerticalPaddle {
     const c = super.collision(b);
     if (!c || b.vx < 0) return;
     return c;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) - Math.PI;
   }
 }
 
@@ -287,6 +304,13 @@ abstract class HorizontalPaddle extends Paddle {
   public override moveBackward(): void {
     this.sx = -300;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (
+      (ball.x + ball.w / 2 - this.x - HorizontalPaddle.w / 2) /
+      (HorizontalPaddle.w / 2)
+    );
+  }
 }
 
 class TopPaddle extends HorizontalPaddle {
@@ -295,6 +319,10 @@ class TopPaddle extends HorizontalPaddle {
     if (!c || b.vy > 0) return;
     return c;
   }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) - Math.PI / 2;
+  }
 }
 
 class BottomPaddle extends HorizontalPaddle {
@@ -302,6 +330,10 @@ class BottomPaddle extends HorizontalPaddle {
     const c = super.collision(b);
     if (!c || b.vy < 0) return;
     return c;
+  }
+
+  public override getOutputAngle(ball: Ball): number {
+    return (Math.PI / 4) * super.getOutputAngle(ball) + Math.PI / 2;
   }
 }
 
@@ -391,21 +423,40 @@ export abstract class Game {
 
       if (target instanceof Wall) this.elements.sounds.push(GameSound.WALL);
 
-      subject.sx += target.sx + 10;
-      subject.sy += target.sy + 10;
-
       balls.forEach((b) => b.move(collision.entryTime));
       paddles.forEach((p) => p.move(collision.entryTime));
 
-      if (collision.xnormal != 0) {
-        subject.vx *= -1;
-        subject.sx *= -1;
+      if (target instanceof Paddle) {
+        const angle = target.getOutputAngle(subject);
+
+        const speed = Math.sqrt(subject.sx ** 2 + subject.sy ** 2);
+        subject.sx = speed * Math.cos(angle);
+        subject.sy = speed * Math.sin(angle);
+
+        const velocity = Math.sqrt(subject.vx ** 2 + subject.vy ** 2);
+        subject.vx = velocity * Math.cos(angle);
+        subject.vy = velocity * Math.sin(angle);
+      } else {
+        if (collision.xnormal != 0) {
+          subject.vx *= -1;
+          subject.sx *= -1;
+        }
+
+        if (collision.ynormal != 0) {
+          subject.vy *= -1;
+          subject.sy *= -1;
+        }
       }
 
-      if (collision.ynormal != 0) {
-        subject.vy *= -1;
-        subject.sy *= -1;
-      }
+      subject.sx +=
+        subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
+      subject.sy +=
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
+
+      subject.sx +=
+        subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
+      subject.sy +=
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
     }
 
     this.clear();
