@@ -251,12 +251,6 @@ export class ChatService {
   }
 
   isAdmin(roomId?: string | null, intraId?: string): boolean {
-//    if (!roomId || !intraId) return false;
-//    const room = this.roomById(roomId);
-//    if (!room || !room.admin || !room.admin.length) return false;
-//    for (const roomIntraId of room.admin)
-//      if (intraId == roomIntraId) return true;
-//    return false;
 		if (!intraId || !roomId) return false;
 		return this.fun.isStringInArray(intraId, this.roomById(roomId)?.admin);
   }
