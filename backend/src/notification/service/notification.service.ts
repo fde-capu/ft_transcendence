@@ -94,7 +94,7 @@ export class NotificationService {
     });
   }
 
-  public async sendNotificationToUser(intraId: string): Promise<void> {
+  private async sendNotificationToUser(intraId: string): Promise<void> {
     const notifications = await this.getAnswerableNotificationByUser(intraId);
     this.getSocketsByUser(intraId).forEach((s) =>
       s.emit('notification:list', notifications),
@@ -105,7 +105,7 @@ export class NotificationService {
     this.sockets[socketId]?.emit('notification:redirect', path);
   }
 
-  public async getNotificationById(id: string): Promise<Notification> {
+  private async getNotificationById(id: string): Promise<Notification> {
     return await this.notificationRepository.findOne({ where: { id } });
   }
 

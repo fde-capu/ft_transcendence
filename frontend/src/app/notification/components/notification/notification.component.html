@@ -1,30 +1,4 @@
 <app-notification-modal *ngIf="notification" [ngSwitch]="notification.template">
-  <!-- Friendship notification -->
-
-  <ng-container *ngSwitchCase="'friendship:invite'">
-    <span>"{{ notification.from?.intraId }}" asked me if you want to be her/his friend...</span>
-    <button (click)="answer('friendship:invite:accept')">Of course!</button>
-    <button (click)="answer('friendship:invite:decline')">I'm busy now! Maybe tomorrow</button>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'friendship:invite:decline'">
-    <span
-      >Now "{{ notification.from?.intraId }}" is your friend! Enjoy your friendship!!</span
-    >
-    <button (click)="answer('friendship:invite:accept:acknowledge')">Ok</button>
-  </ng-container>
-
-  <!-- Quickmatch notification -->
-
-  <ng-container *ngSwitchCase="'quickmatch:invite'">
-    <span>Quickmatch: We found a perfect game room! Are you ready?</span>
-    <button (click)="answer('quickmatch:invite:accept')">Let's go!</button>
-    <button (click)="answer('quickmatch:invite:decline')">
-      I'd rather avoid a shameful defeat and I want to leave the quickmatch
-      queue, please
-    </button>
-  </ng-container>
-
   <!-- Game notification -->
 
   <ng-container *ngSwitchCase="'game:invite'">
@@ -39,22 +13,6 @@
       room</span
     >
     <button (click)="answer('game:invite:decline:acknowledge')">Ok</button>
-  </ng-container>
-
-  <!-- Chat notification -->
-
-  <ng-container *ngSwitchCase="'chat:invite'">
-    <span>"{{ notification.from?.intraId }}" invites you to a chat room</span>
-    <button (click)="answer('chat:invite:accept')">Accept</button>
-    <button (click)="answer('chat:invite:decline')">Decline</button>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'chat:invite:decline'">
-    <span
-      >"{{ notification.from?.intraId }}" declined your invitation to a chat
-      room</span
-    >
-    <button (click)="answer('chat:invite:decline:acknowledge')">Ok</button>
   </ng-container>
 
   <!-- Unknown notification -->

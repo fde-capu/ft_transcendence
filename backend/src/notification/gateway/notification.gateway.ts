@@ -49,12 +49,12 @@ export class NotificationGateway
   }
 
   @SubscribeMessage('notification:create')
-  public notificationCreate(
+  public async notificationCreate(
     @ConnectedSocket() client: Socket,
     @MessageBody() request: Omit<Notification, 'id' | 'answerable' | 'answer'>,
-  ): void {
+  ): Promise<void> {
     try {
-      this.notificationService.createNotification({
+      await this.notificationService.createNotification({
         ...request,
         from: { intraId: client['subject'] },
         fromSocketId: client.id,
@@ -65,12 +65,12 @@ export class NotificationGateway
   }
 
   @SubscribeMessage('notification:answer')
-  public notificationAnswer(
+  public async notificationAnswer(
     @ConnectedSocket() client: Socket,
     @MessageBody() request: Pick<Notification, 'id' | 'answer'>,
-  ): void {
+  ): Promise<void> {
     try {
-      this.notificationService.answerNotification({
+      await this.notificationService.answerNotification({
         ...request,
         toSocketId: client.id,
       });

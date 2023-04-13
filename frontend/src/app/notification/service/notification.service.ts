@@ -56,10 +56,6 @@ export class NotificationService {
     } else this.nextNotification();
   }
 
-  public subscribeToNotificationAnswered(): Observable<Notification> {
-    return this.notificationAnswered$.asObservable();
-  }
-
   private nextNotification() {
     const [head, ...tail] = this.notificationsQueue;
     this.notificationsQueue = tail;
@@ -86,6 +82,7 @@ export class NotificationService {
   }
 
   private redirectToPath(path: string) {
-    if (this.router.url !== path) this.router.navigate([path]);
+    if (this.router.url !== path && !this.nonDisturbMode)
+      this.router.navigate([path]);
   }
 }
