@@ -1,4 +1,4 @@
-<button [disabled]="!enabled" (click)="create()">
+<button [disabled]="!enabled" (click)="create()" class='short-button'>
   <ng-content *ngIf="enabled"></ng-content>
   <ng-container *ngIf="!enabled">{{ alternativeText }}</ng-container>
 </button>

@@ -181,6 +181,15 @@ legend::after
 {
 	content: " ]";
 }
+.short-button::before
+{
+	content: "[";
+}
+.short-button::after
+{
+	content: "]";
+}
+
 ul
 {
 	margin: 0;
