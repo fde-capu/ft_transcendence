@@ -1,26 +1,15 @@
 ft_transcendence
 Checklist based on sub. 12.1
 
-Issue #83 notes:
- - [X] Lack of PAUSE screen.
- - [X] Good behavior when waiting for another person to come back.
- - [X] Winner is not correctly showing on cut-scene.
- - [X] Entering a paused game does not show the paused screen.
-
-
-#Issue 99 related marks:
- - [X] Match history to show partial/individual matches on Profile page.
- - [X] Match history could show the date when the match occurred.
-
- - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
+ Issue #108
  - [ ] Check if updates are not messing up form editions.
+
+Other stuff:
+ - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
  - [ ] Solve all TODOs all around.
  - [ ] Graphic options screen?
- - [ ] Does Game History record the timestamp? If so, show it on game history html.
  - [ ] Ready/Unready button.
- - [ ] BUG Game mode reverts to PONG after any match (even if it was another mode).
- - [ ] BIG QUADPONG is bouncing all walls ...?
 
 --- Warning found: ---
 
@@ -92,3 +81,14 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [?] Quadrapong and PongDouble failed (frozen) with "ERROR TypeError: p.setVelocity is not a function"@game.component.ts:68
 		...I believe this happens due to malfunctioning of fake users.
  - [X] Login is kindda slow, is it some wrong timer?
+Issue #83 notes:
+ - [X] Lack of PAUSE screen.
+ - [X] Good behavior when waiting for another person to come back.
+ - [X] Winner is not correctly showing on cut-scene.
+ - [X] Entering a paused game does not show the paused screen.
+#Issue 99 related marks:
+ - [X] Match history to show partial/individual matches on Profile page.
+ - [X] Match history could show the date when the match occurred.
+ - [X] Does Game History record the timestamp? If so, show it on game history html.
+ - [X] BUG Game mode reverts to PONG after any match (even if it was another mode).
+ - [X] BIG QUADPONG is bouncing all walls ...?
