@@ -62,7 +62,8 @@ export class ProfileComponent {
 
   async getDisplayUser() {
 		if (!this.idRequest) {
-			this.displayUser = this.user;
+			if (!ProfileComponent.editing)
+				this.displayUser = this.user;
 			this.setOwnership();
 		} else {
 			if (!ProfileComponent.editing)
@@ -142,6 +143,10 @@ export class ProfileComponent {
         error: err => (this.imageError = err.error['message']),
       });
   }
+
+	cancelImageChange(file: HTMLInputElement) {
+		file.value = "";
+	}
 
 	setEditing() {
 		ProfileComponent.editing = true;
