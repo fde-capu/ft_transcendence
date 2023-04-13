@@ -7,6 +7,8 @@ Issue #83 notes:
  - [X] Winner is not correctly showing on cut-scene.
  - [X] Entering a paused game does not show the paused screen.
 
+Issue #103:
+ - [ ] Game mode should stay the same after match.
 
 #Issue 99 related marks:
  - [X] Match history to show partial/individual matches on Profile page.
