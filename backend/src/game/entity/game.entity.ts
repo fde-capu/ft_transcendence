@@ -164,30 +164,16 @@ class Ball extends Rectangle {
     this.x = Game.w / 2 - Ball.s / 2;
     this.y = Game.h / 2 - Ball.s / 2;
 
-    const a000 = 0;
-    const a030 = (Math.PI * 1) / 6;
-
-    const a060 = (Math.PI * 1) / 3;
-    const a120 = (Math.PI * 2) / 3;
-
-    const a150 = (Math.PI * 5) / 6;
-    const a210 = (Math.PI * 7) / 6;
-
-    const a240 = (Math.PI * 4) / 3;
-    const a300 = (Math.PI * 5) / 3;
-
-    const a330 = (Math.PI * 11) / 6;
-    const a360 = Math.PI * 2;
+    const rad = (n) => (Math.PI * n) / 180;
 
     let alpha: number;
     do {
       alpha = Math.PI * 2 * Math.random();
     } while (
-      (a000 <= alpha && alpha <= a030) ||
-      (a060 <= alpha && alpha <= a120) ||
-      (a150 <= alpha && alpha <= a210) ||
-      (a240 <= alpha && alpha <= a300) ||
-      (a330 <= alpha && alpha <= a360)
+      (rad(-10) <= alpha && alpha <= rad(10)) ||
+      (rad(80) <= alpha && alpha <= rad(100)) ||
+      (rad(170) <= alpha && alpha <= rad(190)) ||
+      (rad(260) <= alpha && alpha <= rad(280))
     );
 
     this.sx = 200 * Math.cos(alpha);
@@ -636,10 +622,7 @@ export class Quadrapong extends Game {
       sounds: [],
       running: true,
     };
-    this.elements.balls['a'].reset();
-    setTimeout(() => {
-      this.elements.balls['b'].reset();
-    }, 2000);
+    Object.values(this.elements.balls).forEach((b) => b.reset());
   }
 
   protected override applyScore(b: Ball): void {
