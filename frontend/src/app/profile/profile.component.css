@@ -86,6 +86,7 @@ button {
 }
 input[type="file"] {
 	display: auto;
+	width: 100%;
 }
 textarea {
 	height: 2em;

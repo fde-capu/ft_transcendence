@@ -144,6 +144,10 @@ export class ProfileComponent {
       });
   }
 
+	cancelImageChange(file: HTMLInputElement) {
+		file.value = "";
+	}
+
 	setEditing() {
 		ProfileComponent.editing = true;
 	}
