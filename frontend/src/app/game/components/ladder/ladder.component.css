@@ -52,7 +52,7 @@
 	margin-bottom: 0.25em;
 	font-size: var(--font-x-small);
 	width: 56px;
-	position: relative;
+	white-space: nowrap;
 }
 
 button {

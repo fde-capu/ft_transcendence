@@ -20,6 +20,11 @@
 			<td *ngIf='!stat.wins'>Never!</td>
     </tr>
     <tr>
+      <td>Draws</td>
+      <td *ngIf='stat.draws'>{{ stat.draws | number : '2.0-0'}}</td>
+			<td *ngIf='!stat.draws'>Never!</td>
+    </tr>
+    <tr>
       <td>Looses</td>
       <td *ngIf='stat.looses'>{{ stat.looses | number : '2.0-0'}}</td>
       <td *ngIf='!stat.looses && stat.matches'>Invict!</td>
