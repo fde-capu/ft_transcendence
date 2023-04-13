@@ -19,7 +19,7 @@ export class NotificationService {
     private readonly notificationRepository: Repository<Notification>,
   ) {}
 
-  public getNotificationObservable(): Observable<Notification> {
+  public subscribeToNotifications(): Observable<Notification> {
     return this.notificationObservable.asObservable();
   }
 
@@ -62,6 +62,7 @@ export class NotificationService {
 
     notification.answer = request.answer;
     notification.answerable = false;
+    notification.toSocketId = request.toSocketId;
 
     await this.notificationRepository.save(notification);
 
