@@ -24,6 +24,8 @@ export class UserService {
     let existUser = await this.userRepository.findOneBy({
       intraId: codeFrom42.login,
     });
+    if(codeFrom42.image.versions.medium === null)
+      codeFrom42.image.versions.medium = 'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg';
     let newUser = false;
     if (existUser === null) {
       newUser = true;
@@ -37,10 +39,17 @@ export class UserService {
         score: 0,
       });
       existUser = await this.userRepository.save(createdUser);
+      return {
+        intraId: existUser.intraId,
+        mfa_enabled: existUser.mfa_enabled,
+        mfa_verified: false,
+        newUser,
+      };
     }
 
     await this.updateUser(existUser.intraId, { mfa_verified: false });
-    // TODO: pode desimplementar o registro do mfa_verified na db (não está em uso).
+    // Como este se trata do "OK da 42", apenas sempre desverificar só o mfa.
+    // Aliás pode desimplementar o registro do mfa_verified na db.
     return {
       intraId: existUser.intraId,
       mfa_enabled: existUser.mfa_enabled,
@@ -173,6 +182,7 @@ export class UserService {
         status: UserService.status.get(u.intraId)
           ? UserService.status.get(u.intraId)
           : 'OFFLINE',
+        position: 0,
       };
       out.push(dto);
     });

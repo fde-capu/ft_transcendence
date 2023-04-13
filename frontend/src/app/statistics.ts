@@ -4,4 +4,5 @@ export interface Statistics {
   looses: number;
   winsPerLooses: number;
   totalScore: number;
+  position: number;
 }
