@@ -62,7 +62,8 @@ export class ProfileComponent {
 
   async getDisplayUser() {
 		if (!this.idRequest) {
-			this.displayUser = this.user;
+			if (!ProfileComponent.editing)
+				this.displayUser = this.user;
 			this.setOwnership();
 		} else {
 			if (!ProfileComponent.editing)
