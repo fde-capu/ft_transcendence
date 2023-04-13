@@ -2,7 +2,6 @@ ft_transcendence
 Checklist based on sub. 12.1
 
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
- - [ ] Login is kindda slow, is it some wrong timer?
  - [ ] Check if updates are not messing up form editions.
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
  - [ ] Solve all TODOs all around.
@@ -79,3 +78,4 @@ frontend                    | For more info see: https://angular.io/guide/build#
  - [X] On match history, choosing the exibition game mode does not filter properly.
  - [?] Quadrapong and PongDouble failed (frozen) with "ERROR TypeError: p.setVelocity is not a function"@game.component.ts:68
 		...I believe this happens due to malfunctioning of fake users.
+ - [X] Login is kindda slow, is it some wrong timer?
