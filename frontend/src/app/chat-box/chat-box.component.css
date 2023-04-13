@@ -103,3 +103,7 @@ button {
 h2 {
 	text-align: center;
 }
+
+.flag {
+	opacity: .7;
+}

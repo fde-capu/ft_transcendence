@@ -16,11 +16,6 @@ export class Users {
   })
   mfa_enabled?: boolean;
 
-  @Column({
-    default: false,
-  })
-  mfa_verified?: boolean;
-
   @Column()
   name?: string;
 
