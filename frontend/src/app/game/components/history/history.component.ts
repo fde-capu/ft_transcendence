@@ -55,7 +55,22 @@ export class HistoryComponent {
   }
   // ^ This function is currentl all matches, unregarding the mode.
   //   Which I think is a good behavior - to always show all records.
-  //   TODO: Rename/refactor so we don't need to use this.mode as params.
+  //   TODO (if so): Rename/refactor so we don't need to use this.mode as params.
+
+
+       doesThisShow(match: MatchHistoryMap) {
+               if (!this.user) return true;
+               if (match.mode == 0) {
+                       return this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['right'].players[0].intraId;
+               } else if (match.mode == 1) {
+                       return  this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['left'].players[1].intraId
+                               ||              this.user.intraId == match.teams['right'].players[0].intraId || this.user.intraId == match.teams['right'].players[1].intraId;
+               } else if (match.mode == 2) {
+                       return  this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['right'].players[0].intraId
+                               ||              this.user.intraId == match.teams['top'].players[0].intraId || this.user.intraId == match.teams['bottom'].players[0].intraId;
+               }
+               return false;
+       }
 
 
   getPositionName(position: TeamPosition): string {
