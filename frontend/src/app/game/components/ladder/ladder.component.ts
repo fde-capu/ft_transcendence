@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/auth/service/auth.service';
   styleUrls: ['./ladder.component.css'],
 })
 export class LadderComponent implements OnInit {
-  private allUsersUrl = `${environment.BACKEND_ORIGIN}/user/all`;
+  private allUsersUrl = `${environment.BACKEND_ORIGIN}/user/rankingAll`;
 	// TODO ^ Make endport for getting all users.
   maxScore = 0;
   ladder: any[] = [];
@@ -47,12 +47,7 @@ export class LadderComponent implements OnInit {
     this.getLadder().subscribe(_ => {
 			//console.log("gotLadder", _);
       this.ladder = _;
-      this.ladder.sort(function (a: any, b: any) {
-        return b.score - a.score;
-      });
-      let i = 0;
       for (const s of this.ladder) {
-        s.position = ++i;
         this.maxScore = s.score >= this.maxScore ? s.score : this.maxScore;
       }
     });

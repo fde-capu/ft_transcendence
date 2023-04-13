@@ -32,6 +32,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   user?: User;
   id?: string | null;
   iAmAdmin = false;
+	iAmOwner = false;
   invalidNameNotice = false;
   invalidPasswordNotice = false;
   lastRoomName = '';
@@ -40,7 +41,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   static umap: Map<string, number> = new Map<string, number>();
 
   ngOnInit() {
-    this.getUserAndStuff();
+    this.getUser();
 		this.initChatRoom();
   }
 
@@ -48,11 +49,11 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     ChatBoxComponent.ignited = false;
   }
 
-  async getUserAndStuff(): Promise<void> {
+  async getUser(): Promise<void> {
 		this.user = this.userService.getLoggedUser();
 		if (!this.user) {
 			await new Promise(resolve => setTimeout(resolve, 121));
-			return this.getUserAndStuff();
+			return this.getUser();
 		}
 		else
 			return ;
@@ -73,7 +74,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     // ^ If it is a new room (roomId is null), the route will actualy
     // be deceipt by the ChatService, by consequence the component will
     // reload, and the param roomId will be present.
-    this.keepTryingToIdentify(this.id);
+    this.updateRoomUsers(this.id);
     this.chatRoom = await this.chatService.putUserInRoom(this.chatRoom);
     if (
       this.chatRoom.user &&
@@ -91,19 +92,17 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     this.imprintRecursive();
   }
 
-  async keepTryingToIdentify(id: string | null): Promise<void> {
-    //console.log("keepTryingToIdentify");
+  async updateRoomUsers(id: string | null): Promise<void> {
+    //console.log("updateRoomUsers");
     if (id) {
       const chatRoomTest = this.chatService.roomById(id);
       if (chatRoomTest) {
         this.chatRoom = chatRoomTest;
         this.chatRoom.user = chatRoomTest.user;
-				return ;
-        //await new Promise(resolve => setTimeout(resolve, 1034)); // Not heavy after all.
       }
     }
-    await new Promise(resolve => setTimeout(resolve, 234));
-    this.keepTryingToIdentify(id);
+    await new Promise(resolve => setTimeout(resolve, 1234));
+    this.updateRoomUsers(id);
   }
 
   async updateRoomRecursive(): Promise<void> {
@@ -113,12 +112,13 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         this.chatRoom.user
       );
     }
-    await new Promise(resolve => setTimeout(resolve, this.id ? 1657 : 123));
+    await new Promise(resolve => setTimeout(resolve, this.id ? 2657 : 123));
     this.updateRoomRecursive();
   }
 
   async checkAdminRecursive() {
 		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
+		this.iAmOwner = this.isOwner(this.user?.intraId);
     await new Promise(resolve => setTimeout(resolve, this.id ? 1075 : 135));
     this.checkAdminRecursive();
   }
@@ -305,6 +305,13 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     if (intraId) return this.fun.isStringInArray(intraId, this.chatRoom.admin);
     return false;
   }
+
+	isOwner(intraId?: string): boolean {
+		if (!this.chatRoom.admin) this.chatRoom.admin = [];
+		if (intraId)
+			return this.chatRoom.admin.length > 0  && this.chatRoom.admin[0] == intraId;
+		return false;
+	}
 
   revokeAdmin() {
     if (!this.user) return;
