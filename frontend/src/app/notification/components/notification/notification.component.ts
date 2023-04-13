@@ -19,4 +19,13 @@ export class NotificationComponent implements OnInit {
       },
     });
   }
+
+  answer(answer?: string) {
+    if (!this.notification) return;
+
+    this.notificationService.answerNotification({
+      ...this.notification,
+      answer,
+    });
+  }
 }
