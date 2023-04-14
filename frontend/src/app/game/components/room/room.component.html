@@ -5,7 +5,7 @@
   <section id="content" *ngIf="!room">
     <p class='blinker'>Loading...</p>
   </section>
-  <section class="overall" *ngIf="paused">
+  <section class="overall" *ngIf="!room.running">
     <span class='blinker'>PAUSED</span>
 		<hr>
 		Someone is away.<br>
