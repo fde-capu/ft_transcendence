@@ -422,6 +422,10 @@ export abstract class Game {
         const velocity = Math.sqrt(subject.vx ** 2 + subject.vy ** 2);
         subject.vx = velocity * Math.cos(angle);
         subject.vy = velocity * Math.sin(angle);
+        if (target instanceof HorizontalPaddle) {
+          subject.sy *= -1;
+          subject.vy *= -1;
+        }
       } else {
         if (collision.xnormal != 0) {
           subject.vx *= -1;
@@ -546,7 +550,8 @@ export class Pong extends Game {
       sounds: [],
       running: true,
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
+    if (!this.context)
+      Object.values(this.elements.balls).forEach(b => b.reset());
   }
 
   protected override applyScore(b: Ball): void {
@@ -558,9 +563,10 @@ export class Pong extends Game {
 
       if (b.x > Game.w) this.elements.teams['LEFT']++;
 
-      setTimeout(() => {
-        b?.reset();
-      }, 2000);
+      if (!this.context)
+        setTimeout(() => {
+          b?.reset();
+        }, 2000);
     }
   }
 }
@@ -583,7 +589,8 @@ export class PongDouble extends Game {
       sounds: [],
       running: true,
     };
-    Object.values(this.elements.balls).forEach(b => b.reset());
+    if (!this.context)
+      Object.values(this.elements.balls).forEach(b => b.reset());
   }
 
   protected override applyScore(b: Ball): void {
@@ -595,9 +602,10 @@ export class PongDouble extends Game {
 
       if (b.x > Game.w) this.elements.teams['LEFT']++;
 
-      setTimeout(() => {
-        b?.reset();
-      }, 2000);
+      if (!this.context)
+        setTimeout(() => {
+          b?.reset();
+        }, 2000);
     }
   }
 }
@@ -622,10 +630,8 @@ export class Quadrapong extends Game {
       sounds: [],
       running: true,
     };
-    this.elements.balls['a'].reset();
-    setTimeout(() => {
-      this.elements.balls['b'].reset();
-    }, 2000);
+    if (!this.context)
+      Object.values(this.elements.balls).forEach(b => b.reset());
   }
 
   protected override applyScore(b: Ball): void {
@@ -649,9 +655,10 @@ export class Quadrapong extends Game {
 
       if (b.y > Game.h) this.elements.teams['BOTTOM']--;
 
-      setTimeout(() => {
-        b?.reset();
-      }, 2000);
+      if (!this.context)
+        setTimeout(() => {
+          b?.reset();
+        }, 2000);
     }
   }
 }
