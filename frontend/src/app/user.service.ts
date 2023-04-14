@@ -58,9 +58,10 @@ export class UserService {
 			return ;
 		}
     this.authService.getAuthContext().subscribe(_ => {
-      UserService.isAuthorized = true;
-      if (_?.sub)
+      if (_?.sub) {
+				UserService.isAuthorized = true;
 				UserService.currentIntraId = _?.sub;
+			}
     });
 		await new Promise(resolve => setTimeout(resolve, 111));
 		this.setCurrentIntraId();
@@ -69,7 +70,7 @@ export class UserService {
   async announceMe(): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 5555));
 		// ^ Say hi to backend every 5 seconds.
-    if (!UserService.currentIntraId) return this.announceMe();
+    if (!UserService.currentIntraId && !UserService.isAuthorized) return this.announceMe();
     this.http
       .put(
         this.attendanceUrl + UserService.currentIntraId,
@@ -162,7 +163,6 @@ export class UserService {
 				UserService.all = _;
 			});
 		}
-		console.log("All:", UserService.all);
 		await new Promise(resolve => setTimeout(resolve, deltaMs));
 		this.getAllUsersCycle(deltaMs);
 	}

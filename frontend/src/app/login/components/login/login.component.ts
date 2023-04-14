@@ -52,7 +52,7 @@ export class LoginComponent {
 			this.message = this.initialMessage;
 		},
 		error: () => {
-			console.log("Subscription went wrong!");
+			// User is not authorized, so do nothing.
 		},
 	});
   }
