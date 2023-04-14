@@ -106,7 +106,7 @@ export class StatisticsComponent implements OnChanges {
   }
 
 	doesThisShow(match: MatchHistory) {
-			if (!this.user) return true;
+			if (!this.user || !this.user?.intraId) return true;
 			if (match.mode == 0) {
 				return this.user.intraId == match.teams[0].players[0].intraId || this.user.intraId == match.teams[1].players[0].intraId;
 			} else if (match.mode == 1) {
