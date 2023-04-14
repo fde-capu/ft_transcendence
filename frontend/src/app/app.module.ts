@@ -28,6 +28,7 @@ import { InviteModule } from './invitation.module';
 import { GameModule } from './game/game.module';
 import { NotificationModule } from './notification/notification.module';
 import { FindGameComponent } from './find-game/find-game.component';
+import { ChangeNameComponent } from './change-name/change-name.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { FindGameComponent } from './find-game/find-game.component';
     UserBarComponent,
     StatisticsComponent,
     FindGameComponent,
+    ChangeNameComponent,
   ],
   imports: [
     BrowserModule,
