@@ -11,7 +11,7 @@ export class UserService {
   public static status: Map<string, string> = new Map<string, string>();
   static attendance: Map<string, number> = new Map<string, number>();
   static attOnce?: boolean;
-	private static logOffTimeOut: number = 1000 * 10; // 15 seconds
+	private static logOffTimeOut: number = 1000 * 10; // 10 seconds
 
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
