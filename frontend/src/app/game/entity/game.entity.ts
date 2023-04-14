@@ -408,7 +408,7 @@ export abstract class Game {
       balls.forEach(b => b.move(collision.entryTime));
       paddles.forEach(p => p.move(collision.entryTime));
 
-      /*if (target instanceof Paddle) {
+      if (target instanceof Paddle) {
         const angle = target.getOutputAngle(subject);
 
         const speed = Math.sqrt(subject.sx ** 2 + subject.sy ** 2);
@@ -423,19 +423,19 @@ export abstract class Game {
           subject.sy *= -1;
           subject.vy *= -1;
         }
-      } else {*/
-      if (collision.xnormal != 0) {
-        subject.vx *= -1;
-        subject.sx *= -1;
+      } else {
+        if (collision.xnormal != 0) {
+          subject.vx *= -1;
+          subject.sx *= -1;
+        }
+
+        if (collision.ynormal != 0) {
+          subject.vy *= -1;
+          subject.sy *= -1;
+        }
       }
 
-      if (collision.ynormal != 0) {
-        subject.vy *= -1;
-        subject.sy *= -1;
-      }
-      //}
-
-      /*subject.sx +=
+      subject.sx +=
         subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
       subject.sy +=
         subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
@@ -443,7 +443,7 @@ export abstract class Game {
       subject.sx +=
         subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
       subject.sy +=
-        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;*/
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
     }
 
     this.clear();
@@ -471,7 +471,7 @@ export abstract class Game {
       for (const t of targets) {
         const c = t.collision(s);
 
-        if (!c) continue;
+        if (!c || c.entryTime <= 0) continue;
         if (data && c.entryTime >= data.collision.entryTime) continue;
 
         data = { collision: c, subject: s, target: t };
