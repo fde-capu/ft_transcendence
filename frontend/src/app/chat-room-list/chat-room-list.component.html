@@ -10,9 +10,9 @@
 
     {{ room.name }}
     <div class='button-line'>
+				<span *ngIf="isAdmin(user?.intraId, room.id)">[ Administrator ] </span>
       <span *ngIf="!isCurrentUserBlocked(room)">
         <span *ngIf="room.password">
-					<span *ngIf="isAdmin(user?.intraId, room.id)">[ Administrator ]-></span>
           <input
             id="pass{{ room.id }}"
             [ngModel]="password.get(room.id)"
