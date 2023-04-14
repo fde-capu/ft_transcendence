@@ -17,7 +17,9 @@ export class ChangeNameComponent {
 
   submitName() {
     // Make HTTP request to update the user's name
-    const name : string = this.newName;
+    let name : string = this.newName;
+
+    name = name.trim();
     const data = { name };
     const options = { withCredentials: true }; // set withCredentials to true
     this.http.put<any>(`${environment.BACKEND_ORIGIN}/user/update-name`, data, options).subscribe(
