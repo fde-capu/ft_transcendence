@@ -142,7 +142,10 @@ export class ChatService {
   logOutAllRooms(intraId: string) {
     for (const newRoom of ChatService.allRooms) {
       const newUsers: string[] = [];
-			this.revokeAdmin(newRoom.id, intraId);
+//			this.revokeAdmin(newRoom.id, intraId);
+//			^ Not revoking on exit, user persists admin even if out of the chat.
+//				Because, if not, they could never visit another profile and get back
+//				without loosing the admin role.
       for (const user of newRoom.user) if (user != intraId) newUsers.push(user);
       if (newUsers.length != newRoom.user.length) {
         newRoom.user = newUsers;
@@ -226,7 +229,8 @@ export class ChatService {
     for (const adminId of theRoom.admin)
       if (adminId != intraId) newAdmin.push(adminId);
     if (!newAdmin.length) {
-      if (theRoom.user && theRoom.user.length <= 1) {
+      if (theRoom.user && theRoom.user.length <= 1 && this.router.url.indexOf('/chat') == 0) {
+				// This now only runs if is the last revoke ~~^
         this.removeRoom(roomId);
         this.router.navigate(['/rooms']);
         return;
@@ -247,12 +251,6 @@ export class ChatService {
   }
 
   isAdmin(roomId?: string | null, intraId?: string): boolean {
-//    if (!roomId || !intraId) return false;
-//    const room = this.roomById(roomId);
-//    if (!room || !room.admin || !room.admin.length) return false;
-//    for (const roomIntraId of room.admin)
-//      if (intraId == roomIntraId) return true;
-//    return false;
 		if (!intraId || !roomId) return false;
 		return this.fun.isStringInArray(intraId, this.roomById(roomId)?.admin);
   }
