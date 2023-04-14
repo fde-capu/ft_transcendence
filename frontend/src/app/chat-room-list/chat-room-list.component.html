@@ -34,7 +34,7 @@
       <span *ngIf="isCurrentUserMuted(room)"
         >&nbsp;<b>[ YOU ARE MUTED! ]</b></span
       >
-        <button *ngIf="!room.password" routerLink="/chat/{{ room.id }}">
+        <button *ngIf="!room.password && !isCurrentUserBlocked(room)" routerLink="/chat/{{ room.id }}">
           ENTER
         </button>
     </div>
