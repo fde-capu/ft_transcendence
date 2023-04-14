@@ -6,7 +6,14 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { Game, GameData, Pong, Dictionary, PongDouble, Quadrapong } from '../../entity/game.entity';
+import {
+  Game,
+  GameData,
+  Pong,
+  Dictionary,
+  PongDouble,
+  Quadrapong,
+} from '../../entity/game.entity';
 import { GameMode, Room } from '../../entity/room.entity';
 import { RoomSocket } from '../../socket/room.socket';
 
@@ -32,7 +39,7 @@ export class GameComponent implements AfterViewInit {
     new Audio('/assets/sounds/wall.mp3'),
     new Audio('/assets/sounds/score.mp3'),
   ];
-  
+
   ngAfterViewInit(): void {
     switch (this.room.mode) {
       case GameMode.PONG:
@@ -62,7 +69,8 @@ export class GameComponent implements AfterViewInit {
       if (gd) this.game.from(gd);
       gd = undefined;
       const currentTimestamp = Date.now();
-      this.game.update((currentTimestamp - lastUpdate) / 1000);
+      if (this.room.running)
+        this.game.update((currentTimestamp - lastUpdate) / 1000);
       lastUpdate = currentTimestamp;
       setTimeout(() => {
         window.requestAnimationFrame(render);
