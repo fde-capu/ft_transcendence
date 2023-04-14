@@ -44,11 +44,10 @@ export class UserService {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
-    this.setCurrentIntraId(); // <- First thing being done.
+    this.setCurrentIntraId();
 		this.announceMe();
 		this.keepUpdating();
-		this.getAllUsersCycle(3333); // Will update UserService.all
-																 // on every ~3s.
+		this.getAllUsersCycle(3333);
   }
 
   async setCurrentIntraId() {
@@ -56,27 +55,22 @@ export class UserService {
 			this.getSingleUser(UserService.currentIntraId).subscribe(_=>{
 				UserService.currentUser = _;
 			});
-			// ^ SOLUTION: ASAP, make a singleUserRequest to backed.
-			//   So we don't have to wait for UserService.all to complete.
-			//   RESULT: The "waiting" screen  time gets much better,
-			//	 but still depends on the agility of the backend
-			//   response.
 			return ;
 		}
     this.authService.getAuthContext().subscribe(_ => {
-      UserService.isAuthorized = true;
-      if (_?.sub)
+      if (_?.sub) {
+				UserService.isAuthorized = true;
 				UserService.currentIntraId = _?.sub;
+			}
     });
 		await new Promise(resolve => setTimeout(resolve, 111));
 		this.setCurrentIntraId();
-		// ^ Event though this loop for safety, it finds the
-		//   currentIntraId very quickly, of first call.
   }
 
   async announceMe(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 10391));
-    if (!UserService.currentIntraId) return this.announceMe();
+    await new Promise(resolve => setTimeout(resolve, 5555));
+		// ^ Say hi to backend every 5 seconds.
+    if (!UserService.currentIntraId && !UserService.isAuthorized) return this.announceMe();
     this.http
       .put(
         this.attendanceUrl + UserService.currentIntraId,
@@ -101,13 +95,6 @@ export class UserService {
 		let u =  this.getUser(UserService.currentIntraId);
 		if (!!u)
 			UserService.currentUser = u;
-		// ^ As soons as we know the currentIntraId,
-		//   we get the currentUser.
-		//   Problem is: on the first trials, UserService.all is
-		//   still waiting the reponse from backend.
-		// ^ SOLUTION: make a test on "u", so currentUser is not
-		//   set to undefined in case UserService.all is not yet
-		//   populated.
     await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();
   }
@@ -174,9 +161,6 @@ export class UserService {
 		if (UserService.running) {
 			this.getAllUsers().subscribe(_=>{
 				UserService.all = _;
-				// ^ As soon as the first subscription completes,
-				//   the "keepUpdating()" loop will find the currentUser.
-				//   This is where is taking ~2s for "waiting" on login screen.
 			});
 		}
 		await new Promise(resolve => setTimeout(resolve, deltaMs));
