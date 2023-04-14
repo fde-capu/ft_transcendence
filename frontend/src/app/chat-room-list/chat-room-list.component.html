@@ -10,9 +10,9 @@
 
     {{ room.name }}
     <div class='button-line'>
+				<span *ngIf="isAdmin(user?.intraId, room.id)">[ Administrator ] </span>
       <span *ngIf="!isCurrentUserBlocked(room)">
         <span *ngIf="room.password">
-					<span *ngIf="isAdmin(user?.intraId, room.id)">[ Administrator ]-></span>
           <input
             id="pass{{ room.id }}"
             [ngModel]="password.get(room.id)"
@@ -34,10 +34,11 @@
       <span *ngIf="isCurrentUserMuted(room)"
         >&nbsp;<b>[ YOU ARE MUTED! ]</b></span
       >
-        <button *ngIf="!room.password" routerLink="/chat/{{ room.id }}">
+        <button *ngIf="!room.password && !isCurrentUserBlocked(room)" routerLink="/chat/{{ room.id }}">
           ENTER
         </button>
     </div>
   </div>
 </div>
 <div *ngIf="!visibleRooms.length" class='centered'>Nada.</div>
+<button class='centered' routerLink="/chat">Create Chat</button>
