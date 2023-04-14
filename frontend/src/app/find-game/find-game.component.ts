@@ -23,6 +23,7 @@ export class FindGameComponent implements OnInit, OnDestroy {
     this.socket.on('connect', () => {
       console.log('Socket connected');
     });
+    this.socket.emit('join:queue');
     this.socket.on('game:room:create', (id: string) => {
       console.log(`Room ${id} created!`);
      

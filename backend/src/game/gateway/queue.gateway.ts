@@ -25,6 +25,8 @@ import {
   export class QueueGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server: Server;
+
+    count : number = 0;
   
     queue: ClientSocket[] = [];
   
@@ -35,8 +37,18 @@ import {
     ) {}
   
     public async handleConnection(client: ClientSocket): Promise<void> {
+      console.log("Connect at Queue", client.id);
+    }
+  
+    public async handleDisconnect(client: Socket): Promise<void> {
+      this.queue = this.queue.filter((user) => user.id !== client.id);
+      console.log('Remaining users:',  this.queue.map(user => user.id));
+    
+    }
+
+    @SubscribeMessage('join:queue')
+    public async joinQueue(@ConnectedSocket() client: ClientSocket): Promise<void> {
       try {
-        
         const { authorization } = parse(client.handshake.headers.cookie);
         const { sub: subject } = await this.tokenService.inspect(authorization);
         const { name, image } = await this.userService.getUserByIntraId(subject);
@@ -50,12 +62,6 @@ import {
         client.disconnect(true);
       }
     }
-  
-    public async handleDisconnect(client: Socket): Promise<void> {
-      this.queue = this.queue.filter((user) => user.id !== client.id);
-      console.log('Remaining users:',  this.queue.map(user => user.id));
-    
-    }
 
     @SubscribeMessage('leave:queue')
     public leaveQueue(@ConnectedSocket() client: ClientSocket): void {
@@ -66,8 +72,10 @@ import {
   
   
     private matchUsers(): void {
+      this.count++;
+      console.log("Join queue");
       if (this.queue.length >= 2) {
-        console.log("Two users at the queue");
+        console.log("Two users at the queue", this.count);
         const user1 = this.queue.shift();
         const user2 = this.queue.shift();
         this.roomsService.roomQueueCreate(user1, user2);
