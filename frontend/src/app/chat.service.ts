@@ -294,7 +294,7 @@ export class ChatService {
         for (const user of room.blocked)
           if (user != tigged) newBlocks.push(user);
         room.blocked = newBlocks;
-        self.roomChanged(room);
+        this.roomChanged(room);
       }
   }
 
