@@ -228,9 +228,11 @@ export class UserService {
   makeFriend(user_b: User | undefined): Observable<any> {
     if (!UserService.currentUser || !user_b) return of(false);
     if (!UserService.currentUser.friends) UserService.currentUser.friends = [];
-    if (!this.isFriend(user_b))
+    if (!this.isFriend(user_b)) {
       UserService.currentUser.friends.push(user_b.intraId);
-    return this.saveUser(UserService.currentUser);
+			return this.saveUser(UserService.currentUser);
+		}
+		return of(UserService.currentUser);
   }
 
   mutualFriends(
@@ -302,8 +304,11 @@ export class UserService {
   makeBlock(user_b: User | undefined): Observable<any> {
     if (!UserService.currentUser || !user_b) return of(false);
     if (!UserService.currentUser.blocks) UserService.currentUser.blocks = [];
-    UserService.currentUser.blocks.push(user_b.intraId);
-    return this.saveUser(UserService.currentUser);
+		if (!this.isBlock(user_b)){
+			UserService.currentUser.blocks.push(user_b.intraId);
+			return this.saveUser(UserService.currentUser);
+		}
+		return of(UserService.currentUser);
   }
 
   unBlock(user_b: User | undefined): Observable<any> {
