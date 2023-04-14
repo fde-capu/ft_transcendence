@@ -89,7 +89,7 @@ button {
 	overflow: hidden;
 }
 .options-block {
-	top: 6em;
+	top: 5em;
 	position: fixed;
 	overflow: auto;
 	margin: 0 auto;
@@ -98,10 +98,12 @@ button {
 	left: 0;
 	background: var(--color-sublow);
 	z-index: 200;
+	border: var(--border-extra);
 }
 
 h2 {
 	text-align: center;
+	margin-bottom: 1em;
 }
 
 .flag {

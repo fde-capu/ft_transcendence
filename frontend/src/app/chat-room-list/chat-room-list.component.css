@@ -17,3 +17,9 @@ button {
 .button-line {
 	text-align: right;
 }
+
+.centered {
+	margin: 0 auto;
+	display: block;
+	text-align: center;
+}
