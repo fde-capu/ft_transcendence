@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
@@ -11,7 +15,7 @@ export class UserService {
   public static status: Map<string, string> = new Map<string, string>();
   static attendance: Map<string, number> = new Map<string, number>();
   static attOnce?: boolean;
-	private static logOffTimeOut: number = 1000 * 60 * 20; // 20 minutes
+  private static logOffTimeOut: number = 1000 * 60 * 20; // 20 minutes
 
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
@@ -24,8 +28,9 @@ export class UserService {
     let existUser = await this.userRepository.findOneBy({
       intraId: codeFrom42.login,
     });
-    if(codeFrom42.image.versions.medium === null)
-      codeFrom42.image.versions.medium = 'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg';
+    if (codeFrom42.image.versions.medium === null)
+      codeFrom42.image.versions.medium =
+        'https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg';
     let newUser = false;
     if (existUser === null) {
       newUser = true;
@@ -62,45 +67,44 @@ export class UserService {
     return await this.userRepository.findOneBy({ name });
   }
 
-  async updateUserinDatabase(user : Users)
-  {
+  async updateUserinDatabase(user: Users) {
     return await this.userRepository.save(user);
   }
 
   async updateUser(intraId: string, user: Users) {
-    try
-    {
-    const currentUser = await this.findOneBy42Id(intraId); // get the current user from the database
-    const newName = user.name; // get the new name from the request body
-    if (newName && newName !== currentUser.name) { // check if the name has changed
-      const existingUser = await this.findOneByName(newName); // query the database for a user with the new name
-      if (existingUser && existingUser.intraId !== intraId) { // check if a user with the new name already exists, but is not the current user
-        throw new BadRequestException(`A user with the name ${newName} already exists.`);
+    try {
+      const currentUser = await this.findOneBy42Id(intraId); // get the current user from the database
+      const newName = user.name; // get the new name from the request body
+      if (newName && newName !== currentUser.name) {
+        // check if the name has changed
+        const existingUser = await this.findOneByName(newName); // query the database for a user with the new name
+        if (existingUser && existingUser.intraId !== intraId) {
+          // check if a user with the new name already exists, but is not the current user
+          throw new BadRequestException(
+            `A user with the name ${newName} already exists.`,
+          );
+        }
       }
-    }
-  
-    const filtered_user = {
-      name: user.name,
-      image: user.image,
-      friends: user.friends,
-      blocks: user.blocks,
-      score: user.score,
-      mfa_enabled: user.mfa_enabled,
-    };
-    const resp = await this.userRepository
-      .createQueryBuilder()
-      .update(Users)
-      .set(filtered_user)
-      .where('intraId = :intraId', { intraId: intraId })
-      .execute();
-    return resp;
-  }
-  catch(error)
-  {
-    throw error;
-  }
-  }
 
+      const filtered_user = {
+        name: user.name,
+        image: user.image,
+        friends: user.friends,
+        blocks: user.blocks,
+        score: user.score,
+        mfa_enabled: user.mfa_enabled,
+      };
+      const resp = await this.userRepository
+        .createQueryBuilder()
+        .update(Users)
+        .set(filtered_user)
+        .where('intraId = :intraId', { intraId: intraId })
+        .execute();
+      return resp;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });
@@ -126,8 +130,7 @@ export class UserService {
       .getMany();
     const out = [];
     for (const u of resp)
-      if (UserService.status.get(u.intraId) != 'OFFLINE')
-				out.push(u);
+      if (UserService.status.get(u.intraId) != 'OFFLINE') out.push(u);
     return this.makeUserDto(out);
   }
 
