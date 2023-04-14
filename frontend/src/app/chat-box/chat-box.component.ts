@@ -74,8 +74,14 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     // ^ If it is a new room (roomId is null), the route will actualy
     // be deceipt by the ChatService, by consequence the component will
     // reload, and the param roomId will be present.
+		if (!this.id) return;
+		let getRoom = this.chatService.roomById(this.id);
+		if (getRoom)
+			this.chatRoom = getRoom;
+		if (this.fun.isStringInArray(this.user.intraId, this.chatRoom.blocked))
+			this.router.navigate(['/rooms']);
     this.updateRoomUsers(this.id);
-    this.chatRoom = await this.chatService.putUserInRoom(this.chatRoom);
+    this.chatService.putUserInRoom(this.chatRoom);
     if (
       this.chatRoom.user &&
       this.chatRoom.user.length == 1 &&
