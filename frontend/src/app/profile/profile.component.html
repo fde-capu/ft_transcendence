@@ -5,23 +5,10 @@
 
 <div *ngIf='!amIBlocked; else spying' class='box'>
 	<div *ngIf="displayUser; else user_unknown">
-		<app-change-name></app-change-name>
+	
 		<div class='opt-box' *ngIf="owner">
 			<div class='options'>
-				<label class='left'>
-			change name
-				</label>
-				<textarea id="name" [(ngModel)]="displayUser.name" class='middle hover_invert'
-					(focus)="fun.switchIf('nameButton', 'Change', 'Ok'); saveLastName(); setEditing();"
-					(focusout)="fun.switchIf('nameButton', 'Ok', 'Change'); validateAndSaveUser();"
-					(keydown.enter)="fun.blur('name'); fun.blink('nameButton');"
-				></textarea>
-				<div *ngIf='invalidNameNotice' id='invalidNameNotice'><- <b>Invalid</b>&nbsp;
-				</div>
-				<button *ngIf='!invalidNameNotice' id="nameButton" type="button" class='right' (click)=
-					"fun.focusIf('nameButton', 'Change', 'name');"
-					>Change
-				</button>
+				<app-change-name></app-change-name>
 			</div>
 
 			<div class='options'>
