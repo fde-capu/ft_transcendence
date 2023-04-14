@@ -20,7 +20,7 @@ export class OnlineUsersComponent implements OnInit {
     if (!this.userService.authorized() || !UserService.currentIntraId) return;
 		this.users = this.userService.getOnlineUsers();
     await new Promise(resolve =>
-      setTimeout(resolve, 3399 + Math.random() * 3234)
+      setTimeout(resolve, 3333)
     );
     this.getOnlineUsers();
   }

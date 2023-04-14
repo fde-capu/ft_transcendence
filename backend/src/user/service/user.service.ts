@@ -11,7 +11,7 @@ export class UserService {
   public static status: Map<string, string> = new Map<string, string>();
   static attendance: Map<string, number> = new Map<string, number>();
   static attOnce?: boolean;
-	private static logOffTimeOut: number = 1000 * 60 * 20; // 20 minutes
+	private static logOffTimeOut: number = 1000 * 10; // 15 seconds
 
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
@@ -186,11 +186,13 @@ export class UserService {
 
   async checkOnStudents() {
     UserService.attOnce = true;
-    await new Promise((resolve) => setTimeout(resolve, 3391));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+		// ^ Check absents every 5 seconds.
     if (!UserService.attendance) return this.checkOnStudents();
     for (const [u, d] of UserService.attendance.entries()) {
       const elapsed = Date.now() - d;
       if (elapsed > UserService.logOffTimeOut) {
+				// If no notice for more than 10 seconds, consider user OFFLINE.
         UserService.attendance.delete(u);
         UserService.status.set(u, 'OFFLINE');
       }

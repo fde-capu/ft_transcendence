@@ -44,11 +44,10 @@ export class UserService {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
-    this.setCurrentIntraId(); // <- First thing being done.
+    this.setCurrentIntraId();
 		this.announceMe();
 		this.keepUpdating();
-		this.getAllUsersCycle(3333); // Will update UserService.all
-																 // on every ~3s.
+		this.getAllUsersCycle(3333);
   }
 
   async setCurrentIntraId() {
@@ -56,11 +55,6 @@ export class UserService {
 			this.getSingleUser(UserService.currentIntraId).subscribe(_=>{
 				UserService.currentUser = _;
 			});
-			// ^ SOLUTION: ASAP, make a singleUserRequest to backed.
-			//   So we don't have to wait for UserService.all to complete.
-			//   RESULT: The "waiting" screen  time gets much better,
-			//	 but still depends on the agility of the backend
-			//   response.
 			return ;
 		}
     this.authService.getAuthContext().subscribe(_ => {
@@ -70,12 +64,11 @@ export class UserService {
     });
 		await new Promise(resolve => setTimeout(resolve, 111));
 		this.setCurrentIntraId();
-		// ^ Event though this loop for safety, it finds the
-		//   currentIntraId very quickly, of first call.
   }
 
   async announceMe(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 10391));
+    await new Promise(resolve => setTimeout(resolve, 5555));
+		// ^ Say hi to backend every 5 seconds.
     if (!UserService.currentIntraId) return this.announceMe();
     this.http
       .put(
@@ -169,6 +162,7 @@ export class UserService {
 				UserService.all = _;
 			});
 		}
+		console.log("All:", UserService.all);
 		await new Promise(resolve => setTimeout(resolve, deltaMs));
 		this.getAllUsersCycle(deltaMs);
 	}
