@@ -12,6 +12,7 @@ import { HistoryComponent } from './components/history/history.component';
 import { LadderComponent } from './components/ladder/ladder.component';
 import { GameNotificationComponent } from './components/game-notification/game-notification.component';
 import { NotificationModule } from '../notification/notification.module';
+import { GameTestComponent } from './components/game-test/game-test.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { NotificationModule } from '../notification/notification.module';
     HistoryComponent,
     LadderComponent,
     GameNotificationComponent,
+    GameTestComponent,
   ],
   imports: [
     CommonModule,
