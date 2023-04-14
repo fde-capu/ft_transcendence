@@ -32,10 +32,14 @@
 
         <button class='ready-button' *ngIf="isPlayer()" (click)="ready()" [ngClass]="{'vga-bow ready-blinker':alternateReady}">Ready</button>
 
-        <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
       </fieldset>
     </article>
         <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
+
+	<div class="slow-blinker big-title block">
+	{{room.mode == 0 ? "PONG!" : room.mode == 1 ? "PONGDOUBLE!" : "QUADRAPONG!"}}
+	</div>
+
     <article style='position:relative;'>
       <header>
         <h2>Teams</h2>

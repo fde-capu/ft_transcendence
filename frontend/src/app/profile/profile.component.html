@@ -28,11 +28,12 @@
 				<label class='left'>
 			change image
 				</label>
-				<div class="small-profile-image hover_invert"
-					style="background-image:url('{{ displayUser.image }}'); background-size: cover; overflow: hidden;">
+				<div class="small-profile-image hover_invert" *ngIf="!file.files?.length"
+					style="background-image:url('{{ displayUser.image }}');">
 				</div>
         <input #file type="file" name="file" accept="image/*">
-				<button type="button" (click)="upload(file)">Change Image</button>
+				<button type="button" (click)="upload(file)" *ngIf="file.files?.length">Upload Selected File</button>
+				<button type="button" (click)="cancelImageChange(file)" *ngIf="file.files?.length">Cancel</button>
         <span *ngIf="imageError">{{ imageError }}</span>
 			</div>
 

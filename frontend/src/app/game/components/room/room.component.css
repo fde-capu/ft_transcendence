@@ -168,19 +168,19 @@ hr {
 }
 
 @keyframes shock {
-  0%	{ background-color: var(--color-high); 
+  0%	{ background-color: var(--color-high);
 		filter: drop-shadow(0 0 10px #a0a0a087);}
-  2%	{ background-color: var(--color-burn); 
+  2%	{ background-color: var(--color-burn);
 		filter: drop-shadow(0 0 15px #ddddddaa);}
-  4%	{ background-color: var(--color-high); 
+  4%	{ background-color: var(--color-high);
 		filter: drop-shadow(0 0 10px #a0a0a087);}
-  6%	{ background-color: var(--color-burn); 
+  6%	{ background-color: var(--color-burn);
 		filter: drop-shadow(0 0 15px #ddddddaa);}
-  8%	{ background-color: var(--color-high); 
+  8%	{ background-color: var(--color-high);
 		filter: drop-shadow(0 0 10px #a0a0a087);}
-  10%	{ background-color: var(--color-burn); 
+  10%	{ background-color: var(--color-burn);
 		filter: drop-shadow(0 0 15px #ddddddaa);}
-  12%	{ background-color: var(--color-high); 
+  12%	{ background-color: var(--color-high);
 		filter: drop-shadow(0 0 10px #a0a0a087);}
 }
 
@@ -214,106 +214,4 @@ hr {
 
 .justFlash {
 	animation: flash 1.5s;
-}
-
-@keyframes flash {
-	0% {
-		background-color: rgba(255,255,255,255);
-		opacity: 1;
-	}
-	20% {
-		background-color: rgba(10,10,10,255);
-	}
-	80% {
-		background-color: rgba(10,10,10,255);
-		opacity: 1;
-	}
-	100% {
-		background-color: rgba(10,10,10,255);
-		opacity: 0;
-	}
-}
-
-.p-anim, .p-anim div {
-	filter: grayscale(100%);
-	border: none;
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center;
-	min-width: 5em;
-	min-height: 5em;
-	max-width: 5em;
-	max-height: 5em;
-	position: absolute;
-}
-
-.p1 {
-	animation: anim-pl-in;
-	animation-duration: 3.2s;
-}
-.p2 {
-	animation: anim-pr-in;
-	animation-duration: 3.2s;
-}
-.pt {
-	animation: anim-pt-in;
-	animation-duration: 3.2s;
-}
-.pb {
-	animation: anim-pb-in;
-	animation-duration: 3.2s;
-}
-.win {
-	animation: anim-win;
-	animation-duration: 3.2s;
-}
-.loose {
-	animation: anim-loose;
-	animation-duration: 3.2s;
-}
-.outro-score {
-	position: relative;
-	font-size: var(--font-xx-large);
-	display: flex;
-	align-items: center;
-}
-@keyframes anim-pl-in {
-	0% { left: 20%; opacity: 0; }
-	30% { opacity: 1; }
-	70% { opacity: 1; }
-	100% { left: 30%; opacity: 0;}
-}
-
-@keyframes anim-pr-in {
-	0% { right: 20%; opacity: 0; }
-	30% { opacity: 1; }
-	70% { opacity: 1; }
-	100% { right: 30%; opacity: 0;}
-}
-
-@keyframes anim-pt-in {
-	0% { top: 20%; opacity: 0; }
-	30% { opacity: 1; }
-	70% { opacity: 1; }
-	100% { top: 30%; opacity: 0;}
-}
-
-@keyframes anim-pb-in {
-	0% { bottom: 20%; opacity: 0; }
-	30% { opacity: 1; }
-	70% { opacity: 1; }
-	100% { bottom: 30%; opacity: 0;}
-}
-
-@keyframes anim-win {
-	0% { bottom: 50%; opacity: 0;}
-	30% { opacity: 1; }
-	70% { opacity: 1; }
-	100% { bottom: 55%; opacity: 0;}
-}
-@keyframes anim-loose {
-	0% { bottom: 50%; opacity: 0;}
-	30% { opacity: 1; }
-	70% { opacity: 1; }
-	100% { bottom: 45%; opacity: 0;}
 }
