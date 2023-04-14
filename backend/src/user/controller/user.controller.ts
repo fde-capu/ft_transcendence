@@ -105,7 +105,7 @@ export class UserController {
       }
     } catch (error) {
       if (response) {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        response.status(HttpStatus.NOT_ACCEPTABLE).json({ error: error.message });
       } else {
         throw new InternalServerErrorException(error.message);
       }

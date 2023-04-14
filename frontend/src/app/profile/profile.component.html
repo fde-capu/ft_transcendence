@@ -5,12 +5,10 @@
 
 <div *ngIf='!amIBlocked; else spying' class='box'>
 	<div *ngIf="displayUser; else user_unknown">
-	
 		<div class='opt-box' *ngIf="owner">
 			<div class='options'>
-				<app-change-name></app-change-name>
+				<app-change-name [userName]="displayUser.name"></app-change-name>
 			</div>
-
 			<div class='options'>
 				<label class='left'>
 			change image

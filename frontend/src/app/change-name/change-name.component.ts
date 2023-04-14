@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./change-name.component.css'],
 })
 export class ChangeNameComponent {
-  userName = 'John'; // set default user name
+  @Input() userName !: string; // set default user name
   showForm = false;
   newName = '';
   errorMessage = '';
@@ -17,8 +17,9 @@ export class ChangeNameComponent {
 
   submitName() {
     // Make HTTP request to update the user's name
-    const name : string = this.newName;
-    console.log("epaaaaa", name);
+    let name : string = this.newName;
+
+    name = name.trim();
     const data = { name };
     const options = { withCredentials: true }; // set withCredentials to true
     this.http.put<any>(`${environment.BACKEND_ORIGIN}/user/update-name`, data, options).subscribe(
