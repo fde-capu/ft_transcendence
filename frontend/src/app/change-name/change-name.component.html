@@ -7,9 +7,10 @@
   <form>
     <label>
       New Name:
-      <input type="text" [(ngModel)]="newName">
+      <input type="text" [(ngModel)]="newName" name="newName">
     </label>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div> <!-- Display error message below the input -->
     <button (click)="submitName()">Change</button>
-    <button (click)="showForm = false">Back</button> <!-- Added back button -->
+    <button (click)="showForm = false">Back</button>
   </form>
 </div>

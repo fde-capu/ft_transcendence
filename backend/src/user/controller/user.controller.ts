@@ -56,9 +56,9 @@ export class UserController {
     }
   }
 
-  @Put('update/name')
+  @Put('update-name')
   async updateName(
-    @Body() name: string,
+    @Body() name2: any,
     @Request() req,
     @Param('intraId') intraId: string,
     @Res() response: Response = null
@@ -66,7 +66,8 @@ export class UserController {
     try {
       console.log("UPDATE NAME");
       const userId = req.user.sub;
-  
+      const name = name2.name;
+      console.log("O nome que veio é ", name);
       if (!userId) {
         throw new BadRequestException('User ID not found in the request');
       }
@@ -76,29 +77,31 @@ export class UserController {
       if (!user) {
         throw new NotFoundException('User not found');
       }
-  
+      
       // Check if the name of the user is not the same name that he has right now
       if (user.name === name) {
         throw new BadRequestException('New name is the same as the current name');
       }
-  
+      
+      console.log("nAME", name);
       // Check if the name is already in the database
       const existingUser = await this.userService.findOneByName(name);
-      if (existingUser) {
+      if (existingUser && existingUser.intraId !== user.intraId) {
         throw new ConflictException('Name already exists');
       }
   
       // Make sure that the name parameter is defined and not empty
-      if (!name || name.trim().length === 0) {
-        throw new BadRequestException('Name is required');
+      if (name.length < 4) {
+        throw new BadRequestException('Name need to has more than 4 charachters');
       }
   
       // Update the name
       user.name = name;
       await this.userService.updateUserinDatabase(user);
-  
+      
+      console.log(name);
       if (response) {
-        response.json(user.name);
+        response.json({ name });
       }
     } catch (error) {
       if (response) {
