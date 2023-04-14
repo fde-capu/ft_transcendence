@@ -89,7 +89,7 @@ button {
 	overflow: hidden;
 }
 .options-block {
-	top: 6em;
+	top: 5em;
 	position: fixed;
 	overflow: auto;
 	margin: 0 auto;
