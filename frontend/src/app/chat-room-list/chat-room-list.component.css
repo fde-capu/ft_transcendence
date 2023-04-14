@@ -21,4 +21,5 @@ button {
 .centered {
 	margin: 0 auto;
 	display: block;
+	text-align: center;
 }

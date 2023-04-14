@@ -285,7 +285,10 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   async onClose() {
     if (this.optionsOn) this.onMenu();
-    else this.router.navigate(['/rooms']);
+    else {
+			this.revokeAdmin();
+			this.router.navigate(['/rooms']);
+		}
   }
 
   async onMenu() {

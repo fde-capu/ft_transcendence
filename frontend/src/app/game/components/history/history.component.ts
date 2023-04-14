@@ -59,7 +59,7 @@ export class HistoryComponent {
 
 
        doesThisShow(match: MatchHistoryMap) {
-               if (!this.user) return true;
+               if (!this.user || !this.user.intraId) return true;
                if (match.mode == 0) {
                        return this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['right'].players[0].intraId;
                } else if (match.mode == 1) {
