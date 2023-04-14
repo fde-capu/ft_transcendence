@@ -56,6 +56,9 @@ export class UserService {
   }
 
   async updateUser(intraId: string, user: Users) {
+      //check if the name of the user is not the same name that he has right now. 
+      //if it is not the same, check if the name is already in the database. If it is, throw a exception.
+      //if it is not, update the name.
     const filtered_user = {
       name: user.name,
       image: user.image,

@@ -12,6 +12,8 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Request,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { Response } from 'express';
@@ -31,11 +33,16 @@ export class UserController {
 
   @Put('update/:intraId')
   async updateUser(
+    @Request() req,
     @Param('intraId') intraId: string,
     @Res() response: Response = null,
     @Body() user: Users,
   ) {
     try {
+      const userId = req.user.sub; // user that made the request
+      if (userId !== intraId) { // check if the user is trying to update their own record
+        throw new UnauthorizedException('You are not authorized to update this record.');
+      }
       console.log('< update', intraId);
       await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
