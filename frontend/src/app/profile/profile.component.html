@@ -5,7 +5,7 @@
 
 <div *ngIf='!amIBlocked; else spying' class='box'>
 	<div *ngIf="displayUser; else user_unknown">
-
+		<app-change-name></app-change-name>
 		<div class='opt-box' *ngIf="owner">
 			<div class='options'>
 				<label class='left'>
