@@ -51,8 +51,7 @@ export class ChatService {
           if (
             (this.userIsInChat(room.id, ChatService.user?.intraId) ||
               msg.payload.to == ChatService.user ||
-              msg.payload.from == ChatService.user) &&
-            !this.haveIBlocked(msg.payload.user.intraId)
+              msg.payload.from == ChatService.user)
           )
             this.messageList.next(msg.payload);
         }

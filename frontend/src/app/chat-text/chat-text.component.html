@@ -16,9 +16,14 @@
 				[tinyForChat]='true'
 			></app-u2u-actions>
 
-      <div class="small">
+      <div class="small" *ngIf="!isBlock(chatLine.user)">
 				{{ chatLine.message }}
 			</div>
+
+      <div class="small" *ngIf="isBlock(chatLine.user)" style='opacity:.5;'>
+			[ blocked message ] unblock this user to see
+			</div>
+
     </li>
   </ul>
 </div>

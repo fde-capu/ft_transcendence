@@ -45,5 +45,4 @@ export class ChatTextComponent implements OnInit {
 	goToProfile(u: string) {
 		this.router.navigate(['/profile/' + u]);
 	}
-
 }
