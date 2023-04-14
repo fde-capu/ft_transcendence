@@ -3,6 +3,7 @@ export function hideServer<T>(key: any, value: T): T {
   if (key == 'service') return undefined;
   if (key == 'game') return undefined;
   if (key == 'gameInterval') return undefined;
+  if (key == 'gameTimeout') return undefined;
   if (key == 'lastUpdate') return undefined;
   return value;
 }
