@@ -335,7 +335,6 @@ export interface GameData {
   paddles: Dictionary<Paddle>;
   walls: Dictionary<Wall>;
   sounds: Array<GameSound>;
-  running: boolean;
 }
 
 interface CollisionData {
@@ -356,7 +355,6 @@ export abstract class Game {
     paddles: {},
     walls: {},
     sounds: [],
-    running: false,
   };
 
   public playerPaddle: Dictionary<string> = {};
@@ -374,8 +372,6 @@ export abstract class Game {
   }
 
   update(t = 1) {
-    if (!this.elements.running) return;
-
     this.elements.sounds = [];
 
     const balls = Object.values(this.elements.balls).filter(b => !b.outside);
@@ -412,7 +408,7 @@ export abstract class Game {
       balls.forEach(b => b.move(collision.entryTime));
       paddles.forEach(p => p.move(collision.entryTime));
 
-      if (target instanceof Paddle) {
+      /*if (target instanceof Paddle) {
         const angle = target.getOutputAngle(subject);
 
         const speed = Math.sqrt(subject.sx ** 2 + subject.sy ** 2);
@@ -422,23 +418,24 @@ export abstract class Game {
         const velocity = Math.sqrt(subject.vx ** 2 + subject.vy ** 2);
         subject.vx = velocity * Math.cos(angle);
         subject.vy = velocity * Math.sin(angle);
+
         if (target instanceof HorizontalPaddle) {
           subject.sy *= -1;
           subject.vy *= -1;
         }
-      } else {
-        if (collision.xnormal != 0) {
-          subject.vx *= -1;
-          subject.sx *= -1;
-        }
-
-        if (collision.ynormal != 0) {
-          subject.vy *= -1;
-          subject.sy *= -1;
-        }
+      } else {*/
+      if (collision.xnormal != 0) {
+        subject.vx *= -1;
+        subject.sx *= -1;
       }
 
-      subject.sx +=
+      if (collision.ynormal != 0) {
+        subject.vy *= -1;
+        subject.sy *= -1;
+      }
+      //}
+
+      /*subject.sx +=
         subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
       subject.sy +=
         subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
@@ -446,7 +443,7 @@ export abstract class Game {
       subject.sx +=
         subject.sx < 0 ? -Math.abs(target.sx) / 10 : Math.abs(target.sx) / 10;
       subject.sy +=
-        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;
+        subject.sy < 0 ? -Math.abs(target.sy) / 10 : Math.abs(target.sy) / 10;*/
     }
 
     this.clear();
@@ -548,7 +545,6 @@ export class Pong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [],
-      running: true,
     };
     if (!this.context)
       Object.values(this.elements.balls).forEach(b => b.reset());
@@ -587,7 +583,6 @@ export class PongDouble extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [],
-      running: true,
     };
     if (!this.context)
       Object.values(this.elements.balls).forEach(b => b.reset());
@@ -628,7 +623,6 @@ export class Quadrapong extends Game {
       },
       walls: {},
       sounds: [],
-      running: true,
     };
     if (!this.context)
       Object.values(this.elements.balls).forEach(b => b.reset());
