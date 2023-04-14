@@ -51,14 +51,17 @@ export class U2uActionsComponent implements OnChanges {
 	}
 
   unFriend() {
+		this.isFriend = false;
     this.userService.unFriend(this.user).subscribe();
   }
 
   makeBlock() {
+		this.isBlock = true;
     this.userService.makeBlock(this.user).subscribe();
   }
 
   unBlock() {
+		this.isBlock = false;
     this.userService.unBlock(this.user).subscribe();
   }
 
