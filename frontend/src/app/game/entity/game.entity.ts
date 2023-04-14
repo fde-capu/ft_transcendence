@@ -471,7 +471,7 @@ export abstract class Game {
       for (const t of targets) {
         const c = t.collision(s);
 
-        if (!c || c.entryTime <= 0) continue;
+        if (!c || c.entryTime <= 0 || isNaN(c.entryTime)) continue;
         if (data && c.entryTime >= data.collision.entryTime) continue;
 
         data = { collision: c, subject: s, target: t };

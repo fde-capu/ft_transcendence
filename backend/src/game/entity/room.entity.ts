@@ -258,18 +258,18 @@ export class Room {
     this.service.listNonEmptyRooms();
 
     setTimeout(() => {
-      this.resume();
+      if (this.getPlayers().reduce((s, p) => p.connected && s, true))
+        this.resume();
       this.gameTimeout = setTimeout(() => this.finish(), 100000);
     }, 3000);
   }
 
   private pause(): void {
-    this.gameInterval = undefined;
-    this.lastUpdate = undefined;
-
     this.running = false;
-    this.server.emit('game:status', this.game?.elements);
     clearInterval(this.gameInterval);
+    this.lastUpdate = undefined;
+    this.gameInterval = undefined;
+    this.server.emit('game:status', this.game?.elements);
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
@@ -279,7 +279,8 @@ export class Room {
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
-      this.game?.update((currentTimestamp - this.lastUpdate) / 1000);
+      if (this.running)
+        this.game?.update((currentTimestamp - this.lastUpdate) / 1000);
       this.lastUpdate = currentTimestamp;
       this.server.emit('game:status', this.game?.elements);
     }, 1000 / 25);
