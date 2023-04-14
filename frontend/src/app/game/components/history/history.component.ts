@@ -61,13 +61,13 @@ export class HistoryComponent {
        doesThisShow(match: MatchHistoryMap) {
                if (!this.user || !this.user?.intraId) return true;
                if (match.mode == 0) {
-                       return this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['right'].players[0].intraId;
+                       return this.user.intraId == match.teams['left'].players[0]?.intraId || this.user.intraId == match.teams['right'].players[0]?.intraId;
                } else if (match.mode == 1) {
-                       return  this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['left'].players[1].intraId
-                               ||              this.user.intraId == match.teams['right'].players[0].intraId || this.user.intraId == match.teams['right'].players[1].intraId;
+                       return  this.user.intraId == match.teams['left'].players[0]?.intraId || this.user.intraId == match.teams['left'].players[1]?.intraId
+                               ||              this.user.intraId == match.teams['right'].players[0]?.intraId || this.user.intraId == match.teams['right'].players[1]?.intraId;
                } else if (match.mode == 2) {
-                       return  this.user.intraId == match.teams['left'].players[0].intraId || this.user.intraId == match.teams['right'].players[0].intraId
-                               ||              this.user.intraId == match.teams['top'].players[0].intraId || this.user.intraId == match.teams['bottom'].players[0].intraId;
+                       return  this.user.intraId == match.teams['left'].players[0]?.intraId || this.user.intraId == match.teams['right'].players[0]?.intraId
+                               ||              this.user.intraId == match.teams['top'].players[0]?.intraId || this.user.intraId == match.teams['bottom'].players[0]?.intraId;
                }
                return false;
        }
