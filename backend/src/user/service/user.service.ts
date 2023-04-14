@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
@@ -54,8 +54,31 @@ export class UserService {
       newUser,
     };
   }
+  async findOneBy42Id(intraId: string): Promise<Users> {
+    return await this.userRepository.findOneBy({ intraId });
+  }
+
+  async findOneByName(name: string): Promise<Users> {
+    return await this.userRepository.findOneBy({ name });
+  }
+
+  async updateUserinDatabase(user : Users)
+  {
+    return await this.userRepository.save(user);
+  }
 
   async updateUser(intraId: string, user: Users) {
+    try
+    {
+    const currentUser = await this.findOneBy42Id(intraId); // get the current user from the database
+    const newName = user.name; // get the new name from the request body
+    if (newName && newName !== currentUser.name) { // check if the name has changed
+      const existingUser = await this.findOneByName(newName); // query the database for a user with the new name
+      if (existingUser && existingUser.intraId !== intraId) { // check if a user with the new name already exists, but is not the current user
+        throw new BadRequestException(`A user with the name ${newName} already exists.`);
+      }
+    }
+  
     const filtered_user = {
       name: user.name,
       image: user.image,
@@ -70,13 +93,14 @@ export class UserService {
       .set(filtered_user)
       .where('intraId = :intraId', { intraId: intraId })
       .execute();
-    //if (resp.affected === 0) {
-      //throw new NotFoundException();
-			// This happens only if a malicious user tries to update an
-			// unexisten user, but crashes the backend. So just do nothing, chill!
-    //}
     return resp;
   }
+  catch(error)
+  {
+    throw error;
+  }
+  }
+
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
     const resp = await this.userRepository.findOneBy({ intraId: u_intraId });

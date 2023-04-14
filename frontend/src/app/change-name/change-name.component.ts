@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-change-name',
@@ -10,21 +11,35 @@ export class ChangeNameComponent {
   userName = 'John'; // set default user name
   showForm = false;
   newName = '';
+  errorMessage = '';
 
   constructor(private http: HttpClient) {}
 
   submitName() {
     // Make HTTP request to update the user's name
-    this.http.post('/api/update-name', { name: this.newName }).subscribe(
+    const name : string = this.newName;
+    const options = { withCredentials: true }; // set withCredentials to true
+    this.http.put(`${environment.BACKEND_ORIGIN}/user/update/name`, name, options).subscribe(
       response => {
         this.userName = this.newName; // update user name on success
         this.newName = ''; // clear input field
         this.showForm = false; // hide form
+        this.errorMessage = ''; // clear error message
       },
-      error => {
+      (error: HttpErrorResponse) => {
         console.log('Error updating name:', error); // log error message
-        alert('Error updating name: ' + error.error.message); // show error message
+        if (error.error instanceof ErrorEvent) {
+          // Client-side error occurred
+          this.errorMessage = `Error updating name: ${error.error.message}`;
+        } else {
+          // Server-side error occurred
+          this.errorMessage = `Error updating name: ${error.status} ${error.statusText}`;
+        }
       }
     );
+  }
+
+  hideErrorMessage() {
+    this.errorMessage = '';
   }
 }

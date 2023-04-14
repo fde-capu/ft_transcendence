@@ -12,6 +12,12 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Request,
+  UnauthorizedException,
+  NotFoundException,
+  BadRequestException,
+  ConflictException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { Response } from 'express';
@@ -31,18 +37,78 @@ export class UserController {
 
   @Put('update/:intraId')
   async updateUser(
+    @Request() req,
     @Param('intraId') intraId: string,
     @Res() response: Response = null,
     @Body() user: Users,
   ) {
     try {
+      const userId = req.user.sub; // user that made the request
+      if (userId !== intraId) { // check if the user is trying to update their own record
+        throw new UnauthorizedException('You are not authorized to update this record.');
+      }
       console.log('< update', intraId);
       await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
     } catch (e) {
+      console.log(e);
       response.status(e.status).json(e.data);
     }
   }
+
+  @Put('update/name')
+  async updateName(
+    @Body() name: string,
+    @Request() req,
+    @Param('intraId') intraId: string,
+    @Res() response: Response = null
+  ) {
+    try {
+      console.log("UPDATE NAME");
+      const userId = req.user.sub;
+  
+      if (!userId) {
+        throw new BadRequestException('User ID not found in the request');
+      }
+  
+      // Check if the user that made the request exists
+      const user = await this.userService.findOneBy42Id(userId);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+  
+      // Check if the name of the user is not the same name that he has right now
+      if (user.name === name) {
+        throw new BadRequestException('New name is the same as the current name');
+      }
+  
+      // Check if the name is already in the database
+      const existingUser = await this.userService.findOneByName(name);
+      if (existingUser) {
+        throw new ConflictException('Name already exists');
+      }
+  
+      // Make sure that the name parameter is defined and not empty
+      if (!name || name.trim().length === 0) {
+        throw new BadRequestException('Name is required');
+      }
+  
+      // Update the name
+      user.name = name;
+      await this.userService.updateUserinDatabase(user);
+  
+      if (response) {
+        response.json(user.name);
+      }
+    } catch (error) {
+      if (response) {
+        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
+      } else {
+        throw new InternalServerErrorException(error.message);
+      }
+    }
+  }  
+
 
   @Put('status/:intraId')
   async updateStatus(
