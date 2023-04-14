@@ -47,6 +47,7 @@ export class UserController {
       await this.userService.updateUser(intraId, user);
       return response.status(200).json({});
     } catch (e) {
+      console.log(e);
       response.status(e.status).json(e.data);
     }
   }

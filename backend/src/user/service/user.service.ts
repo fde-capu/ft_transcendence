@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserFortyTwoApi } from 'src/forty-two/service/user';
 import { Repository } from 'typeorm';
@@ -19,6 +19,8 @@ export class UserService {
   ) {
     if (!UserService.attOnce) this.checkOnStudents();
   }
+
+ 
 
   async registerUserOk42(codeFrom42: UserFortyTwoApi): Promise<registerResp> {
     let existUser = await this.userRepository.findOneBy({
@@ -55,10 +57,26 @@ export class UserService {
     };
   }
 
+  async findOneBy42Id(intraId: string): Promise<Users> {
+    return await this.userRepository.findOneBy({ intraId });
+  }
+
+  async findOneByName(name: string): Promise<Users> {
+    return await this.userRepository.findOneBy({ name });
+  }
+
   async updateUser(intraId: string, user: Users) {
-      //check if the name of the user is not the same name that he has right now. 
-      //if it is not the same, check if the name is already in the database. If it is, throw a exception.
-      //if it is not, update the name.
+    try
+    {
+    const currentUser = await this.findOneBy42Id(intraId); // get the current user from the database
+    const newName = user.name; // get the new name from the request body
+    if (newName && newName !== currentUser.name) { // check if the name has changed
+      const existingUser = await this.findOneByName(newName); // query the database for a user with the new name
+      if (existingUser && existingUser.intraId !== intraId) { // check if a user with the new name already exists, but is not the current user
+        throw new BadRequestException(`A user with the name ${newName} already exists.`);
+      }
+    }
+  
     const filtered_user = {
       name: user.name,
       image: user.image,
@@ -73,12 +91,12 @@ export class UserService {
       .set(filtered_user)
       .where('intraId = :intraId', { intraId: intraId })
       .execute();
-    //if (resp.affected === 0) {
-      //throw new NotFoundException();
-			// This happens only if a malicious user tries to update an
-			// unexisten user, but crashes the backend. So just do nothing, chill!
-    //}
     return resp;
+  }
+  catch(error)
+  {
+    throw error;
+  }
   }
 
   async getUserByIntraId(u_intraId: string): Promise<UserDTO> {
