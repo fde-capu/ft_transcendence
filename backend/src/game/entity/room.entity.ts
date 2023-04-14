@@ -4,10 +4,12 @@ import { Logger } from '@nestjs/common';
 import { RoomsService } from '../service/rooms.service';
 import { Game, Pong, PongDouble, Quadrapong } from './game.entity';
 import { createMatchHistory } from '../util/game-data-to-match-history.converter';
-import { UserService } from 'src/user/service/user.service';
-import { Users } from 'src/user/entity/user.entity';
 
-export type ClientSocket = Socket & { subject: string; name: string, image: string };
+export type ClientSocket = Socket & {
+  subject: string;
+  name: string;
+  image: string;
+};
 
 export enum GameMode {
   PONG = 0,
@@ -21,7 +23,7 @@ export class User {
   public constructor(
     public readonly id: string,
     public readonly name: string,
-		public readonly image: string,
+    public readonly image: string,
   ) {}
 
   public static from(client: ClientSocket): User {
@@ -51,9 +53,6 @@ export class Team {
 }
 
 export class Room {
-
-	private static matchDuration: number = 1000 * 100;
-
   private readonly logger: Logger;
 
   public teams: Array<Team> = [];
@@ -73,8 +72,6 @@ export class Room {
   public lastUpdate?: number;
 
   public gameTimeout?: NodeJS.Timeout;
-
-	public waitingFor: string[] = [];
 
   public constructor(
     public readonly id: string,
@@ -108,20 +105,8 @@ export class Room {
         this.inGame &&
         !this.running &&
         this.getPlayers().reduce((s, p) => p.connected && s, true)
-      ) {
-				let newWaiting: string[] = [];
-				for (const u of this.waitingFor) {
-					if (u != user.id)
-						newWaiting.push(u);
-					else {
-						const player = this.getPlayers().find((p) => p.id == user.id);
-						if (player)
-							player.ready = true;
-					}
-				}
-				this.waitingFor = newWaiting;
+      )
         this.resume();
-			}
       this.server.emit('game:room:status', hideCircular(this));
       this.service.listNonEmptyRooms();
       return;
@@ -171,11 +156,18 @@ export class Room {
     const player = this.getPlayers().find((p) => p.id == user.id);
     if (player) {
       player.ready = false;
-      if (this.inGame) {
-				this.waitingFor.push(player.id);
-				this.pause();
-			}
+      if (this.inGame) this.pause();
     }
+
+    setTimeout(
+      async () => {
+        if (!found.connected) await this.leave(found);
+      },
+      this.inGame && player ? 1200000 : 10000,
+    );
+
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
   }
 
   private rebalance(): void {
@@ -259,59 +251,56 @@ export class Room {
     }
 
     this.game.reset();
-		this.waitingFor = [];
     this.inGame = true;
-		this.pause();
+    this.pause();
     this.server.emit('game:room:status', hideCircular(this));
 
     this.service.listNonEmptyRooms();
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
-		if (!this.waitingFor.length)
-			this.resume();
+    setTimeout(() => {
+      if (this.getPlayers().reduce((s, p) => p.connected && s, true))
+        this.resume();
+      this.gameTimeout = setTimeout(() => this.finish(), 100000);
+    }, 3000);
   }
 
   private pause(): void {
-    this.gameInterval = undefined;
-    this.lastUpdate = undefined;
-
     this.running = false;
-    this.game.elements.running = false;
-    this.server.emit('game:status', this.game?.elements);
     clearInterval(this.gameInterval);
+    this.lastUpdate = undefined;
+    this.gameInterval = undefined;
+    this.server.emit('game:status', this.game?.elements);
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
 
   private resume(): void {
-    this.game.elements.running = true;
-    if (!this.gameTimeout)
-      setTimeout(() => {
-        this.finish();
-      }, Room.matchDuration);
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
-      this.game?.update((currentTimestamp - this.lastUpdate) / 1000);
+      if (this.running)
+        this.game?.update((currentTimestamp - this.lastUpdate) / 1000);
       this.lastUpdate = currentTimestamp;
       this.server.emit('game:status', this.game?.elements);
     }, 1000 / 25);
-    
+
     this.running = true;
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
- 
+
   private async finish(): Promise<void> {
     if (this.inGame === false) return;
     this.inGame = false;
 
     this.pause();
-    this.teams.forEach((t) => t.players.forEach((p) => {
-			if (!p.connected) this.leave(p);
-			p.ready = false;
-		}));
+    this.teams.forEach((t) =>
+      t.players.forEach((p) => {
+        if (!p.connected) this.leave(p);
+        p.ready = false;
+      }),
+    );
     if (this.gameTimeout) clearTimeout(this.gameTimeout);
 
     let match = createMatchHistory(

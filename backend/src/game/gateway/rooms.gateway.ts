@@ -45,7 +45,6 @@ export class RoomsGateway implements OnGatewayInit, OnGatewayConnection {
     }
   }
 
-
   @SubscribeMessage('game:room:list')
   public roomList(@ConnectedSocket() client: Socket): void {
     this.roomsService.listNonEmptyRooms(client);

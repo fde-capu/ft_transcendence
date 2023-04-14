@@ -164,7 +164,7 @@ class Ball extends Rectangle {
     this.x = Game.w / 2 - Ball.s / 2;
     this.y = Game.h / 2 - Ball.s / 2;
 
-    const rad = (n) => (Math.PI * n) / 180;
+    const rad = (n: number) => (Math.PI * n) / 180;
 
     let alpha: number;
     do {
@@ -335,7 +335,6 @@ export interface GameData {
   paddles: Dictionary<Paddle>;
   walls: Dictionary<Wall>;
   sounds: Array<GameSound>;
-  running: boolean;
 }
 
 interface CollisionData {
@@ -356,10 +355,9 @@ export abstract class Game {
     paddles: {},
     walls: {},
     sounds: [],
-    running: false,
   };
 
-  public playerPaddle: Dictionary<string>;
+  public playerPaddle: Dictionary<string> = {};
 
   constructor(canvas?: HTMLCanvasElement) {
     if (canvas) {
@@ -374,8 +372,6 @@ export abstract class Game {
   }
 
   update(t = 1) {
-    if (!this.elements.running) return;
-
     this.elements.sounds = [];
 
     const balls = Object.values(this.elements.balls).filter((b) => !b.outside);
@@ -387,7 +383,7 @@ export abstract class Game {
 
     const collisionables: Array<Rectangle> = [...paddles, ...walls];
 
-    let data: CollisionData;
+    let data: CollisionData | undefined;
 
     while (
       (data = this.nextCollision(
@@ -422,6 +418,11 @@ export abstract class Game {
         const velocity = Math.sqrt(subject.vx ** 2 + subject.vy ** 2);
         subject.vx = velocity * Math.cos(angle);
         subject.vy = velocity * Math.sin(angle);
+
+        if (target instanceof HorizontalPaddle) {
+          subject.sy *= -1;
+          subject.vy *= -1;
+        }
       } else {
         if (collision.xnormal != 0) {
           subject.vx *= -1;
@@ -470,7 +471,7 @@ export abstract class Game {
       for (const t of targets) {
         const c = t.collision(s);
 
-        if (!c) continue;
+        if (!c || c.entryTime <= 0 || isNaN(c.entryTime)) continue;
         if (data && c.entryTime >= data.collision.entryTime) continue;
 
         data = { collision: c, subject: s, target: t };
@@ -544,9 +545,9 @@ export class Pong extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [],
-      running: true,
     };
-    Object.values(this.elements.balls).forEach((b) => b.reset());
+    if (!this.context)
+      Object.values(this.elements.balls).forEach((b) => b.reset());
   }
 
   protected override applyScore(b: Ball): void {
@@ -558,9 +559,10 @@ export class Pong extends Game {
 
       if (b.x > Game.w) this.elements.teams['LEFT']++;
 
-      setTimeout(() => {
-        b?.reset();
-      }, 2000);
+      if (!this.context)
+        setTimeout(() => {
+          b?.reset();
+        }, 2000);
     }
   }
 }
@@ -581,9 +583,9 @@ export class PongDouble extends Game {
         bottom: new Wall(-5, Game.h, Game.w + 10, 5),
       },
       sounds: [],
-      running: true,
     };
-    Object.values(this.elements.balls).forEach((b) => b.reset());
+    if (!this.context)
+      Object.values(this.elements.balls).forEach((b) => b.reset());
   }
 
   protected override applyScore(b: Ball): void {
@@ -595,9 +597,10 @@ export class PongDouble extends Game {
 
       if (b.x > Game.w) this.elements.teams['LEFT']++;
 
-      setTimeout(() => {
-        b?.reset();
-      }, 2000);
+      if (!this.context)
+        setTimeout(() => {
+          b?.reset();
+        }, 2000);
     }
   }
 }
@@ -620,9 +623,9 @@ export class Quadrapong extends Game {
       },
       walls: {},
       sounds: [],
-      running: true,
     };
-    Object.values(this.elements.balls).forEach((b) => b.reset());
+    if (!this.context)
+      Object.values(this.elements.balls).forEach((b) => b.reset());
   }
 
   protected override applyScore(b: Ball): void {
@@ -646,9 +649,10 @@ export class Quadrapong extends Game {
 
       if (b.y > Game.h) this.elements.teams['BOTTOM']--;
 
-      setTimeout(() => {
-        b?.reset();
-      }, 2000);
+      if (!this.context)
+        setTimeout(() => {
+          b?.reset();
+        }, 2000);
     }
   }
 }

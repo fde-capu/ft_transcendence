@@ -5,7 +5,7 @@
   <section id="content" *ngIf="!room">
     <p class='blinker'>Loading...</p>
   </section>
-  <section class="overall" *ngIf="paused">
+  <section class="overall" *ngIf="!room.running">
     <span class='blinker'>PAUSED</span>
 		<hr>
 		Someone is away.<br>
@@ -27,13 +27,14 @@
           id="mode">
           <option value="0" [selected]="room.mode === 0">PONG</option>
           <option value="1" [selected]="room.mode === 1">PONGDOUBLE</option>
+          <option value="2" [selected]="room.mode === 2">QUADRAPONG</option>
         </select>
 
         <button class='ready-button' *ngIf="isPlayer()" (click)="ready()" [ngClass]="{'vga-bow ready-blinker':alternateReady}">Ready</button>
 
       </fieldset>
     </article>
-        <a (click)="leave()" class='take-me-out'><- Game Lobby</a>
+        <a (click)="leave()" class='take-me-out'><- Leave room</a>
 
 	<div class="slow-blinker big-title block">
 	{{room.mode == 0 ? "PONG!" : room.mode == 1 ? "PONGDOUBLE!" : "QUADRAPONG!"}}

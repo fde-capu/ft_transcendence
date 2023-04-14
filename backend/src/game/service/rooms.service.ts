@@ -50,7 +50,11 @@ export class RoomsService {
   }
 
   public listNonEmptyRooms(client?: Socket): void {
-    const rooms = Object.values(this.rooms).filter((room) => !room.isEmpty());
+    const rooms = Object.values(this.rooms).filter(
+      (room) =>
+        !room.isEmpty() &&
+        room.getUsers().reduce((r, u) => u.connected || r, false),
+    );
     if (client) client.emit('game:room:list', hideCircular(rooms));
     else this.server.emit('game:room:list', hideCircular(rooms));
   }
