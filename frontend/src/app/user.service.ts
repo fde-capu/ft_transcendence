@@ -101,13 +101,6 @@ export class UserService {
 		let u =  this.getUser(UserService.currentIntraId);
 		if (!!u)
 			UserService.currentUser = u;
-		// ^ As soons as we know the currentIntraId,
-		//   we get the currentUser.
-		//   Problem is: on the first trials, UserService.all is
-		//   still waiting the reponse from backend.
-		// ^ SOLUTION: make a test on "u", so currentUser is not
-		//   set to undefined in case UserService.all is not yet
-		//   populated.
     await new Promise(resolve => setTimeout(resolve, 1369));
     this.keepUpdating();
   }
@@ -174,9 +167,6 @@ export class UserService {
 		if (UserService.running) {
 			this.getAllUsers().subscribe(_=>{
 				UserService.all = _;
-				// ^ As soon as the first subscription completes,
-				//   the "keepUpdating()" loop will find the currentUser.
-				//   This is where is taking ~2s for "waiting" on login screen.
 			});
 		}
 		await new Promise(resolve => setTimeout(resolve, deltaMs));
