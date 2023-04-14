@@ -108,13 +108,13 @@ export class StatisticsComponent implements OnChanges {
 	doesThisShow(match: MatchHistory) {
 			if (!this.user || !this.user?.intraId) return true;
 			if (match.mode == 0) {
-				return this.user.intraId == match.teams[0].players[0].intraId || this.user.intraId == match.teams[1].players[0].intraId;
+				return this.user.intraId == match.teams[0].players[0]?.intraId || this.user.intraId == match.teams[1].players[0]?.intraId;
 			} else if (match.mode == 1) {
-				return	this.user.intraId == match.teams[0].players[0].intraId || this.user.intraId == match.teams[0].players[1].intraId
-					||		this.user.intraId == match.teams[1].players[0].intraId || this.user.intraId == match.teams[1].players[1].intraId;
+				return	this.user.intraId == match.teams[0].players[0]?.intraId || this.user.intraId == match.teams[0].players[1]?.intraId
+					||		this.user.intraId == match.teams[1].players[0]?.intraId || this.user.intraId == match.teams[1].players[1]?.intraId;
 			} else if (match.mode == 2) {
-				return	this.user.intraId == match.teams[0].players[0].intraId || this.user.intraId == match.teams[1].players[0].intraId
-					||		this.user.intraId == match.teams[2].players[0].intraId || this.user.intraId == match.teams[3].players[0].intraId;
+				return	this.user.intraId == match.teams[0].players[0]?.intraId || this.user.intraId == match.teams[1].players[0]?.intraId
+					||		this.user.intraId == match.teams[2].players[0]?.intraId || this.user.intraId == match.teams[3].players[0]?.intraId;
 			}
 			return false;
 		}
