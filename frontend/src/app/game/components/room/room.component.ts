@@ -20,12 +20,12 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   scene: string = 'off';
   alternateReady: boolean = false;
-	paused: boolean = false;
+  paused: boolean = false;
   score: Dictionary<number> = {};
-	leftWin: boolean = false;
-	rightWin: boolean = false;
-	topWin: boolean = false;
-	bottomWin: boolean = false;
+  leftWin: boolean = false;
+  rightWin: boolean = false;
+  topWin: boolean = false;
+  bottomWin: boolean = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -74,22 +74,28 @@ export class RoomComponent implements OnInit, OnDestroy {
     });
   }
 
-	amIAudience() {
-		for (const aud of this.room.audience)
-			if (aud.id == this.userId)
-				return true;
-		return false;
-	}
+  amIAudience() {
+    for (const aud of this.room.audience)
+      if (aud.id == this.userId) return true;
+    return false;
+  }
 
-	pauseCheck() {
-		if ((this.room && this.room.inGame && this.room.running)
-				|| (this.scene == "off" && this.room && this.room.inGame && !this.room.running && this.amIAudience()))
-			this.scene = "game";
-		this.paused = (this.scene == "game"
-			&& this.room
-			&& this.room.inGame
-			&& !this.room.running)
-	}
+  pauseCheck() {
+    if (
+      (this.room && this.room.inGame && this.room.running) ||
+      (this.scene == 'off' &&
+        this.room &&
+        this.room.inGame &&
+        !this.room.running &&
+        this.amIAudience())
+    )
+      this.scene = 'game';
+    this.paused =
+      this.scene == 'game' &&
+      this.room &&
+      this.room.inGame &&
+      !this.room.running;
+  }
 
   ngOnDestroy() {
     this.roomSocket?.disconnect();
@@ -117,52 +123,67 @@ export class RoomComponent implements OnInit, OnDestroy {
     this.roomSocket.emit('game:room:leave');
   }
 
-	allIn(): boolean {
-		let ready_c: number = 0;
-		let total_c: number = -1;
-		if (this.room.mode == 0) {
-			total_c = 2;
-			ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
-			ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
-		} else if (this.room.mode == 1) {
-			total_c = 4;
-			ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
-			ready_c += this.room.teams[0].players[1]?.ready ? 1 : 0;
-			ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
-			ready_c += this.room.teams[1].players[1]?.ready ? 1 : 0;
-		} else if (this.room.mode == 2) {
-			total_c = 4;
-			ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
-			ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
-			ready_c += this.room.teams[2].players[0]?.ready ? 1 : 0;
-			ready_c += this.room.teams[3].players[0]?.ready ? 1 : 0;
-		};
-		return ready_c == total_c;
-	}
+  allIn(): boolean {
+    let ready_c: number = 0;
+    let total_c: number = -1;
+    if (this.room.mode == 0) {
+      total_c = 2;
+      ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
+      ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
+    } else if (this.room.mode == 1) {
+      total_c = 4;
+      ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
+      ready_c += this.room.teams[0].players[1]?.ready ? 1 : 0;
+      ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
+      ready_c += this.room.teams[1].players[1]?.ready ? 1 : 0;
+    } else if (this.room.mode == 2) {
+      total_c = 4;
+      ready_c += this.room.teams[0].players[0]?.ready ? 1 : 0;
+      ready_c += this.room.teams[1].players[0]?.ready ? 1 : 0;
+      ready_c += this.room.teams[2].players[0]?.ready ? 1 : 0;
+      ready_c += this.room.teams[3].players[0]?.ready ? 1 : 0;
+    }
+    return ready_c == total_c;
+  }
 
-	async cutScene(): Promise<void> {
-		let allPlayers = this.allIn();
+  async cutScene(): Promise<void> {
+    let allPlayers = this.allIn();
 
-		let prevScene = this.scene;
-		let newScene = this.scene == 'off' && allPlayers ? 'intro' :
-			this.scene == 'game' && !this.room.inGame && allPlayers ? 'outro' :
-			this.scene == 'game' && !this.room.inGame && !allPlayers ? 'justFlash' :
-			this.scene;
-		if (prevScene == 'game' && newScene == 'outro') {
-			console.log(this.score);
-			if (this.room.mode == 0 || this.room.mode == 1) {
-				this.leftWin = this.score['LEFT'] > this.score['RIGHT'];
-				this.rightWin = this.score['RIGHT'] > this.score['LEFT'];
-			} else if (this.room.mode == 2) {
-				this.leftWin = this.score['LEFT'] > this.score['RIGHT'] && this.score['LEFT'] > this.score['TOP'] && this.score['LEFT'] > this.score['BOTTOM'];
-				this.rightWin = this.score['RIGHT'] > this.score['LEFT'] && this.score['RIGHT'] > this.score['TOP'] && this.score['RIGHT'] > this.score['BOTTOM'];
-				this.topWin = this.score['TOP'] > this.score['RIGHT'] && this.score['TOP'] > this.score['LEFT'] && this.score['TOP'] > this.score['BOTTOM'];
-				this.bottomWin = this.score['BOTTOM'] > this.score['RIGHT'] && this.score['BOTTOM'] > this.score['TOP'] && this.score['BOTTOM'] > this.score['LEFT'];
-			};
-		}
-		this.scene = newScene;
+    let prevScene = this.scene;
+    let newScene =
+      this.scene == 'off' && allPlayers
+        ? 'intro'
+        : this.scene == 'game' && !this.room.inGame && allPlayers
+        ? 'outro'
+        : this.scene == 'game' && !this.room.inGame && !allPlayers
+        ? 'justFlash'
+        : this.scene;
+    if (prevScene == 'game' && newScene == 'outro') {
+      if (this.room.mode == 0 || this.room.mode == 1) {
+        this.leftWin = this.score['LEFT'] > this.score['RIGHT'];
+        this.rightWin = this.score['RIGHT'] > this.score['LEFT'];
+      } else if (this.room.mode == 2) {
+        this.leftWin =
+          this.score['LEFT'] > this.score['RIGHT'] &&
+          this.score['LEFT'] > this.score['TOP'] &&
+          this.score['LEFT'] > this.score['BOTTOM'];
+        this.rightWin =
+          this.score['RIGHT'] > this.score['LEFT'] &&
+          this.score['RIGHT'] > this.score['TOP'] &&
+          this.score['RIGHT'] > this.score['BOTTOM'];
+        this.topWin =
+          this.score['TOP'] > this.score['RIGHT'] &&
+          this.score['TOP'] > this.score['LEFT'] &&
+          this.score['TOP'] > this.score['BOTTOM'];
+        this.bottomWin =
+          this.score['BOTTOM'] > this.score['RIGHT'] &&
+          this.score['BOTTOM'] > this.score['TOP'] &&
+          this.score['BOTTOM'] > this.score['LEFT'];
+      }
+    }
+    this.scene = newScene;
 
-		if (this.scene == 'off' || this.scene == 'game') return ;
+    if (this.scene == 'off' || this.scene == 'game') return;
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 

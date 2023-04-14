@@ -32,7 +32,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   user?: User;
   id?: string | null;
   iAmAdmin = false;
-	iAmOwner = false;
+  iAmOwner = false;
   invalidNameNotice = false;
   invalidPasswordNotice = false;
   lastRoomName = '';
@@ -42,7 +42,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUser();
-		this.initChatRoom();
+    this.initChatRoom();
   }
 
   ngOnDestroy() {
@@ -50,21 +50,18 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   async getUser(): Promise<void> {
-		this.user = this.userService.getLoggedUser();
-		if (!this.user) {
-			await new Promise(resolve => setTimeout(resolve, 121));
-			return this.getUser();
-		}
-		else
-			return ;
+    this.user = this.userService.getLoggedUser();
+    if (!this.user) {
+      await new Promise(resolve => setTimeout(resolve, 121));
+      return this.getUser();
+    } else return;
   }
 
   async initChatRoom(): Promise<void> {
-		if (!this.user) {
-			await new Promise(resolve => setTimeout(resolve, 129));
-			return this.initChatRoom();
-		}
-    //console.log("ChatBox Init");
+    if (!this.user) {
+      await new Promise(resolve => setTimeout(resolve, 129));
+      return this.initChatRoom();
+    }
     this.id = this.route.snapshot.paramMap.get('roomId');
     if (!this.id && this.user) {
       const [newRoomId] = await this.chatService.newRoom([this.user.intraId]);
@@ -74,12 +71,11 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     // ^ If it is a new room (roomId is null), the route will actualy
     // be deceipt by the ChatService, by consequence the component will
     // reload, and the param roomId will be present.
-		if (!this.id) return;
-		let getRoom = this.chatService.roomById(this.id);
-		if (getRoom)
-			this.chatRoom = getRoom;
-		if (this.fun.isStringInArray(this.user.intraId, this.chatRoom.blocked))
-			this.router.navigate(['/rooms']);
+    if (!this.id) return;
+    let getRoom = this.chatService.roomById(this.id);
+    if (getRoom) this.chatRoom = getRoom;
+    if (this.fun.isStringInArray(this.user.intraId, this.chatRoom.blocked))
+      this.router.navigate(['/rooms']);
     this.updateRoomUsers(this.id);
     this.chatService.putUserInRoom(this.chatRoom);
     if (
@@ -99,7 +95,6 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   async updateRoomUsers(id: string | null): Promise<void> {
-    //console.log("updateRoomUsers");
     if (id) {
       const chatRoomTest = this.chatService.roomById(id);
       if (chatRoomTest) {
@@ -123,8 +118,8 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   async checkAdminRecursive() {
-		this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
-		this.iAmOwner = this.isOwner(this.user?.intraId);
+    this.iAmAdmin = this.chatService.isAdmin(this.id, this.user?.intraId);
+    this.iAmOwner = this.isOwner(this.user?.intraId);
     await new Promise(resolve => setTimeout(resolve, this.id ? 1075 : 135));
     this.checkAdminRecursive();
   }
@@ -132,10 +127,10 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   async getOutOfChatUsers() {
     if (!this.userService.authorized() || !ChatBoxComponent.ignited) {
     } else {
-			let t = this.chatService.getOutOfChatUsers(this.chatRoom.id);
-			if(!this.fun.equalUserArray(t, this.usersOutOfChat))
-				this.usersOutOfChat = t;
-		}
+      let t = this.chatService.getOutOfChatUsers(this.chatRoom.id);
+      if (!this.fun.equalUserArray(t, this.usersOutOfChat))
+        this.usersOutOfChat = t;
+    }
     await new Promise(resolve => setTimeout(resolve, this.id ? 2047 : 653));
     this.getOutOfChatUsers();
   }
@@ -171,15 +166,14 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   emit() {
-//    console.log(
-//      'Noticed room changed.',
-//      'users',
-//      this.chatRoom.user,
-//      'mutes',
-//      this.chatRoom.muted,
-//      'blocks',
-//      this.chatRoom.blocked
-//    );
+    //      'Noticed room changed.',
+    //      'users',
+    //      this.chatRoom.user,
+    //      'mutes',
+    //      this.chatRoom.muted,
+    //      'blocks',
+    //      this.chatRoom.blocked
+    //    );
     this.chatService.roomChanged(this.chatRoom);
   }
 
@@ -286,9 +280,9 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   async onClose() {
     if (this.optionsOn) this.onMenu();
     else {
-			this.revokeAdmin();
-			this.router.navigate(['/rooms']);
-		}
+      this.revokeAdmin();
+      this.router.navigate(['/rooms']);
+    }
   }
 
   async onMenu() {
@@ -315,12 +309,14 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     return false;
   }
 
-	isOwner(intraId?: string): boolean {
-		if (!this.chatRoom.admin) this.chatRoom.admin = [];
-		if (intraId)
-			return this.chatRoom.admin.length > 0  && this.chatRoom.admin[0] == intraId;
-		return false;
-	}
+  isOwner(intraId?: string): boolean {
+    if (!this.chatRoom.admin) this.chatRoom.admin = [];
+    if (intraId)
+      return (
+        this.chatRoom.admin.length > 0 && this.chatRoom.admin[0] == intraId
+      );
+    return false;
+  }
 
   revokeAdmin() {
     if (!this.user) return;
