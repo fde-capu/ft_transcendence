@@ -52,8 +52,10 @@ export class ChatService {
             (this.userIsInChat(room.id, ChatService.user?.intraId) ||
               msg.payload.to == ChatService.user ||
               msg.payload.from == ChatService.user)
-          )
+          ) {
             this.messageList.next(msg.payload);
+            this.messageList.next({} as ChatMessage);
+					}
         }
     }
     if (msg.payload.update_rooms) {
