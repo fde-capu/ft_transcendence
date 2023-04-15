@@ -263,7 +263,7 @@ export class Room {
     this.game.reset();
     this.inGame = true;
     this.stage = RoomStage.STARTING;
-    this.pause();
+
     this.server.emit('game:room:status', hideCircular(this));
 
     this.service.listNonEmptyRooms();
