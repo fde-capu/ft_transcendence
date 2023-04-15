@@ -5,7 +5,7 @@
   <section id="content" *ngIf="!room">
     <p class='blinker'>Loading...</p>
   </section>
-  <section class="overall" *ngIf="room.inGame && !room.running">
+  <section class="overall" *ngIf="room.stage === 3">
     <span class='blinker'>PAUSED</span>
 		<hr>
 		Someone is away.<br>
@@ -132,8 +132,8 @@
   </section>
 </main>
 
-<div *ngIf="scene=='intro'">
-		<div class="cut-scene" [ngClass]="{'intro':scene=='intro'}">
+<div *ngIf="room.stage === 1">
+		<div class="cut-scene" class="intro">
 			<div *ngIf='room.mode == 0'>
 				<div class='p-anim p1' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
 				<div class='p-anim p2' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
@@ -153,8 +153,8 @@
 		</div>
 </div>
 
-<div *ngIf="scene=='outro'">
-		<div class="cut-scene" [ngClass]="{'outro':scene=='outro'}">
+<div *ngIf="room.stage === 4">
+		<div class="cut-scene"  class="outro">
 			<div *ngIf='room.mode == 0'>
 				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="leftWin ? 'win' : 'loose'">
 					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
@@ -201,10 +201,5 @@
 					<div class='outro-score'>{{this.score['BOTTOM']}}</div>
 				</div>
 			</div>
-		</div>
-</div>
-
-<div *ngIf="scene=='justFlash'">
-		<div class="cut-scene" [ngClass]="{'justFlash':scene=='justFlash'}">
 		</div>
 </div>
