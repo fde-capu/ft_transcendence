@@ -18,6 +18,10 @@ export class OnlineUsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+		this.cycleUpdate();
+	}
+
+	async cycleUpdate() {
     this.onlineSocket
       .fromEvent<Array<string>>('online:list')
       .pipe(
@@ -26,7 +30,8 @@ export class OnlineUsersComponent implements OnInit {
         )
       )
       .subscribe({ next: users => (this.users = users) });
-
     this.onlineSocket.emit('online:list');
+    await new Promise(resolve => setTimeout(resolve, 5000));
+		this.cycleUpdate();
   }
 }
