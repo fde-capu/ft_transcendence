@@ -271,8 +271,20 @@ export class UserController {
         .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY }),
     )
     file: Express.Multer.File,
+    @Res() response: Response = null,
   ) {
+    try
+    {
+    const user = await this.userService.findOneBy42Id(payload.sub);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
     await this.userService.updateProfileImage(payload.sub, file.filename);
     return file;
+    }
+    catch (error)
+    {
+      response.status(HttpStatus.NOT_ACCEPTABLE).json({ error: error.message });
+    }
   }
 }
