@@ -294,13 +294,6 @@ export class Room {
     if (this.inGame === false) return;
     this.inGame = false;
 
-    this.pause();
-    this.teams.forEach((t) =>
-      t.players.forEach((p) => {
-        if (!p.connected) this.leave(p);
-        p.ready = false;
-      }),
-    );
     if (this.gameTimeout) clearTimeout(this.gameTimeout);
 
     let match = createMatchHistory(
