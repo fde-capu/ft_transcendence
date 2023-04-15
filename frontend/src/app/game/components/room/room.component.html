@@ -3,19 +3,19 @@
 
 <main id="container">
   <section id="content" *ngIf="!room">
-    <p class='blinker'>Loading...</p>
+    <p class="blinker">Loading...</p>
   </section>
-  <section class="overall" *ngIf="room.inGame && !room.running">
-    <span class='blinker'>PAUSED</span>
-		<hr>
-		Someone is away.<br>
-		Wait until they come back.
+  <section class="overall" *ngIf="room.stage === 3">
+    <span class="blinker">PAUSED</span>
+    <hr />
+    Someone is away.<br />
+    Wait until they come back.
   </section>
-  <section id="content" *ngIf="!!room && !room.inGame">
+  <section id="content" *ngIf="room.stage === 0">
     <header>
       <h2>Room {{ room.id }}</h2>
     </header>
-    <article *ngIf='userId === room.host.id || isPlayer()'>
+    <article *ngIf="userId === room.host.id || isPlayer()">
       <fieldset>
         <legend>Get Set</legend>
         <label *ngIf="userId === room.host.id" for="mode">Mode</label>
@@ -30,86 +30,112 @@
           <option value="2" [selected]="room.mode === 2">QUADRAPONG</option>
         </select>
 
-        <button class='ready-button' *ngIf="isPlayer()" (click)="ready()" [ngClass]="{'vga-bow ready-blinker':alternateReady}">Ready</button>
-
+        <button
+          class="ready-button"
+          *ngIf="isPlayer()"
+          (click)="ready()"
+          [ngClass]="{ 'vga-bow ready-blinker': alternateReady }">
+          Ready
+        </button>
       </fieldset>
     </article>
-        <a (click)="leave()" class='take-me-out'><- Leave room</a>
+    <a (click)="leave()" class="take-me-out"><- Leave room</a>
 
-	<div class="slow-blinker big-title block">
-	{{room.mode == 0 ? "PONG!" : room.mode == 1 ? "PONGDOUBLE!" : "QUADRAPONG!"}}
-	</div>
+    <div class="slow-blinker big-title block">
+      {{
+        room.mode == 0
+          ? 'PONG!'
+          : room.mode == 1
+          ? 'PONGDOUBLE!'
+          : 'QUADRAPONG!'
+      }}
+    </div>
 
-    <article style='position:relative;'>
+    <article style="position: relative">
       <header>
         <h2>Teams</h2>
       </header>
-			<div class='versus'>
-			vs.</div>
+      <div class="versus">vs.</div>
       <ul id="teams" class="center">
         <li *ngFor="let team of room.teams">
-          <article class="team center" style="
-						height: {{room.mode!=1?'8em':'12em'}}
+          <article
+            class="team center"
+            style="
+						height: {{ room.mode != 1 ? '8em' : '12em' }}
 					">
             <header>
-              <h3 style="
-								{{team.id=='LEFT'||team.id=='TOP'?'left:0;':''}}
-								{{team.id=='RIGHT'||team.id=='BOTTOM'?'right:0;':''}}
-								{{team.id=='LEFT'||team.id=='RIGHT'?'top:0;':''}}
-								{{team.id=='TOP'||team.id=='BOTTOM'?'bottom:0;':''}}
+              <h3
+                style="
+								{{ team.id == 'LEFT' || team.id == 'TOP' ? 'left:0;' : '' }}
+								{{ team.id == 'RIGHT' || team.id == 'BOTTOM' ? 'right:0;' : '' }}
+								{{ team.id == 'LEFT' || team.id == 'RIGHT' ? 'top:0;' : '' }}
+								{{ team.id == 'TOP' || team.id == 'BOTTOM' ? 'bottom:0;' : '' }}
 							">
                 {{ team.id }}
-								<br>({{ team.players.length }}/{{ team.capacity }})
+                <br />({{ team.players.length }}/{{ team.capacity }})
               </h3>
             </header>
-						<section *ngFor="let player of team.players; let i = index;">
-							<div class="game-avatar player-image"
-								style="
-									background-image:url('{{player.image}}');
+            <section *ngFor="let player of team.players; let i = index">
+              <div
+                class="game-avatar player-image"
+                style="
+									background-image:url('{{ player.image }}');
 
-									{{room.mode==0&&team.id=='LEFT'?'right:-3em;top:-2em;':''}}
-									{{room.mode==0&&team.id=='RIGHT'?'left:-3em;bottom:-2em;':''}}
+									{{ room.mode == 0 && team.id == 'LEFT' ? 'right:-3em;top:-2em;' : '' }}
+									{{ room.mode == 0 && team.id == 'RIGHT' ? 'left:-3em;bottom:-2em;' : '' }}
 
-									{{room.mode==1&&team.id=='LEFT'&&!i?'right:-3em;top:-2em;':''}}
-									{{room.mode==1&&team.id=='LEFT'&&i?'right:2em;top:-2em;':''}}
-									{{room.mode==1&&team.id=='RIGHT'&&!i?'left:-3em;bottom:-2em;':''}}
-									{{room.mode==1&&team.id=='RIGHT'&&i?'left:2em;bottom:-2em;':''}}
+									{{ room.mode == 1 && team.id == 'LEFT' && !i ? 'right:-3em;top:-2em;' : '' }}
+									{{ room.mode == 1 && team.id == 'LEFT' && i ? 'right:2em;top:-2em;' : '' }}
+									{{ room.mode == 1 && team.id == 'RIGHT' && !i ? 'left:-3em;bottom:-2em;' : '' }}
+									{{ room.mode == 1 && team.id == 'RIGHT' && i ? 'left:2em;bottom:-2em;' : '' }}
 
-									{{room.mode==2&&team.id=='LEFT'?'right:-1.5em;bottom:-1.5em;':''}}
-									{{room.mode==2&&team.id=='RIGHT'?'left:-1.5em;bottom:-1.5em':''}}
-									{{room.mode==2&&team.id=='TOP'?'right:-1.5em;top:-1.5em;':''}}
-									{{room.mode==2&&team.id=='BOTTOM'?'left:-1.5em;top:-1.5em;':''}}
-								"
-							></div>
-							<div class='player_name'>
-								{{ player.name }}
-							</div>
-							<div class='flags' style="
-								{{team.id=='LEFT'||team.id=='TOP'?'left:0;':''}}
-								{{team.id=='RIGHT'||team.id=='BOTTOM'?'right:0;':''}}
-								{{team.id=='LEFT'||team.id=='RIGHT'?'bottom:0;':''}}
-								{{team.id=='TOP'||team.id=='BOTTOM'?'top:0;':''}}
+									{{ room.mode == 2 && team.id == 'LEFT' ? 'right:-1.5em;bottom:-1.5em;' : '' }}
+									{{ room.mode == 2 && team.id == 'RIGHT' ? 'left:-1.5em;bottom:-1.5em' : '' }}
+									{{ room.mode == 2 && team.id == 'TOP' ? 'right:-1.5em;top:-1.5em;' : '' }}
+									{{ room.mode == 2 && team.id == 'BOTTOM' ? 'left:-1.5em;top:-1.5em;' : '' }}
+								"></div>
+              <div class="player_name">
+                {{ player.name }}
+              </div>
+              <div
+                class="flags"
+                style="
+								{{ team.id == 'LEFT' || team.id == 'TOP' ? 'left:0;' : '' }}
+								{{ team.id == 'RIGHT' || team.id == 'BOTTOM' ? 'right:0;' : '' }}
+								{{ team.id == 'LEFT' || team.id == 'RIGHT' ? 'bottom:0;' : '' }}
+								{{ team.id == 'TOP' || team.id == 'BOTTOM' ? 'top:0;' : '' }}
 							">
-								<span class="flag vga-bow" *ngIf="userId === player.id">YOU</span>
-								<span class="flag vga-bow" *ngIf="room.host.id === player.id">HOST</span>
-							</div>
-							<div class="flags" style="
-								{{room.mode==0&&team.id=='LEFT'?'right:2em;top:0;':''}}
-								{{room.mode==0&&team.id=='RIGHT'?'left:2em;bottom:0;':''}}
+                <span class="flag vga-bow" *ngIf="userId === player.id"
+                  >YOU</span
+                >
+                <span class="flag vga-bow" *ngIf="room.host.id === player.id"
+                  >HOST</span
+                >
+              </div>
+              <div
+                class="flags"
+                style="
+								{{ room.mode == 0 && team.id == 'LEFT' ? 'right:2em;top:0;' : '' }}
+								{{ room.mode == 0 && team.id == 'RIGHT' ? 'left:2em;bottom:0;' : '' }}
 
-								{{room.mode==1&&team.id=='LEFT'&&!i?'right:-2.5em;top:3em;':''}}
-								{{room.mode==1&&team.id=='LEFT'&&i?'right:7em;top:0;':''}}
-								{{room.mode==1&&team.id=='RIGHT'&&!i?'left:-2.5em;bottom:3em;':''}}
-								{{room.mode==1&&team.id=='RIGHT'&&i?'left:7em;bottom:0;':''}}
+								{{ room.mode == 1 && team.id == 'LEFT' && !i ? 'right:-2.5em;top:3em;' : '' }}
+								{{ room.mode == 1 && team.id == 'LEFT' && i ? 'right:7em;top:0;' : '' }}
+								{{
+                  room.mode == 1 && team.id == 'RIGHT' && !i
+                    ? 'left:-2.5em;bottom:3em;'
+                    : ''
+                }}
+								{{ room.mode == 1 && team.id == 'RIGHT' && i ? 'left:7em;bottom:0;' : '' }}
 
-								{{room.mode==2&&team.id=='LEFT'?'right:0;top:0;':''}}
-								{{room.mode==2&&team.id=='RIGHT'?'left:0;top:0':''}}
-								{{room.mode==2&&team.id=='TOP'?'right:0;bottom:0;':''}}
-								{{room.mode==2&&team.id=='BOTTOM'?'left:0;bottom:0;':''}}
-							" *ngIf="player.ready">
-								<span class="flag vga-bow ready-blinker">READY</span>
-							</div>
-						</section>
+								{{ room.mode == 2 && team.id == 'LEFT' ? 'right:0;top:0;' : '' }}
+								{{ room.mode == 2 && team.id == 'RIGHT' ? 'left:0;top:0' : '' }}
+								{{ room.mode == 2 && team.id == 'TOP' ? 'right:0;bottom:0;' : '' }}
+								{{ room.mode == 2 && team.id == 'BOTTOM' ? 'left:0;bottom:0;' : '' }}
+							"
+                *ngIf="player.ready">
+                <span class="flag vga-bow ready-blinker">READY</span>
+              </div>
+            </section>
           </article>
         </li>
       </ul>
@@ -120,9 +146,13 @@
       </header>
       <ul id="audience" class="center">
         <li class="queue-li" *ngFor="let user of room.audience">
-					<div class='game-avatar user-image' style="background-image:url('{{user.image}}')"></div>
-          <div class='audience-name'>{{ user.name }}</div>
-          <div class="flag-audience vga-bow" *ngIf="userId === user.id">YOU</div>
+          <div
+            class="game-avatar user-image"
+            style="background-image:url('{{ user.image }}')"></div>
+          <div class="audience-name">{{ user.name }}</div>
+          <div class="flag-audience vga-bow" *ngIf="userId === user.id">
+            YOU
+          </div>
         </li>
       </ul>
     </article>
@@ -132,79 +162,174 @@
   </section>
 </main>
 
-<div *ngIf="scene=='intro'">
-		<div class="cut-scene" [ngClass]="{'intro':scene=='intro'}">
-			<div *ngIf='room.mode == 0'>
-				<div class='p-anim p1' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim p2' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
-			</div>
-			<div *ngIf='room.mode == 1'>
-				<div class='p-anim p1' style="top: calc(50vh - 6em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim p1' style="bottom: calc(50vh - 6em); background-image:url('{{room.teams[0].players[1].image}}');"></div>
-				<div class='p-anim p2' style="top: calc(50vh - 6em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim p2' style="bottom: calc(50vh - 6em); background-image:url('{{room.teams[1].players[1].image}}');"></div>
-			</div>
-			<div *ngIf='room.mode == 2'>
-				<div class='p-anim p1' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[0].players[0].image}}');"></div>
-				<div class='p-anim p2' style="top: calc(50vh - 2.5em); background-image:url('{{room.teams[1].players[0].image}}');"></div>
-				<div class='p-anim pt' style="left: calc(50vw - 2.5em); background-image:url('{{room.teams[2].players[0].image}}');"></div>
-				<div class='p-anim pb' style="left: calc(50vw - 2.5em); background-image:url('{{room.teams[3].players[0].image}}');"></div>
-			</div>
-		</div>
+<div *ngIf="room.stage === 1">
+  <div class="cut-scene" class="intro">
+    <div *ngIf="room.mode == 0">
+      <div
+        class="p-anim p1"
+        style="top: calc(50vh - 2.5em); background-image:url('{{
+          room.teams[0].players[0].image
+        }}');"></div>
+      <div
+        class="p-anim p2"
+        style="top: calc(50vh - 2.5em); background-image:url('{{
+          room.teams[1].players[0].image
+        }}');"></div>
+    </div>
+    <div *ngIf="room.mode == 1">
+      <div
+        class="p-anim p1"
+        style="top: calc(50vh - 6em); background-image:url('{{
+          room.teams[0].players[0].image
+        }}');"></div>
+      <div
+        class="p-anim p1"
+        style="bottom: calc(50vh - 6em); background-image:url('{{
+          room.teams[0].players[1].image
+        }}');"></div>
+      <div
+        class="p-anim p2"
+        style="top: calc(50vh - 6em); background-image:url('{{
+          room.teams[1].players[0].image
+        }}');"></div>
+      <div
+        class="p-anim p2"
+        style="bottom: calc(50vh - 6em); background-image:url('{{
+          room.teams[1].players[1].image
+        }}');"></div>
+    </div>
+    <div *ngIf="room.mode == 2">
+      <div
+        class="p-anim p1"
+        style="top: calc(50vh - 2.5em); background-image:url('{{
+          room.teams[0].players[0].image
+        }}');"></div>
+      <div
+        class="p-anim p2"
+        style="top: calc(50vh - 2.5em); background-image:url('{{
+          room.teams[1].players[0].image
+        }}');"></div>
+      <div
+        class="p-anim pt"
+        style="left: calc(50vw - 2.5em); background-image:url('{{
+          room.teams[2].players[0].image
+        }}');"></div>
+      <div
+        class="p-anim pb"
+        style="left: calc(50vw - 2.5em); background-image:url('{{
+          room.teams[3].players[0].image
+        }}');"></div>
+    </div>
+  </div>
 </div>
 
-<div *ngIf="scene=='outro'">
-		<div class="cut-scene" [ngClass]="{'outro':scene=='outro'}">
-			<div *ngIf='room.mode == 0'>
-				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="leftWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['LEFT']}}</div>
-				</div>
-				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="rightWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['RIGHT']}}</div>
-				</div>
-			</div>
-			<div *ngIf='room.mode == 1'>
-				<div class='p-anim' style="left: calc(50vw - 13em;" [ngClass]="leftWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['LEFT']}}</div>
-				</div>
-				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="leftWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[0].players[1].image}}');"></div>
-					<div class='outro-score'>{{this.score['LEFT']}}</div>
-				</div>
-				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="rightWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['RIGHT']}}</div>
-				</div>
-				<div class='p-anim' style="left: calc(50vw + 7em);" [ngClass]="rightWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[1].players[1].image}}');"></div>
-					<div class='outro-score'>{{this.score['RIGHT']}}</div>
-				</div>
-			</div>
-			<div *ngIf='room.mode == 2'>
-				<div class='p-anim' style="left: calc(50vw - 13em;" [ngClass]="leftWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[0].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['LEFT']}}</div>
-				</div>
-				<div class='p-anim' style="left: calc(50vw - 6em);" [ngClass]="rightWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[1].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['RIGHT']}}</div>
-				</div>
-				<div class='p-anim' style="left: calc(50vw + 1em);" [ngClass]="topWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[2].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['TOP']}}</div>
-				</div>
-				<div class='p-anim' style="left: calc(50vw + 8em);" [ngClass]="bottomWin ? 'win' : 'loose'">
-					<div style="background-image:url('{{room.teams[3].players[0].image}}');"></div>
-					<div class='outro-score'>{{this.score['BOTTOM']}}</div>
-				</div>
-			</div>
-		</div>
-</div>
-
-<div *ngIf="scene=='justFlash'">
-		<div class="cut-scene" [ngClass]="{'justFlash':scene=='justFlash'}">
-		</div>
+<div *ngIf="room.stage === 4">
+  <div class="cut-scene" class="outro">
+    <div *ngIf="room.mode == 0">
+      <div
+        class="p-anim"
+        style="left: calc(50vw - 6em)"
+        [ngClass]="leftWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[0].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['LEFT'] }}</div>
+      </div>
+      <div
+        class="p-anim"
+        style="left: calc(50vw + 1em)"
+        [ngClass]="rightWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[1].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['RIGHT'] }}</div>
+      </div>
+    </div>
+    <div *ngIf="room.mode == 1">
+      <div
+        class="p-anim"
+        style="left: calc(50vw - 13em;"
+        [ngClass]="leftWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[0].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['LEFT'] }}</div>
+      </div>
+      <div
+        class="p-anim"
+        style="left: calc(50vw - 6em)"
+        [ngClass]="leftWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[0].players[1].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['LEFT'] }}</div>
+      </div>
+      <div
+        class="p-anim"
+        style="left: calc(50vw + 1em)"
+        [ngClass]="rightWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[1].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['RIGHT'] }}</div>
+      </div>
+      <div
+        class="p-anim"
+        style="left: calc(50vw + 7em)"
+        [ngClass]="rightWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[1].players[1].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['RIGHT'] }}</div>
+      </div>
+    </div>
+    <div *ngIf="room.mode == 2">
+      <div
+        class="p-anim"
+        style="left: calc(50vw - 13em;"
+        [ngClass]="leftWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[0].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['LEFT'] }}</div>
+      </div>
+      <div
+        class="p-anim"
+        style="left: calc(50vw - 6em)"
+        [ngClass]="rightWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[1].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['RIGHT'] }}</div>
+      </div>
+      <div
+        class="p-anim"
+        style="left: calc(50vw + 1em)"
+        [ngClass]="topWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[2].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['TOP'] }}</div>
+      </div>
+      <div
+        class="p-anim"
+        style="left: calc(50vw + 8em)"
+        [ngClass]="bottomWin ? 'win' : 'loose'">
+        <div
+          style="background-image:url('{{
+            room.teams[3].players[0].image
+          }}');"></div>
+        <div class="outro-score">{{ this.score['BOTTOM'] }}</div>
+      </div>
+    </div>
+  </div>
 </div>

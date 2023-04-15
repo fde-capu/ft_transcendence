@@ -1,3 +1,11 @@
+export enum RoomStage {
+  WAITING = 0,
+  STARTING = 1,
+  RUNNING = 2,
+  PAUSED = 3,
+  FINISHED = 4,
+}
+
 export enum GameMode {
   PONG = 0,
   PONGDOUBLE = 1,
@@ -28,4 +36,5 @@ export interface Room {
   id: string;
   host: User;
   mode: GameMode;
+  stage: RoomStage;
 }

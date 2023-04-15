@@ -61,6 +61,10 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.roomsService.rooms[client['roomId']].server =
         client.nsp as unknown as Server;
       this.roomsService.rooms[client['roomId']]?.join(User.from(client));
+
+      Object.values(this.roomsService.rooms)
+        .filter((r) => r.id != client['roomId'])
+        .forEach((r) => r.leave(User.from(client)));
     } catch (error) {
       client.emit('game:error', 'You are not authenticated!');
       client.disconnect(true);

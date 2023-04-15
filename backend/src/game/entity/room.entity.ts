@@ -52,6 +52,14 @@ export class Team {
   }
 }
 
+export enum RoomStage {
+  WAITING = 0,
+  STARTING = 1,
+  RUNNING = 2,
+  PAUSED = 3,
+  FINISHED = 4,
+}
+
 export class Room {
   private readonly logger: Logger;
 
@@ -72,6 +80,8 @@ export class Room {
   public lastUpdate?: number;
 
   public gameTimeout?: NodeJS.Timeout;
+
+  public stage: RoomStage = RoomStage.WAITING;
 
   public constructor(
     public readonly id: string,
@@ -252,7 +262,8 @@ export class Room {
 
     this.game.reset();
     this.inGame = true;
-    this.pause();
+    this.stage = RoomStage.STARTING;
+
     this.server.emit('game:room:status', hideCircular(this));
 
     this.service.listNonEmptyRooms();
@@ -266,9 +277,12 @@ export class Room {
 
   private pause(): void {
     this.running = false;
+    this.stage = RoomStage.PAUSED;
+
     clearInterval(this.gameInterval);
     this.lastUpdate = undefined;
     this.gameInterval = undefined;
+
     this.server.emit('game:status', this.game?.elements);
 
     this.server.emit('game:room:status', hideCircular(this));
@@ -286,6 +300,7 @@ export class Room {
     }, 1000 / 25);
 
     this.running = true;
+    this.stage = RoomStage.RUNNING;
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
   }
@@ -293,15 +308,12 @@ export class Room {
   private async finish(): Promise<void> {
     if (this.inGame === false) return;
     this.inGame = false;
+    this.stage = RoomStage.FINISHED;
 
-    this.pause();
-    this.teams.forEach((t) =>
-      t.players.forEach((p) => {
-        if (!p.connected) this.leave(p);
-        p.ready = false;
-      }),
-    );
     if (this.gameTimeout) clearTimeout(this.gameTimeout);
+    if (this.gameInterval) clearInterval(this.gameInterval);
+    this.lastUpdate = undefined;
+    this.gameInterval = undefined;
 
     let match = createMatchHistory(
       structuredClone(this.mode),
@@ -314,6 +326,12 @@ export class Room {
 
     this.server.emit('game:room:status', hideCircular(this));
     this.service.listNonEmptyRooms();
+
+    setTimeout(() => {
+      this.stage = RoomStage.WAITING;
+      this.server.emit('game:room:status', hideCircular(this));
+      this.service.listNonEmptyRooms();
+    }, 3000);
   }
 
   public moveForward(user: User): void {
