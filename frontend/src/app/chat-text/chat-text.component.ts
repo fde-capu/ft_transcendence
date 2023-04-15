@@ -24,9 +24,8 @@ export class ChatTextComponent implements OnInit {
 
   ngOnInit() {
     this.chatService.messageList.subscribe(msg => {
-      if (msg && msg.roomId == this.room.id) {
-        this.chatMessage.push(msg);
-      }
+      if (msg && msg.roomId == this.room.id)
+				this.chatMessage.push(msg);
     });
   }
 
