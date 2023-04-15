@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { ChatService } from './chat.service';
 import { UserService } from './user.service';
+import { OnlineSocket } from './online.socket';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +11,14 @@ import { UserService } from './user.service';
 })
 export class AppComponent implements OnInit {
   cleanChat = false;
-	oldRoute = "";
-	oldStatus = "";
+  oldRoute = '';
+  oldStatus = '';
 
   constructor(
     public router: Router,
     public chatService: ChatService,
-    public userService: UserService
+    public userService: UserService,
+    public onlineSocket: OnlineSocket
   ) {}
 
   ngOnInit() {
@@ -34,22 +36,19 @@ export class AppComponent implements OnInit {
           this.cleanChat = true;
         } else this.cleanChat = false;
       }
-			let newRoute = this.router.url;
-			let newStatus = "";
-			if (newRoute != this.oldRoute) {
-				this.oldRoute = newRoute;
-				UserService.running = newRoute.indexOf("/log") != 0;
-				if (newRoute.indexOf("/game/") == 0)
-					newStatus = "INGAME";
-				else if (newRoute.indexOf("/chat") == 0)
-					newStatus = "INCHAT";
-				else
-					newStatus = "ONLINE";
-				if (newStatus != this.oldStatus) {
-					this.oldStatus = newStatus;
-					this.userService.setStatus(newStatus);
-				}
-			}
+      let newRoute = this.router.url;
+      let newStatus = '';
+      if (newRoute != this.oldRoute) {
+        this.oldRoute = newRoute;
+        UserService.running = newRoute.indexOf('/log') != 0;
+        if (newRoute.indexOf('/game/') == 0) newStatus = 'INGAME';
+        else if (newRoute.indexOf('/chat') == 0) newStatus = 'INCHAT';
+        else newStatus = 'ONLINE';
+        if (newStatus != this.oldStatus) {
+          this.oldStatus = newStatus;
+          this.userService.setStatus(newStatus);
+        }
+      }
     });
   }
 }
