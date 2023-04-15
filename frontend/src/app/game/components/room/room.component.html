@@ -5,7 +5,7 @@
   <section id="content" *ngIf="!room">
     <p class='blinker'>Loading...</p>
   </section>
-  <section class="overall" *ngIf="!room.running">
+  <section class="overall" *ngIf="room.inGame && !room.running">
     <span class='blinker'>PAUSED</span>
 		<hr>
 		Someone is away.<br>
@@ -15,7 +15,7 @@
     <header>
       <h2>Room {{ room.id }}</h2>
     </header>
-    <article *ngIf='userId == room.host.id || isPlayer()'>
+    <article *ngIf='userId === room.host.id || isPlayer()'>
       <fieldset>
         <legend>Get Set</legend>
         <label *ngIf="userId === room.host.id" for="mode">Mode</label>
