@@ -1,6 +1,9 @@
 ft_transcendence
 Checklist based on sub. 12.1
 
+ - [ ] Online user not showing..?
+
+
  - [ ] VERIFY: you must use the latest stable version of every library or framework used in your project.
  - [ ] On Chat: disable Private Messaging from u2u when user is already on chat.
  - [ ] Solve all TODOs all around.
