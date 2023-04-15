@@ -6,7 +6,9 @@
 	</div>
   <div [ngClass]="{ singleline: singleline }">
     <button (click)="goToProfile()" *ngIf='!singleline'>Profile</button>
-    <button *ngIf="!amIBlocked && availability" (click)="inviteToChat()">Message</button>
+    <button *ngIf="!amIBlocked && availability" (click)="inviteToChat()"
+			[attr.disabled]="messageDelay ? true : null"
+		>Message</button>
     <button *ngIf="!isFriend && availability && !amIBlocked" (click)="makeFriend()">Friend</button>
     <button *ngIf="isFriend" (click)="unFriend()">Unfriend</button>
     <button *ngIf="!isBlock" (click)="makeBlock()">Block</button>

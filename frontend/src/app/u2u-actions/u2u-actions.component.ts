@@ -19,6 +19,7 @@ export class U2uActionsComponent implements OnChanges {
 	@Input() tinyForChat?: boolean;
   isMe?: boolean;
   availability?: boolean;
+	messageDelay?: boolean;
 
 	constructor(
 		private userService: UserService,
@@ -33,9 +34,14 @@ export class U2uActionsComponent implements OnChanges {
   }
 
   inviteToChat() {
+		if (this.messageDelay) return;
     const myId = this.userService.getQuickIntraId();
     if (!myId || !this.user) return;
     this.invitationService.invitePrivateChat(myId, this.user.intraId);
+		this.messageDelay = true;
+		setTimeout(() => {
+			this.messageDelay = false;
+		}, 5000);
   }
 
   inviteToMatch() {
