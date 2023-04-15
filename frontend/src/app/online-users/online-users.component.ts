@@ -18,6 +18,11 @@ export class OnlineUsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+		this.callOnlineUsers();
+		this.cycleUpdate();
+	}
+
+	callOnlineUsers() {
     this.onlineSocket
       .fromEvent<Array<string>>('online:list')
       .pipe(
@@ -26,7 +31,16 @@ export class OnlineUsersComponent implements OnInit {
         )
       )
       .subscribe({ next: users => (this.users = users) });
-
     this.onlineSocket.emit('online:list');
   }
+
+	async cycleUpdate() {
+		for (const i in this.users) {
+			let updatedUser = this.userService.getUser(this.users[i].intraId);
+			if (updatedUser)
+				this.users[i] = updatedUser;
+		}
+    await new Promise(resolve => setTimeout(resolve, 5000));
+		this.cycleUpdate();
+	}
 }
