@@ -3,7 +3,9 @@
 	width: 100%;
 	overflow: auto;
 	border: none;
-	height: calc(var(--inner-below-menu-height) - 9em);
+	bottom: 5.5em;
+	top: 3em;
+	position: absolute;
 }
 .chat-line {
 	white-space: normal;
