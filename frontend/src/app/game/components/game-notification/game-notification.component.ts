@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import { GameSocket } from '../../socket/rooms.socket';
 import { debounce, filter, interval, map, switchMap, tap } from 'rxjs';
@@ -22,6 +22,16 @@ export class GameNotificationComponent implements OnInit {
 
   ngOnInit() {
     let userId: string;
+
+    this.router.events
+      .pipe(
+        filter(
+          event =>
+            event instanceof NavigationEnd &&
+            this.router.url === `/game/${this.roomId}`
+        )
+      )
+      .subscribe({ next: () => (this.displayNotification = false) });
 
     this.authService
       .getAuthContext()
