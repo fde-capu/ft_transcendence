@@ -123,6 +123,10 @@ export class InvitationService {
 
   replyFalse(invite: Invitation | undefined) {
     if (!invite) return;
+		if (invite.type
+			&& invite.type.indexOf('PRIVATE') == 0
+			&& invite.route)
+			this.chatService.removeRoom(invite.route.substr(6));
     invite.answer = false;
     this.sendReply(invite);
   }
