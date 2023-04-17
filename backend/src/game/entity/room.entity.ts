@@ -360,6 +360,7 @@ export class Room {
 
     setTimeout(() => {
       this.stage = RoomStage.WAITING;
+      this.getPlayers().forEach((p) => (p.ready = false));
       this.rebalance();
       this.notifyRoomStatus();
     }, 3000);
