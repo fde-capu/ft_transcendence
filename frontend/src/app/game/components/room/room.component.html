@@ -140,26 +140,28 @@
         </li>
       </ul>
     </article>
-    <article *ngIf="room.audience.length">
-      <header>
-        <h2>Audience</h2>
-      </header>
-      <ul id="audience" class="center">
-        <li class="queue-li" *ngFor="let user of room.audience">
-          <div
-            class="game-avatar user-image"
-            style="background-image:url('{{ user.image }}')"></div>
-          <div class="audience-name">{{ user.name }}</div>
-          <div class="flag-audience vga-bow" *ngIf="userId === user.id">
-            YOU
-          </div>
-        </li>
-      </ul>
-    </article>
   </section>
+
   <section *ngIf="!!room && room.inGame">
     <app-game [roomSocket]="roomSocket" [room]="room"></app-game>
   </section>
+
+	<div *ngIf="room.audience.length && (room.stage === 0 || room.stage === 2)" [ngClass]="!!room && room.inGame ? 'fixed-bottom' : 'bottom-margin'">
+		<header *ngIf="!!room && !room.inGame">
+			<h2>Audience</h2>
+		</header>
+		<ul id="audience" class="center">
+			<li class="queue-li" *ngFor="let user of room.audience" [ngClass]="!!room && !room.inGame ? 'blocked' : ''">
+				<div
+					class="game-avatar user-image"
+					style="background-image:url('{{ user.image }}')"></div>
+				<div *ngIf="!!room && !room.inGame">
+					<div class="audience-name">{{ user.name }}</div>
+					<div class="flag-audience vga-bow" *ngIf="userId === user.id">YOU</div>
+				</div>
+			</li>
+		</ul>
+	</div>
 </main>
 
 <div *ngIf="room.stage === 1">
@@ -223,7 +225,7 @@
   </div>
 </div>
 
-<div *ngIf="room.stage === 4 || true">
+<div *ngIf="room.stage === 4">
   <div class="cut-scene" class="outro">
     <div *ngIf="room.mode == 0">
       <div
