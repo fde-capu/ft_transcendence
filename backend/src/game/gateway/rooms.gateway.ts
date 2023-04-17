@@ -52,6 +52,6 @@ export class RoomsGateway implements OnGatewayInit, OnGatewayConnection {
 
   @SubscribeMessage('game:room:create')
   public roomCreate(@ConnectedSocket() client: Socket): void {
-    this.roomsService.roomCreate(client as ClientSocket);
+    this.roomsService.roomCreateAndNotify(client as ClientSocket);
   }
 }

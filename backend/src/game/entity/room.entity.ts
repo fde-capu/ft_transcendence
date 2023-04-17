@@ -50,6 +50,10 @@ export class Team {
   public isFull(): boolean {
     return this.players.length == this.capacity;
   }
+
+  public isReady(): boolean {
+    return this.isFull() && this.players.every((p) => p.ready && p.connected);
+  }
 }
 
 export enum RoomStage {
@@ -83,14 +87,15 @@ export class Room {
 
   public stage: RoomStage = RoomStage.WAITING;
 
+  public host?: User;
+
   public constructor(
     public readonly id: string,
     public server: Server,
     public readonly service: RoomsService,
-    public host: User,
   ) {
     this.logger = new Logger(`Room ${id}`);
-    this.logger.log(`Room ${id} created by ${host.id}`);
+    this.logger.log(`Room ${id} created`);
     this.setMode(this.mode);
   }
 
@@ -111,14 +116,9 @@ export class Room {
     if (found) {
       if (!found.connected) this.logger.log(`Connected: ${user.id}`);
       found.connected = true;
-      if (
-        this.inGame &&
-        !this.running &&
-        this.getPlayers().reduce((s, p) => p.connected && s, true)
-      )
-        this.resume();
-      this.server.emit('game:room:status', hideCircular(this));
-      this.service.listNonEmptyRooms();
+      this.resume();
+      this.rebalance();
+      this.notifyRoomStatus();
       return;
     }
 
@@ -127,16 +127,14 @@ export class Room {
     this.audience = [...this.audience, user];
 
     this.rebalance();
-
-    this.server.emit('game:room:status', hideCircular(this));
-    this.service.listNonEmptyRooms();
+    this.notifyRoomStatus();
   }
 
   public async leave(user: User): Promise<void> {
     this.logger.log(`Leave: ${user.id}`);
 
-    if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
-      await this.finish();
+    const finishGame =
+      this.inGame && this.getPlayers().find((p) => p.id == user.id);
 
     this.teams.forEach((t) => {
       t.players = t.players.filter((p) => p.id != user.id);
@@ -149,10 +147,10 @@ export class Room {
     }
 
     this.rebalance();
+    this.notifyRoomStatus();
 
-    this.server.emit('game:room:status', hideCircular(this));
+    if (finishGame) await this.finish();
     this.service.deleteIfEmpty(this.id);
-    this.service.listNonEmptyRooms();
   }
 
   public disconnect(user: User): void {
@@ -165,8 +163,8 @@ export class Room {
 
     const player = this.getPlayers().find((p) => p.id == user.id);
     if (player) {
-      player.ready = false;
       if (this.inGame) this.pause();
+      else player.ready = false;
     }
 
     setTimeout(
@@ -176,17 +174,44 @@ export class Room {
       this.inGame && player ? 1200000 : 10000,
     );
 
-    this.server.emit('game:room:status', hideCircular(this));
-    this.service.listNonEmptyRooms();
+    this.rebalance();
+    this.notifyRoomStatus();
   }
 
   private rebalance(): void {
+    // Rebalance only if there is no game running
+    if (this.inGame) return;
+
+    // move disconnected players to audience
+    this.teams.forEach((t) => {
+      t.players = t.players.filter((p) => {
+        if (p.connected) return true;
+        this.audience = [...this.audience, p];
+        return false;
+      });
+    });
+
+    // move audience to teams if possible
     this.audience = this.audience.filter((u) => {
+      if (!u.connected) return true;
+
       const team = this.teams.find((t) => !t.isFull());
       if (!team) return true;
+
       team.players = [...team.players, Player.from(u)];
       return false;
     });
+
+    // Change host if it is disconnected or doesn't exist
+    if (!this.host || !this.host.connected) {
+      const newHost = this.getPlayers().find((u) => u.connected);
+      if (newHost) this.host = newHost;
+    }
+  }
+
+  private notifyRoomStatus(): void {
+    this.server.emit('game:room:status', hideCircular(this));
+    this.service.listNonEmptyRooms();
   }
 
   public setMode(mode: GameMode): void {
@@ -209,8 +234,7 @@ export class Room {
         break;
     }
     this.rebalance();
-    this.server.emit('game:room:status', hideCircular(this));
-    this.service.listNonEmptyRooms();
+    this.notifyRoomStatus();
   }
 
   public sendStatus(client: Socket): void {
@@ -221,17 +245,17 @@ export class Room {
     this.getPlayers()
       .filter((p) => p.id == user.id)
       .forEach((p) => (p.ready = !p.ready));
-    this.server.emit('game:room:status', hideCircular(this));
-    this.service.listNonEmptyRooms();
-    if (
-      this.getPlayers().reduce((s, p) => p.ready && s, true) &&
-      this.teams.reduce((s, t) => t.isFull() && s, true)
-    ) {
+    this.notifyRoomStatus();
+    if (this.teams.every((t) => t.isReady())) {
       this.start();
     }
   }
 
   public async start() {
+    if (this.stage !== RoomStage.WAITING) return;
+
+    this.logger.log('Starting game');
+
     switch (this.mode) {
       case GameMode.PONG:
         this.game = new Pong();
@@ -264,18 +288,19 @@ export class Room {
     this.inGame = true;
     this.stage = RoomStage.STARTING;
 
-    this.server.emit('game:room:status', hideCircular(this));
-
-    this.service.listNonEmptyRooms();
+    this.notifyRoomStatus();
 
     setTimeout(() => {
-      if (this.getPlayers().reduce((s, p) => p.connected && s, true))
-        this.resume();
+      this.resume();
       this.gameTimeout = setTimeout(() => this.finish(), 100000);
     }, 3000);
   }
 
   private pause(): void {
+    if (![RoomStage.RUNNING, RoomStage.STARTING].includes(this.stage)) return;
+
+    this.logger.log('Pausing game');
+
     this.running = false;
     this.stage = RoomStage.PAUSED;
 
@@ -285,11 +310,16 @@ export class Room {
 
     this.server.emit('game:status', this.game?.elements);
 
-    this.server.emit('game:room:status', hideCircular(this));
-    this.service.listNonEmptyRooms();
+    this.notifyRoomStatus();
   }
 
   private resume(): void {
+    if (![RoomStage.PAUSED, RoomStage.STARTING].includes(this.stage)) return;
+
+    if (!this.teams.every((t) => t.isReady())) return;
+
+    this.logger.log('Resuming game');
+
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
@@ -301,12 +331,14 @@ export class Room {
 
     this.running = true;
     this.stage = RoomStage.RUNNING;
-    this.server.emit('game:room:status', hideCircular(this));
-    this.service.listNonEmptyRooms();
+    this.notifyRoomStatus();
   }
 
   private async finish(): Promise<void> {
     if (this.inGame === false) return;
+
+    this.logger.log('Finishing game');
+
     this.inGame = false;
     this.stage = RoomStage.FINISHED;
 
@@ -324,13 +356,13 @@ export class Room {
     match = await this.service.historyService.saveMatchHistory(match);
     this.logger.log(`Match finished: ${match.id}`);
 
-    this.server.emit('game:room:status', hideCircular(this));
-    this.service.listNonEmptyRooms();
+    this.notifyRoomStatus();
 
     setTimeout(() => {
       this.stage = RoomStage.WAITING;
-      this.server.emit('game:room:status', hideCircular(this));
-      this.service.listNonEmptyRooms();
+      this.getPlayers().forEach((p) => (p.ready = false));
+      this.rebalance();
+      this.notifyRoomStatus();
     }, 3000);
   }
 

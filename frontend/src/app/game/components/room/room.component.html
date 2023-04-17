@@ -10,6 +10,8 @@
     <hr />
     Someone is away.<br />
     Wait until they come back.
+    <hr />
+    <a (click)="leave()">[ I want to leave now! ]</a>
   </section>
   <section id="content" *ngIf="room.stage === 0">
     <header>
@@ -152,6 +154,9 @@
           <div class="audience-name">{{ user.name }}</div>
           <div class="flag-audience vga-bow" *ngIf="userId === user.id">
             YOU
+          </div>
+          <div class="flag-audience vga-bow" *ngIf="!user.connected">
+            DISCONNECTED
           </div>
         </li>
       </ul>

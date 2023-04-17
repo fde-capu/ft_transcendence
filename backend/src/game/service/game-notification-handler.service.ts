@@ -28,9 +28,7 @@ export class GameNotificationHandlerService {
       )
       .subscribe({
         next: (n) => {
-          const roomId = this.roomsService.roomCreateWithUser(
-            new User(n.from.intraId, n.from.name, n.from.image),
-          );
+          const roomId = this.roomsService.roomCreate();
           const roomPath = `/game/${roomId}`;
           this.notificationService.requestRedirect(n.fromSocketId, roomPath);
           this.notificationService.requestRedirect(n.toSocketId, roomPath);
