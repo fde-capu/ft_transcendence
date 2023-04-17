@@ -198,9 +198,7 @@ export class UserService {
         mfa_enabled: u.mfa_enabled,
         friends: u.friends,
         blocks: u.blocks,
-        status: UserService.status.get(u.intraId)
-          ? UserService.status.get(u.intraId)
-          : 'OFFLINE',
+        status: UserService.status.get(u.intraId),
         position: 0,
       };
       out.push(dto);
@@ -218,7 +216,7 @@ export class UserService {
       if (elapsed > UserService.logOffTimeOut) {
 				// If no notice for more than 10 seconds, consider user OFFLINE.
         UserService.attendance.delete(u);
-        UserService.status.set(u, 'OFFLINE');
+        UserService.status.set(u, undefined);
       }
     }
     this.checkOnStudents();
