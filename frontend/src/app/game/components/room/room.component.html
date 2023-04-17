@@ -155,6 +155,9 @@
           <div class="flag-audience vga-bow" *ngIf="userId === user.id">
             YOU
           </div>
+          <div class="flag-audience vga-bow" *ngIf="!user.connected">
+            DISCONNECTED
+          </div>
         </li>
       </ul>
     </article>
