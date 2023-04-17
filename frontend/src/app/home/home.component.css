@@ -1,12 +1,30 @@
-.main-screen {
+@media (max-width: 580px) {
+	.big-title {
+		font-variant-caps: all-petite-caps;
+		margin: 4px 0px 0px 24px;
+		font-size:var(--font-xx-large);
+		text-align:left;
+	}
 }
-.big-title {
-	font-variant-caps: all-petite-caps;
-	margin: 4px 0px 0px 24px;
-	font-size:var(--font-huge);
+@media (min-width: 580px) {
+	.big-title {
+		font-variant-caps: all-petite-caps;
+		margin: 4px 0px 0px 24px;
+		font-size:var(--font-huge);
+		text-align:left;
+	}
 }
-.menu-items {
-	position: absolute;
-	right: 0;
-	bottom: 1em;
+@media (min-height: 400px) {
+	.menu-items {
+		position: absolute;
+		right: 0;
+		bottom: 1em;
+	}
+}
+@media (max-height: 400px) {
+	.main-screen {
+	}
+	.menu-items {
+		display: none;
+	}
 }
