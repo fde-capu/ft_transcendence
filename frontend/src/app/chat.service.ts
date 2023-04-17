@@ -22,6 +22,7 @@ export class ChatService {
     {} as ChatMessage
   );
   gotNews = false;
+	canProceed: boolean = false;
 
   constructor(
     private readonly socket: ChatSocket,
@@ -105,6 +106,7 @@ export class ChatService {
     };
     this.roomChanged(room);
     await new Promise(resolve => setTimeout(resolve, 1007));
+		this.setPass();
     return [newRoomId, newRoomName];
   }
 
@@ -351,10 +353,14 @@ export class ChatService {
       }
   }
 
-  mockChat(): void {
-    setTimeout(() => {
-      this.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
-      this.mockChat();
-    }, Math.random() * 10000 + 5000);
-  }
+	setPass() {
+		this.canProceed = true;
+		setTimeout(() => {
+			this.canProceed = false;
+		}, 5000);
+	}
+
+	getPass(): boolean {
+		return this.canProceed;
+	}
 }

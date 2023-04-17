@@ -73,6 +73,7 @@ export class ChatRoomListComponent implements OnInit {
         this.fun.focus('pass' + room.id);
         return;
       }
+			this.chatService.setPass();
       this.router.navigate(['/chat/' + room.id]);
     }
   }
