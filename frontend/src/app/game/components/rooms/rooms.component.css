@@ -62,3 +62,7 @@ table td:nth-child(3) {
 	padding-left: 0.5em;
 	min-width: 5em;
 }
+
+button {
+	margin: 0 auto;
+}
