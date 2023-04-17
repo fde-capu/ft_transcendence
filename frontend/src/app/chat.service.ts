@@ -363,12 +363,4 @@ export class ChatService {
 	getPass(): boolean {
 		return this.canProceed;
 	}
-
-  mockChat(): void {
-    setTimeout(() => {
-      this.socket.emit('chat', CHATS[Math.floor(Math.random() * CHATS.length)]);
-      this.mockChat();
-    }, Math.random() * 10000 + 5000);
-  }
-
 }
