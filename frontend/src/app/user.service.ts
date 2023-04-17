@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Statistics } from './statistics';
 import { HelperFunctionsService } from './helper-functions.service';
 import { environment } from '../environments/environment';
+import { OnlineSocket } from './online.socket';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,7 @@ export class UserService {
     private readonly authService: AuthService,
     private http: HttpClient,
     private router: Router,
+    private readonly onlineSocket: OnlineSocket,
     private fun: HelperFunctionsService
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
@@ -168,12 +170,6 @@ export class UserService {
     return this.http
       .get<User>(this.userByLoginUrl + intraId, { withCredentials: true })
       .pipe(catchError(this.handleError<User>('getSingleUser')));
-  }
-
-  getOnlineUsers(): User[] {
-    let out: User[] = [];
-    for (const u of UserService.all) if (u.status != 'OFFLINE') out.push(u);
-    return out;
   }
 
   getAvailableUsers(): User[] {

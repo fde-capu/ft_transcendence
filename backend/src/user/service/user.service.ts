@@ -216,16 +216,13 @@ export class UserService {
       if (elapsed > UserService.logOffTimeOut) {
 				// If no notice for more than 10 seconds, consider user OFFLINE.
         UserService.attendance.delete(u);
-        UserService.status.set(u, 'OFFLINE');
+        UserService.status.set(u, undefined);
       }
     }
     this.checkOnStudents();
   }
 
   presence(intraId: string) {
-		console.log("Presencing", intraId);
-		if (!UserService.status.get(intraId))
-			UserService.status.set(intraId, "ONLINE");
     UserService.attendance.set(intraId, Date.now());
   }
 

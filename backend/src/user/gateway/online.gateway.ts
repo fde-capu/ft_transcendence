@@ -11,7 +11,6 @@ import { parse } from 'cookie';
 import { TokenService } from 'src/auth/service/token.service';
 import { environment } from 'src/environment';
 import { Logger } from '@nestjs/common';
-import { UserService } from '../service/user.service';
 
 @WebSocketGateway({
   cors: { origin: environment.FRONTEND_ORIGIN, credentials: true },
@@ -26,10 +25,7 @@ export class OnlineGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   logger = new Logger('Online Serivce');
 
-  public constructor(
-		private readonly tokenService: TokenService,
-		private readonly userService: UserService,
-	) {}
+  public constructor(private readonly tokenService: TokenService) {}
 
   public async handleConnection(client: Socket): Promise<void> {
     try {
@@ -41,8 +37,6 @@ export class OnlineGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       client['subject'] = subject;
       this.clients[client.id] = subject;
-
-			this.userService.presence(subject);
 
       this.emitOnlineList();
 
@@ -75,9 +69,7 @@ export class OnlineGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private emitOnlineList(to: Socket | Server = this.server): void {
-		let onlineList = this.getUniqueUsers();
-		console.log("Emitting onlines:", onlineList);
-    to.emit('online:list', onlineList);
+    to.emit('online:list', this.getUniqueUsers());
   }
 
   private getUniqueUsers(): string[] {
