@@ -1,16 +1,17 @@
-<div *ngIf="!showForm">
-  Name: {{ userName }}
+<div *ngIf="!showForm" class='options'>
+  <label>name</label>
+	<div>{{ userName }}</div>
   <button (click)="showForm = true">Change Name</button>
 </div>
 
-<div *ngIf="showForm">
-  <form>
+<div *ngIf="showForm" class='options'>
     <label>
-      New Name:
-      <input type="text" [(ngModel)]="newName" name="newName">
+      new name
     </label>
+		<input type="text" [(ngModel)]="newName" name="newName" (keydown.enter)="submitName()">
     <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div> <!-- Display error message below the input -->
-    <button (click)="submitName()">Change</button>
-    <button (click)="showForm = false">Back</button>
-  </form>
+		<div class='oneliner'>
+			<button (click)="submitName()" id='okButton'>Change</button>
+			<button (click)="showForm = false">Cancel</button>
+		</div>
 </div>

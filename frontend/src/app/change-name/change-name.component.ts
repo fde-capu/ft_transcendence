@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { HelperFunctionsService } from '../helper-functions.service';
 
 @Component({
   selector: 'app-change-name',
@@ -13,9 +14,13 @@ export class ChangeNameComponent {
   newName = '';
   errorMessage = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+		private http: HttpClient,
+		private fun: HelperFunctionsService
+	) {}
 
   submitName() {
+		this.fun.blink('okButton');
     // Make HTTP request to update the user's name
     let name: string = this.newName;
 
@@ -34,10 +39,10 @@ export class ChangeNameComponent {
         (error: HttpErrorResponse) => {
           if (error.error instanceof ErrorEvent) {
             // Client-side error occurred
-            this.errorMessage = `Error updating name: ${error.error.message}`;
+            this.errorMessage = `Invalid: ${error.error.message}`;
           } else {
             // Server-side error occurred
-            this.errorMessage = `Error updating name: $${error.error.error}`;
+            this.errorMessage = `Invalid: $${error.error.error}`;
           }
         }
       );

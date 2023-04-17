@@ -1,5 +1,31 @@
 .error-message {
     color: red;
-    font-size: 14px;
+    font-size: var(--font-small);
     margin-top: 5px;
   }
+
+.options {
+	padding: 1em;
+	min-height: 5em;
+	min-width: 14em;
+	max-width: 30vw;
+	border: var(--border-extra);
+	overflow: auto;
+	margin: 0.5em;
+	display: inline-grid;
+	align-content: space-between;
+}
+.options div {
+	display: block;
+}
+button {
+	max-width: fit-content;
+	margin: auto;
+	margin-right: 0;
+}
+input {
+	width: 100%;
+}
+form {
+	height: 100%;
+}
