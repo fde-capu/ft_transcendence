@@ -107,3 +107,7 @@ textarea:active {
 	margin: auto;
 	width: fit-content;
 }
+.profileTitle {
+	max-width: var(--base-normal-width);
+	margin: 0 auto;
+}
