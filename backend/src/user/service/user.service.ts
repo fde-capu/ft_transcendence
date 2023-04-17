@@ -198,9 +198,7 @@ export class UserService {
         mfa_enabled: u.mfa_enabled,
         friends: u.friends,
         blocks: u.blocks,
-        status: UserService.status.get(u.intraId)
-          ? UserService.status.get(u.intraId)
-          : 'OFFLINE',
+        status: UserService.status.get(u.intraId),
         position: 0,
       };
       out.push(dto);
@@ -225,6 +223,9 @@ export class UserService {
   }
 
   presence(intraId: string) {
+		console.log("Presencing", intraId);
+		if (!UserService.status.get(intraId))
+			UserService.status.set(intraId, "ONLINE");
     UserService.attendance.set(intraId, Date.now());
   }
 

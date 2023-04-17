@@ -42,6 +42,8 @@ export class OnlineGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client['subject'] = subject;
       this.clients[client.id] = subject;
 
+			this.userService.presence(subject);
+
       this.emitOnlineList();
 
       if (newConnection) this.logger.log(`Client connected: ${subject}`);
@@ -67,10 +69,14 @@ export class OnlineGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.emitOnlineList(client);
   }
 
+  @SubscribeMessage('online:bye')
+  public onlineBye(@ConnectedSocket() client: Socket): void {
+		this.handleDisconnect(client);
+  }
+
   private emitOnlineList(to: Socket | Server = this.server): void {
 		let onlineList = this.getUniqueUsers();
-		for (const u of onlineList)
-			this.userService.presence(u);
+		console.log("Emitting onlines:", onlineList);
     to.emit('online:list', onlineList);
   }
 
