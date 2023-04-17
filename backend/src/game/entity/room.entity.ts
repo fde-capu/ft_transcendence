@@ -87,14 +87,15 @@ export class Room {
 
   public stage: RoomStage = RoomStage.WAITING;
 
+  public host?: User;
+
   public constructor(
     public readonly id: string,
     public server: Server,
     public readonly service: RoomsService,
-    public host: User,
   ) {
     this.logger = new Logger(`Room ${id}`);
-    this.logger.log(`Room ${id} created by ${host.id}`);
+    this.logger.log(`Room ${id} created`);
     this.setMode(this.mode);
   }
 
@@ -116,6 +117,7 @@ export class Room {
       if (!found.connected) this.logger.log(`Connected: ${user.id}`);
       found.connected = true;
       this.resume();
+      this.rebalance();
       this.notifyRoomStatus();
       return;
     }
@@ -131,8 +133,8 @@ export class Room {
   public async leave(user: User): Promise<void> {
     this.logger.log(`Leave: ${user.id}`);
 
-    if (this.inGame && this.getPlayers().find((p) => p.id == user.id))
-      await this.finish();
+    const finishGame =
+      this.inGame && this.getPlayers().find((p) => p.id == user.id);
 
     this.teams.forEach((t) => {
       t.players = t.players.filter((p) => p.id != user.id);
@@ -146,6 +148,8 @@ export class Room {
 
     this.rebalance();
     this.notifyRoomStatus();
+
+    if (finishGame) await this.finish();
     this.service.deleteIfEmpty(this.id);
   }
 
@@ -159,8 +163,8 @@ export class Room {
 
     const player = this.getPlayers().find((p) => p.id == user.id);
     if (player) {
-      player.ready = false;
       if (this.inGame) this.pause();
+      else player.ready = false;
     }
 
     setTimeout(
@@ -189,8 +193,11 @@ export class Room {
 
     // move audience to teams if possible
     this.audience = this.audience.filter((u) => {
+      if (!u.connected) return true;
+
       const team = this.teams.find((t) => !t.isFull());
       if (!team) return true;
+
       team.players = [...team.players, Player.from(u)];
       return false;
     });
@@ -247,6 +254,8 @@ export class Room {
   public async start() {
     if (this.stage !== RoomStage.WAITING) return;
 
+    this.logger.log('Starting game');
+
     switch (this.mode) {
       case GameMode.PONG:
         this.game = new Pong();
@@ -290,6 +299,8 @@ export class Room {
   private pause(): void {
     if (![RoomStage.RUNNING, RoomStage.STARTING].includes(this.stage)) return;
 
+    this.logger.log('Pausing game');
+
     this.running = false;
     this.stage = RoomStage.PAUSED;
 
@@ -307,6 +318,8 @@ export class Room {
 
     if (!this.teams.every((t) => t.isReady())) return;
 
+    this.logger.log('Resuming game');
+
     this.lastUpdate = Date.now();
     this.gameInterval = setInterval(() => {
       const currentTimestamp = Date.now();
@@ -323,6 +336,8 @@ export class Room {
 
   private async finish(): Promise<void> {
     if (this.inGame === false) return;
+
+    this.logger.log('Finishing game');
 
     this.inGame = false;
     this.stage = RoomStage.FINISHED;
