@@ -36,10 +36,9 @@
 					<div *ngIf="!displayUser.mfa_enabled">
 						<button (click)="switchMfa();">Activate</button>
 					</div>
+				<app-login class='overall mfa' *ngIf='mfaOpened' [stepActivate]='true'></app-login>
 			</div>
 		</div>
-				<app-login class='overall' *ngIf='mfaOpened' [stepActivate]='true'>
-				</app-login>
 
 		<div class='oneliner' class='profileTitle'>
 			<div class="profile-image hover_invert"
