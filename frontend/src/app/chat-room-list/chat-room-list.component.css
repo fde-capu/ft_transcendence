@@ -23,3 +23,7 @@ button {
 	display: block;
 	text-align: center;
 }
+
+input {
+	width: unset;
+}
