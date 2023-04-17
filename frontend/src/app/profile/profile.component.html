@@ -44,8 +44,7 @@
 							<button (click)="switchMfa();">Activate</button>
 						</div>
 					</div>
-				<app-login class='overall' *ngIf='mfaOpened' [stepActivate]='true'>
-				</app-login>
+				<app-login class='overall mfa' *ngIf='mfaOpened' [stepActivate]='true'></app-login>
 			</div>
 		</div>
 
