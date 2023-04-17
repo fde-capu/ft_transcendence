@@ -3,8 +3,11 @@
 
   <ng-container *ngSwitchCase="'game:invite'">
     <span>"{{ notification.from?.intraId }}" invites you to a game room</span>
-    <button (click)="answer('game:invite:accept')">Accept</button>
-    <button (click)="answer('game:invite:decline')">Decline</button>
+		<hr>
+		<div class='oneliner'>
+			<button (click)="answer('game:invite:accept')">Accept</button>
+			<button (click)="answer('game:invite:decline')">Decline</button>
+		</div>
   </ng-container>
 
   <ng-container *ngSwitchCase="'game:invite:decline'">
@@ -12,6 +15,7 @@
       >"{{ notification.from?.intraId }}" declined your invitation to a game
       room</span
     >
+		<hr>
     <button (click)="answer('game:invite:decline:acknowledge')">Ok</button>
   </ng-container>
 
@@ -19,6 +23,7 @@
 
   <ng-container *ngSwitchDefault>
     <span>Unknown notification from "{{ notification.from?.intraId }}"</span>
+		<hr>
     <button (click)="answer('notification:acknowledge')">Close</button>
   </ng-container>
 </app-notification-modal>

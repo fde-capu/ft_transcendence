@@ -1,3 +1,4 @@
 button {
   color: var(--color-dark);
+	margin: 0 auto;
 }
