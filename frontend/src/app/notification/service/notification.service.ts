@@ -42,7 +42,6 @@ export class NotificationService {
   }
 
   public setNonDisturbMode(nonDisturbMode: boolean) {
-    console.dir(this.notificationsQueue);
     if (this.nonDisturbMode === nonDisturbMode) return;
 
     this.nonDisturbMode = nonDisturbMode;
