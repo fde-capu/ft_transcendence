@@ -50,7 +50,7 @@ export class LoginComponent {
       next: secret => {
         this.challengeUri = secret;
         this.initialMessage =
-          'Please open Google/Microsoft Authenticator and type in the code.';
+          'Please open Google/Microsoft Authenticator and type in the code. If you have already done that, you may just confirm the code.';
         this.message = this.initialMessage;
       },
       error: () => {
