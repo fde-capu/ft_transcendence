@@ -90,8 +90,8 @@ export class ProfileComponent {
   switchMfa() {
     if (!this.displayUser) return;
 		if (this.displayUser.mfa_enabled) {
-			this.displayUser.mfa_enabled = false;
 			this.setEditing();
+			this.displayUser.mfa_enabled = false;
 			this.saveUser();
 		} else {
 			this.mfaOpened = true;
@@ -100,8 +100,8 @@ export class ProfileComponent {
 
 	afterMfaActivate() {
     if (!this.displayUser) return;
-		this.displayUser.mfa_enabled = true;
 		this.setEditing();
+		this.displayUser.mfa_enabled = true;
 		this.mfaOpened = false;
 		this.saveUser();
 	}
