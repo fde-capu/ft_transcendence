@@ -1,4 +1,3 @@
-
 .center {
   display: flex;
   align-items: center;
@@ -6,12 +5,14 @@
   flex-flow: column;
   width: 100%;
   height: 100%;
+	display: flex;
+	justify-content: space-around;
 }
 
 #container {
   z-index: 500;
 
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
 
@@ -30,8 +31,4 @@
   padding: 5vmin;
 
 	filter: drop-shadow(-1em 1em 0 var(--color-medium-transp));
-}
-
-#content * {
-  color: var(--color-dark);
 }

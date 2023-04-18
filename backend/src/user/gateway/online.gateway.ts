@@ -63,6 +63,11 @@ export class OnlineGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.emitOnlineList(client);
   }
 
+  @SubscribeMessage('online:bye')
+  public onlineBye(@ConnectedSocket() client: Socket): void {
+		this.handleDisconnect(client);
+  }
+
   private emitOnlineList(to: Socket | Server = this.server): void {
     to.emit('online:list', this.getUniqueUsers());
   }

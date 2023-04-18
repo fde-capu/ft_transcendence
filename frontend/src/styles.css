@@ -353,6 +353,10 @@ table th {
 	text-shadow: none;
 	filter: drop-shadow(0 0 10px #a0a0a087);
 }
+.vga-bow button:hover {
+	filter: none;
+	color: var(--color-high);
+}
 
 @keyframes flash {
 	0% {

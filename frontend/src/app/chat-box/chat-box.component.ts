@@ -65,7 +65,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.paramMap.get('roomId');
     if (!this.id && this.user) {
       const [newRoomId] = await this.chatService.newRoom([this.user.intraId]);
-      this.router.navigate(['/chat/' + newRoomId]);
+      this.router.navigate(['/chat/' + newRoomId], {replaceUrl:true});
       return;
     }
     // ^ If it is a new room (roomId is null), the route will actualy
@@ -74,7 +74,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     if (!this.id) return;
     let getRoom = this.chatService.roomById(this.id);
     if (getRoom) this.chatRoom = getRoom;
-    if (this.fun.isStringInArray(this.user.intraId, this.chatRoom.blocked))
+    if ((this.chatRoom.password && !this.chatService.getPass()) || this.fun.isStringInArray(this.user.intraId, this.chatRoom.blocked))
       this.router.navigate(['/rooms']);
     this.updateRoomUsers(this.id);
     this.chatService.putUserInRoom(this.chatRoom);

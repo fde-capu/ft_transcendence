@@ -15,19 +15,19 @@ export class RoomsService {
 
   public constructor(public readonly historyService: MatchHistoryService) {}
 
-  public roomCreate(client: ClientSocket): string {
-    const id = this.roomCreateWithUser(User.from(client));
+  public roomCreateAndNotify(client: ClientSocket): string {
+    const id = this.roomCreate();
     client.emit('game:room:create', id);
     return id;
   }
 
-  public roomCreateWithUser(host: User): string {
+  public roomCreate(): string {
     let id: string;
     do {
       id = randomBytes(10).toString('hex').substring(0, 6);
     } while (this.rooms[id]);
 
-    this.rooms[id] = new Room(id, this.server, this, host);
+    this.rooms[id] = new Room(id, this.server, this);
 
     setTimeout(() => this.deleteIfEmpty(id), 300000);
     return id;
@@ -39,7 +39,7 @@ export class RoomsService {
       id = randomBytes(10).toString('hex').substring(0, 6);
     } while (this.rooms[id]);
 
-    this.rooms[id] = new Room(id, this.server, this, User.from(client));
+    this.rooms[id] = new Room(id, this.server, this);
     client.emit('game:room:create', id);
     client2.emit('game:room:create', id);
     setTimeout(() => this.deleteIfEmpty(id), 300000);

@@ -6,9 +6,7 @@
 <div *ngIf='!amIBlocked; else spying' class='box'>
 	<div *ngIf="displayUser; else user_unknown">
 		<div class='opt-box' *ngIf="owner">
-			<div class='options'>
-				<app-change-name [userName]="displayUser.name"></app-change-name>
-			</div>
+			<app-change-name [userName]="displayUser.name"></app-change-name>
 			<div class='options'>
 				<label class='left'>
 			change image
@@ -26,30 +24,23 @@
 				<label>
 			2FA
 				</label>
+					<div class='centered'*ngIf="displayUser.mfa_enabled">
+						ACTIVE
+					</div>
 					<div *ngIf="displayUser.mfa_enabled">
-						<div class='centered'>
-							ACTIVE
-						</div>
-						<br>
-						<div>
-							<button (click)="switchMfa();">Deactivate</button>
-						</div>
+						<button (click)="switchMfa();">Deactivate</button>
+					</div>
+					<div class='centered' *ngIf="!displayUser.mfa_enabled">
+						OFF
 					</div>
 					<div *ngIf="!displayUser.mfa_enabled">
-						<div class='centered'>
-							OFF
-						</div>
-						<br>
-						<div>
-							<button (click)="switchMfa();">Activate</button>
-						</div>
+						<button (click)="switchMfa();">Activate</button>
 					</div>
-				<app-login class='overall' *ngIf='mfaOpened' [stepActivate]='true'>
-				</app-login>
+				<app-login class='overall mfa' *ngIf='mfaOpened' [stepActivate]='true'></app-login>
 			</div>
 		</div>
 
-		<div class='oneliner'>
+		<div class='oneliner' class='profileTitle'>
 			<div class="profile-image hover_invert"
 				style="background-image:url('{{ displayUser.image }}'); background-size: cover; overflow: hidden;">
 			</div>
@@ -74,7 +65,9 @@
 </div>
 
 <ng-template #user_unknown>
+<div class='centered'>
 Wait...
+</div>
 </ng-template>
 
 <ng-template #spying>

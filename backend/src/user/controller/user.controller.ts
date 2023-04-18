@@ -68,32 +68,25 @@ export class UserController {
       const userId = req.user.sub;
       const name = name2.name;
       if (!userId) {
-        throw new BadRequestException('User ID not found in the request');
+        throw new BadRequestException('ID not found.');
       }
 
       // Check if the user that made the request exists
       const user = await this.userService.findOneBy42Id(userId);
       if (!user) {
-        throw new NotFoundException('User not found');
-      }
-
-      // Check if the name of the user is not the same name that he has right now
-      if (user.name === name) {
-        throw new BadRequestException(
-          'New name is the same as the current name',
-        );
+        throw new NotFoundException('User not found.');
       }
 
       // Check if the name is already in the database
       const existingUser = await this.userService.findOneByName(name);
       if (existingUser && existingUser.intraId !== user.intraId) {
-        throw new ConflictException('Name already exists');
+        throw new ConflictException('Name already exists.');
       }
 
       // Make sure that the name parameter is defined and not empty
       if (name.length < 4) {
         throw new BadRequestException(
-          'Name need to has more than 4 charachters',
+          'Name too short (min: 4 char).',
         );
       }
 

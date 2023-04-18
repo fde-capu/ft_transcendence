@@ -40,7 +40,7 @@ export class OnlineUsersComponent implements OnInit {
 			if (updatedUser)
 				this.users[i] = updatedUser;
 		}
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise(resolve => setTimeout(resolve, 100));
 		this.cycleUpdate();
 	}
 }

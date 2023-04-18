@@ -131,6 +131,8 @@ export class ProfileComponent {
 		}
     const fd = new FormData();
     fd.append('file', file.files[0], file.files[0].name);
+		file.value = "";
+		file.files = null;
     this.httpClient
       .post<void>(`${environment.BACKEND_ORIGIN}/user/profile/image`, fd, {
         withCredentials: true,
