@@ -148,7 +148,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   async cutScene(): Promise<void> {
     let allPlayers = this.allIn();
-		if (allPlayers) this.alternateReady = false;
+
     let prevScene = this.scene;
     let newScene =
       this.scene == 'off' && allPlayers
