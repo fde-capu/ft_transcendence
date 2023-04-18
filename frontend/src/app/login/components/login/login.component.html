@@ -5,7 +5,8 @@ PONG!
 	<hr>
   <button (click)="signIn()">Sign In</button>
 </section>
-<section *ngIf="step_two && !authOk">
+
+<section *ngIf="step_two">
   <div *ngIf="message" class='loginMessage'>{{message}}</div>
 	<br>
   <form #challenge="ngForm" (ngSubmit)="solveChallenge(challenge)">
