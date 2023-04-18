@@ -23,7 +23,7 @@ export class FindGameComponent implements OnInit, OnDestroy {
     this.socket.emit('join:queue');
     this.socket.on('game:room:create', (id: string) => {
       const link = '/game/' + id;
-      this.router.navigate([link]);
+      this.router.navigate([link], {replaceUrl:true});
     });
 
     this.socket.on('disconnect', () => {});
