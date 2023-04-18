@@ -36,7 +36,7 @@ export class ProfileComponent {
   invalidNameNotice: boolean = false;
   lastName: string = '';
   lastPassword?: string;
-  mfaOpened: boolean = false;
+  mfaOpened?: boolean;
 	static editing: boolean = false;
   imageError?: string;
 
@@ -62,14 +62,12 @@ export class ProfileComponent {
 
   async getDisplayUser() {
 		if (!this.idRequest) {
-			if (!ProfileComponent.editing) {
+			if (!ProfileComponent.editing)
 				this.displayUser = this.user;
-			}
 			this.setOwnership();
 		} else {
-			if (!ProfileComponent.editing) {
+			if (!ProfileComponent.editing)
 				this.displayUser = this.userService.getUser(this.idRequest);
-			}
 			this.setOwnership();
 			this.amIBlocked = this.userService.amIBlocked(this.displayUser);
 		}
@@ -88,21 +86,12 @@ export class ProfileComponent {
   }
 
   switchMfa() {
-    if (!this.displayUser) return;
-		this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
-		if (this.displayUser.mfa_enabled) {
-			this.mfaOpened = true;
-		} else {
-			this.saveUser();
-		}
+    if (this.displayUser) {
+      this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
+      if (this.displayUser.mfa_enabled) this.mfaOpened = true;
+      else this.saveUser();
+    }
   }
-
-	afterMfa() {
-    if (!this.displayUser) return;
-		this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
-		this.saveUser();
-		this.mfaOpened = false;
-	}
 
 	solveChallenge(form: NgForm) {
 		this.loginComponent.solveChallenge(form);
@@ -127,7 +116,7 @@ export class ProfileComponent {
   }
 
   saveUser() {
-		this.setEditing();
+		ProfileComponent.editing = true;
     if (this.displayUser) {
       this.userService
         .saveUser(this.displayUser)
@@ -166,6 +155,8 @@ export class ProfileComponent {
 	}
 
 	unsetEditing() {
-		ProfileComponent.editing = false;
+		setTimeout(() => {
+			ProfileComponent.editing = false;
+		}, 2555);
 	}
 }
