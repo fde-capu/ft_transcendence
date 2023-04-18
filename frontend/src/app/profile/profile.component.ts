@@ -36,7 +36,7 @@ export class ProfileComponent {
   invalidNameNotice: boolean = false;
   lastName: string = '';
   lastPassword?: string;
-  mfaOpened: boolean = false;
+  mfaOpened?: boolean;
 	static editing: boolean = false;
   imageError?: string;
 
@@ -62,14 +62,12 @@ export class ProfileComponent {
 
   async getDisplayUser() {
 		if (!this.idRequest) {
-			if (!ProfileComponent.editing) {
+			if (!ProfileComponent.editing)
 				this.displayUser = this.user;
-			}
 			this.setOwnership();
 		} else {
-			if (!ProfileComponent.editing) {
+			if (!ProfileComponent.editing)
 				this.displayUser = this.userService.getUser(this.idRequest);
-			}
 			this.setOwnership();
 			this.amIBlocked = this.userService.amIBlocked(this.displayUser);
 		}
@@ -129,7 +127,7 @@ export class ProfileComponent {
   }
 
   saveUser() {
-		this.setEditing();
+		ProfileComponent.editing = true;
     if (this.displayUser) {
       this.userService
         .saveUser(this.displayUser)
