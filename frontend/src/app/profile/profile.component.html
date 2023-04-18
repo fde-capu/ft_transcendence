@@ -48,13 +48,14 @@
 				<span class='small-id'>{{displayUser.intraId}}</span>
 				<span class='big-user'>{{displayUser.name}}</span>
 			</div>
-		</div>
 
-		<div class='actions'>
-		<app-u2u-actions *ngIf='!owner'
-			[isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser'
-			[caption]='false' [singleline]='true'>
-		</app-u2u-actions>
+			<div class='actions'>
+			<app-u2u-actions *ngIf='!owner'
+				[isFriend]='isFriend' [isBlock]='isBlock' [amIBlocked]='amIBlocked' [user]='displayUser'
+				[caption]='false' [singleline]='true'>
+			</app-u2u-actions>
+			</div>
+
 		</div>
 
 		<app-friends-list [user]="displayUser"></app-friends-list>

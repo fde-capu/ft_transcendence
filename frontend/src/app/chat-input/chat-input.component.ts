@@ -4,6 +4,7 @@ import { ChatMessage } from '../chat-message';
 import { UserService } from '../user.service';
 import { User } from '../user';
 import { ChatRoom } from '../chat-room';
+import { HelperFunctionsService } from '../helper-functions.service';
 
 @Component({
   selector: 'app-chat-input',
@@ -21,7 +22,8 @@ export class ChatInputComponent implements OnInit, OnChanges {
 
   constructor(
     public chatService: ChatService,
-    public userService: UserService
+    public userService: UserService,
+    public fun: HelperFunctionsService
   ) {}
 
   ngOnInit(): void {
@@ -42,8 +44,12 @@ export class ChatInputComponent implements OnInit, OnChanges {
 
   send(event: Event) {
     event.preventDefault();
+    if (!this.message || !this.room || this.messageTooBig) {
+			this.fun.blink3('long-message');
+			return ;
+		}
+
     this.blink('send-button');
-    if (!this.message || !this.room || this.messageTooBig) return;
 
     const newMessage: ChatMessage = {
       roomId: this.room.id,

@@ -461,7 +461,6 @@ table th {
 }
 
 .big-title {
-	margin: -0.5em 0;
 	font-size:var(--font-xx-large);
 	text-align: center;
 }

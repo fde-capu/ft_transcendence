@@ -7,19 +7,19 @@
 	box-shadow: inset 0px 8px 64px #77777719;
 	-webkit-filter: drop-shadow(0px 0px 32px #00000055);
 	position: fixed;
+	left: 1em;
+	right: 9em;
 	width: auto;
 	width: -moz-available;
-	left: 1em;
-	right: 1em;
 }
+
 .chat-input-text:focus-visible {
 	outline-style: unset;
 	animation: none;
 }
+
 .chat-input-box {
 	height: 3em;
-/*	top: calc(var(--inner-below-menu-height) - 2em);
-*/
 	filter: drop-shadow(0px 16px 128px #aaaaaaff);
 	border-top: var(--border-thin);
 	padding: var(--font-medium);
@@ -31,7 +31,9 @@
 }
 
 button {
-	position: absolute;
+	width: 7em;
+	position: fixed;
 	right: 1em;
-	bottom: 0;
+	padding: 0;
+	text-align: center;
 }
