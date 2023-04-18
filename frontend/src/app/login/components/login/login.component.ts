@@ -32,13 +32,16 @@ export class LoginComponent {
         this.step_one = false;
         if (ctx.mfa.enabled) {
           if (ctx.mfa.verified === true) {
-            if (this.router.url.indexOf('/login') == 0)
+            if (this.router.url.indexOf('/login') == 0) {
               this.router.navigate(['/']);
+						}
             else {
 							this.close.emit(null);
 						}
           }
           this.step_two = true;
+					const exist = document.getElementById('code-field');
+					if (exist) exist.focus();
         }
       },
     });
@@ -57,7 +60,11 @@ export class LoginComponent {
   }
 
   ngOnChanges() {
-    if (this.stepActivate) this.step_two = true;
+    if (this.stepActivate) {
+			this.step_two = true;
+			const exist = document.getElementById('code-field');
+			if (exist) exist.focus();
+		}
   }
 
   signIn() {

@@ -24,7 +24,7 @@
 				<label>
 			2FA
 				</label>
-					<div class='centered'*ngIf="displayUser.mfa_enabled">
+					<div class='centered' *ngIf="displayUser.mfa_enabled">
 						ACTIVE
 					</div>
 					<div *ngIf="displayUser.mfa_enabled">
@@ -40,7 +40,7 @@
 						class='overall mfa'
 						[stepActivate]='true'
 						*ngIf='mfaOpened'
-						(close)="afterMfa()"
+						(close)="afterMfaActivate()"
 					></app-login>
 			</div>
 		</div>
