@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
@@ -11,9 +11,9 @@ import { UserService } from '../../../user.service';
 })
 export class LoginComponent {
   @Input() stepActivate: boolean = false;
+	@Output() close = new EventEmitter();
   step_one: Boolean = false;
   step_two: Boolean = false;
-  authOk: Boolean = false;
   public challengeUri?: string;
   message?: string;
   initialMessage?: string;
@@ -32,13 +32,16 @@ export class LoginComponent {
         this.step_one = false;
         if (ctx.mfa.enabled) {
           if (ctx.mfa.verified === true) {
-            this.authOk = true;
-            this.saveAuth(ctx.sub);
-            if (this.router.url.indexOf('/login') == 0)
+            if (this.router.url.indexOf('/login') == 0) {
               this.router.navigate(['/']);
-            else this.router.navigate([this.router.url]);
+						}
+            else {
+							this.close.emit(null);
+						}
           }
           this.step_two = true;
+					const exist = document.getElementById('code-field');
+					if (exist) exist.focus();
         }
       },
     });
@@ -57,7 +60,11 @@ export class LoginComponent {
   }
 
   ngOnChanges() {
-    if (this.stepActivate) this.step_two = true;
+    if (this.stepActivate) {
+			this.step_two = true;
+			const exist = document.getElementById('code-field');
+			if (exist) exist.focus();
+		}
   }
 
   signIn() {
@@ -68,7 +75,6 @@ export class LoginComponent {
     this.authService.solveChallenge(form.value.code).subscribe({
       next: () => {
         this.message = 'Nicely done!';
-        this.authOk = true;
       },
       error: () => {
         this.message =
@@ -78,13 +84,6 @@ export class LoginComponent {
           ']?? Yikes! Wrong code, bud!';
       },
     });
-  }
-
-  saveAuth(intraId: string) {
-    const u = this.userService.getUser(intraId);
-    if (!u || (!!u && !!u.mfa_enabled)) return;
-    u.mfa_enabled = true;
-    this.userService.saveUser(u).subscribe();
   }
 
   signOut() {

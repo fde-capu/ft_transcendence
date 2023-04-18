@@ -86,12 +86,23 @@ export class ProfileComponent {
   }
 
   switchMfa() {
-    if (this.displayUser) {
-      this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
-      if (this.displayUser.mfa_enabled) this.mfaOpened = true;
-      else this.saveUser();
-    }
+    if (!this.displayUser) return;
+		if (this.displayUser.mfa_enabled) {
+			this.setEditing();
+			this.displayUser.mfa_enabled = false;
+			this.saveUser();
+		} else {
+			this.mfaOpened = true;
+		}
   }
+
+	afterMfaActivate() {
+    if (!this.displayUser) return;
+		this.setEditing();
+		this.displayUser.mfa_enabled = true;
+		this.mfaOpened = false;
+		this.saveUser();
+	}
 
 	solveChallenge(form: NgForm) {
 		this.loginComponent.solveChallenge(form);
@@ -157,6 +168,6 @@ export class ProfileComponent {
 	unsetEditing() {
 		setTimeout(() => {
 			ProfileComponent.editing = false;
-		}, 2555);
+		}, 4555);
 	}
 }
