@@ -4,20 +4,22 @@
       <li *ngFor="let team of room.teams" class="team center" style="flex-direction:
 				{{team.id=='LEFT'||room.mode==2?'row':'row-reverse'}}
 				;">
-        <span>{{ team.id }}</span>
-        <ul class="players">
+        <ul class="players oneliner">
           <li *ngFor="let player of team.players">
-							<div class="mini-avatar" style="
+						<span class='team-id'>{{ team.id }} </span>
+						<span class='player-name'>{{ player.name }}</span>
+						<span class='center oneliner'>
+							<span class="mini-avatar" style="
 								{{room.mode>=1?
-									'max-width:1em;max-height:1em;min-width:1em;min-height:1em;'
-									:
-									'max-width:2em;max-height:2em;min-width:2em;min-height:2em;'
+									'max-width:2em;max-height:2em;min-width:2em;min-height:2em;' :
+									'max-width:3em;max-height:3em;min-width:3em;min-height:3em;'
 									}}
-								background-image:url('{{player.image}}');"></div>
-						{{ player.name }}
+								background-image:url('{{player.image}}');">
+							</span>
+							<span class='score'>{{ getTeamScore(team.id) }}</span>
+						</span>
 					</li>
         </ul>
-        <span class='score'>{{ getTeamScore(team.id) }}</span>
       </li>
     </ul>
     <canvas #stage id="stage">Canvas is not supported!</canvas>

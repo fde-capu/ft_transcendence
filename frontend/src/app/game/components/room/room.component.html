@@ -142,29 +142,28 @@
         </li>
       </ul>
     </article>
-    <article *ngIf="room.audience.length">
-      <header>
-        <h2>Audience</h2>
-      </header>
-      <ul id="audience" class="center">
-        <li class="queue-li" *ngFor="let user of room.audience">
-          <div
-            class="game-avatar user-image"
-            style="background-image:url('{{ user.image }}')"></div>
-          <div class="audience-name">{{ user.name }}</div>
-          <div class="flag-audience vga-bow" *ngIf="userId === user.id">
-            YOU
-          </div>
-          <div class="flag-audience vga-bow" *ngIf="!user.connected">
-            DISCONNECTED
-          </div>
-        </li>
-      </ul>
-    </article>
   </section>
+
   <section *ngIf="!!room && room.inGame">
     <app-game [roomSocket]="roomSocket" [room]="room"></app-game>
   </section>
+
+	<div *ngIf="room.audience.length && (room.stage === 0 || room.stage === 2)" [ngClass]="!!room && room.inGame ? 'fixed-bottom' : 'bottom-margin'">
+		<header *ngIf="!!room && !room.inGame">
+			<h2>Audience</h2>
+		</header>
+		<ul id="audience" class="center">
+			<li class="queue-li" *ngFor="let user of room.audience" [ngClass]="!!room && !room.inGame ? 'blocked' : ''">
+				<div
+					class="game-avatar user-image"
+					style="background-image:url('{{ user.image }}')"></div>
+				<div *ngIf="!!room && !room.inGame">
+					<div class="audience-name">{{ user.name }}</div>
+					<div class="flag-audience vga-bow" *ngIf="userId === user.id">YOU</div>
+				</div>
+			</li>
+		</ul>
+	</div>
 </main>
 
 <div *ngIf="room && room.stage === 1">
@@ -297,7 +296,7 @@
     <div *ngIf="room.mode == 2">
       <div
         class="p-anim"
-        style="left: calc(50vw - 13em;"
+        style="left: calc(50vw - 13em);"
         [ngClass]="leftWin ? 'win' : 'loose'">
         <div
           style="background-image:url('{{

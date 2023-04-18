@@ -43,12 +43,8 @@
 }
 
 .flag-audience {
-	position: absolute;
 	font-size: var(--font-x-small);
-	left: 0;
-	right: 0;
 	padding: 0;
-	bottom: 1em;
 	text-align: center;
 }
 
@@ -138,9 +134,7 @@ hr {
 }
 
 .queue-li {
-	margin: 1em 1em -1em;
 	display: flex;
-	width: 11em;
 	position: relative;
 	align-items: flex-start;
 }
@@ -213,4 +207,19 @@ hr {
 
 .justFlash {
 	animation: flash 1.5s;
+}
+
+.bottom-margin {
+	margin-bottom: 64px !important;
+}
+
+.fixed-bottom {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+.blocked {
+	width: 11em;
+	margin: 1em;
 }
