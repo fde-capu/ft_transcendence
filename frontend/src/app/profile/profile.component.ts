@@ -63,13 +63,11 @@ export class ProfileComponent {
   async getDisplayUser() {
 		if (!this.idRequest) {
 			if (!ProfileComponent.editing) {
-				console.log("Profile updating user (no url).");
 				this.displayUser = this.user;
 			}
 			this.setOwnership();
 		} else {
 			if (!ProfileComponent.editing) {
-				console.log("Profile updating user (with url).");
 				this.displayUser = this.userService.getUser(this.idRequest);
 			}
 			this.setOwnership();
@@ -93,20 +91,16 @@ export class ProfileComponent {
     if (!this.displayUser) return;
 		this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
 		if (this.displayUser.mfa_enabled) {
-			console.log("Opening mfaOpened.");
 			this.mfaOpened = true;
 		} else {
-			console.log("Profile saving user.");
 			this.saveUser();
 		}
   }
 
 	afterMfa() {
     if (!this.displayUser) return;
-		console.log("Profile saving user after mfa.");
 		this.displayUser.mfa_enabled = !this.displayUser.mfa_enabled;
 		this.saveUser();
-		console.log("Closing mfa");
 		this.mfaOpened = false;
 	}
 

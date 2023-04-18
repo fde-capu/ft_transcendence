@@ -35,7 +35,6 @@ export class LoginComponent {
             if (this.router.url.indexOf('/login') == 0)
               this.router.navigate(['/']);
             else {
-							console.log("Would reload page");
 							this.close.emit(null);
 						}
           }
