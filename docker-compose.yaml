@@ -23,7 +23,7 @@ services:
     networks:
       - samsara_net
     volumes:
-      - ./database/pgdata:/var/lib/postgresql/data
+      - database_data:/var/lib/postgresql/data
     env_file:
       - ./.env
 
